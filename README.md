@@ -7,6 +7,12 @@ This Project is open source and free for use.
 
 Enjoy it :)
 
+## Features
+launch on Multi platforms
+
+Built-in maps
+
+
 ## How to Build
 ```
 tsc index.ts bot.ts typings\global.d.ts
