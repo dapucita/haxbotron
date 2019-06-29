@@ -3,6 +3,7 @@
 import { RoomConfig } from "./controller/RoomConfig";
 import { stadiumText } from "./stadium/huge.hbs";
 import { Player } from "./controller/Player";
+import { Logger } from "./controller/Logger";
 
 const roomConfig:RoomConfig = {
     roomName: "TEST for Haxball by BOT",
@@ -14,9 +15,11 @@ const roomConfig:RoomConfig = {
     playerName: "Bot"
 }
 
+let logger: Logger = Logger.getInstance();
+
 var room = window.HBInit(roomConfig);
 
-//room.setDefaultStadium("Big");
+// room.setDefaultStadium("Big");
 room.setCustomStadium(stadiumText);
 room.setScoreLimit(3);
 room.setTimeLimit(3);
@@ -32,10 +35,21 @@ function updateAdmins(): void {
 
 
 room.onPlayerJoin = function(player: any) {
+    // Event called when a new player joins the room.
     updateAdmins();
-    room.sendChat( player.name + " - This message is sent for welcome you.");
+    room.sendChat( player.name + " - This message is sent for welcome you.", player.id); //send welcome message to new player. other players cannot read this message.
+    logger.c(`[JOIN] ${player.name} has joined.`);
 }
 
 room.onPlayerLeave = function(player: any) {
+    // Event called when a player leaves the room.
     updateAdmins();
+    logger.c(`[LEFT] ${player.name} has left.`);
+}
+
+room.onPlayerChat = function(player: any, message: string): boolean {
+    // Event called when a player sends a chat message.
+    logger.c(`[CHAT] ${player.name} said, "${message}"`);
+    return true;
+    // if return false, the game will ignore it's message.
 }

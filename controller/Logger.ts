@@ -12,6 +12,11 @@ export class Logger {
         return this.instance;
     }
 
+    public c(msg: string): void {
+        //just wrapping
+        console.log(msg);
+    }
+
     public w(key: string, msg: string): void {
         //log warning messages
         
@@ -44,6 +49,6 @@ interface LogMessage {
 USAGE EXAMPLE
 
 let something: Logger = new Logger(); // It makes an error: constructor of 'Singleton' is private.
-let instance: Logger = Parser.getInstance(); instace.blahbalh(); // now do something with the instance.
+let instance: Logger = Logger.getInstance(); instace.blahbalh(); // now do something with the instance.
 
 */

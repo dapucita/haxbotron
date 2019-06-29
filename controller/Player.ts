@@ -27,8 +27,11 @@ export class Player implements PlayerObject {
 
     stats: PlayerStats;
 
+    //Is this player ignored?
+    ignored: boolean;
+
     // init
-    constructor(id: number, name: string, auth: string, conn: string, admin: boolean, team: number, position: PlayerPosition, stats: PlayerStats) {
+    constructor(id: number, name: string, auth: string, conn: string, admin: boolean, team: number, position: PlayerPosition, stats: PlayerStats, ignored: boolean) {
         this.id = id;
         this.name = name;
         this.auth = auth;
@@ -37,5 +40,6 @@ export class Player implements PlayerObject {
         this.team = team;
         this.position = position;
         this.stats = stats;
+        this.ignored = ignored;
     }
 }
