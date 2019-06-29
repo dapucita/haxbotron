@@ -1,0 +1,9 @@
+{
+    "botName": "Haxbotron",
+    "botVersion": "0.0.1",
+    "botOperator": "Haxbotron",
+
+    "welcomeJoin": true,
+    "advertise": true,
+    "advertiseMessage": "Thanks for join us! - Haxbotron"
+}
