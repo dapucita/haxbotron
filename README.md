@@ -55,14 +55,18 @@ If you(the player) type a command by chat...
 
 `!stats` shows all players your stats.
 
-`!stats!reset` reset your stats. It cannot be recovered.
+`!stats!reset` resets your stats. It cannot be recovered.
 
 `!streak` shows you which team is being on a winning streak.
 
-## Game Commands for Admin Players
-`!ignore` prohibits or permits other all players to chat.
+`!level` shows you your hierarchy level.
 
-`!ignore PLAYER` prohibits or permits the player whose name is PLAYER to chat.
+`!afk MSG` switchses to active or idle status. If it contains MSG for idle, the message as reason for away from keyboards is shown when others call the player.
+
+## Game Commands for Admin Players
+`!mute` prohibits or permits other all players to chat.
+
+`!mute PLAYER` prohibits or permits the player whose name is PLAYER to chat.
 
 `!kick PLAYER MSG` kicks the player whose name is PLAYER. If it contains MSG, the message as reason for kicking is shown for the user.
 
@@ -70,11 +74,13 @@ If you(the player) type a command by chat...
 
 `!kick!og` kicks the player who made O.G. most recently.
 
+`!kick!afk` kicks all players who are away from keyboards.
+
 ## Game Commands for Super Admin Players
 
 If you(the super admin) type a command by chat...
 
-`!policy!thor` disqualify all admin players from admin permission, and makes admin player permission by self.
+`!super!thor` disqualify all admin players from admin permission, and makes admin player permission by self.
 
 `!debug!brake` pauses the game, stops operating the bot, and just waiting until restart. The system only can be restared by reloading the application manually.
 
