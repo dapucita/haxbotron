@@ -9,11 +9,9 @@
   "author": "dapucita",
   "license": "MIT",
   "dependencies": {
-    "mustache": "^3.0.1",
     "puppeteer": "^1.18.1"
   },
   "devDependencies": {
-    "@types/mustache": "^0.8.32",
     "@types/puppeteer": "^1.12.4"
   }
 }
