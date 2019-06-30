@@ -6,9 +6,13 @@ import { stadiumText } from "./stadium/huge.hbs";
 import { Player } from "./controller/Player";
 import { Logger } from "./controller/Logger";
 import { PlayerObject } from "./controller/PlayerObject";
+import { ScoresObject } from "./controller/ScoresObject";
 import { ActionQueue, ActionTicket } from "./controller/Action";
 import { Parser } from "./controller/Parser";
 import { RStrings } from "./resources/strings"; 
+
+
+console.log(`[DEBUG] headless token is conveyed via cookie(${getCookieFromHeadless('botToken')})`);
 
 // initial settings part
 const roomConfig: RoomConfig = {
@@ -16,7 +20,7 @@ const roomConfig: RoomConfig = {
     password: "HBTRON",
     maxPlayers: 13,
     // https://www.haxball.com/headlesstoken
-    // token: "123123blahblah", //It doesn't need if bot is running on none-headless mode.
+    token: getCookieFromHeadless('botToken'), //If this value doesn't exist, headless host api page will require to solving recaptcha.
     public: true,
     playerName: "Haxbotron"
 }
@@ -40,7 +44,7 @@ setInterval(function():void {
                 break;
         }
     }
-},0);
+}, 0);
 
 function initialiseRoom(): void {
     // Write initialising processes here.
@@ -104,6 +108,11 @@ function initialiseRoom(): void {
         }
     }
 
+    room.onTeamVictory = function(scores: ScoresObject): void {
+        // Event called when a team wins.
+        room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
+    }
+
     function updateAdmins(): void { 
         // Get all players except the host (id = 0 is always the host)
         var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0 );
@@ -113,6 +122,11 @@ function initialiseRoom(): void {
     }
 
     function printPlayerInfo(player: PlayerObject): void {
-        logger.c(`[INFO] NAME(${player.name}),ID(${player.id}),CONN(${player.conn},AUTH(${player.auth})`);
+        logger.c(`[INFO] NAME(${player.name}),ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
     }
+}
+
+function getCookieFromHeadless(name: string): string {
+    var result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
+    return result ? result[1] : '';
 }
