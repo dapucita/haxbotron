@@ -51,7 +51,7 @@ If you(the player) type a command by chat...
 
 `!help` shows you simple information about this bot.
 
-`!help!usage COMMAND` shows you how to use COMMAND command.
+`!help COMMAND` shows you how to use COMMAND command.
 
 `!stats` shows all players your stats.
 

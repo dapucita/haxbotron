@@ -1,25 +1,40 @@
+import { ActionTicket } from "./Action";
+
 export class Parser {
     // written in Singleton Pattern
     // If the bot created Parser object once, never create ever until the bot instance dead. 
     private static instance: Parser = new Parser();
-    private Parser() { }
+
+    private Parser() { } // not use
     public static getInstance(): Parser {
         if (this.instance == null) {
             this.instance = new Parser();
         }
         return this.instance;
     }
-    public seperate(message: string, limit: number): string[] {
-        return message.split(" ", limit);
-    }
-    /*public recognise(token: string): void {
-        switch(token) {
-            case "help": 
+    
 
+    public eval(message: string, playerID: number): ActionTicket {
+        // evaluate given string
+        // if given string is command chat, this function returns true, nor false.
+        var ticket: ActionTicket = { type: "none", ownerPlayerID: playerID, messageString: message };
+        if(this.isCommandString(message) == true) {
+            // if given string is command chat
+            let cutMsg: string[] = message.split(" ", 3); // divide into 3 parts by sperator. !COMMAND FIRST-ARG SECOND-ARG
+            let cmd: string = cutMsg[0].substr(1, cutMsg[0].length); // remove first character of COMMAND part(it maybe '!')
 
+            switch(cmd) {
+                case "help":
+                    ticket.type = "selfnotice";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.messageString = "help command test";
+                    break;
+            }
         }
-    }*/
-    public isCommand(message: string): boolean {
+        return ticket;
+    }
+
+    private isCommandString(message: string): boolean {
         if(message.charAt(0) == "!") {
             // If message has '!' as first character in it's string, return true.
             return true;
@@ -27,7 +42,6 @@ export class Parser {
             return false;
         }
     }
-    
 }
 
 /*

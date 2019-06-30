@@ -38,7 +38,7 @@ export class Logger {
     }
 }
 
-interface LogMessage {
+export interface LogMessage {
     category: string;
     key: string;
     msg: string;

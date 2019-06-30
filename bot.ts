@@ -6,9 +6,12 @@ import { stadiumText } from "./stadium/huge.hbs";
 import { Player } from "./controller/Player";
 import { Logger } from "./controller/Logger";
 import { PlayerObject } from "./controller/PlayerObject";
+import { ActionQueue, ActionTicket } from "./controller/Action";
+import { Parser } from "./controller/Parser";
+import { RStrings } from "./resources/strings"; 
 
 // initial settings part
-const roomConfig:RoomConfig = {
+const roomConfig: RoomConfig = {
     roomName: "BOT TESTING ROOM - IN DEVELOPMENT",
     password: "HBTRON",
     maxPlayers: 13,
@@ -19,9 +22,25 @@ const roomConfig:RoomConfig = {
 }
 const playerList = new Map();
 
-var logger: Logger = Logger.getInstance();
+const actionQueue: ActionQueue<ActionTicket> = ActionQueue.getInstance();
+const logger: Logger = Logger.getInstance();
+const parser: Parser = Parser.getInstance();
+
 var room = window.HBInit(roomConfig);
 initialiseRoom();
+
+setInterval(function():void {
+    //Loop timer for processing ActionTicket Queue.
+    var timerTicket: ActionTicket|undefined = actionQueue.pop();
+    if(timerTicket !== undefined) {
+        switch(timerTicket.type) {
+            case "selfnotice":
+                logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
+                room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
+                break;
+        }
+    }
+},0);
 
 function initialiseRoom(): void {
     // Write initialising processes here.
@@ -48,6 +67,7 @@ function initialiseRoom(): void {
 
         // send welcome message to new player. other players cannot read this message.
         room.sendChat(`[System] Welcome, ${player.name}#${player.id}!`, player.id);
+        //room.sendChat(RStrings.joinMessage, player.id);
         room.sendChat(`[System] You wins ${playerList.get(player.id).stats.wins} of total ${playerList.get(player.id).stats.totals} games.`, player.id);
     }
     
@@ -61,11 +81,19 @@ function initialiseRoom(): void {
     room.onPlayerChat = function(player: PlayerObject, message: string): boolean {
         // Event called when a player sends a chat message.
         // The event function can return false in order to filter the chat message.
-        // This prevents the chat message from reaching other players in the room.
-    
-        logger.c(`[CHAT] ${player.name} said, "${message}"`);
-
-        return true;
+        // Then It prevents the chat message from reaching other players in the room.
+        if(playerList.get(player.id).ignored == true) {
+            logger.c(`[CHAT] ${player.name} said, "${message}", but ignored.`);
+            room.sendChat(`[System] You are muted. You can't send message to others.`, player.id);
+            return false;
+        } else {
+            logger.c(`[CHAT] ${player.name} said, "${message}"`);
+            var evals: ActionTicket = parser.eval(message, player.id);
+            if(evals.type != "none") {
+                actionQueue.push(evals);
+            }
+            return true;
+        }
     }
 
     room.onPlayerTeamChange = function(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
