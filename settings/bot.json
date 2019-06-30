@@ -4,6 +4,7 @@
     "botOperator": "Haxbotron",
 
     "welcomeJoin": true,
-    "advertise": true,
-    "advertiseMessage": "Thanks for join us! - Haxbotron"
+    "advertising": true,
+
+    "language": "ko"
 }
