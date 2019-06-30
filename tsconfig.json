@@ -10,9 +10,12 @@
     // "jsx": "preserve",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     // "declaration": true,                   /* Generates corresponding '.d.ts' file. */
     // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    // "sourceMap": true,                     /* Generates corresponding '.map' file. */
+    //  sourceMap: true,                     /* Generates corresponding '.map' file. */
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
-    // "outDir": "./out",                        /* Redirect output structure to the directory. */
+     "outDir": "./out",                        /* Redirect output structure to the directory. */
+     "pretty": true,
+     "listFiles": true,
+     "removeComments": true,
     // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     // "composite": true,                     /* Enable project compilation */
     // "tsBuildInfoFile": "./",               /* Specify file to store incremental compilation information */
@@ -61,7 +64,7 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "exclude" : [
-    "dist",
+    "out",
     "webpack.config.js"
   ]
 }

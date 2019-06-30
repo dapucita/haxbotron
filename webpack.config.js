@@ -1,8 +1,8 @@
 var path = require('path');
 module.exports = {
-    entry: './bot.js',
+    entry: './out/bot.js',
     output: {
         filename: 'bot_bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'out')
     }
 };

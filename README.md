@@ -25,12 +25,14 @@ Built-in maps: especially popular in Korea
 
 
 ## How to Build
-```
-tsc index.ts bot.ts typings\global.d.ts
-webpack
-node index.js
-```
+There are 2 ways to build and start the bot.
 
+You don't have to build again if you did it already.
+
+```
+npm run build
+npm start
+```
 ## How to Use
 Just launch and solve recaptcha.
 

@@ -17,7 +17,7 @@ async function bot(headlessFlag: boolean) {
     });
     await page.setCookie({name: 'botToken', value: headlessToken}); //test code for cookie
     await page.addScriptTag({
-        path: './dist/bot_bundle.js'
+        path: './out/bot_bundle.js'
     });
 }
 
