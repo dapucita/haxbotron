@@ -98,7 +98,7 @@ If you(the super admin) type a command by chat...
 
 `!debug!brake` pauses the game, stops operating the bot, and just waiting until restart. The system only can be restared by reloading the application manually.
 
-`!debug!log MSG` write a message contains MSG into loggin system.
+`!debug!log MSG` write a message contains MSG into logging system.
 
 ## Contacts
 https://github.com/dapucita/haxbotron
