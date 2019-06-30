@@ -21,7 +21,8 @@ export class Player implements PlayerObject {
     // Whether the player has admin rights.
     admin: boolean;
     // The team of the player.
-    team: number; //github doc: team : TeamID
+    // Spectators: 0, Red Team: 1, Blue Team: 2
+    team: number;
     // The player's position in the field, if the player is not in the field the value will be null.
     position: PlayerPosition; //github doc: position : {"x": float, "y": float}
 
