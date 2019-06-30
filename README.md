@@ -59,14 +59,22 @@ If you(the player) type a command by chat...
 
 `!streak` shows you which team is being on a winning streak.
 
+`!poss` shows you possessions rate of both Read and Blue team.
+
 `!level` shows you your hierarchy level.
 
-`!afk MSG` switchses to active or idle status. If it contains MSG for idle, the message as reason for away from keyboards is shown when others call the player.
+`!afk MSG` switchses to idle status. If it contains MSG, the message as reason for away from keyboards is shown when others call the player.
+
+`!unafk` switches to active status.
 
 ## Game Commands for Admin Players
-`!mute` prohibits or permits other all players to chat.
+`!mute` prohibits other all players to chat.
 
-`!mute PLAYER` prohibits or permits the player whose name is PLAYER to chat.
+`!mute PLAYER` prohibits the player whose name is PLAYER to chat.
+
+`!unmute PLAYER` permits the player whose name is PLAYER to chat.
+
+`!unmute!all` clears all of muted players list.
 
 `!kick PLAYER MSG` kicks the player whose name is PLAYER. If it contains MSG, the message as reason for kicking is shown for the user.
 
@@ -81,6 +89,12 @@ If you(the player) type a command by chat...
 If you(the super admin) type a command by chat...
 
 `!super!thor` disqualify all admin players from admin permission, and makes admin player permission by self.
+
+`!ban PLAYER MSG` bans PLAYER forever. If it contains MSG, the message as reason for banning is shown for the user.
+
+`!unban PLAYER` unbans PLAYER.
+
+`!unban!all` unbans all players who banned.
 
 `!debug!brake` pauses the game, stops operating the bot, and just waiting until restart. The system only can be restared by reloading the application manually.
 
