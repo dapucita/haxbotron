@@ -2,3 +2,4 @@ node_modules/
 out/
 *.js
 !webpack.config.js
+techmemo.md
