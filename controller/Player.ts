@@ -1,4 +1,4 @@
-import { PlayerObject, PlayerPosition, PlayerStats } from "./PlayerObject";
+import { PlayerObject, PlayerPosition, PlayerStats, PlayerPermissions } from "./PlayerObject";
 export class Player implements PlayerObject {
     // PlayerObject holds information about a player
 
@@ -26,21 +26,22 @@ export class Player implements PlayerObject {
     // The player's position in the field, if the player is not in the field the value will be null.
     position: PlayerPosition; //github doc: position : {"x": float, "y": float}
 
+    // statistics of the player.
     stats: PlayerStats;
 
-    //Is this player ignored?
-    ignored: boolean;
+    // permissions the player has.
+    permissions: PlayerPermissions;
 
     // init
-    constructor(id: number, name: string, auth: string, conn: string, admin: boolean, team: number, position: PlayerPosition, stats: PlayerStats, ignored: boolean) {
-        this.id = id;
-        this.name = name;
-        this.auth = auth;
-        this.conn = conn;
-        this.admin = admin;
-        this.team = team;
-        this.position = position;
+    constructor(player: PlayerObject, stats: PlayerStats, permissions: PlayerPermissions) {
+        this.id = player.id;
+        this.name = player.name;
+        this.auth = player.auth;
+        this.conn = player.conn;
+        this.admin = player.admin;
+        this.team = player.team;
+        this.position = player.position;
         this.stats = stats;
-        this.ignored = ignored;
+        this.permissions = permissions;
     }
 }

@@ -37,3 +37,12 @@ export interface PlayerPosition {
     x: number;
     y: number;
 }
+
+export interface PlayerPermissions {
+    mute: boolean; // Is this player muted? If true, his/her messages will ignored.
+    afkmode: boolean; /* Is this player away from keyboards? If the player sets afk mode, the value is true.
+                        It is not a mean for auto dectecting and kicking afk players. */
+    captain: boolean; //Is this player the captain of his/her team?
+    super: boolean; // Is this player super admin? It doesn't matter whether he/she is an admin.
+    // admin permission is already decleared by admin: boolean.
+}

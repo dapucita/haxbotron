@@ -66,7 +66,7 @@ function initialiseRoom(): void {
     
         // add new player into playerList by creating class instance
         // playerList is an Map object.
-        playerList.set(player.id, new Player(player.id, player.name, player.auth, player.conn, player.admin, player.team, player.position, {totals: 0, wins: 0},false));
+        playerList.set(player.id, new Player(player, {totals: 0, wins: 0}, { mute: false, afkmode: false, captain: false, super: false }));
         // playerList.get(player.id).name; : just usage of playerList
 
         // send welcome message to new player. other players cannot read this message.

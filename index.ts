@@ -2,23 +2,32 @@
 const readline = require("readline");
 const puppeteer = require('puppeteer');
 
+var isOpenHeadless: boolean = false; //option for open chrome in headless mode
 var isBotLaunched: boolean = false;
 var isTokenEmpty: boolean = true;
 var headlessToken: string = '';
+var pageContainer:any;
 
-async function bot(headlessFlag: boolean) {
+async function bot() {
     const browser = await puppeteer.launch({
-        headless: headlessFlag,
+        headless: isOpenHeadless,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
+    /*await page.on('console', (msg: any) => {
+        //output messages come from puppeteer console
+        for (let i = 0; i < msg.args().length; ++i) {
+            console.log(`[PUPPETEER] ${msg.args()[i]}`); //args example: console.log('hello', 5, {foo: 'bar'}) on JS injected in puppeteer
+        }
+    });*/
     await page.goto('https://www.haxball.com/headless', {
         waitUntil: 'networkidle2'
     });
-    await page.setCookie({name: 'botToken', value: headlessToken}); //test code for cookie
+    await page.setCookie({name: 'botToken', value: headlessToken}); //auth token for headless-api page
     await page.addScriptTag({
         path: './out/bot_bundle.js'
     });
+    return page;
 }
 
 const rl = readline.createInterface({
@@ -45,7 +54,8 @@ rl.on("line", (inputData: string) => {
                 if(isTokenEmpty) { // if headless token not setted yet
                     console.log("error: you need to set headless token for starting bot. use token command.");
                 } else {
-                    bot(false);
+                    //bot();
+                    pageContainer = bot();
                     console.log("Bot loaded.");
                     isBotLaunched = true;
                 }
@@ -53,7 +63,7 @@ rl.on("line", (inputData: string) => {
             break;
         case "token":
             if(data[1] === undefined || data[1] == '') {
-                console.log("error: token key field should not be empty.")
+                console.log("error: token key field should not be empty.");
             } else {
                 console.log(`token key is saved. (${data[1]})`);
                 headlessToken = data[1];
@@ -63,7 +73,13 @@ rl.on("line", (inputData: string) => {
         case "exit":
             process.exit(0);
             break;
-        case "token":
+        case "ping":
+            if(isBotLaunched) {
+                //pageContainer.then( ( page:any ) => { page.setCookie({name: 'ping', value: 'ping from main launcher'}); } );
+                
+            } else {
+                console.log("error: you can do ping only when the bot is launched.");
+            }
             break;
         case "help":
             console.log("Haxbotron CLI | Available commands : start, exit, token, help");
