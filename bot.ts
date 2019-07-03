@@ -62,12 +62,12 @@ function initialiseRoom(): void {
         logger.c(`[JOIN] ${player.name} has joined.`);
         printPlayerInfo(player);
 
-        updateAdmins();
-    
         // add new player into playerList by creating class instance
         // playerList is an Map object.
         playerList.set(player.id, new Player(player, {totals: 0, wins: 0}, { mute: false, afkmode: false, captain: false, super: false }));
         // playerList.get(player.id).name; : just usage of playerList
+
+        updateAdmins();
 
         // send welcome message to new player. other players cannot read this message.
         room.sendChat(`[System] Welcome, ${player.name}#${player.id}!`, player.id);
@@ -86,7 +86,7 @@ function initialiseRoom(): void {
         // Event called when a player sends a chat message.
         // The event function can return false in order to filter the chat message.
         // Then It prevents the chat message from reaching other players in the room.
-        if(playerList.get(player.id).ignored == true) {
+        if(playerList.get(player.id).permissions.mute == true) {
             logger.c(`[CHAT] ${player.name} said, "${message}", but ignored.`);
             room.sendChat(`[System] You are muted. You can't send message to others.`, player.id);
             return false;
@@ -113,12 +113,27 @@ function initialiseRoom(): void {
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
     }
 
+    room.onStadiumChange = function(newStadiumName: string, byPlayer: PlayerObject ): void {
+        // Event called when the stadium is changed.
+        if(playerList.get(byPlayer.id).permissions.super == true) {
+            logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions.super})`);
+            room.sendChat(`[System] ${newStadiumName} has been a new stadium.`);
+        } else {
+            // If trying for chaning stadium is rejected, reload default stadium.
+            logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.`);
+            room.sendChat(`[System] You can't change the stadium.`, byPlayer.id);
+            room.setCustomStadium(stadiumText);
+        }
+    }
+
     function updateAdmins(): void { 
         // Get all players except the host (id = 0 is always the host)
         var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0 );
         if ( players.length == 0 ) return; // No players left, do nothing.
         if ( players.find((player: PlayerObject) => player.admin) != null ) return; // There's an admin left so do nothing.
         room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
+        playerList.get(players[0].id).permissions.admin = true;
+        logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).permissions.admin}), because there was no admin players.`)
     }
 
     function printPlayerInfo(player: PlayerObject): void {
