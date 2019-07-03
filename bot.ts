@@ -113,16 +113,40 @@ function initialiseRoom(): void {
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
     }
 
+    room.onPlayerKicked = function(kickedPlayer : PlayerObject, reason : string, ban : boolean, byPlayer : PlayerObject): void {
+        /* Event called when a player has been kicked from the room. This is always called after the onPlayerLeave event.
+        byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+        if(ban == true) {
+            // ban
+            if(playerList.get(byPlayer.id).permissions.super != true) {
+                // if the player who acted banning is not super admin
+                room.sendChat(`[System] You can't ban other players. Act kicking if you need.`, byPlayer.id);
+                room.sendChat(`[System] Banning ${kickedPlayer.name}#${kickedPlayer.id} player is negated.`);
+                room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
+                logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
+            } else {
+                logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
+            }
+        } else {
+            // kick
+            logger.c(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked by ${byPlayer.name}#${byPlayer.id}. (reason:${reason})`);
+        }
+        
+    }
+
     room.onStadiumChange = function(newStadiumName: string, byPlayer: PlayerObject ): void {
         // Event called when the stadium is changed.
-        if(playerList.get(byPlayer.id).permissions.super == true) {
-            logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions.super})`);
-            room.sendChat(`[System] ${newStadiumName} has been a new stadium.`);
-        } else {
-            // If trying for chaning stadium is rejected, reload default stadium.
-            logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.`);
-            room.sendChat(`[System] You can't change the stadium.`, byPlayer.id);
-            room.setCustomStadium(stadiumText);
+        if(playerList.size != 0) { // if size == 0, that means there's no players.
+            if(playerList.get(byPlayer.id).permissions.super == true) {
+                logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions.super})`);
+                room.sendChat(`[System] ${newStadiumName} has been a new stadium.`);
+            } else {
+                // If trying for chaning stadium is rejected, reload default stadium.
+                logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions.super})`);
+                // logger.c(`[DEBUG] ${playerList.get(byPlayer.id).name}`); for debugging
+                room.sendChat(`[System] You can't change the stadium.`, byPlayer.id);
+                room.setCustomStadium(stadiumText);
+            }
         }
     }
 
@@ -132,8 +156,9 @@ function initialiseRoom(): void {
         if ( players.length == 0 ) return; // No players left, do nothing.
         if ( players.find((player: PlayerObject) => player.admin) != null ) return; // There's an admin left so do nothing.
         room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
-        playerList.get(players[0].id).permissions.admin = true;
-        logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).permissions.admin}), because there was no admin players.`)
+        playerList.get(players[0].id).admin = true;
+        logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.super}), because there was no admin players.`);
+        room.sendChat(`[System] ${playerList.get(players[0].id).name} has been admin.`);
     }
 
     function printPlayerInfo(player: PlayerObject): void {
