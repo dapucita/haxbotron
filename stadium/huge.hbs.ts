@@ -1,5 +1,5 @@
 export var stadiumText: string = `{
-    "name": "Haxbotron 4vs4",
+    "name": "Haxbotron 4vs4 1.0",
     "width": 840,
     "height": 380,
     "bg": {
@@ -856,7 +856,7 @@ export var stadiumText: string = `{
     },
     "ballPhysics": {
         "radius": 6.4,
-        "color": "7CFC00"
+        "color": "DEE8D1"
     },
     "spawnDistance": 350
 }`
