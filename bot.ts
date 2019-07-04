@@ -17,14 +17,14 @@ console.log(`[DEBUG] headless token is conveyed via cookie(${getCookieFromHeadle
 // initial settings part
 const roomConfig: RoomConfig = {
     roomName: "BOT TESTING ROOM - IN DEVELOPMENT",
-    password: "HBTRON",
+    password: "hbtron",
     maxPlayers: 13,
     // https://www.haxball.com/headlesstoken
     token: getCookieFromHeadless('botToken'), //If this value doesn't exist, headless host api page will require to solving recaptcha.
     public: true,
     playerName: "Haxbotron"
 }
-const playerList = new Map();
+var playerList = new Map();
 
 const actionQueue: ActionQueue<ActionTicket> = ActionQueue.getInstance();
 const logger: Logger = Logger.getInstance();
@@ -38,10 +38,24 @@ setInterval(function():void {
     var timerTicket: ActionTicket|undefined = actionQueue.pop();
     if(timerTicket !== undefined) {
         switch(timerTicket.type) {
-            case "selfnotice":
+            case "selfnotice": {
                 logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
                 room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
                 break;
+            }
+            case "super": {
+                logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
+                playerList.get(timerTicket.ownerPlayerID).permissions.super = true;
+                logger.c(`[SUPER] ${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID} is super admin now.(super:${playerList.get(timerTicket.ownerPlayerID).permissions['super']})`);
+                room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
+                break;
+            }
+            case "debug": {
+                logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
+                logger.c(`[DEBUG] super:${playerList.get(timerTicket.ownerPlayerID).permissions['super']}`);
+                room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
+                break;
+            }
         }
     }
 }, 0);
@@ -86,7 +100,7 @@ function initialiseRoom(): void {
         // Event called when a player sends a chat message.
         // The event function can return false in order to filter the chat message.
         // Then It prevents the chat message from reaching other players in the room.
-        if(playerList.get(player.id).permissions.mute == true) {
+        if(playerList.get(player.id).permissions['mute'] == true) {
             logger.c(`[CHAT] ${player.name} said, "${message}", but ignored.`);
             room.sendChat(`[System] You are muted. You can't send message to others.`, player.id);
             return false;
@@ -118,7 +132,7 @@ function initialiseRoom(): void {
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         if(ban == true) {
             // ban
-            if(playerList.get(byPlayer.id).permissions.super != true) {
+            if(playerList.get(byPlayer.id).permissions['super'] != true) {
                 // if the player who acted banning is not super admin
                 room.sendChat(`[System] You can't ban other players. Act kicking if you need.`, byPlayer.id);
                 room.sendChat(`[System] Banning ${kickedPlayer.name}#${kickedPlayer.id} player is negated.`);
@@ -134,19 +148,23 @@ function initialiseRoom(): void {
         
     }
 
-    room.onStadiumChange = function(newStadiumName: string, byPlayer: PlayerObject ): void {
+    //room.onStadiumChange = function(newStadiumName: string, byPlayer: PlayerObject ): void {
+    room.onStadiumChange = function (newStadiumName: string, byPlayer: PlayerObject)  {
         // Event called when the stadium is changed.
-        if(playerList.size != 0) { // if size == 0, that means there's no players.
-            if(playerList.get(byPlayer.id).permissions.super == true) {
-                logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions.super})`);
+        if(playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
+            if(playerList.get(byPlayer.id).permissions['super'] == true) {
+                //There are two ways for access to map value, permissions['super'] and permissions.super.
+                logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['super']})`);
                 room.sendChat(`[System] ${newStadiumName} has been a new stadium.`);
             } else {
                 // If trying for chaning stadium is rejected, reload default stadium.
-                logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions.super})`);
+                logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['super']})`);
                 // logger.c(`[DEBUG] ${playerList.get(byPlayer.id).name}`); for debugging
                 room.sendChat(`[System] You can't change the stadium.`, byPlayer.id);
                 room.setCustomStadium(stadiumText);
             }
+        } else {
+            logger.c(`[MAP] ${newStadiumName} has been loaded as default map.`);
         }
     }
 
@@ -170,3 +188,17 @@ function getCookieFromHeadless(name: string): string {
     var result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
     return result ? result[1] : '';
 }
+/*
+function updatePlayerList(id: number, targetObject: Map<number, Player>, targetValue: )
+
+const editSchoolName = ((schools, oldName, name) =>{
+    schools.map(item => {
+      if (item.name === oldName) {
+        item.name = name;
+        return item.name;
+      } else {
+        return item;
+      }
+    });
+    console.log(schools);
+  });*/

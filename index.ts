@@ -56,8 +56,8 @@ rl.on("line", (inputData: string) => {
                 } else {
                     //bot();
                     pageContainer = bot();
-                    console.log("Bot loaded.");
                     isBotLaunched = true;
+                    console.log("Bot loaded.");
                 }
             }
             break;

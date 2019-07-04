@@ -24,11 +24,24 @@ export class Parser {
             let cmd: string = cutMsg[0].substr(1, cutMsg[0].length); // remove first character of COMMAND part(it maybe '!')
 
             switch(cmd) {
-                case "help":
+                case "help": {
                     ticket.type = "selfnotice";
                     ticket.ownerPlayerID = playerID;
                     ticket.messageString = "help command test";
                     break;
+                }
+                case "super": {
+                    ticket.type = "super";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.messageString = "You are super admin now.";
+                    break;
+                }   
+                case "debug": {
+                    ticket.type = "debug";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.messageString = "Debug information has printed in console.";
+                    break;
+                }
             }
         }
         return ticket;
