@@ -27,16 +27,22 @@ export class Parser {
                 case "help": {
                     ticket.type = "selfnotice";
                     ticket.ownerPlayerID = playerID;
-                    ticket.messageString = "help command test";
+                    ticket.messageString = "[HELP] !help !about";
                     break;
                 }
-                case "super": {
+                case "about": {
+                    ticket.type = "selfnotice";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.messageString = "[SYSTEM] Haxbotron bot - launched on " + localStorage.getItem('_LaunchTime');
+                    break;
+                }
+                case "super": { // temporal command in development stage. remove this command when you operate the bot with other players
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;
                     ticket.messageString = "You are super admin now.";
                     break;
                 }   
-                case "debug": {
+                case "debug": { // temporal command in development stage. remove this command when you operate the bot with other players
                     ticket.type = "debug";
                     ticket.ownerPlayerID = playerID;
                     ticket.messageString = "Debug information has printed in console.";
