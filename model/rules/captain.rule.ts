@@ -10,7 +10,8 @@ export var gameRule: GameRule = {
     requisite: {
         minimumPlayers: 4,
         timeLimit: 3,
-        scoreLimit: 3
+        scoreLimit: 3,
+        timeLock: true
     },
     autoOperating: false,
     statsRecord: true,

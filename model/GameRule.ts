@@ -8,6 +8,7 @@ export interface GameRule {
         maximumPlayers?: number; // maximum number of players limits for apply this rule
         timeLimit: number; // limit time for end the game
         scoreLimit: number; // limit score for end the game
+        timeLock: boolean; // limit moving teams by self
     }
     autoOperating: boolean; // auto emcee mode
     statsRecord: boolean; // record game results on statistics system.
