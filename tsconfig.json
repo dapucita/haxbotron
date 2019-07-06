@@ -65,6 +65,7 @@
   },
   "exclude" : [
     "out",
+    "docs",
     "webpack.config.js"
   ]
 }
