@@ -66,6 +66,7 @@
   "exclude" : [
     "out",
     "docs",
+    ".node-persist",
     "webpack.config.js"
   ]
 }
