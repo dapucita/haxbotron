@@ -133,6 +133,26 @@ function initialiseRoom(): void {
         }
     }
 
+    room.onGameStart = function(byPlayer: PlayerObject): void {
+        /* Event called when a game starts.
+        byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+        let msg = "[GAME] The game has been started.";
+        if(byPlayer !== undefined && byPlayer.id != 0) {
+            msg += `(by ${byPlayer.name}#${byPlayer.id})`;
+        }
+        logger.c(msg);
+    }
+
+    room.onGameStop = function(byPlayer: PlayerObject): void {
+        /* Event called when a game stops.
+        byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+        let msg = "[GAME] The game has been stopped.";
+        if(byPlayer !== undefined && byPlayer.id != 0) {
+            msg += `(by ${byPlayer.name}#${byPlayer.id})`;
+        }
+        logger.c(msg);
+    }
+
     room.onTeamVictory = function(scores: ScoresObject): void {
         // Event called when a team wins.
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
