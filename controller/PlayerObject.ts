@@ -29,8 +29,10 @@ export interface PlayerObject {
 }
 
 export interface PlayerStats {
-    totals: number;
-    wins: number;
+    totals: number; // total games include wins
+    wins: number; // the game wins
+    goals: number; // not contains OGs.
+    ogs: number; // it means 'own goal'
 }
 
 export interface PlayerPosition {
@@ -42,6 +44,20 @@ export interface PlayerPermissions {
     mute: boolean; // Is this player muted? If true, his/her messages will ignored.
     afkmode: boolean; // Is this player away from keyboards? If the player sets afk mode, the value is true. It is not a mean for auto dectecting and kicking afk players.
     captain: boolean; //Is this player the captain of his/her team?
-    super: boolean; // Is this player super admin? It doesn't matter whether he/she is an admin.
+    superadmin: boolean; // Is this player super admin? It doesn't matter whether he/she is an admin.
     // admin permission is already decleared by admin: boolean.
+}
+
+export interface PlayerStorage {
+    // object literal that will be stored in LocalStorage as JSON.
+    // however, JSON stringify should be done in LocalStorage not Node.js Map() object.
+    auth: string; // same meaning as in PlayerObject
+    conn: string; // same meaning as in PlayerObject.
+    name: string; // player's name used in previous game.
+    totals: number; // total games include wins
+    wins: number; // the game wins
+    goals: number; // not contains OGs.
+    ogs: number; // it means 'own goal'
+    mute: boolean; // is this player muted?
+    superadmin: boolean; // is this player super admin?
 }
