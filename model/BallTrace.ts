@@ -22,4 +22,8 @@ export class KickStack {
     pop(): number | undefined {
         return this._store.pop();
     }
+
+    clear(): void {
+        this._store = []; // clear
+    }
 }

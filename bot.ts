@@ -203,6 +203,8 @@ function initialiseRoom(): void {
             setPlayerData(playerList.get(eachPlayer.id)); // updates wins and totals count
         });
 
+        ballStack.clear(); // clear the stack.
+
         logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
     }
