@@ -122,6 +122,17 @@ function initialiseRoom(): void {
         }
     }
 
+    room.onPlayerAdminChange = function(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
+        /* Event called when a player's admin rights are changed.
+        byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+        if(playerList.size != 0 && playerList.get(changedPlayer.id).admin != true) {
+            playerList.get(changedPlayer.id).admin = true;
+            if(byPlayer !== undefined) {
+                logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(value:${playerList.get(changedPlayer.id).admin},super:${playerList.get(changedPlayer.id).permissions.super}) by ${byPlayer.name}#${byPlayer.id}`);
+            }
+        }
+    }
+
     room.onTeamVictory = function(scores: ScoresObject): void {
         // Event called when a team wins.
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
@@ -152,7 +163,7 @@ function initialiseRoom(): void {
     room.onStadiumChange = function (newStadiumName: string, byPlayer: PlayerObject)  {
         // Event called when the stadium is changed.
         if(playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
-            if(playerList.get(byPlayer.id).permissions['super'] == true) {
+        if(playerList.get(byPlayer.id).permissions['super'] == true) {
                 //There are two ways for access to map value, permissions['super'] and permissions.super.
                 logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['super']})`);
                 room.sendChat(`[System] ${newStadiumName} has been a new stadium.`);
