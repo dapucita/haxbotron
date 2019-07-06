@@ -18,6 +18,7 @@
     "@types/node-persist": "0.0.33",
     "@types/puppeteer": "^1.12.4",
     "typescript": "^3.5.2",
-    "webpack": "^4.35.2"
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
   }
 }
