@@ -859,4 +859,4 @@ export var stadiumText: string = `{
         "color": "DEE8D1"
     },
     "spawnDistance": 350
-}`
+}`;
