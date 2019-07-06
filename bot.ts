@@ -5,7 +5,7 @@ import { RoomConfig } from "./controller/RoomConfig";
 import { stadiumText } from "./stadium/huge.hbs";
 import { Player } from "./controller/Player";
 import { Logger } from "./controller/Logger";
-import { PlayerObject } from "./controller/PlayerObject";
+import { PlayerObject, PlayerStorage } from "./controller/PlayerObject";
 import { ScoresObject } from "./controller/ScoresObject";
 import { ActionQueue, ActionTicket } from "./controller/Action";
 import { Parser } from "./controller/Parser";
@@ -24,7 +24,7 @@ const roomConfig: RoomConfig = {
     public: true,
     playerName: "Haxbotron"
 }
-var playerList = new Map();
+const playerList = new Map(); // playerList is an Map object. // playerList.get(player.id).name; : usage for playerList
 
 const actionQueue: ActionQueue<ActionTicket> = ActionQueue.getInstance();
 const logger: Logger = Logger.getInstance();
@@ -45,14 +45,14 @@ setInterval(function():void {
             }
             case "super": {
                 logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
-                playerList.get(timerTicket.ownerPlayerID).permissions.super = true;
-                logger.c(`[SUPER] ${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID} is super admin now.(super:${playerList.get(timerTicket.ownerPlayerID).permissions['super']})`);
+                playerList.get(timerTicket.ownerPlayerID).permissions.superadmin = true;
+                logger.c(`[SUPER] ${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID} is super admin now.(super:${playerList.get(timerTicket.ownerPlayerID).permissions['superadmin']})`);
                 room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
                 break;
             }
             case "debug": {
                 logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
-                logger.c(`[DEBUG] super:${playerList.get(timerTicket.ownerPlayerID).permissions['super']}`);
+                logger.c(`[DEBUG] super:${playerList.get(timerTicket.ownerPlayerID).permissions['superadmin']}`);
                 room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
                 break;
             }
@@ -62,6 +62,8 @@ setInterval(function():void {
 
 function initialiseRoom(): void {
     // Write initialising processes here.
+    const nowDate: Date = new Date();
+    localStorage.setItem('_LaunchTime', nowDate.toString()); // save time the bot launched in localStorage
 
     // room.setDefaultStadium("Big");
     room.setCustomStadium(stadiumText);
@@ -76,17 +78,33 @@ function initialiseRoom(): void {
         logger.c(`[JOIN] ${player.name} has joined.`);
         printPlayerInfo(player);
 
-        // add new player into playerList by creating class instance
-        // playerList is an Map object.
-        playerList.set(player.id, new Player(player, {totals: 0, wins: 0}, { mute: false, afkmode: false, captain: false, super: false }));
-        // playerList.get(player.id).name; : just usage of playerList
+        // add the player who joined into playerList by creating class instance
+        if(localStorage.getItem(player.auth) !== null) {
+            // if this player is not new player
+            var loadedData: PlayerStorage | null = getPlayerData(player.auth);
+            if(loadedData !== null) {
+                playerList.set(player.id, new Player(player, {totals: loadedData.totals, wins: loadedData.wins, goals: loadedData.goals, ogs: loadedData.ogs}
+                    , {mute: loadedData.mute, afkmode: false, captain: false, superadmin: loadedData.superadmin}));
+                if(player.name != loadedData.name) { 
+                    // if this player changed his/her name
+                    // notify that fact to other players only once ( it will never be notified if he/she rejoined next time)
+                    room.sendChat(`[System] ${player.name}#${player.id} is changed name from ${loadedData.name}`);
+                }
+            }
+        } else {
+            // if new player
+            // create a Player Object
+            playerList.set(player.id, new Player(player, {totals: 0, wins: 0, goals: 0, ogs: 0}
+                , { mute: false, afkmode: false, captain: false, superadmin: false }));
+            
+        }
+
+        setPlayerData(playerList.get(player.id)); // register(or update) in localStorage
 
         updateAdmins();
 
         // send welcome message to new player. other players cannot read this message.
         room.sendChat(`[System] Welcome, ${player.name}#${player.id}!`, player.id);
-        //room.sendChat(RStrings.joinMessage, player.id);
-        room.sendChat(`[System] You wins ${playerList.get(player.id).stats.wins} of total ${playerList.get(player.id).stats.totals} games.`, player.id);
     }
     
     room.onPlayerLeave = function(player: PlayerObject): void {
@@ -109,6 +127,7 @@ function initialiseRoom(): void {
             var evals: ActionTicket = parser.eval(message, player.id);
             if(evals.type != "none") {
                 actionQueue.push(evals);
+                return false; // if the chat message is command chat, filter the chat message to other players.
             }
             return true;
         }
@@ -127,8 +146,8 @@ function initialiseRoom(): void {
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         if(playerList.size != 0 && playerList.get(changedPlayer.id).admin != true) {
             playerList.get(changedPlayer.id).admin = true;
-            if(byPlayer !== undefined) {
-                logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(value:${playerList.get(changedPlayer.id).admin},super:${playerList.get(changedPlayer.id).permissions.super}) by ${byPlayer.name}#${byPlayer.id}`);
+            if(byPlayer !== null) {
+                logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(value:${playerList.get(changedPlayer.id).admin},super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
             }
         }
     }
@@ -137,7 +156,7 @@ function initialiseRoom(): void {
         /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         let msg = "[GAME] The game has been started.";
-        if(byPlayer !== undefined && byPlayer.id != 0) {
+        if(byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
         logger.c(msg);
@@ -147,7 +166,7 @@ function initialiseRoom(): void {
         /* Event called when a game stops.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         let msg = "[GAME] The game has been stopped.";
-        if(byPlayer !== undefined && byPlayer.id != 0) {
+        if(byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
         logger.c(msg);
@@ -163,7 +182,7 @@ function initialiseRoom(): void {
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         if(ban == true) {
             // ban
-            if(playerList.get(byPlayer.id).permissions['super'] != true) {
+            if(playerList.get(byPlayer.id).permissions['superadmin'] != true) {
                 // if the player who acted banning is not super admin
                 room.sendChat(`[System] You can't ban other players. Act kicking if you need.`, byPlayer.id);
                 room.sendChat(`[System] Banning ${kickedPlayer.name}#${kickedPlayer.id} player is negated.`);
@@ -183,13 +202,13 @@ function initialiseRoom(): void {
     room.onStadiumChange = function (newStadiumName: string, byPlayer: PlayerObject)  {
         // Event called when the stadium is changed.
         if(playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
-        if(playerList.get(byPlayer.id).permissions['super'] == true) {
-                //There are two ways for access to map value, permissions['super'] and permissions.super.
-                logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['super']})`);
+        if(playerList.get(byPlayer.id).permissions['superadmin'] == true) {
+                //There are two ways for access to map value, permissions['superadmin'] and permissions.superadmin.
+                logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
                 room.sendChat(`[System] ${newStadiumName} has been a new stadium.`);
             } else {
                 // If trying for chaning stadium is rejected, reload default stadium.
-                logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['super']})`);
+                logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
                 // logger.c(`[DEBUG] ${playerList.get(byPlayer.id).name}`); for debugging
                 room.sendChat(`[System] You can't change the stadium.`, byPlayer.id);
                 room.setCustomStadium(stadiumText);
@@ -199,6 +218,15 @@ function initialiseRoom(): void {
         }
     }
 
+    room.onRoomLink = function(url: string): void {
+        // Event called when the room link is created.
+        // this bot application provides some informations by DOM control.
+        // DO NOT document.write(). just access on IFrame elements.
+        document.title = `Haxbotron - ${roomConfig.roomName}`; //HTML Title
+
+        //let docIframe = document.getElementsByTagName('iframe');
+    }
+
     function updateAdmins(): void { 
         // Get all players except the host (id = 0 is always the host)
         var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0 );
@@ -206,7 +234,7 @@ function initialiseRoom(): void {
         if ( players.find((player: PlayerObject) => player.admin) != null ) return; // There's an admin left so do nothing.
         room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
         playerList.get(players[0].id).admin = true;
-        logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.super}), because there was no admin players.`);
+        logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
         room.sendChat(`[System] ${playerList.get(players[0].id).name} has been admin.`);
     }
 
@@ -219,17 +247,30 @@ function getCookieFromHeadless(name: string): string {
     var result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
     return result ? result[1] : '';
 }
-/*
-function updatePlayerList(id: number, targetObject: Map<number, Player>, targetValue: )
 
-const editSchoolName = ((schools, oldName, name) =>{
-    schools.map(item => {
-      if (item.name === oldName) {
-        item.name = name;
-        return item.name;
-      } else {
-        return item;
-      }
-    });
-    console.log(schools);
-  });*/
+function getPlayerData(playerAuth: string): PlayerStorage | null {
+    // load player's data from localStorage
+    var jsonData: string | null = localStorage.getItem(playerAuth);
+    if(jsonData !== null) {
+        var convertedData: PlayerStorage = JSON.parse(jsonData);
+        return convertedData;
+    } else {
+        return null;
+    }
+}
+
+function setPlayerData(player: Player): void {
+    // store player's data in localStorage
+    var playerData: PlayerStorage = {
+        auth: player.auth, // same meaning as in PlayerObject. It can used for identify each of players.
+        conn: player.conn, // same meaning as in PlayerObject.
+        name: player.name, // save for compare player's current name and previous name.
+        totals: player.stats.totals, // total games include wins
+        wins: player.stats.wins, // the game wins
+        goals: player.stats.goals, // not contains OGs.
+        ogs: player.stats.ogs, // it means 'own goal'
+        mute: player.permissions.mute, // is this player muted?
+        superadmin: player.permissions.superadmin // is this player super admin?
+    }
+    localStorage.setItem(player.auth, JSON.stringify(playerData)); // convert object to json for store in localStorage // for decode: JSON.parse
+}
