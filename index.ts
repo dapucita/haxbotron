@@ -27,6 +27,7 @@ async function bot() {
     await page.addScriptTag({
         path: './out/bot_bundle.js'
     });
+    
     return page;
 }
 
@@ -47,7 +48,7 @@ rl.prompt();
 rl.on("line", (inputData: string) => {
     var data: string[] = inputData.split(" ");
     switch (data[0]) {
-        case "start":
+        case "start": {
             if (isBotLaunched) {
                 console.log("Bot already has been launched.")
             } else {
@@ -61,7 +62,8 @@ rl.on("line", (inputData: string) => {
                 }
             }
             break;
-        case "token":
+        }
+        case "token": {
             if(data[1] === undefined || data[1] == '') {
                 console.log("error: token key field should not be empty.");
             } else {
@@ -70,22 +72,37 @@ rl.on("line", (inputData: string) => {
                 isTokenEmpty = false;
             }
             break;
-        case "exit":
+        }
+        case "exit": {
             process.exit(0);
             break;
-        case "ping":
+        }
+        /*
+        case "ping": { // eval test
             if(isBotLaunched) {
                 //pageContainer.then( ( page:any ) => { page.setCookie({name: 'ping', value: 'ping from main launcher'}); } );
-                
+                pageContainer.then( (page: any) => { page.evaluate(() => { window.ping(); }) } );
             } else {
                 console.log("error: you can do ping only when the bot is launched.");
             }
             break;
-        case "help":
+        }
+        case "addping": { // eval test
+            if(isBotLaunched) {
+                pageContainer.then( (page: any) => { page.exposeFunction('ping', () => { console.log("piiing!!"); }) } );
+            } else {
+                console.log("error: you can add ping only when the bot is launched.");
+            }
+            break;
+        } 
+        */
+        case "help": {
             console.log("Haxbotron CLI | Available commands : start, exit, token, help");
             break;
-        default:
+        }
+        default: {
             console.log(`error: ${data} is wrong command.`);
+        }
     }
     rl.prompt();
 });
