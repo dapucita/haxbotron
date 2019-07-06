@@ -2,14 +2,15 @@
 
 // import part
 import { RoomConfig } from "./controller/RoomConfig";
-import { stadiumText } from "./stadium/huge.hbs";
 import { Player } from "./controller/Player";
 import { Logger } from "./controller/Logger";
 import { PlayerObject, PlayerStorage } from "./controller/PlayerObject";
 import { ScoresObject } from "./controller/ScoresObject";
 import { ActionQueue, ActionTicket } from "./controller/Action";
 import { Parser } from "./controller/Parser";
+import { gameRule } from "./model/rules/captain.rule";
 import { RStrings } from "./resources/strings"; 
+import { KickStack } from "./model/BallTrace";
 
 
 console.log(`[DEBUG] headless token is conveyed via cookie(${getCookieFromHeadless('botToken')})`);
@@ -27,10 +28,14 @@ const roomConfig: RoomConfig = {
 const playerList = new Map(); // playerList is an Map object. // playerList.get(player.id).name; : usage for playerList
 
 const actionQueue: ActionQueue<ActionTicket> = ActionQueue.getInstance();
+const ballStack: KickStack = KickStack.getInstance();
+
 const logger: Logger = Logger.getInstance();
 const parser: Parser = Parser.getInstance();
 
-var room = window.HBInit(roomConfig);
+var gameMode: string = "ready"; // "ready", "stats"
+
+var room: any = window.HBInit(roomConfig);
 initialiseRoom();
 
 setInterval(function():void {
@@ -66,10 +71,10 @@ function initialiseRoom(): void {
     localStorage.setItem('_LaunchTime', nowDate.toString()); // save time the bot launched in localStorage
 
     // room.setDefaultStadium("Big");
-    room.setCustomStadium(stadiumText);
-    room.setScoreLimit(3);
-    room.setTimeLimit(3);
-    room.setTeamsLock(true);
+    room.setCustomStadium(gameRule.defaultMap);
+    room.setScoreLimit(gameRule.requisite.scoreLimit);
+    room.setTimeLimit(gameRule.requisite.timeLimit);
+    room.setTeamsLock(gameRule.requisite.teamLock);
 
     room.onPlayerJoin = function(player: PlayerObject): void {
         // Event called when a new player joins the room.
@@ -83,8 +88,9 @@ function initialiseRoom(): void {
             // if this player is not new player
             var loadedData: PlayerStorage | null = getPlayerData(player.auth);
             if(loadedData !== null) {
-                playerList.set(player.id, new Player(player, {totals: loadedData.totals, wins: loadedData.wins, goals: loadedData.goals, ogs: loadedData.ogs}
-                    , {mute: loadedData.mute, afkmode: false, captain: false, superadmin: loadedData.superadmin}));
+                playerList.set(player.id, new Player(player, {totals: loadedData.totals, wins: loadedData.wins,
+                    goals: loadedData.goals, assists: loadedData.assists, ogs: loadedData.ogs},
+                    {mute: loadedData.mute, afkmode: false, captain: false, superadmin: loadedData.superadmin}));
                 if(player.name != loadedData.name) { 
                     // if this player changed his/her name
                     // notify that fact to other players only once ( it will never be notified if he/she rejoined next time)
@@ -94,7 +100,7 @@ function initialiseRoom(): void {
         } else {
             // if new player
             // create a Player Object
-            playerList.set(player.id, new Player(player, {totals: 0, wins: 0, goals: 0, ogs: 0}
+            playerList.set(player.id, new Player(player, {totals: 0, wins: 0, goals: 0, assists: 0, ogs: 0}
                 , { mute: false, afkmode: false, captain: false, superadmin: false }));
             
         }
@@ -139,6 +145,8 @@ function initialiseRoom(): void {
         if(changedPlayer.id == 0) { //if the player changed into othere team is host player(always id 0),
             room.setPlayerTeam(0, 0); //stay host player in Spectators team.
         }
+        playerList.get(changedPlayer.id).team = changedPlayer.team;
+        setPlayerData(playerList.get(changedPlayer.id));
     }
 
     room.onPlayerAdminChange = function(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
@@ -173,7 +181,29 @@ function initialiseRoom(): void {
     }
 
     room.onTeamVictory = function(scores: ScoresObject): void {
-        // Event called when a team wins.
+        // Event called when a team 'wins'. not just when game ended.
+        // recors vicotry in stats. total games also counted in this event.
+        var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0 ); // except Spectators players
+        var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 1 ); // except non Red players
+        var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 2 ); // except non Blue players
+        if(scores.red > scores.blue) {
+            // if Red wins
+            redPlayers.forEach(function (eachPlayer: PlayerObject) {
+                playerList.get(eachPlayer.id).stats.wins++; //records a win
+            });
+        } else {
+            // if Blue wins
+            bluePlayers.forEach(function (eachPlayer: PlayerObject) {
+                playerList.get(eachPlayer.id).stats.wins++; //records a win
+            });
+        }
+        gamePlayers.forEach(function (eachPlayer: PlayerObject) {
+            // records a game count
+            playerList.get(eachPlayer.id).stats.totals++;
+            setPlayerData(playerList.get(eachPlayer.id)); // updates wins and totals count
+        });
+
+        logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
     }
 
@@ -211,10 +241,45 @@ function initialiseRoom(): void {
                 logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
                 // logger.c(`[DEBUG] ${playerList.get(byPlayer.id).name}`); for debugging
                 room.sendChat(`[System] You can't change the stadium.`, byPlayer.id);
-                room.setCustomStadium(stadiumText);
+                room.setCustomStadium(gameRule.defaultMap);
             }
         } else {
             logger.c(`[MAP] ${newStadiumName} has been loaded as default map.`);
+        }
+    }
+
+    room.onPlayerBallKick = function (player: PlayerObject): void {
+        // Event called when a player kicks the ball.
+        // records player's id, team when the ball was kicked
+        ballStack.push(player.id);
+    }
+
+    room.onTeamGoal = function(team: number): void {
+        // Event called when a team scores a goal.
+        // identify who has goaled.
+        var touchPlayer: number|undefined = ballStack.pop();
+        var assistPlayer: number|undefined = ballStack.pop();
+        if (touchPlayer !== undefined) {
+            if(playerList.get(touchPlayer).team == team) {
+                // if the goal is not OG
+                playerList.get(touchPlayer).stats.goals++;
+                setPlayerData(playerList.get(touchPlayer));
+                var goalMsg: string = `[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made a goal!`;
+                if(assistPlayer !== undefined && touchPlayer != assistPlayer && playerList.get(assistPlayer).team == team) {
+                    // records assist when the player who assists is not same as the player goaled, and is not other team.
+                    playerList.get(assistPlayer).stats.assists++;
+                    setPlayerData(playerList.get(assistPlayer));
+                    goalMsg += ` ${playerList.get(assistPlayer).name}#${playerList.get(assistPlayer).id} assisted the goal.`;
+                }
+                room.sendChat(goalMsg);
+                logger.c(goalMsg);
+            } else {
+                // if the goal is OG
+                playerList.get(touchPlayer).stats.ogs++;
+                setPlayerData(playerList.get(touchPlayer));
+                room.sendChat(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
+                logger.c(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
+            }
         }
     }
 
@@ -268,6 +333,7 @@ function setPlayerData(player: Player): void {
         totals: player.stats.totals, // total games include wins
         wins: player.stats.wins, // the game wins
         goals: player.stats.goals, // not contains OGs.
+        assists: player.stats.assists, // count for assist goal
         ogs: player.stats.ogs, // it means 'own goal'
         mute: player.permissions.mute, // is this player muted?
         superadmin: player.permissions.superadmin // is this player super admin?

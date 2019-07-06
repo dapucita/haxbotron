@@ -32,6 +32,7 @@ export interface PlayerStats {
     totals: number; // total games include wins
     wins: number; // the game wins
     goals: number; // not contains OGs.
+    assists: number; // count for assist goal
     ogs: number; // it means 'own goal'
 }
 
@@ -57,6 +58,7 @@ export interface PlayerStorage {
     totals: number; // total games include wins
     wins: number; // the game wins
     goals: number; // not contains OGs.
+    assists: number; // count for assist goal
     ogs: number; // it means 'own goal'
     mute: boolean; // is this player muted?
     superadmin: boolean; // is this player super admin?
