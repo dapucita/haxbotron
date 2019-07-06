@@ -20,7 +20,7 @@ export class ActionQueue<T extends ActionTicket> {
         return this.instance;
     }
     
-    push(act: T) {
+    push(act: T): void {
         this._store.push(act);
     }
     pop(): T | undefined {
