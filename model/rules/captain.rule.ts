@@ -11,7 +11,7 @@ export var gameRule: GameRule = {
         minimumPlayers: 4,
         timeLimit: 3,
         scoreLimit: 3,
-        timeLock: true
+        teamLock: true
     },
     autoOperating: false,
     statsRecord: true,
