@@ -16,4 +16,4 @@ a bot application for operating Haxball host
 - Korean
 
 ## Project Contributors
-- [dapucita](http://dapucita.kr) as Project Manager
+- [dapucita](https://github.com/dapucita) as Project Manager
