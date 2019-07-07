@@ -73,7 +73,7 @@ function initialiseRoom(): void {
     logger.c(`[HAXBOTRON] The room is launched at ${nowDate.toString()}.`);
 
     gameMode = "ready" // no 'stats' not yet
-    logger.c(`[MODE] Game mode is ${gameMode}.`);
+    logger.c(`[MODE] Game mode is ${gameMode}(by default).`);
 
     // room.setDefaultStadium("Big");
     room.setCustomStadium(gameRule.defaultMap);
@@ -116,6 +116,13 @@ function initialiseRoom(): void {
 
         // send welcome message to new player. other players cannot read this message.
         room.sendChat(`[System] Welcome, ${player.name}#${player.id}!`, player.id);
+
+        // check number of players joined and change game mode
+        if(gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+            gameMode = "stats";
+        } else {
+            gameMode = "ready";
+        }
     }
     
     room.onPlayerLeave = function(player: PlayerObject): void {
@@ -123,6 +130,13 @@ function initialiseRoom(): void {
     
         updateAdmins();
         logger.c(`[LEFT] ${player.name} has left.`);
+
+        // check number of players joined and change game mode
+        if(gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+            gameMode = "stats";
+        } else {
+            gameMode = "ready";
+        }
     }
     
     room.onPlayerChat = function(player: PlayerObject, message: string): boolean {
@@ -168,14 +182,13 @@ function initialiseRoom(): void {
     room.onGameStart = function(byPlayer: PlayerObject): void {
         /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
-        let msg = "[GAME] The game has been started.";
+        let msg = `[GAME] The game(mode:${gameMode}) has been started.`;
         if(byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
-        if(gameRule.statsRecord == true) { // TODO : apply minimum players
-            // if the game rule that applied has statsRecord option
-            room.sendChat(`[System] This game's result will be recorded in statistics system!`);
-            gameMode = "stats";
+        if(gameMode == "stats") {
+            // if the game mode is stats, records the result of this game.
+            room.sendChat(`[System] This game's result will be recorded in the statistics system!`); 
         }
         logger.c(msg);
     }
@@ -187,7 +200,6 @@ function initialiseRoom(): void {
         if(byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
-        gameMode = "ready";
         logger.c(msg);
     }
 
@@ -219,6 +231,7 @@ function initialiseRoom(): void {
         ballStack.clear(); // clear the stack.
 
         gameMode = "ready";
+        logger.c(`[MODE] Game mode is ${gameMode}.`);
 
         logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
@@ -316,26 +329,31 @@ function initialiseRoom(): void {
 
         //let docIframe = document.getElementsByTagName('iframe');
     }
-
-    function updateAdmins(): void { 
-        // Get all players except the host (id = 0 is always the host)
-        var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0 );
-        if ( players.length == 0 ) return; // No players left, do nothing.
-        if ( players.find((player: PlayerObject) => player.admin) != null ) return; // There's an admin left so do nothing.
-        room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
-        playerList.get(players[0].id).admin = true;
-        logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
-        room.sendChat(`[System] ${playerList.get(players[0].id).name} has been admin.`);
-    }
-
-    function printPlayerInfo(player: PlayerObject): void {
-        logger.c(`[INFO] NAME(${player.name}),ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
-    }
 }
 
 function getCookieFromHeadless(name: string): string {
     var result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
     return result ? result[1] : '';
+}
+
+function updateAdmins(): void { 
+    // Get all players except the host (id = 0 is always the host)
+    var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0 );
+    if ( players.length == 0 ) return; // No players left, do nothing.
+    if ( players.find((player: PlayerObject) => player.admin) != null ) return; // There's an admin left so do nothing.
+    room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
+    playerList.get(players[0].id).admin = true;
+    logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
+    room.sendChat(`[System] ${playerList.get(players[0].id).name} has been admin.`);
+}
+
+function printPlayerInfo(player: PlayerObject): void {
+    logger.c(`[INFO] NAME(${player.name}),ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
+}
+
+function roomPlayersNumberCheck(): number {
+    // return number of players joined this room
+    return room.getPlayerList().filter((player: PlayerObject) => player.id != 0 ).length();
 }
 
 function getPlayerData(playerAuth: string): PlayerStorage | null {
