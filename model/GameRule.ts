@@ -13,5 +13,5 @@ export interface GameRule {
     autoOperating: boolean; // auto emcee mode
     statsRecord: boolean; // record game results on statistics system.
     defaultMap: string; // default stadium data for the game.
-    readyMap: string; // stadium data for using until the game starts.
+    readyMap: string; // stadium data for using until the game starts. If statsRecord options is false, S E T this same as defaultMap option.
 }
