@@ -33,7 +33,8 @@ export interface PlayerStats {
     wins: number; // the game wins
     goals: number; // not contains OGs.
     assists: number; // count for assist goal
-    ogs: number; // it means 'own goal'
+    ogs: number; // it means 'own goal' (in Korean, '자책골')
+    losePoints: number; // it means the points this player lost (in Korean, '실점')
 }
 
 export interface PlayerPosition {
@@ -59,7 +60,8 @@ export interface PlayerStorage {
     wins: number; // the game wins
     goals: number; // not contains OGs.
     assists: number; // count for assist goal
-    ogs: number; // it means 'own goal'
+    ogs: number; // it means 'own goal' (in Korean, '자책골')
+    losePoints: number; // it means the points this player lost (in Korean, '실점')
     mute: boolean; // is this player muted?
     superadmin: boolean; // is this player super admin?
 }

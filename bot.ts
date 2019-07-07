@@ -69,6 +69,11 @@ function initialiseRoom(): void {
     // Write initialising processes here.
     const nowDate: Date = new Date();
     localStorage.setItem('_LaunchTime', nowDate.toString()); // save time the bot launched in localStorage
+    
+    logger.c(`[HAXBOTRON] The room is launched at ${nowDate.toString()}.`);
+
+    gameMode = "ready" // no 'stats' not yet
+    logger.c(`[MODE] Game mode is ${gameMode}.`);
 
     // room.setDefaultStadium("Big");
     room.setCustomStadium(gameRule.defaultMap);
@@ -89,7 +94,7 @@ function initialiseRoom(): void {
             var loadedData: PlayerStorage | null = getPlayerData(player.auth);
             if(loadedData !== null) {
                 playerList.set(player.id, new Player(player, {totals: loadedData.totals, wins: loadedData.wins,
-                    goals: loadedData.goals, assists: loadedData.assists, ogs: loadedData.ogs},
+                    goals: loadedData.goals, assists: loadedData.assists, ogs: loadedData.ogs, losePoints: loadedData.losePoints},
                     {mute: loadedData.mute, afkmode: false, captain: false, superadmin: loadedData.superadmin}));
                 if(player.name != loadedData.name) { 
                     // if this player changed his/her name
@@ -100,7 +105,7 @@ function initialiseRoom(): void {
         } else {
             // if new player
             // create a Player Object
-            playerList.set(player.id, new Player(player, {totals: 0, wins: 0, goals: 0, assists: 0, ogs: 0}
+            playerList.set(player.id, new Player(player, {totals: 0, wins: 0, goals: 0, assists: 0, ogs: 0, losePoints: 0}
                 , { mute: false, afkmode: false, captain: false, superadmin: false }));
             
         }
@@ -167,6 +172,11 @@ function initialiseRoom(): void {
         if(byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
+        if(gameRule.statsRecord == true) { // TODO : apply minimum players
+            // if the game rule that applied has statsRecord option
+            room.sendChat(`[System] This game's result will be recorded in statistics system!`);
+            gameMode = "stats";
+        }
         logger.c(msg);
     }
 
@@ -177,33 +187,38 @@ function initialiseRoom(): void {
         if(byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
+        gameMode = "ready";
         logger.c(msg);
     }
 
     room.onTeamVictory = function(scores: ScoresObject): void {
         // Event called when a team 'wins'. not just when game ended.
         // recors vicotry in stats. total games also counted in this event.
-        var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0 ); // except Spectators players
-        var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 1 ); // except non Red players
-        var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 2 ); // except non Blue players
-        if(scores.red > scores.blue) {
-            // if Red wins
-            redPlayers.forEach(function (eachPlayer: PlayerObject) {
-                playerList.get(eachPlayer.id).stats.wins++; //records a win
-            });
-        } else {
-            // if Blue wins
-            bluePlayers.forEach(function (eachPlayer: PlayerObject) {
-                playerList.get(eachPlayer.id).stats.wins++; //records a win
+        if(gameMode == "stats") { // records when game mode is for stats recording.
+            var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0 ); // except Spectators players
+            var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 1 ); // except non Red players
+            var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 2 ); // except non Blue players
+            if(scores.red > scores.blue) {
+                // if Red wins
+                redPlayers.forEach(function (eachPlayer: PlayerObject) {
+                    playerList.get(eachPlayer.id).stats.wins++; //records a win
+                });
+            } else {
+                // if Blue wins
+                bluePlayers.forEach(function (eachPlayer: PlayerObject) {
+                    playerList.get(eachPlayer.id).stats.wins++; //records a win
+                });
+            }
+            gamePlayers.forEach(function (eachPlayer: PlayerObject) {
+            // records a game count
+                playerList.get(eachPlayer.id).stats.totals++;
+                setPlayerData(playerList.get(eachPlayer.id)); // updates wins and totals count
             });
         }
-        gamePlayers.forEach(function (eachPlayer: PlayerObject) {
-            // records a game count
-            playerList.get(eachPlayer.id).stats.totals++;
-            setPlayerData(playerList.get(eachPlayer.id)); // updates wins and totals count
-        });
 
         ballStack.clear(); // clear the stack.
+
+        gameMode = "ready";
 
         logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
         room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
@@ -261,7 +276,8 @@ function initialiseRoom(): void {
         // identify who has goaled.
         var touchPlayer: number|undefined = ballStack.pop();
         var assistPlayer: number|undefined = ballStack.pop();
-        if (touchPlayer !== undefined) {
+        ballStack.clear(); // clear the stack.
+        if (gameMode == "stats" && touchPlayer !== undefined) { // records when game mode is for stats recording.
             if(playerList.get(touchPlayer).team == team) {
                 // if the goal is not OG
                 playerList.get(touchPlayer).stats.goals++;
@@ -282,6 +298,13 @@ function initialiseRoom(): void {
                 room.sendChat(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
                 logger.c(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
             }
+            // except spectators and filter who were lose a point
+            var losePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0 && player.team != team);
+            losePlayers.forEach(function (eachPlayer: PlayerObject) {
+                // records a lost point
+                playerList.get(eachPlayer.id).stats.losePoints++;
+                setPlayerData(playerList.get(eachPlayer.id)); // updates lost points count
+            });
         }
     }
 
@@ -336,7 +359,8 @@ function setPlayerData(player: Player): void {
         wins: player.stats.wins, // the game wins
         goals: player.stats.goals, // not contains OGs.
         assists: player.stats.assists, // count for assist goal
-        ogs: player.stats.ogs, // it means 'own goal'
+        ogs: player.stats.ogs, // it means 'own goal' (in Korean, '자책골')
+        losePoints: player.stats.losePoints, // it means the points this player lost (in Korean, '실점')
         mute: player.permissions.mute, // is this player muted?
         superadmin: player.permissions.superadmin // is this player super admin?
     }
