@@ -1,4 +1,4 @@
-# Haxbotron
+# Haxbotron 🤖
 
 ## What is this
 Haxbotron is a bot application for launch Haxball game room.

@@ -1,4 +1,4 @@
-# Haxbotron
+# Haxbotron 🤖
 a bot application for operating Haxball host
 
 ## Versions
