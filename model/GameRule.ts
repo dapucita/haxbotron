@@ -5,7 +5,7 @@ export interface GameRule {
     ruleDescripttion?: string; // simple description of this rule
     requisite: {
         minimumPlayers: number; // minimum number of players needs for apply this rule
-        maximumPlayers?: number; // maximum number of players limits for apply this rule
+        // maximumPlayers?: number; // maximum number of players limits for apply this rule // deprecated
         timeLimit: number; // limit time for end the game
         scoreLimit: number; // limit score for end the game
         teamLock: boolean; // limit moving teams by self
