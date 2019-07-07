@@ -1,5 +1,5 @@
 export var stadiumText: string = `{
-    "name": "Haxbotron Ready for next game",
+    "name": "Haxbotron Miniready",
     "width": 300,
     "height": 200,
     "bg": {
