@@ -1,6 +1,5 @@
 node_modules/
 out/
 .node-persist/
-*.js
 !webpack.config.js
 techmemo.md
