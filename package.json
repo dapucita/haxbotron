@@ -11,6 +11,14 @@
   },
   "author": "dapucita",
   "license": "MIT",
+  "homepage": "https://github.com/dapucita/haxbotron",
+  "bugs": {
+    "url": "https://github.com/dapucita/haxbotron/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dapucita/haxbotron.git"
+  },
   "dependencies": {
     "node-persist": "^3.0.4",
     "puppeteer": "^1.18.1"
