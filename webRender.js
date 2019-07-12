@@ -20,4 +20,3 @@ roomInfoSubmitBtn.addEventListener('click', function() {
 
     ipcRenderer.send('room-make-action', renderedRoomInfo);
 });
-
