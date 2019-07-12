@@ -1,3 +1,5 @@
+// if you want to implement 'click' member using objects from index.ts, you should to do it in index.ts not here. (you can't use ipcrender)
+
 const template = [{
         label: 'Application',
         submenu: [{
