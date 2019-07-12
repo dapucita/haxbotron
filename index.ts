@@ -11,13 +11,13 @@ const menuTemplate = require('./view/menuTemplate');
 const puppeteer = require('puppeteer');
 const nodeStorage = require('node-persist');
 
-let electronWindow; // window object for Electron
+let electronWindow: any; // window object for Electron
 
 var hostRoomConfig: HostRoomConfig; // Configuration data for Room Host
 var isOpenHeadless: boolean = false; // option for open chromium in headless mode
 
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
-var pageContainer: any; // puppeteer window object
+var puppeteerContainer: any; // puppeteer window object
 
 function createWindow() {
     // create the Electron browser window
@@ -45,22 +45,26 @@ function createWindow() {
 }
 
 // get room host information and launch the bot
-ipcMain.on('room-make-action', (event: any, arg: any) => {
+ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
     // Event emitter for sending asynchronous messages
     //event.sender.send('asynchronous-reply', 'async pong');
     hostRoomConfig = arg;
     hostRoomConfig.maxPlayers = parseInt(arg.maxPlayers, 10); // do type casting because conveyed maxPlayers value is string type
     if(isBotLaunched != true) {
-        pageContainer = bot(JSON.stringify(hostRoomConfig));
+        if(Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').checked == true) { // if headless mode checkbox is checked
+            isOpenHeadless = true;
+        } else { // or not checked
+            isOpenHeadless = false;
+        }
+        puppeteerContainer = bot(JSON.stringify(hostRoomConfig));
+        Menu.getApplicationMenu().getMenuItemById('startMenuItem').enabled = false;
+        Menu.getApplicationMenu().getMenuItemById('stopMenuItem').enabled = true;
+        Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').enabled = false;
         isBotLaunched = true;
     } else {
         console.log("The bot is running already.");
     }
 });
-
-const electronMenu = Menu.buildFromTemplate(menuTemplate);
-
-Menu.setApplicationMenu(electronMenu);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -84,6 +88,17 @@ app.on('activate', (electronWindow: any) => {
     }
 });
 
+const appMenu = Menu.buildFromTemplate(menuTemplate);
+Menu.setApplicationMenu(appMenu);
+Menu.getApplicationMenu().getMenuItemById('startMenuItem').click = function() { // add click event handler on the menu item.
+    // simulate onClick event like press the button.
+    electronWindow.webContents.executeJavaScript(`document.getElementById('launchButton').click();`);
+}
+Menu.getApplicationMenu().getMenuItemById('stopMenuItem').click = function() { // add click event handler on the menu item.
+    // close the headless browser
+    puppeteerContainer.then((browser: any) => { browser.close(); }); // close the puppeteer browser
+}
+
 // In this file you can include the rest of your app's specific main process code.
 // You can also put them in separate files and require them here.
 async function bot(hostConfig: string) {
@@ -98,6 +113,9 @@ async function bot(hostConfig: string) {
         clearInterval(storageLoop);
         // browser.close();
         isBotLaunched = false;
+        Menu.getApplicationMenu().getMenuItemById('startMenuItem').enabled = true;
+        Menu.getApplicationMenu().getMenuItemById('stopMenuItem').enabled = false;
+        Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').enabled = true;
         console.log("The headless host is closed.");
         return;
     });
@@ -153,7 +171,7 @@ async function bot(hostConfig: string) {
         });
     }, 5000); // by each 5seconds
 
-    return page;
+    return browser;
 }
 
 interface HostRoomConfig { // same as RoomConfig. Do not change the structure alone.
