@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron out/index.js",
     "cli-start": "node out/index.js",
-    "build": "tsc && webpack",
+    "build": "tsc && webpack --config webpack.config.bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "dapucita",
