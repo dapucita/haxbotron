@@ -87,11 +87,19 @@ app.on('activate', (electronWindow: any) => {
 // In this file you can include the rest of your app's specific main process code.
 // You can also put them in separate files and require them here.
 async function bot(hostConfig: string) {
+    console.log("The headless host has started.");
     await nodeStorage.init();
 
     const browser = await puppeteer.launch({
         headless: isOpenHeadless,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    await browser.on('disconnected', () => {
+        clearInterval(storageLoop);
+        // browser.close();
+        isBotLaunched = false;
+        console.log("The headless host is closed.");
+        return;
     });
     const page = await browser.newPage();
 
@@ -108,12 +116,13 @@ async function bot(hostConfig: string) {
     The console event receives a ConsoleMessage object,
     which tells you what type of call it was (log, error, etc.),
     what the arguments were (args()), etc.
-    */
+    
     await page.on('console', (msg: any) => {
         for (let i = 0; i < msg.args().length; ++i){
             console.log(`${i}: ${msg.args()[i]}`);
         }
     });
+    */
 
     await page.addScriptTag({
         path: './out/bot_bundle.js'
@@ -128,7 +137,7 @@ async function bot(hostConfig: string) {
     });
 
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
-    setInterval(async function () {
+    var storageLoop = setInterval(async function () {
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};
             for (let i = 0; i < localStorage.length; i++) {
