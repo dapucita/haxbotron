@@ -35,23 +35,23 @@ import {
 } from "./model/BallTrace";
 
 
-var roomAuthToken: string = getCookieFromHeadless('botToken');
+var botConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
 
 console.log("====");
 console.log('\x1b[32m%s\x1b[0m', "H a x b o t r o n"); //green color
 console.log("Haxbotron Debugging System on headless chromium");
-console.log(`The authentication token is conveyed via cookie(${roomAuthToken})`);
+console.log(`The authentication token is conveyed via cookie(${botConfig.token})`);
 console.log("====");
 
 // initial settings part
 const roomConfig: RoomConfig = {
-    roomName: "🤖 ĦΘ§Ŧ βΘŦ Ŧξ§Ŧ∫ŊŒ (in Development)",
-    password: "hbtron",
-    maxPlayers: 13,
+    roomName: botConfig.roomName,
+    password: botConfig.password,
+    maxPlayers: botConfig.maxPlayers,
     // https://www.haxball.com/headlesstoken
-    token: roomAuthToken, //If this value doesn't exist, headless host api page will require to solving recaptcha.
-    public: true,
-    playerName: "🤖"
+    token: botConfig.token, //If this value doesn't exist, headless host api page will require to solving recaptcha.
+    public: botConfig.public,
+    playerName: botConfig.playerName
 }
 const playerList = new Map(); // playerList is an Map object. // playerList.get(player.id).name; : usage for playerList
 
