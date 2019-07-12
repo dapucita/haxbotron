@@ -2,25 +2,22 @@
 const {
     app,
     BrowserWindow,
-    Menu
-} = require('electron');
-const {
+    Menu,
     ipcMain
 } = require('electron');
 const menuTemplate = require('./view/menuTemplate');
 
 //BOT Loader
-const readline = require("readline");
 const puppeteer = require('puppeteer');
 const nodeStorage = require('node-persist');
 
-let electronWindow; //window object for Electron
+let electronWindow; // window object for Electron
 
-var isOpenHeadless: boolean = false; //option for open chrome in headless mode
-var isBotLaunched: boolean = false;
-var isTokenEmpty: boolean = true;
-var headlessToken: string = '';
-var pageContainer: any;
+var hostRoomConfig: HostRoomConfig; // Configuration data for Room Host
+var isOpenHeadless: boolean = false; // option for open chromium in headless mode
+
+var isBotLaunched: boolean = false; // flag for check whether the bot is running
+var pageContainer: any; // puppeteer window object
 
 function createWindow() {
     // create the Electron browser window
@@ -47,23 +44,18 @@ function createWindow() {
     });
 }
 
-// Event handler for asynchronous incoming messages
-ipcMain.on('asynchronous-message', (event: any, arg: any) => {
-    console.log(arg);
-
-    /* Event emitter for sending asynchronous messages */
-    event.sender.send('asynchronous-reply', 'async pong');
-});
-
-// Event handler for synchronous incoming messages
-ipcMain.on('synchronous-message', (event: any, arg: any) => {
-    console.log(arg);
-
-    /* Synchronous event emmision in 10 sec */
-    setTimeout(() => {
-        event.returnValue = 'sync pong';
-    }, 10 * 1000);
-
+// get room host information and launch the bot
+ipcMain.on('room-make-action', (event: any, arg: any) => {
+    // Event emitter for sending asynchronous messages
+    //event.sender.send('asynchronous-reply', 'async pong');
+    hostRoomConfig = arg;
+    hostRoomConfig.maxPlayers = parseInt(arg.maxPlayers, 10); // do type casting because conveyed maxPlayers value is string type
+    if(isBotLaunched != true) {
+        pageContainer = bot(JSON.stringify(hostRoomConfig));
+        isBotLaunched = true;
+    } else {
+        console.log("The bot is running already.");
+    }
 });
 
 const electronMenu = Menu.buildFromTemplate(menuTemplate);
@@ -94,8 +86,7 @@ app.on('activate', (electronWindow: any) => {
 
 // In this file you can include the rest of your app's specific main process code.
 // You can also put them in separate files and require them here.
-
-async function bot() {
+async function bot(hostConfig: string) {
     await nodeStorage.init();
 
     const browser = await puppeteer.launch({
@@ -108,14 +99,27 @@ async function bot() {
         waitUntil: 'networkidle2'
     });
     await page.setCookie({
-        name: 'botToken',
-        value: headlessToken
-    }); //auth token for headless-api page
+        name: 'botConfig',
+        value: hostConfig
+    }); // convey room host configuration via cookie
+
+    /* 
+    https://stackoverflow.com/questions/51907677
+    The console event receives a ConsoleMessage object,
+    which tells you what type of call it was (log, error, etc.),
+    what the arguments were (args()), etc.
+    */
+    await page.on('console', (msg: any) => {
+        for (let i = 0; i < msg.args().length; ++i){
+            console.log(`${i}: ${msg.args()[i]}`);
+        }
+    });
+
     await page.addScriptTag({
         path: './out/bot_bundle.js'
     });
 
-    // load stored datas from node-persist storage to puppeteer html5 localstorage
+    // load stored data from node-persist storage to puppeteer html5 localstorage
     await nodeStorage.forEach(async function (datum: any) { // async forEach(callback): This function iterates over each key/value pair and executes an asynchronous callback as well
         // usage: datum.key, datum.value
         await page.evaluate((tempKey: string, tempStr: string) => {
@@ -123,7 +127,7 @@ async function bot() {
         }, datum.key, datum.value);
     });
 
-    // get stored datas from puppeteer html5 localstorage and copy it into node-persist storage
+    // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
     setInterval(async function () {
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};
@@ -141,6 +145,27 @@ async function bot() {
     }, 5000); // by each 5seconds
 
     return page;
+}
+
+interface HostRoomConfig { // same as RoomConfig. Do not change the structure alone.
+    // The name for the room.
+    roomName?: string;
+    // The name for the host player.
+    playerName?: string;
+    // The password for the room (no password if ommited).
+    password?: string;
+    // Max number of players the room accepts.
+    maxPlayers?: number;
+    // If true the room will appear in the room list.
+    public?: boolean;
+    // GeoLocation override for the room.
+    geo?: {
+        "code": string,
+        "lat": number,
+        "lon": number
+    };
+    // token doesn't need if the bot is started from Headless page, not standalone.
+    token?: string;
 }
 
 /*===========
