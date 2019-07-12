@@ -14,8 +14,6 @@ Not yet :)
 ### Schduled Version
 0.1.0 for first release
 
-0.2.0 with new features like GUI, advanced game control
-
 ## Features
 launch on Multi platforms: Windows, Linux, OS X and so on
 
@@ -25,18 +23,19 @@ Built-in maps: especially popular in Korea
 
 
 ## How to Build
-There are 2 ways to build and start the bot.
-
 You don't have to build again if you did it already.
 
 ```
 npm run build
 npm start
 ```
-## How to Use
-Just launch and solve recaptcha.
 
-It will change later.
+## How to Use
+You need to prepare headless token key. You can get it from [here](https://www.haxball.com/headlesstoken).
+
+If you got the token, you have to launch the application and input your room's configuration values.
+
+Then, you can launch your own game room.
 
 ## Player Hierarchy
 
