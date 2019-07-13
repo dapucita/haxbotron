@@ -137,6 +137,7 @@ async function bot(hostConfig: string) {
             document.getElementById('roomInformationDiv').style.display = "none";
             document.getElementById('roomIndicator').innerHTML = "NOT LAUNCHED YET";
             document.getElementById('roomLinkIndicator').innerHTML = "link";
+            document.getElementById('botConsole').innerHTML = "";
         `);
         console.log("The headless host is closed.");
         return;
