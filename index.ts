@@ -173,9 +173,11 @@ async function bot(hostConfig: string) {
     // load stored data from node-persist storage to puppeteer html5 localstorage
     await nodeStorage.forEach(async function (datum: any) { // async forEach(callback): This function iterates over each key/value pair and executes an asynchronous callback as well
         // usage: datum.key, datum.value
-        await page.evaluate((tempKey: string, tempStr: string) => {
-            localStorage.setItem(tempKey, tempStr);
-        }, datum.key, datum.value);
+        if(datum.key != "_LaunchTime") { // except _LaunchTime
+            await page.evaluate((tempKey: string, tempStr: string) => {
+                localStorage.setItem(tempKey, tempStr);
+            }, datum.key, datum.value);
+        }
     });
 
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
