@@ -4,6 +4,5 @@ declare global {
         roomURIlink: string
         HBInit(config: RoomConfig): any
         onHBLoaded(): void
-        //ping(): void // eval test
     }
 }
