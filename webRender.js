@@ -17,6 +17,5 @@ roomInfoSubmitBtn.addEventListener('click', function() {
         maxPlayers : roomMaxPlayers.value,
         token : roomAuthToken.value
     };
-
     ipcRenderer.send('room-make-action', renderedRoomInfo);
 });
