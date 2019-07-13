@@ -3,6 +3,7 @@ const {
     app,
     BrowserWindow,
     Menu,
+    dialog,
     ipcMain
 } = require('electron');
 const menuTemplate = require('./view/menuTemplate');
@@ -17,16 +18,18 @@ var hostRoomConfig: HostRoomConfig; // Configuration data for Room Host
 var isOpenHeadless: boolean = false; // option for open chromium in headless mode
 
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
-var puppeteerContainer: any; // puppeteer window object
+var puppeteerContainer: any; // puppeteer page object
 
 function createWindow() {
     // create the Electron browser window
     electronWindow = new BrowserWindow({
+        title: "Haxbotron",
+        resizable: false,
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: true
-        }
+        } //TODO: 예쁜 테마 적용해보기
     });
 
     // and load the index.html of the app.
@@ -57,12 +60,22 @@ ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
             isOpenHeadless = false;
         }
         puppeteerContainer = bot(JSON.stringify(hostRoomConfig));
+
         Menu.getApplicationMenu().getMenuItemById('startMenuItem').enabled = false;
         Menu.getApplicationMenu().getMenuItemById('stopMenuItem').enabled = true;
         Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').enabled = false;
+
+        electronWindow.webContents.executeJavaScript(`
+            document.getElementById('roomSettingDiv').style.display = "none";
+            document.getElementById('roomInformationDiv').style.display = "block";
+            document.getElementById('roomTitleIndicator').innerHTML = "Title : " + document.getElementById('roomTitle').value;
+            document.getElementById('roomPasswordIndicator').innerHTML = "Password : " + document.getElementById('roomPassword').value;
+            document.getElementById('roomIndicator').innerHTML = "BOT IS RUNNING NOW";
+        `);
         isBotLaunched = true;
     } else {
-        console.log("The bot is running already.");
+        dialog.showErrorBox("You can launch only one bot.", "The bot was launched already. You can't launch other bot on this process.");
+        console.log("The bot was launched already");
     }
 });
 
@@ -96,7 +109,7 @@ Menu.getApplicationMenu().getMenuItemById('startMenuItem').click = function() { 
 }
 Menu.getApplicationMenu().getMenuItemById('stopMenuItem').click = function() { // add click event handler on the menu item.
     // close the headless browser
-    puppeteerContainer.then((browser: any) => { browser.close(); }); // close the puppeteer browser
+    puppeteerContainer.then((page: any) => { page.close(); }); // close the puppeteer browser (the single page will be closed actually)
 }
 
 // In this file you can include the rest of your app's specific main process code.
@@ -116,10 +129,18 @@ async function bot(hostConfig: string) {
         Menu.getApplicationMenu().getMenuItemById('startMenuItem').enabled = true;
         Menu.getApplicationMenu().getMenuItemById('stopMenuItem').enabled = false;
         Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').enabled = true;
+        electronWindow.webContents.executeJavaScript(`
+            document.getElementById('roomSettingDiv').style.display = "block";
+            document.getElementById('roomInformationDiv').style.display = "none";
+            document.getElementById('roomIndicator').innerHTML = "NOT LAUNCHED YET";
+            document.getElementById('roomLinkIndicator').innerHTML = "link";
+        `);
         console.log("The headless host is closed.");
         return;
     });
-    const page = await browser.newPage();
+
+    const loadedPages = await browser.pages(); // get all pages (acutally it will be only one page in the first loading of puppeteer)
+    const page = await loadedPages[0]; // target on empty, blank page
 
     await page.goto('https://www.haxball.com/headless', {
         waitUntil: 'networkidle2'
@@ -171,7 +192,13 @@ async function bot(hostConfig: string) {
         });
     }, 5000); // by each 5seconds
 
-    return browser;
+    await page.waitForFunction(() => window.roomURIlink !== undefined); // wait until window.roomURIlink is created. That object is made when room.onRoomLink event is called.
+    var conveyedRoomLink: string = await page.evaluate(() => {
+        return window.roomURIlink; // get the link
+    });
+    await electronWindow.webContents.executeJavaScript(`document.getElementById('roomLinkIndicator').innerHTML = "Link : ${conveyedRoomLink}";`); // display the link
+
+    return page;
 }
 
 interface HostRoomConfig { // same as RoomConfig. Do not change the structure alone.
@@ -194,65 +221,3 @@ interface HostRoomConfig { // same as RoomConfig. Do not change the structure al
     // token doesn't need if the bot is started from Headless page, not standalone.
     token?: string;
 }
-
-/*===========
-
-
-
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-console.log("================================================================================");
-console.log('\x1b[32m%s\x1b[0m', "H a x b o t r o n"); //green color
-console.log("Haxbotron Command Line Interface - type 'help' command.");
-console.log("You can get token for headless host on https://www.haxball.com/headlesstoken");
-console.log("================================================================================");
-
-rl.setPrompt("Haxbotron@localhost > ");
-
-rl.prompt();
-rl.on("line", (inputData: string) => {
-    var data: string[] = inputData.split(" ");
-    switch (data[0]) {
-        case "start": {
-            if (isBotLaunched) {
-                console.log("Bot already has been launched.");
-            } else {
-                if (isTokenEmpty) { // if headless token not setted yet
-                    console.log("error: you need to set headless token for starting bot. use token command.");
-                } else {
-                    pageContainer = bot();
-                    isBotLaunched = true;
-                    console.log("Bot loaded.");
-                }
-            }
-            break;
-        }
-        case "token": {
-            if (data[1] === undefined || data[1] == '') {
-                console.log("error: token key field should not be empty.");
-            } else {
-                console.log(`token key is saved. (${data[1]})`);
-                headlessToken = data[1];
-                isTokenEmpty = false;
-            }
-            break;
-        }
-        case "exit": {
-            process.exit(0);
-            break;
-        }
-        case "help": {
-            console.log("Haxbotron CLI | Available commands : start, exit, token, help");
-            break;
-        }
-        default: {
-            console.log(`error: ${data} is wrong command.`);
-        }
-    }
-    rl.prompt();
-});
-
-===========*/
