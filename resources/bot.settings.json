@@ -1,0 +1,10 @@
+{
+    "botName": "Haxbotron",
+    "botVersion": "0.0.1",
+    "botOperator": "Haxbotron",
+
+    "welcomeJoin": true,
+    "advertising": true,
+
+    "language": "en"
+}
