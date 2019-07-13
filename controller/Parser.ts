@@ -1,4 +1,5 @@
 import { ActionTicket } from "./Action";
+import * as lang from "../resources/strings";
 
 export class Parser {
     // written in Singleton Pattern
@@ -27,25 +28,29 @@ export class Parser {
                 case "help": {
                     ticket.type = "selfnotice";
                     ticket.ownerPlayerID = playerID;
-                    ticket.messageString = "[HELP] !help !about";
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = lang.command.help;
                     break;
                 }
                 case "about": {
                     ticket.type = "selfnotice";
                     ticket.ownerPlayerID = playerID;
-                    ticket.messageString = "[SYSTEM] Haxbotron bot - launched on " + localStorage.getItem('_LaunchTime');
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = lang.command.about;
                     break;
                 }
                 case "super": { // temporal command in development stage. remove this command when you operate the bot with other players
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;
-                    ticket.messageString = "You are super admin now.";
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = lang.command.super;
                     break;
                 }   
                 case "debug": { // temporal command in development stage. remove this command when you operate the bot with other players
                     ticket.type = "debug";
                     ticket.ownerPlayerID = playerID;
-                    ticket.messageString = "Debug information has printed in console.";
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = lang.command.debug;
                     break;
                 }
             }
@@ -60,6 +65,23 @@ export class Parser {
         } else {
             return false;
         }
+    }
+
+    public maketext(str: string, placeholder: any): string {
+        // find placeholer, and interpolate it.
+        // if property not found string is not replaced
+        // from https://stackoverflow.com/questions/19896511/how-to-replace-specific-parts-in-string-with-javascript-with-values-from-object
+        return String(str).replace((/\\?\{([^{}]+)\}/g), function(match, name) {
+            return (placeholder[name] != null) ? placeholder[name] : match;
+        });
+        /* usage
+        var content ="Looks like you have {no_email} or {no_code} provided";
+        var Lang = {
+            'no_email' : "No email",
+            'no_code' : "No code"
+        }
+        var formatted = replace(content, lang);
+        */
     }
 }
 

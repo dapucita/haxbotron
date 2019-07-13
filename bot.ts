@@ -28,9 +28,6 @@ import {
     gameRule
 } from "./model/rules/captain.rule";
 import {
-    RStrings
-} from "./resources/strings";
-import {
     KickStack
 } from "./model/BallTrace";
 
@@ -72,8 +69,16 @@ setInterval(function (): void {
     if (timerTicket !== undefined) {
         switch (timerTicket.type) {
             case "selfnotice": {
+                var placeholder = { // Parser.maketext(str, placeholder)
+                    _LaunchTime: localStorage.getItem('_LaunchTime'),
+                    ticketOwner: timerTicket.ownerPlayerID,
+                    ticketTarget: timerTicket.targetPlayerID,
+                    targetTeamID: timerTicket.targetTeamID
+                }
                 logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
-                room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
+                if(timerTicket.messageString !== undefined) {
+                    room.sendChat(parser.maketext(timerTicket.messageString, placeholder), timerTicket.ownerPlayerID);
+                }
                 break;
             }
             case "super": {
