@@ -33,6 +33,14 @@ const template = [{
         ]
     },
     {
+        label: 'Command',
+        submenu: [{
+            id: 'announceCommandMenuItem',
+            enabled: false,
+            label: 'Announce a message'
+        }]
+    },
+    {
         label: 'Setting',
         submenu: [{
             id: 'headlessModeMenuItem',
