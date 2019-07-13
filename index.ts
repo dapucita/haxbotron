@@ -51,6 +51,9 @@ function createWindow() {
 ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
     // Event emitter for sending asynchronous messages
     //event.sender.send('asynchronous-reply', 'async pong');
+    if(arg.password == "") {
+        arg.password = null
+    }
     hostRoomConfig = arg;
     hostRoomConfig.maxPlayers = parseInt(arg.maxPlayers, 10); // do type casting because conveyed maxPlayers value is string type
     if(isBotLaunched != true) {
