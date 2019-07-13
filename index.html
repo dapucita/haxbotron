@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>🤖 Haxbotron 🤖</title>
+    <title>Haxbotron</title>
 </head>
 
 <body>
     <h1>🤖 Haxbotron 🤖</h1>
-    <p id="indicator">NOT LAUNCHED YET</p>
-    <div id="roomSettingDiv">
+    <p id="roomIndicator">NOT LAUNCHED YET</p>
+    <div id="roomSettingDiv" style="display:block">
         <p>New Room Information</p>
         <p>Title <input id="roomTitle" name="roomTitle" type="text" size="42" value="🤖 ĦΘ§Ŧ βΘŦ Ŧξ§Ŧ∫ŊŒ (in Development)" /></p>
         <p>Password <input id="roomPassword" name="roomPassword" type="text" size="20" value="hbtron" /></p>
@@ -18,6 +18,12 @@
         <p>Public <input id="roomPublicCheck" name="roomPublicCheck" type="checkbox" checked="true" /></p>
         <p>Auth Token <input id="roomAuthToken" name="roomAuthToken" type="text" size="42" value="https://www.haxball.com/headlesstoken" /></p>
         <input id="launchButton" name="launchButton" type="button" value="RUN!" />
+    </div>
+    <div id="roomInformationDiv" style="display:none">
+        <p>Room Information</p>
+        <p id="roomTitleIndicator">title</p>
+        <p id="roomPasswordIndicator">password</p>
+        <p id="roomLinkIndicator">link</p>
     </div>
 </body>
 <script src='webRender.js'></script>
