@@ -26,10 +26,30 @@ export class Parser {
 
             switch(cmd) {
                 case "help": {
+                    if(cutMsg[1] !== undefined) {
+                        switch(cutMsg[1]) {
+                            case "help": {
+                                ticket.messageString = lang.command.helpman.help;
+                                break;
+                            }
+                            case "about": {
+                                ticket.messageString = lang.command.helpman.about;
+                                break;
+                            }
+                            case "stats": {
+                                ticket.messageString = lang.command.helpman.stats;
+                                break;
+                            }
+                            default: {
+                                ticket.messageString = lang.command.helpman._ErrorWrongMan;
+                            }
+                        }
+                    } else {
+                        ticket.messageString = lang.command.help;
+                    }
                     ticket.type = "selfnotice";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = lang.command.help;
                     break;
                 }
                 case "about": {
