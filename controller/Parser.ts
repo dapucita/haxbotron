@@ -1,5 +1,5 @@
 import { ActionTicket } from "./Action";
-import * as lang from "../resources/strings";
+import { command as langCommand } from "../resources/strings";
 
 export class Parser {
     // written in Singleton Pattern
@@ -29,23 +29,23 @@ export class Parser {
                     if(cutMsg[1] !== undefined) {
                         switch(cutMsg[1]) {
                             case "help": {
-                                ticket.messageString = lang.command.helpman.help;
+                                ticket.messageString = langCommand.helpman.help;
                                 break;
                             }
                             case "about": {
-                                ticket.messageString = lang.command.helpman.about;
+                                ticket.messageString = langCommand.helpman.about;
                                 break;
                             }
                             case "stats": {
-                                ticket.messageString = lang.command.helpman.stats;
+                                ticket.messageString = langCommand.helpman.stats;
                                 break;
                             }
                             default: {
-                                ticket.messageString = lang.command.helpman._ErrorWrongMan;
+                                ticket.messageString = langCommand.helpman._ErrorWrongMan;
                             }
                         }
                     } else {
-                        ticket.messageString = lang.command.help;
+                        ticket.messageString = langCommand.help;
                     }
                     ticket.type = "selfnotice";
                     ticket.ownerPlayerID = playerID;
@@ -56,21 +56,21 @@ export class Parser {
                     ticket.type = "selfnotice";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = lang.command.about;
+                    ticket.messageString = langCommand.about;
                     break;
                 }
                 case "super": { // temporal command in development stage. remove this command when you operate the bot with other players
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = lang.command.super;
+                    ticket.messageString = langCommand.super;
                     break;
                 }   
                 case "debug": { // temporal command in development stage. remove this command when you operate the bot with other players
                     ticket.type = "debug";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = lang.command.debug;
+                    ticket.messageString = langCommand.debug;
                     break;
                 }
             }
