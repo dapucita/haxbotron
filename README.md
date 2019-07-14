@@ -50,13 +50,15 @@ Admin players have yellow colored name tag in the spectator room, but Super Admi
 ## Game Commands for Players
 If you(the player) type a command by chat...
 
-`!help` shows you simple information about this bot.
+`!help` shows you a simple list of commands you can use.
 
 `!help COMMAND` shows you how to use COMMAND command.
 
-`!stats` shows all players your stats.
+`!about` shows you simple inforamtion of the bot running now.
 
-`!stats!reset` resets your stats. It cannot be recovered.
+`!stats` shows all players your statistical information.
+
+`!stats!reset` resets your statistical information. It cannot be recovered.
 
 `!streak` shows you which team is being on a winning streak.
 
