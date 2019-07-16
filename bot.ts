@@ -139,7 +139,8 @@ function initialiseRoom(): void {
             playerStatsOgs: 0,
             playerStatsLosepoints: 0
         };
-
+        placeholderJoin = Object.assign(placeholderCommon);
+        
         // logging into console (debug)
         logger.c(`[JOIN] ${player.name} has joined.`);
         printPlayerInfo(player);
@@ -206,12 +207,12 @@ function initialiseRoom(): void {
         // check number of players joined and change game mode
         if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
             if(gameMode != "stats") {
-                room.sendChat(parser.maketext(LangRes.onJoin.startRecord, placeholderCommon));
+                room.sendChat(parser.maketext(LangRes.onJoin.startRecord, placeholderJoin));
                 gameMode = "stats";
             }
         } else {
             if(gameMode != "ready") {
-                room.sendChat(parser.maketext(LangRes.onJoin.stopRecord, placeholderCommon));
+                room.sendChat(parser.maketext(LangRes.onJoin.stopRecord, placeholderJoin));
                 gameMode = "ready";
             }
         }
@@ -232,6 +233,7 @@ function initialiseRoom(): void {
             playerStatsOgs: playerList.get(player.id).stats.ogs,
             playerStatsLosepoints: playerList.get(player.id).stats.losePoints
         };
+        placeholderLeft = Object.assign(placeholderCommon);
 
         updateAdmins();
         logger.c(`[LEFT] ${player.name} has left.`);
@@ -261,6 +263,7 @@ function initialiseRoom(): void {
             playerID: player.id,
             playerName: player.name
         };
+        placeholderChat = Object.assign(placeholderCommon);
 
         var msg = `[CHAT] ${player.name} said, "${message}"`;
         var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
@@ -299,7 +302,7 @@ function initialiseRoom(): void {
             }
         }
     }
-    
+
     room.onGameStart = function (byPlayer: PlayerObject): void {
         /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
@@ -307,6 +310,8 @@ function initialiseRoom(): void {
             playerID: byPlayer.id,
             playerName: byPlayer.name
         };
+        placeholderStart = Object.assign(placeholderCommon);
+        
         let msg = `[GAME] The game(mode:${gameMode}) has been started.`;
         if (byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
@@ -327,6 +332,8 @@ function initialiseRoom(): void {
             playerID: byPlayer.id,
             playerName: byPlayer.name
         };
+        placeholderStop = Object.assign(placeholderCommon);
+
         let msg = "[GAME] The game has been stopped.";
         if (byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
@@ -344,6 +351,8 @@ function initialiseRoom(): void {
             redScore: scores.red,
             blueScore: scores.blue
         };
+        placeholderVictory = Object.assign(placeholderCommon);
+
         if (gameRule.statsRecord == true && gameMode == "stats") { // records when game mode is for stats recording.
             var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0); // except Spectators players
             var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 1); // except non Red players
@@ -388,6 +397,8 @@ function initialiseRoom(): void {
             kickerName : byPlayer.name,
             reason : reason
         };
+        placeholderKick = Object.assign(placeholderCommon);
+
         if (ban == true) {
             // ban
             if (playerList.get(byPlayer.id).permissions['superadmin'] != true) {
@@ -412,6 +423,8 @@ function initialiseRoom(): void {
             playerName: byPlayer.name,
             stadiumName: newStadiumName
         };
+        placeholderStadium = Object.assign(placeholderCommon);
+        
         // Event called when the stadium is changed.
         if (playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
             if (playerList.get(byPlayer.id).permissions['superadmin'] == true) {
@@ -437,6 +450,8 @@ function initialiseRoom(): void {
             playerID: player.id,
             playerName: player.name
         };
+        placeholderBall = Object.assign(placeholderCommon);
+
         ballStack.push(player.id);
     }
 
@@ -452,6 +467,8 @@ function initialiseRoom(): void {
             ogID: '',
             ogName: ''
         };
+        placeholderGoal = Object.assign(placeholderCommon);
+
         if(team == 1) { 
             // if red team win
             placeholderGoal.teamName = 'Red';
@@ -535,6 +552,8 @@ function updateAdmins(): void {
         playerID: 0,
         playerName: ''
     };
+    placeholderUpdateAdmins = Object.assign(placeholderCommon);
+
     // Get all players except the host (id = 0 is always the host)
     var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
     if (players.length == 0) return; // No players left, do nothing.
