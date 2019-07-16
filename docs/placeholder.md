@@ -25,7 +25,13 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `ticketTarget` : the player who is the target of this ticket. (number PlayerID)
 
-`targetTeamID` : the team which is the target of this ticket. (number 0 / 1 / 2)
+`targetTeamID` : the team which is the target of this ticket. (number 0 Spec / 1 Red / 2 Blue)
+
+## in Functions in code
+### function updateAdmins (funcUpdateAdmins)
+`playerID` : numeric ID of the player who has been admin.
+
+`playerName` : name of the player who has been admin.
 
 ## in The game events
 ### room.onPlayerJoin (onJoin), onPlayerLeave (onLeft)
@@ -47,7 +53,51 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `playerStatsLosepoints` : count of points the player lose.
 
-### room.onPlayerChat (onChat)
+### room.onPlayerChat (onChat), room.onGameStart (onStart), room.onGameStop (onStop), room.onPlayerBallKick (onTouch)
 `playerID` : numeric ID of this player.
 
 `playerName` : name of this player.
+
+### room.onTeamVictory (onVictory)
+`teamID` : numeric ID of the team has winned.
+
+`teamName` : name of the team has winnded. string (Red / Blue)
+
+`redScore` : score of red team
+
+`blueScore` : score of blue team
+
+### room.onPlayerKicked (onKick)
+`kickedID` : numberic ID of the player who is kicked
+
+`kickedName` : name of the player who is kicked
+
+`kickerID` : numberic ID of the player who act kicking
+
+`kickerName` : name of the player who act kicking
+
+`reason` : the reason why the player is kicked
+
+### room.onStadiumChange (onStadium)
+`playerID` : numeric ID of the player who changed map.
+
+`playerName` : name of the player who changed map.
+
+`stadiumName` : the name of loaded stadium
+
+### room.onTeamGoal (onGoal)
+`teamID` : numberic ID of the team got a score
+
+`teamName` : name of the team got a score. string ( Red / Blue)
+
+`scorerID` : numeric ID of the player scored
+
+`scorerName` : name of the player scored
+
+`assistID` : numeric ID of the player assisted
+
+`assistName` : name of the player assisted
+
+`ogID` : numeric ID of the player made an OG
+
+`ogName` : name of the player made an OG
