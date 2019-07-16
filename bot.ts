@@ -33,6 +33,8 @@ import {
 } from "./model/BallTrace";
 import * as LangRes from "./resources/strings";
 
+window.logQueue = []; // init
+
 const botConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
 
 console.log("====");
