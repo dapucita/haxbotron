@@ -14,8 +14,12 @@ export const command = {
     ,debug: '👑 Debug information has printed in console.'
 }
 
+export const funcUpdateAdmins = {
+    newAdmin: '📢 {playerName}#{playerID} has been new admin.'
+}
+
 export const onJoin = {
-    welcome: '📢 Welcome, ${playerName}#${playerID}! 📄 You can get informations by command !help'
+    welcome: '📢 Welcome, {playerName}#{playerID}! 📄 You can get informations by command !help'
     ,changename: '📢 {playerName}#{playerID} has changed name from {playerNameOld}'
     ,startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
     ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
@@ -30,6 +34,36 @@ export const onChat = {
     mutedChat: '🔇 You are muted. You can\'t send message to others.'
 }
 
+export const onStart = {
+    startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
+    ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
+}
+
+export const onStop = {
+
+}
+
+export const onVictory = {
+    victory: '🎉 The game has ended. Scores {redScore}:{blueScore}!'
+}
+
+export const onKick = {
+    cannotBan: '🚫 You can\'t ban other players. Act kicking if you need.'
+    ,notifyNotBan: '🚫 Banning {kickedName}#{kickedID} player is negated.'
+}
+
+export const onStadium = {
+    loadNewStadium: '📁 {stadiumName} has been a new stadium.'
+    ,cannotChange: '🚫 You can\'t change the stadium.'
+}
+
+export const onTouch = {
+
+}
+
 export const onGoal = {
-    goal: '⚽️ '
+    goal: '⚽️ {scorerName}#{scorerID} made a goal!'
+    ,goalWithAssist: '⚽️ {scorerName}#{scorerID} made a goal! Assist by {assistName}#{assistID}'
+    ,og: '⚽️ {ogName}#{ogID} made an OG.'
+
 }
