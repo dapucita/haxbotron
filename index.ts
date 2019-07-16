@@ -29,7 +29,7 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: true
-        } //TODO: 예쁜 테마 적용해보기
+        } //TODO: try to new theme for great visual
     });
 
     // and load the index.html of the app.
