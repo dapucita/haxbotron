@@ -1,6 +1,7 @@
-// Bot that will injected into puppeteer
+// Haxbotron
+// This is the main part of the bot
 
-// import part
+// import modules
 import {
     RoomConfig
 } from "./controller/RoomConfig";
@@ -30,9 +31,9 @@ import {
 import {
     KickStack
 } from "./model/BallTrace";
+import * as LangRes from "./resources/strings";
 
-
-var botConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
+const botConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
 
 console.log("====");
 console.log('\x1b[32m%s\x1b[0m', "H a x b o t r o n"); //green color
@@ -50,7 +51,7 @@ const roomConfig: RoomConfig = {
     public: botConfig.public,
     playerName: botConfig.playerName
 }
-const playerList = new Map(); // playerList is an Map object. // playerList.get(player.id).name; : usage for playerList
+const playerList = new Map(); // playerList:Player is an Map object. // playerList.get(player.id).name; : usage for playerList
 
 const actionQueue: ActionQueue < ActionTicket > = ActionQueue.getInstance();
 const ballStack: KickStack = KickStack.getInstance();
@@ -59,6 +60,16 @@ const logger: Logger = Logger.getInstance();
 const parser: Parser = Parser.getInstance();
 
 var gameMode: string = "ready"; // "ready", "stats"
+
+var placeholderCommon = { // Parser.maketext(str, placeholder)
+    gameRuleName: gameRule.ruleName,
+    gameRuleDescription: gameRule.ruleDescripttion,
+    gameRuleLimitTime: gameRule.requisite.timeLimit,
+    gameRuleLimitScore: gameRule.requisite.scoreLimit,
+    gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+    gameRuleMapDefault: gameRule.defaultMap,
+    gameRuleMapReady: gameRule.readyMap
+};
 
 var room: any = window.HBInit(roomConfig);
 initialiseRoom();
@@ -69,7 +80,7 @@ setInterval(function (): void {
     if (timerTicket !== undefined) {
         switch (timerTicket.type) {
             case "selfnotice": {
-                var placeholder = { // Parser.maketext(str, placeholder)
+                var placeholderQueueCommand = { // Parser.maketext(str, placeholder)
                     _LaunchTime: localStorage.getItem('_LaunchTime'),
                     ticketOwner: timerTicket.ownerPlayerID,
                     ticketTarget: timerTicket.targetPlayerID,
@@ -77,7 +88,7 @@ setInterval(function (): void {
                 }
                 logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
                 if(timerTicket.messageString !== undefined) {
-                    room.sendChat(parser.maketext(timerTicket.messageString, placeholder), timerTicket.ownerPlayerID);
+                    room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                 }
                 break;
             }
@@ -117,6 +128,18 @@ function initialiseRoom(): void {
     room.onPlayerJoin = function (player: PlayerObject): void {
         // Event called when a new player joins the room.
 
+        var placeholderJoin = { // Parser.maketext(str, placeholder)
+            playerID: player.id,
+            playerName: player.name,
+            playerNameOld: player.name,
+            playerStatsTotal: 0,
+            playerStatsWins: 0,
+            playerStatsGoals: 0,
+            playerStatsAssists: 0,
+            playerStatsOgs: 0,
+            playerStatsLosepoints: 0
+        };
+
         // logging into console (debug)
         logger.c(`[JOIN] ${player.name} has joined.`);
         printPlayerInfo(player);
@@ -139,10 +162,20 @@ function initialiseRoom(): void {
                     captain: false,
                     superadmin: loadedData.superadmin
                 }));
+
+                // update player information in placeholder
+                placeholderJoin.playerStatsAssists = loadedData.assists;
+                placeholderJoin.playerStatsGoals = loadedData.goals;
+                placeholderJoin.playerStatsLosepoints = loadedData.losePoints;
+                placeholderJoin.playerStatsOgs = loadedData.ogs;
+                placeholderJoin.playerStatsTotal = loadedData.totals;
+                placeholderJoin.playerStatsWins = loadedData.wins;
+
                 if (player.name != loadedData.name) {
                     // if this player changed his/her name
                     // notify that fact to other players only once ( it will never be notified if he/she rejoined next time)
-                    room.sendChat(`[System] ${player.name}#${player.id} has changed name from ${loadedData.name}`);
+                    placeholderJoin.playerNameOld = loadedData.name
+                    room.sendChat(parser.maketext(LangRes.onJoin.changename, placeholderJoin));
                 }
             }
         } else {
@@ -161,25 +194,24 @@ function initialiseRoom(): void {
                 captain: false,
                 superadmin: false
             }));
-
         }
 
         setPlayerData(playerList.get(player.id)); // register(or update) in localStorage
 
-        updateAdmins();
+        updateAdmins(); // check there are any admin players, if not make an admin player.
 
         // send welcome message to new player. other players cannot read this message.
-        room.sendChat(`[System] Welcome, ${player.name}#${player.id}!`, player.id);
+        room.sendChat(parser.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id);
 
         // check number of players joined and change game mode
         if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
             if(gameMode != "stats") {
-                room.sendChat("[System] Enough players has joined, so the game's result will be recorded from now.");
+                room.sendChat(parser.maketext(LangRes.onJoin.startRecord, placeholderCommon));
                 gameMode = "stats";
             }
         } else {
             if(gameMode != "ready") {
-                room.sendChat(`[System] Need more players. The game's result will not be recorded from now. (needs ${gameRule.requisite.minimumPlayers} players at least)`);
+                room.sendChat(parser.maketext(LangRes.onJoin.stopRecord, placeholderCommon));
                 gameMode = "ready";
             }
         }
@@ -190,18 +222,29 @@ function initialiseRoom(): void {
     room.onPlayerLeave = function (player: PlayerObject): void {
         // Event called when a player leaves the room.
 
+        var placeholderLeft = { // Parser.maketext(str, placeholder)
+            playerID: player.id,
+            playerName: player.name,
+            playerStatsTotal: playerList.get(player.id).stats.totals,
+            playerStatsWins: playerList.get(player.id).stats.wins,
+            playerStatsGoals: playerList.get(player.id).stats.goals,
+            playerStatsAssists: playerList.get(player.id).stats.assists,
+            playerStatsOgs: playerList.get(player.id).stats.ogs,
+            playerStatsLosepoints: playerList.get(player.id).stats.losePoints
+        };
+
         updateAdmins();
         logger.c(`[LEFT] ${player.name} has left.`);
 
         // check number of players joined and change game mode
         if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
             if(gameMode != "stats") {
-                room.sendChat("[System] Enough players has joined, so the game's result will be recorded from now.");
+                room.sendChat(parser.maketext(LangRes.onLeft.startRecord, placeholderLeft));
                 gameMode = "stats";
             }
         } else {
             if(gameMode != "ready") {
-                room.sendChat(`[System] Need more players. The game's result will not be recorded from now. (needs ${gameRule.requisite.minimumPlayers} players at least)`);
+                room.sendChat(parser.maketext(LangRes.onLeft.stopRecord, placeholderLeft));
                 gameMode = "ready";
             }
         }
@@ -213,19 +256,26 @@ function initialiseRoom(): void {
         // Event called when a player sends a chat message.
         // The event function can return false in order to filter the chat message.
         // Then It prevents the chat message from reaching other players in the room.
-        if (playerList.get(player.id).permissions['mute'] == true) {
-            logger.c(`[CHAT] ${player.name} said, "${message}", but ignored.`);
-            room.sendChat(`[System] You are muted. You can't send message to others.`, player.id);
-            return false;
+
+        var placeholderChat = { // Parser.maketext(str, placeholder)
+            playerID: player.id,
+            playerName: player.name
+        };
+
+        var msg = `[CHAT] ${player.name} said, "${message}"`;
+        var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
+        if (evals.type != "none") { // if the message is command chat
+            actionQueue.push(evals); // and push it it queue.
+            return false; // and filter the chat message to other players.
         } else {
-            logger.c(`[CHAT] ${player.name} said, "${message}"`);
-            var evals: ActionTicket = parser.eval(message, player.id);
-            if (evals.type != "none") {
-                actionQueue.push(evals);
-                return false; // if the chat message is command chat, filter the chat message to other players.
+            if (playerList.get(player.id).permissions['mute'] == true) { // if the player is muted
+                msg += ' but ignored.';
+                room.sendChat(parser.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id); // notify that fact
+                return false; // and filter the chat message to other players.
             }
-            return true;
         }
+        logger.c(msg);
+        return true;
     }
 
     room.onPlayerTeamChange = function (changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
@@ -249,19 +299,23 @@ function initialiseRoom(): void {
             }
         }
     }
-
+    
     room.onGameStart = function (byPlayer: PlayerObject): void {
         /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+        var placeholderStart = { // Parser.maketext(str, placeholder)
+            playerID: byPlayer.id,
+            playerName: byPlayer.name
+        };
         let msg = `[GAME] The game(mode:${gameMode}) has been started.`;
         if (byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
         if (gameRule.statsRecord == true && gameMode == "stats") {
             // if the game mode is stats, records the result of this game.
-            room.sendChat(`[System] This game's result will be recorded in the statistics system!`);
+            room.sendChat(parser.maketext(LangRes.onStart.startRecord, placeholderStart));
         } else {
-            room.sendChat(`[System] This game's result will not be recorded in the statistics system. (needs ${gameRule.requisite.minimumPlayers} players at least)`);
+            room.sendChat(parser.maketext(LangRes.onStart.stopRecord, placeholderStart));
         }
         logger.c(msg);
     }
@@ -269,6 +323,10 @@ function initialiseRoom(): void {
     room.onGameStop = function (byPlayer: PlayerObject): void {
         /* Event called when a game stops.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+        var placeholderStop = { // Parser.maketext(str, placeholder)
+            playerID: byPlayer.id,
+            playerName: byPlayer.name
+        };
         let msg = "[GAME] The game has been stopped.";
         if (byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
@@ -280,17 +338,27 @@ function initialiseRoom(): void {
     room.onTeamVictory = function (scores: ScoresObject): void {
         // Event called when a team 'wins'. not just when game ended.
         // recors vicotry in stats. total games also counted in this event.
+        var placeholderVictory = { // Parser.maketext(str, placeholder)
+            teamID: 0,
+            teamName: '',
+            redScore: scores.red,
+            blueScore: scores.blue
+        };
         if (gameRule.statsRecord == true && gameMode == "stats") { // records when game mode is for stats recording.
             var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0); // except Spectators players
             var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 1); // except non Red players
             var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 2); // except non Blue players
             if (scores.red > scores.blue) {
                 // if Red wins
+                placeholderVictory.teamID = 1;
+                placeholderVictory.teamName = 'Red';
                 redPlayers.forEach(function (eachPlayer: PlayerObject) {
                     playerList.get(eachPlayer.id).stats.wins++; //records a win
                 });
             } else {
                 // if Blue wins
+                placeholderVictory.teamID = 2;
+                placeholderVictory.teamName = 'Blue';
                 bluePlayers.forEach(function (eachPlayer: PlayerObject) {
                     playerList.get(eachPlayer.id).stats.wins++; //records a win
                 });
@@ -305,7 +373,7 @@ function initialiseRoom(): void {
         ballStack.clear(); // clear the stack.
 
         logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
-        room.sendChat(`[System] The game has ended. Scores ${scores.red}:${scores.blue}!`);
+        room.sendChat(parser.maketext(LangRes.onVictory.victory, placeholderVictory));
 
         setDefaultStadiums(); // check number of players and auto-set stadium
     }
@@ -313,12 +381,19 @@ function initialiseRoom(): void {
     room.onPlayerKicked = function (kickedPlayer: PlayerObject, reason: string, ban: boolean, byPlayer: PlayerObject): void {
         /* Event called when a player has been kicked from the room. This is always called after the onPlayerLeave event.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+        var placeholderKick = { // Parser.maketext(str, placeholder)
+            kickedID : kickedPlayer.id,
+            kickedName : kickedPlayer.name,
+            kickerID : byPlayer.id,
+            kickerName : byPlayer.name,
+            reason : reason
+        };
         if (ban == true) {
             // ban
             if (playerList.get(byPlayer.id).permissions['superadmin'] != true) {
                 // if the player who acted banning is not super admin
-                room.sendChat(`[System] You can't ban other players. Act kicking if you need.`, byPlayer.id);
-                room.sendChat(`[System] Banning ${kickedPlayer.name}#${kickedPlayer.id} player is negated.`);
+                room.sendChat(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id);
+                room.sendChat(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick));
                 room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
                 logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
             } else {
@@ -332,17 +407,22 @@ function initialiseRoom(): void {
 
     //room.onStadiumChange = function(newStadiumName: string, byPlayer: PlayerObject ): void {
     room.onStadiumChange = function (newStadiumName: string, byPlayer: PlayerObject) {
+        var placeholderStadium = { // Parser.maketext(str, placeholder)
+            playerID: byPlayer.id,
+            playerName: byPlayer.name,
+            stadiumName: newStadiumName
+        };
         // Event called when the stadium is changed.
         if (playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
             if (playerList.get(byPlayer.id).permissions['superadmin'] == true) {
                 //There are two ways for access to map value, permissions['superadmin'] and permissions.superadmin.
                 logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
-                room.sendChat(`[System] ${newStadiumName} has been a new stadium.`);
+                room.sendChat(parser.maketext(LangRes.onStadium.loadNewStadium, placeholderStadium));
             } else {
                 // If trying for chaning stadium is rejected, reload default stadium.
                 logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
                 // logger.c(`[DEBUG] ${playerList.get(byPlayer.id).name}`); for debugging
-                room.sendChat(`[System] You can't change the stadium.`, byPlayer.id);
+                room.sendChat(parser.maketext(LangRes.onStadium.cannotChange, placeholderStadium), byPlayer.id);
                 setDefaultStadiums();
             }
         } else {
@@ -353,11 +433,32 @@ function initialiseRoom(): void {
     room.onPlayerBallKick = function (player: PlayerObject): void {
         // Event called when a player kicks the ball.
         // records player's id, team when the ball was kicked
+        var placeholderBall = { // Parser.maketext(str, placeholder)
+            playerID: player.id,
+            playerName: player.name
+        };
         ballStack.push(player.id);
     }
 
     room.onTeamGoal = function (team: number): void {
         // Event called when a team scores a goal.
+        var placeholderGoal = { // Parser.maketext(str, placeholder)
+            teamID: team,
+            teamName: '',
+            scorerID: '',
+            scorerName: '',
+            assistID: '',
+            assistName: '',
+            ogID: '',
+            ogName: ''
+        };
+        if(team == 1) { 
+            // if red team win
+            placeholderGoal.teamName = 'Red';
+        } else {
+            // if blue team win
+            placeholderGoal.teamName = 'Blue';
+        }
         // identify who has goaled.
         var touchPlayer: number | undefined = ballStack.pop();
         var assistPlayer: number | undefined = ballStack.pop();
@@ -365,22 +466,28 @@ function initialiseRoom(): void {
         if (gameMode == "stats" && touchPlayer !== undefined) { // records when game mode is for stats recording.
             if (playerList.get(touchPlayer).team == team) {
                 // if the goal is not OG
+                placeholderGoal.scorerID = playerList.get(touchPlayer).id;
+                placeholderGoal.scorerName = playerList.get(touchPlayer).name;
                 playerList.get(touchPlayer).stats.goals++;
                 setPlayerData(playerList.get(touchPlayer));
-                var goalMsg: string = `[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made a goal!`;
+                var goalMsg: string = parser.maketext(LangRes.onGoal.goal, placeholderGoal);
                 if (assistPlayer !== undefined && touchPlayer != assistPlayer && playerList.get(assistPlayer).team == team) {
                     // records assist when the player who assists is not same as the player goaled, and is not other team.
+                    placeholderGoal.assistID = playerList.get(assistPlayer).id;
+                    placeholderGoal.assistName = playerList.get(assistPlayer).name;
                     playerList.get(assistPlayer).stats.assists++;
                     setPlayerData(playerList.get(assistPlayer));
-                    goalMsg += ` ${playerList.get(assistPlayer).name}#${playerList.get(assistPlayer).id} assisted the goal.`;
+                    goalMsg = parser.maketext(LangRes.onGoal.goalWithAssist, placeholderGoal);
                 }
                 room.sendChat(goalMsg);
                 logger.c(goalMsg);
             } else {
                 // if the goal is OG
+                placeholderGoal.ogID = playerList.get(touchPlayer).id;
+                placeholderGoal.ogName = playerList.get(touchPlayer).name;
                 playerList.get(touchPlayer).stats.ogs++;
                 setPlayerData(playerList.get(touchPlayer));
-                room.sendChat(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
+                room.sendChat(parser.maketext(LangRes.onGoal.og, placeholderGoal));
                 logger.c(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
             }
             // except spectators and filter who were lose a point
@@ -424,14 +531,22 @@ function getCookieFromHeadless(name: string): string {
 }
 
 function updateAdmins(): void {
+    var placeholderUpdateAdmins = { // Parser.maketext(str, placeholder)
+        playerID: 0,
+        playerName: ''
+    };
     // Get all players except the host (id = 0 is always the host)
     var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
     if (players.length == 0) return; // No players left, do nothing.
     if (players.find((player: PlayerObject) => player.admin) != null) return; // There's an admin left so do nothing.
+
+    placeholderUpdateAdmins.playerID = players[0].id;
+    placeholderUpdateAdmins.playerName = playerList.get(players[0].id).name;
+
     room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
     playerList.get(players[0].id).admin = true;
     logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
-    room.sendChat(`[System] ${playerList.get(players[0].id).name} has been admin.`);
+    room.sendChat(parser.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins));
 }
 
 function printPlayerInfo(player: PlayerObject): void {
