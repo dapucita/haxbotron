@@ -26,11 +26,15 @@ import {
     Parser
 } from "./controller/Parser";
 import {
+    getPlayerData, setPlayerData
+} from "./controller/Storage";
+import {
     gameRule
 } from "./model/rules/captain.rule";
 import {
     KickStack
 } from "./model/BallTrace";
+import * as StatCalc from "./controller/Statistics";
 import * as LangRes from "./resources/strings";
 
 window.logQueue = []; // init
@@ -63,16 +67,6 @@ const parser: Parser = Parser.getInstance();
 
 var gameMode: string = "ready"; // "ready", "stats"
 
-var placeholderCommon = { // Parser.maketext(str, placeholder)
-    gameRuleName: gameRule.ruleName,
-    gameRuleDescription: gameRule.ruleDescripttion,
-    gameRuleLimitTime: gameRule.requisite.timeLimit,
-    gameRuleLimitScore: gameRule.requisite.scoreLimit,
-    gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-    gameRuleMapDefault: gameRule.defaultMap,
-    gameRuleMapReady: gameRule.readyMap
-};
-
 var room: any = window.HBInit(roomConfig);
 initialiseRoom();
 
@@ -80,17 +74,48 @@ setInterval(function (): void {
     //Loop timer for processing ActionTicket Queue.
     var timerTicket: ActionTicket | undefined = actionQueue.pop();
     if (timerTicket !== undefined) {
+        var placeholderQueueCommand = { // Parser.maketext(str, placeholder)
+            _LaunchTime: localStorage.getItem('_LaunchTime'),
+            ticketOwner: timerTicket.ownerPlayerID,
+            ticketTarget: timerTicket.targetPlayerID,
+            targetTeamID: timerTicket.targetTeamID,
+            targetName: playerList.get(timerTicket.targetPlayerID).name,
+            targetStatsTotal: playerList.get(timerTicket.targetPlayerID).stats.totals,
+            targetStatsWins: playerList.get(timerTicket.targetPlayerID).stats.wins,
+            targetStatsGoals: playerList.get(timerTicket.targetPlayerID).stats.goals,
+            targetStatsAssists: playerList.get(timerTicket.targetPlayerID).stats.assists,
+            targetStatsOgs: playerList.get(timerTicket.targetPlayerID).stats.ogs,
+            targetStatsLosepoints: playerList.get(timerTicket.targetPlayerID).stats.losePoints,
+            targetStatsWinRate: StatCalc.calcWinsRate(playerList.get(timerTicket.targetPlayerID).stats.totals, playerList.get(timerTicket.targetPlayerID).stats.wins),
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+        }
+        
         switch (timerTicket.type) {
-            case "selfnotice": {
-                var placeholderQueueCommand = { // Parser.maketext(str, placeholder)
-                    _LaunchTime: localStorage.getItem('_LaunchTime'),
-                    ticketOwner: timerTicket.ownerPlayerID,
-                    ticketTarget: timerTicket.targetPlayerID,
-                    targetTeamID: timerTicket.targetTeamID
-                }
+            case "info": {
                 logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
-                if(timerTicket.messageString !== undefined) {
-                    room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                if(timerTicket.messageString) {
+                    if(timerTicket.selfnotify == true) {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                    } else {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                    }
+                }
+                break;
+            }
+            case "stats": {
+                if(timerTicket.action) {
+                    timerTicket.action(timerTicket.ownerPlayerID, playerList);
+                }
+                if(timerTicket.messageString) {
+                    if(timerTicket.selfnotify == true) {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                    } else {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                    }
                 }
                 break;
             }
@@ -139,9 +164,13 @@ function initialiseRoom(): void {
             playerStatsGoals: 0,
             playerStatsAssists: 0,
             playerStatsOgs: 0,
-            playerStatsLosepoints: 0
+            playerStatsLosepoints: 0,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderJoin = Object.assign(placeholderCommon);
         
         // logging into console (debug)
         logger.c(`[JOIN] ${player.name} has joined.`);
@@ -233,9 +262,13 @@ function initialiseRoom(): void {
             playerStatsGoals: playerList.get(player.id).stats.goals,
             playerStatsAssists: playerList.get(player.id).stats.assists,
             playerStatsOgs: playerList.get(player.id).stats.ogs,
-            playerStatsLosepoints: playerList.get(player.id).stats.losePoints
+            playerStatsLosepoints: playerList.get(player.id).stats.losePoints,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderLeft = Object.assign(placeholderCommon);
 
         updateAdmins();
         logger.c(`[LEFT] ${player.name} has left.`);
@@ -263,9 +296,13 @@ function initialiseRoom(): void {
 
         var placeholderChat = { // Parser.maketext(str, placeholder)
             playerID: player.id,
-            playerName: player.name
+            playerName: player.name,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderChat = Object.assign(placeholderCommon);
 
         var msg = `[CHAT] ${player.name} said, "${message}"`;
         var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
@@ -310,9 +347,14 @@ function initialiseRoom(): void {
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         var placeholderStart = { // Parser.maketext(str, placeholder)
             playerID: byPlayer.id,
-            playerName: byPlayer.name
+            playerName: byPlayer.name,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderStart = Object.assign(placeholderCommon);
+
         
         let msg = `[GAME] The game(mode:${gameMode}) has been started.`;
         if (byPlayer !== null && byPlayer.id != 0) {
@@ -332,9 +374,16 @@ function initialiseRoom(): void {
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         var placeholderStop = { // Parser.maketext(str, placeholder)
             playerID: byPlayer.id,
-            playerName: byPlayer.name
+            playerName: byPlayer.name,
+
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+
         };
-        placeholderStop = Object.assign(placeholderCommon);
+
 
         let msg = "[GAME] The game has been stopped.";
         if (byPlayer !== null && byPlayer.id != 0) {
@@ -351,9 +400,13 @@ function initialiseRoom(): void {
             teamID: 0,
             teamName: '',
             redScore: scores.red,
-            blueScore: scores.blue
+            blueScore: scores.blue,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderVictory = Object.assign(placeholderCommon);
 
         if (gameRule.statsRecord == true && gameMode == "stats") { // records when game mode is for stats recording.
             var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0); // except Spectators players
@@ -397,9 +450,15 @@ function initialiseRoom(): void {
             kickedName : kickedPlayer.name,
             kickerID : byPlayer.id,
             kickerName : byPlayer.name,
-            reason : reason
+            reason : reason,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+
         };
-        placeholderKick = Object.assign(placeholderCommon);
+
 
         if (ban == true) {
             // ban
@@ -423,9 +482,14 @@ function initialiseRoom(): void {
         var placeholderStadium = { // Parser.maketext(str, placeholder)
             playerID: byPlayer.id,
             playerName: byPlayer.name,
-            stadiumName: newStadiumName
+            stadiumName: newStadiumName,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderStadium = Object.assign(placeholderCommon);
+
         
         // Event called when the stadium is changed.
         if (playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
@@ -450,9 +514,14 @@ function initialiseRoom(): void {
         // records player's id, team when the ball was kicked
         var placeholderBall = { // Parser.maketext(str, placeholder)
             playerID: player.id,
-            playerName: player.name
+            playerName: player.name,
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderBall = Object.assign(placeholderCommon);
+
 
         ballStack.push(player.id);
     }
@@ -467,9 +536,13 @@ function initialiseRoom(): void {
             assistID: '',
             assistName: '',
             ogID: '',
-            ogName: ''
+            ogName: '',
+            gameRuleName: gameRule.ruleName,
+            gameRuleDescription: gameRule.ruleDescripttion,
+            gameRuleLimitTime: gameRule.requisite.timeLimit,
+            gameRuleLimitScore: gameRule.requisite.scoreLimit,
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers
         };
-        placeholderGoal = Object.assign(placeholderCommon);
 
         if(team == 1) { 
             // if red team win
@@ -552,9 +625,13 @@ function getCookieFromHeadless(name: string): string {
 function updateAdmins(): void {
     var placeholderUpdateAdmins = { // Parser.maketext(str, placeholder)
         playerID: 0,
-        playerName: ''
+        playerName: '',
+        gameRuleName: gameRule.ruleName,
+        gameRuleDescription: gameRule.ruleDescripttion,
+        gameRuleLimitTime: gameRule.requisite.timeLimit,
+        gameRuleLimitScore: gameRule.requisite.scoreLimit,
+        gameRuleNeedMin: gameRule.requisite.minimumPlayers
     };
-    placeholderUpdateAdmins = Object.assign(placeholderCommon);
 
     // Get all players except the host (id = 0 is always the host)
     var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
@@ -577,33 +654,4 @@ function printPlayerInfo(player: PlayerObject): void {
 function roomPlayersNumberCheck(): number {
     // return number of players joined this room
     return room.getPlayerList().filter((player: PlayerObject) => player.id != 0).length;
-}
-
-function getPlayerData(playerAuth: string): PlayerStorage | null {
-    // load player's data from localStorage
-    var jsonData: string | null = localStorage.getItem(playerAuth);
-    if (jsonData !== null) {
-        var convertedData: PlayerStorage = JSON.parse(jsonData);
-        return convertedData;
-    } else {
-        return null;
-    }
-}
-
-function setPlayerData(player: Player): void {
-    // store player's data in localStorage
-    var playerData: PlayerStorage = {
-        auth: player.auth, // same meaning as in PlayerObject. It can used for identify each of players.
-        conn: player.conn, // same meaning as in PlayerObject.
-        name: player.name, // save for compare player's current name and previous name.
-        totals: player.stats.totals, // total games include wins
-        wins: player.stats.wins, // the game wins
-        goals: player.stats.goals, // not contains OGs.
-        assists: player.stats.assists, // count for assist goal
-        ogs: player.stats.ogs, // it means 'own goal' (in Korean, '자책골')
-        losePoints: player.stats.losePoints, // it means the points this player lost (in Korean, '실점')
-        mute: player.permissions.mute, // is this player muted?
-        superadmin: player.permissions.superadmin // is this player super admin?
-    }
-    localStorage.setItem(player.auth, JSON.stringify(playerData)); // convert object to json for store in localStorage // for decode: JSON.parse
 }
