@@ -186,18 +186,19 @@ async function bot(hostConfig: string) {
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
     var storageLoop = setInterval(async function () {
         var msgContext: any = await page.evaluate(() => { // get log message
-            /*var msgStr = '';
-            for (var i = 0; i < window.logQueue.length; ++i )    {
-                msgStr = window.logQueue[i] + '\n' + msgStr;
+            var msgChunk: string = '';
+            for(var loopCount = 0; loopCount < window.logQueue.length; loopCount++) {
+                msgChunk = window.logQueue.pop() + '\\r\\n' + msgChunk;
             }
-            window.logQueue = [];
-            return msgStr;*/
-            return window.logQueue.pop(); // TODO: 한번에 큐의 모든 메시지 가져오기.
+            return msgChunk;
         });
-        
+
         // and print it on electron's textarea
-        await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgContext + "\\r\\n' + document.getElementById('botConsole').value;");
-        
+        if(await msgContext != '') {
+            await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgContext + "' + document.getElementById('botConsole').value;");
+        } // TODO: replace logging system using textarea to rest api server
+        // FIXME: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame"
+
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};
             for (let i = 0; i < localStorage.length; i++) {
