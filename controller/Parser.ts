@@ -1,5 +1,6 @@
 import { ActionTicket } from "./Action";
 import { command as langCommand } from "../resources/strings";
+import { setPlayerData } from "./Storage";
 
 export class Parser {
     // written in Singleton Pattern
@@ -40,6 +41,10 @@ export class Parser {
                                 ticket.messageString = langCommand.helpman.stats;
                                 break;
                             }
+                            case "statsreset": {
+                                ticket.messageString = langCommand.helpman.statsreset;
+                                break;
+                            }
                             default: {
                                 ticket.messageString = langCommand.helpman._ErrorWrongMan;
                             }
@@ -47,16 +52,41 @@ export class Parser {
                     } else {
                         ticket.messageString = langCommand.help;
                     }
-                    ticket.type = "selfnotice";
-                    ticket.ownerPlayerID = playerID;
+                    ticket.type = "info";
                     ticket.targetPlayerID = playerID;
+                    ticket.selfnotify = true;
                     break;
                 }
                 case "about": {
-                    ticket.type = "selfnotice";
-                    ticket.ownerPlayerID = playerID;
+                    ticket.type = "info";
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = langCommand.about;
+                    ticket.selfnotify = true;
+                    break;
+                }
+                case "stats": {
+                    ticket.type = "stats";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = langCommand.stats;
+                    ticket.selfnotify = false;
+                    break;
+                }
+                case "statsreset": {
+                    ticket.type = "stats";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = langCommand.statsreset;
+                    ticket.selfnotify = true;
+                    ticket.action = function(playerID: number, playerList: any): void {
+                        playerList.get(playerID).stats.totals = 0;
+                        playerList.get(playerID).stats.wins = 0;
+                        playerList.get(playerID).stats.goals = 0;
+                        playerList.get(playerID).stats.assists = 0;
+                        playerList.get(playerID).stats.ogs = 0;
+                        playerList.get(playerID).stats.losePoints = 0;
+                        setPlayerData(playerList.get(playerID));
+                    }
                     break;
                 }
                 case "super": { // temporal command in development stage. remove this command when you operate the bot with other players
@@ -64,6 +94,7 @@ export class Parser {
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = langCommand.super;
+                    ticket.selfnotify = true;
                     break;
                 }   
                 case "debug": { // temporal command in development stage. remove this command when you operate the bot with other players
@@ -71,6 +102,7 @@ export class Parser {
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = langCommand.debug;
+                    ticket.selfnotify = true;
                     break;
                 }
             }
