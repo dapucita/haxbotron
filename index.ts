@@ -197,7 +197,7 @@ async function bot(hostConfig: string) {
         if(await msgContext != '') {
             await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgContext + "' + document.getElementById('botConsole').value;");
         } // TODO: replace logging system using textarea to rest api server
-        // FIXME: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame"
+        // FIXME: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame". Maybe it was caused by quotation marks..
 
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};
