@@ -58,7 +58,7 @@ If you(the player) type a command by chat...
 
 `!stats` shows all players your statistical information.
 
-`!stats!reset` resets your statistical information. It cannot be recovered.
+`!statsreset` resets your statistical information. It cannot be recovered.
 
 `!streak` shows you which team is being on a winning streak.
 
