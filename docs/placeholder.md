@@ -14,10 +14,6 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `gameRuleNeedMin` : minimum number of players needs for apply loaded game rule
 
-`gameRuleMapDefault` : default stadium name of loaded game rule
-
-`gameRuleMapReady` : stadium name for using until the game starts of loaded game rule.
-
 ## in The event loop for ActionTicket Queue (command)
 `_LaunchTime` : the time the bot launched. (stringfied date)
 
@@ -25,7 +21,24 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `ticketTarget` : the player who is the target of this ticket. (number PlayerID)
 
+`targetName`: name of the player who is the target of this ticket. (string)
+
 `targetTeamID` : the team which is the target of this ticket. (number 0 Spec / 1 Red / 2 Blue)
+
+### statistical information
+`targetStatsWinRate` : winning games rate of the player
+
+`targetStatsTotal` : count of the player played.
+
+`targetStatsWins` : count of the player winned.
+
+`targetStatsGoals` : count of goals the player made.
+
+`targetStatsAssists` : count of assists the player made.
+
+`targetStatsOgs` : count of OGs the player made.
+
+`targetStatsLosepoints` : count of points the player lose.
 
 ## in Functions in code
 ### function updateAdmins (funcUpdateAdmins)
@@ -41,7 +54,7 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `playerNameOld` : previous name of this player. It can be same as current name. Just loaded from localStorage. **Only available on onPlayerJoin event.**
 
-`playerStatsTotal` : count of the player winned.
+`playerStatsTotal` : count of the player played.
 
 `playerStatsWins` : count of the player winned.
 
