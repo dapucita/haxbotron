@@ -4,7 +4,8 @@ export interface ActionTicket {
     targetPlayerID?: number;
     targetTeamID?: number;
     messageString?: string;
-    action?(): any;
+    selfnotify?: boolean;
+    action?: Function;
 }
 
 export class ActionQueue<T extends ActionTicket> {
