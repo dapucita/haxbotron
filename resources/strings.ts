@@ -7,11 +7,14 @@ export const command = {
         _ErrorWrongMan : '❌ Failed to read about that command.'
         ,help: '📑 !help COMMAND shows you how to use COMMAND command.'
         ,about: '📑 !about shows you simple inforamtion of the bot running now.'
-        ,stats: '📑 !stats shows all players your statistical information.'
+        ,stats: '📑 !stats shows all players your statistical information. 📑 If you want to reset, do !statsreset'
+        ,statsreset: '📑 !statsreset resets your statistical information. It cannot be recovered.'
     } 
-    ,about: '📄 Haxbotron bot - launched on {{_LaunchTime}}'
+    ,about: '📄 Haxbotron bot - launched on {_LaunchTime}'
     ,super: '👑 You are super admin now.'
     ,debug: '👑 Debug information has printed in console.'
+    ,stats: '📊 {targetName}#{ticketTarget} Win {targetStatsWins}/{targetStatsTotal}({targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}.'
+    ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
 }
 
 export const funcUpdateAdmins = {
