@@ -14,6 +14,11 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `gameRuleNeedMin` : minimum number of players needs for apply loaded game rule
 
+### ball possession rate
+`possTeamRed`: numeric possession rate of red team
+
+`possTeamBlue`: numeric possession rate of blue team
+
 ## in The event loop for ActionTicket Queue (command)
 `_LaunchTime` : the time the bot launched. (stringfied date)
 

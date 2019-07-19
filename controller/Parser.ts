@@ -45,6 +45,10 @@ export class Parser {
                                 ticket.messageString = langCommand.helpman.statsreset;
                                 break;
                             }
+                            case "poss": {
+                                ticket.messageString = langCommand.helpman.poss;
+                                break;
+                            }
                             default: {
                                 ticket.messageString = langCommand.helpman._ErrorWrongMan;
                             }
@@ -61,6 +65,14 @@ export class Parser {
                     ticket.type = "info";
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = langCommand.about;
+                    ticket.selfnotify = true;
+                    break;
+                }
+                case "poss": {
+                    ticket.type = "stats";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = langCommand.poss;
                     ticket.selfnotify = true;
                     break;
                 }

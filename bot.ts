@@ -91,7 +91,9 @@ setInterval(function (): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         }
         
         switch (timerTicket.type) {
@@ -169,7 +171,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
         
         // logging into console (debug)
@@ -267,7 +271,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
         updateAdmins();
@@ -301,7 +307,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
         var msg = `[CHAT] ${player.name} said, "${message}"`;
@@ -352,7 +360,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
         
@@ -375,13 +385,13 @@ function initialiseRoom(): void {
         var placeholderStop = { // Parser.maketext(str, placeholder)
             playerID: byPlayer.id,
             playerName: byPlayer.name,
-
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
-
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
 
@@ -391,6 +401,7 @@ function initialiseRoom(): void {
         }
         logger.c(msg);
         setDefaultStadiums(); // check number of players and auto-set stadium
+        ballStack.possClear(); // clear possession count
     }
 
     room.onTeamVictory = function (scores: ScoresObject): void {
@@ -405,7 +416,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
         if (gameRule.statsRecord == true && gameMode == "stats") { // records when game mode is for stats recording.
@@ -455,8 +468,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
-
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
 
@@ -487,7 +501,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
         
@@ -519,11 +535,13 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
-
         ballStack.push(player.id);
+        ballStack.possCount(player.team); // 1: red team, 2: blue team
     }
 
     room.onTeamGoal = function (team: number): void {
@@ -541,7 +559,9 @@ function initialiseRoom(): void {
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers
+            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+            possTeamRed: ballStack.possCalculate(1),
+            possTeamBlue: ballStack.possCalculate(2)
         };
 
         if(team == 1) { 
@@ -630,7 +650,9 @@ function updateAdmins(): void {
         gameRuleDescription: gameRule.ruleDescripttion,
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers
+        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        possTeamRed: ballStack.possCalculate(1),
+        possTeamBlue: ballStack.possCalculate(2)
     };
 
     // Get all players except the host (id = 0 is always the host)
