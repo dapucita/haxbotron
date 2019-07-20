@@ -470,8 +470,8 @@ function initialiseRoom(): void {
         /* Event called when a game stops.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         var placeholderStop = { // Parser.maketext(str, placeholder)
-            playerID: byPlayer.id,
-            playerName: byPlayer.name,
+            playerID: 0,
+            playerName: '',
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
@@ -482,7 +482,10 @@ function initialiseRoom(): void {
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
-
+        if(byPlayer !== null) {
+            placeholderStop.playerID = byPlayer.id;
+            placeholderStop.playerName = byPlayer.name;
+        }
 
         let msg = "[GAME] The game has been stopped.";
         if (byPlayer !== null && byPlayer.id != 0) {
