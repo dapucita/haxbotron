@@ -14,7 +14,7 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `gameRuleNeedMin` : minimum number of players needs for apply loaded game rule
 
-### statistical information
+### team statistical information
 `possTeamRed`: numeric ball possession rate of red team
 
 `possTeamBlue`: numeric ball possession rate of blue team
@@ -34,7 +34,7 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `targetTeamID` : the team which is the target of this ticket. (number 0 Spec / 1 Red / 2 Blue)
 
-### statistical information for command
+### player statistical information for command
 `targetStatsWinRate` : winning games rate of the player
 
 `targetStatsTotal` : count of the player played.
