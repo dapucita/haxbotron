@@ -1,11 +1,20 @@
 import { RoomConfig } from '../controller/RoomConfig';
 declare global {
     interface Window {
-        roomURIlink: string // bot // for sharing URI link of the room
-        logQueue: string[] // bot // for sharing log message
-        sendRoomChat(msg: string, playerID?: number): void // bot // for send chat message to the game
+        // bot
+        roomURIlink: string // for sharing URI link of the room
+        logQueue: string[] // for sharing log message
+        sendRoomChat(msg: string, playerID?: number): void // for send chat message to the game
 
-        HBInit(config: RoomConfig): any // haxball
-        onHBLoaded(): void // haxball
+        // on dev-console tools for emergency
+        onEmergency: {
+            list(): void
+            chat(msg: string, playerID?: number): void
+            kick(playerID: number, ban: boolean, msg?: string): void
+        }
+
+        // haxball
+        HBInit(config: RoomConfig): any
+        onHBLoaded(): void
     }
 }

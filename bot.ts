@@ -571,7 +571,7 @@ function initialiseRoom(): void {
         };
 
 
-        if (ban == true) {
+        if (byPlayer !== null && byPlayer.id != 0 && ban == true) {
             // ban
             if (playerList.get(byPlayer.id).permissions['superadmin'] != true) {
                 // if the player who acted banning is not super admin
@@ -781,4 +781,28 @@ function printPlayerInfo(player: PlayerObject): void {
 function roomPlayersNumberCheck(): number {
     // return number of players joined this room
     return room.getPlayerList().filter((player: PlayerObject) => player.id != 0).length;
+}
+
+// on dev-console tools for emergency
+window.onEmergency = {
+    list: function(): void {
+        var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
+        players.forEach((player: PlayerObject) => {
+            console.log(`[EMERGENCY][LIST]${player.name}#${player.id}:team(${player.team}):admin(${player.admin})`);
+        });
+    },
+    chat: function(msg: string, playerID?: number): void {
+        if(playerID) {
+            room.sendChat(msg, playerID);
+        } else {
+            room.sendChat(msg);
+        }
+    },
+    kick: function(playerID: number, ban: boolean, msg?: string): void {
+        if(msg) {
+            room.kickPlayer(playerID, msg, ban);
+        } else {
+            room.kickPlayer(playerID, 'by haxbotron', ban);
+        }
+    }
 }
