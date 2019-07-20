@@ -81,6 +81,8 @@ If you(the super admin) type a command by chat...
 
 `!super login KEY` makes you super admin. KEY is authentication key for login, and the keys can be made in the Electron-based UI.
 
+`!super logout` disqualifies your super admin permission when you are loginned.
+
 `!super thor` disqualify all admin players from admin permission, and makes admin player permission by self.
 
 `!ban PLAYER MSG` bans PLAYER forever. If it contains MSG, the message as reason for banning is shown for the user.

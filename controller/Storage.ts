@@ -25,7 +25,7 @@ export function setPlayerData(player: Player): void {
         ogs: player.stats.ogs, // it means 'own goal' (in Korean, '자책골')
         losePoints: player.stats.losePoints, // it means the points this player lost (in Korean, '실점')
         mute: player.permissions.mute, // is this player muted?
-        superadmin: player.permissions.superadmin // is this player super admin?
+        //superadmin: player.permissions.superadmin // is this player super admin? // not save
     }
     localStorage.setItem(player.auth, JSON.stringify(playerData)); // convert object to json for store in localStorage // for decode: JSON.parse
 }

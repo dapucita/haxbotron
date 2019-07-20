@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const announcement = {
-    advertise: '📢 Haxbotron is open source and free to use! - https://dapucita.github.io/haxbotron/'
+    advertise: '📢 Haxbotron is in development. Open source and free to use!'
     ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
 }
 
@@ -32,6 +32,7 @@ export const command = {
     ,super: {
         _ErrorWrongCommand : '❌ You did wrong command for super admin system.'
         ,_ErrorNoPermission : '❌ You are not super admin. You can\'t do this command.'
+        ,_ErrorLoginAlready : '❌ You are already super admin. 📑 You can logout by command !super logout.'
         ,defaultMessage: '📄 Super admin system for control Haxbotron bot in the game.'
         ,loginSuccess: '🔑 Succeeded to login. You are super admin from now.'
         ,logoutSuccess: '🔑 Succeeded to logout. You are not super admin from now.'

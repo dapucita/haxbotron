@@ -2,6 +2,7 @@ import { ActionTicket } from "./Action";
 import { command as langCommand } from "../resources/strings";
 import { setPlayerData } from "./Storage";
 import { PlayerObject } from "./PlayerObject";
+import { superAdminLogin } from "./SuperAdmin";
 
 export class Parser {
     // written in Singleton Pattern
@@ -150,10 +151,31 @@ export class Parser {
                         if(cutMsg[1] !== undefined) {
                             switch(cutMsg[1]) {
                                 case "login": {
-                                    if(cutMsg[2] !== undefined) {
-                                        // key check and login
+                                    if(playerList.get(playerID).permissions.superadmin != true) { // only when not yet loginned
+                                        if(cutMsg[2] !== undefined) {
+                                            // key check and login
+                                            if(superAdminLogin(cutMsg[2]) == true) { // if login key is matched
+                                                playerList.get(playerID).permissions.superadmin = true; // set super admin
+                                                //setPlayerData(playerList.get(playerID)); // update
+                                                ticket.messageString = langCommand.super.loginSuccess;
+                                            } else {
+                                                ticket.messageString = langCommand.super.loginFail;
+                                            }
+                                        } else {
+                                            ticket.messageString = langCommand.super.loginFailNoKey;
+                                        }
+                                    } else { // if already loginned
+                                        ticket.messageString = langCommand.super._ErrorLoginAlready;
+                                    }
+                                    break;
+                                }
+                                case "logout": {
+                                    if(playerList.get(playerID).permissions.superadmin == true) { // only when loginned
+                                        playerList.get(playerID).permissions.superadmin = false; // disqualify super admin
+                                        //setPlayerData(playerList.get(playerID)); // update
+                                        ticket.messageString = langCommand.super.logoutSuccess;
                                     } else {
-                                        ticket.messageString = langCommand.super.loginFailNoKey;
+                                        ticket.messageString = langCommand.super._ErrorNoPermission;
                                     }
                                     break;
                                 }

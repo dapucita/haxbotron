@@ -10,21 +10,38 @@
     <h1>🤖 Haxbotron 🤖</h1>
     <p id="roomIndicator">NOT LAUNCHED YET</p>
     <div id="roomSettingDiv" style="display:block">
-        <p>New Room Information</p>
-        <p>Title <input id="roomTitle" name="roomTitle" type="text" size="42" value="🤖 ĦΘ§Ŧ βΘŦ Ŧξ§Ŧ∫ŊŒ (in Development)" /></p>
+        <h2>New Room Information</h2>
+        <p>Title <input id="roomTitle" name="roomTitle" type="text" size="42" value="🤖 𝑯 𝒂 𝒙 𝒃 𝒐 𝒕 𝒓 𝒐 𝒏" /></p>
         <p>Password <input id="roomPassword" name="roomPassword" type="text" size="20" value="hbtron" /></p>
         <p>Host Name <input id="roomHostName" name="roomHostName" type="text" size="20" value="🤖" /></p>
-        <p>Max Players <input id="roomMaxPlayers" name="roomMaxPlayers" type="number" size="2" value="13" /></p>
+        <p>Max Players <input id="roomMaxPlayers" name="roomMaxPlayers" type="number" style="width:32px;" value="13" /></p>
         <p>Public <input id="roomPublicCheck" name="roomPublicCheck" type="checkbox" checked="true" /></p>
         <p>Auth Token <input id="roomAuthToken" name="roomAuthToken" type="text" size="42" value="https://www.haxball.com/headlesstoken" /></p>
         <input id="launchButton" name="launchButton" type="button" value="RUN!" />
     </div>
     <div id="roomInformationDiv" style="display:none">
-        <p>Room Information</p>
+        <h2>Room Information</h2>
         <p id="roomTitleIndicator">title</p>
         <p id="roomPasswordIndicator">password</p>
         <p id="roomLinkIndicator">link</p>
-        <textarea style="resize:none" id="botConsole" name="botConsole" readonly="readonly" cols="100" rows="15"></textarea>
+    </div>
+    <div id="superAdminKeyDiv" style="display:none">
+        <h2>Login keys for Super admin</h2>
+        <p>Edit and Apply. Seperate by Enter Key.</p>
+        <textarea style="resize:none; background-color: #bebebe;" id="superKeyList" name="superKeyList" readonly="readonly" cols="100" rows="15"></textarea>
+        <input id="superKeyGenerateButton" name="superKeyGenerateButton" type="button" value="Generate" />
+        <input id="superKeyEditButton" name="superKeyEditButton" type="button" value="Edit" />
+        <input id="superKeyApplyButton" name="superKeyApplyButton" type="button" value="Apply" />
+    </div>
+    <div id="announcementDiv" style="display:none">
+        <h2>Announce message to the Room</h2>
+        <p>Message 
+            <input id="announceMsg" name="announceMsg" type="text" size="42" /> 
+            <input id="announceMsgSendButton" name="announceMsgSendButton" type="button" value="Send" />
+        </p>
+    </div>
+    <div id="botConsoleDiv" style="display:none">
+        <textarea style="resize:none; background-color: #bebebe;" id="botConsole" name="botConsole" readonly="readonly" cols="100" rows="15"></textarea>
     </div>
 </body>
 <script src='webRender.js'></script>

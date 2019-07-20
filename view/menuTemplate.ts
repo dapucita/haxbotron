@@ -34,11 +34,16 @@ const template = [{
     },
     {
         label: 'Command',
-        submenu: [{
+        submenu: [
+        {
             id: 'announceCommandMenuItem',
             enabled: false,
             label: 'Announce a message'
-        }]
+        }, {
+            id: 'superAdminLoginKeyMenuItem',
+            label: 'Login keys for Super admin'
+        }
+    ]
     },
     {
         label: 'Setting',

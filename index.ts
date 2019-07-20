@@ -1,5 +1,3 @@
-import { async } from "q";
-
 //Electron Loader
 const {
     app,
@@ -22,6 +20,13 @@ var isOpenHeadless: boolean = false; // option for open chromium in headless mod
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
 var puppeteerContainer: any; // puppeteer page object
 
+const MenuItemSwitch = {
+    announceMsg: false,
+    superAdminKey: false
+};
+
+var superKeyList: string;
+
 function createWindow() {
     // create the Electron browser window
     electronWindow = new BrowserWindow({
@@ -37,8 +42,7 @@ function createWindow() {
     // and load the index.html of the app.
     electronWindow.loadFile('../index.html');
 
-    // Open the DevTools.
-    //electronWindow.webContents.openDevTools();
+    nodeStorageInit(); // init nodeStorage
 
     // When the window is closed
     electronWindow.on('closed', () => {
@@ -54,7 +58,7 @@ ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
     // Event emitter for sending asynchronous messages
     //event.sender.send('asynchronous-reply', 'async pong');
     if(arg.password == "") {
-        arg.password = null
+        arg.password = null;
     }
     hostRoomConfig = arg;
     hostRoomConfig.maxPlayers = parseInt(arg.maxPlayers, 10); // do type casting because conveyed maxPlayers value is string type
@@ -69,9 +73,12 @@ ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
         Menu.getApplicationMenu().getMenuItemById('startMenuItem').enabled = false;
         Menu.getApplicationMenu().getMenuItemById('stopMenuItem').enabled = true;
         Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').enabled = false;
-
+        Menu.getApplicationMenu().getMenuItemById('announceCommandMenuItem').enabled = true;
         electronWindow.webContents.executeJavaScript(`
             document.getElementById('roomSettingDiv').style.display = "none";
+            document.getElementById('announcementDiv').style.display = "none";
+            document.getElementById('superAdminKeyDiv').style.display = "none";
+            document.getElementById('botConsoleDiv').style.display = "block";
             document.getElementById('roomInformationDiv').style.display = "block";
             document.getElementById('roomTitleIndicator').innerHTML = "Title : " + document.getElementById('roomTitle').value;
             document.getElementById('roomPasswordIndicator').innerHTML = "Password : " + document.getElementById('roomPassword').value;
@@ -81,6 +88,34 @@ ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
     } else {
         dialog.showErrorBox("You can launch only one bot.", "The bot was launched already. You can't launch other bot on this process.");
         console.log("The bot was launched already");
+    }
+});
+// send chat message toward the game room
+ipcMain.on('msg-send-action', (event: any, arg: any) => { // webRender.js
+    // Event emitter for sending asynchronous messages
+    //event.sender.send('asynchronous-reply', 'async pong');
+    if(isBotLaunched == true) { // only when the bot is running
+        puppeteerContainer.then((page: any) => {
+            page.evaluate((msgString: any) => {
+                window.sendRoomChat(msgString); // send chat toward game
+            }, arg);
+        });
+    }
+});
+// get and store the login key for super admin permission, and send to the bot.
+ipcMain.on('super-key-action', (event: any, arg: any) => { // webRender.js
+    // Event emitter for sending asynchronous messages
+    //event.sender.send('asynchronous-reply', 'async pong');
+    if(arg != null) {
+        superKeyList = arg;
+        nodeStorage.setItem('_SuperAdminKeys', superKeyList); // save into node-persist storage
+        if(isBotLaunched == true) { // and if the bot is running
+            puppeteerContainer.then((page: any) => {
+                page.evaluate((keys: any) => { // also save into localStorage on puppeteer
+                    localStorage.setItem('_SuperAdminKeys', keys);
+                }, superKeyList);
+            });
+        }
     }
 });
 
@@ -116,12 +151,38 @@ Menu.getApplicationMenu().getMenuItemById('stopMenuItem').click = function() { /
     // close the headless browser
     puppeteerContainer.then((page: any) => { page.close(); }); // close the puppeteer browser (the single page will be closed actually)
 }
+Menu.getApplicationMenu().getMenuItemById('superAdminLoginKeyMenuItem').click = function() { // add click event handler on the menu item.
+    if(MenuItemSwitch.superAdminKey == false) { // if this menu is not activated
+        MenuItemSwitch.superAdminKey = true; // switch and open
+        // and load super admin keys onto textarea
+        electronWindow.webContents.executeJavaScript(`document.getElementById('superAdminKeyDiv').style.display = "block";`);
+        electronWindow.webContents.executeJavaScript("document.getElementById('superKeyList').value = '" + superKeyList.replace(/\n|\r\n|\r/g,'\\n') + "';");
+    } else { // if this menu is activated
+        MenuItemSwitch.superAdminKey = false; // switch and close
+        electronWindow.webContents.executeJavaScript(`document.getElementById('superAdminKeyDiv').style.display = "none";`);
+    }
+}
+Menu.getApplicationMenu().getMenuItemById('announceCommandMenuItem').click = function() { // add click event handler on the menu item.
+    if(MenuItemSwitch.announceMsg == false) {// if this menu is not activated
+        MenuItemSwitch.announceMsg = true; // switch and open
+        electronWindow.webContents.executeJavaScript(`document.getElementById('announcementDiv').style.display = "block";`);
+    } else { // if this menu is activated
+        MenuItemSwitch.announceMsg = false; // switch and close
+        electronWindow.webContents.executeJavaScript(`document.getElementById('announcementDiv').style.display = "none";`);
+    }
+}
+
 
 // In this file you can include the rest of your app's specific main process code.
 // You can also put them in separate files and require them here.
+async function nodeStorageInit() {
+    await nodeStorage.init();
+    superKeyList = await nodeStorage.getItem('_SuperAdminKeys');
+}
+
 async function bot(hostConfig: string) {
     console.log("The headless host has started.");
-    await nodeStorage.init();
+    //await nodeStorage.init();
 
     const browser = await puppeteer.launch({
         headless: isOpenHeadless,
@@ -134,12 +195,16 @@ async function bot(hostConfig: string) {
         Menu.getApplicationMenu().getMenuItemById('startMenuItem').enabled = true;
         Menu.getApplicationMenu().getMenuItemById('stopMenuItem').enabled = false;
         Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').enabled = true;
+        Menu.getApplicationMenu().getMenuItemById('announceCommandMenuItem').enabled = false;
         electronWindow.webContents.executeJavaScript(`
             document.getElementById('roomSettingDiv').style.display = "block";
+            document.getElementById('announcementDiv').style.display = "none";
+            document.getElementById('superAdminKeyDiv').style.display = "none";
+            document.getElementById('botConsoleDiv').style.display = "none";
             document.getElementById('roomInformationDiv').style.display = "none";
             document.getElementById('roomIndicator').innerHTML = "NOT LAUNCHED YET";
             document.getElementById('roomLinkIndicator').innerHTML = "link";
-            document.getElementById('botConsole').innerHTML = "";
+            document.getElementById('botConsole').value = "";
         `);
         console.log("The headless host is closed.");
         return;
@@ -199,11 +264,13 @@ async function bot(hostConfig: string) {
         } // TODO: replace logging system using textarea to rest api server
         // FIXME: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame". Maybe it was caused by quotation marks..
 
+        // TODO: 접속중인 인원수 표시하기.
+
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};
             for (let i = 0; i < localStorage.length; i++) {
                 const key: string | null = localStorage.key(i);
-                if (typeof key === "string") {
+                if (typeof key === "string" && key != "_SuperAdminKeys") { // not load _SuperAdminKeys from localStorage on puppeteer
                     jsonData[key] = localStorage.getItem(key);
                 }
             }

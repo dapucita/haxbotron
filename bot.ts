@@ -205,6 +205,15 @@ function initialiseRoom(): void {
     gameMode = "ready" // no 'stats' not yet
     logger.c(`[MODE] Game mode is '${gameMode}'(by default).`);
 
+    // declare function in window object
+    window.sendRoomChat = function(msg: string, playerID?: number): void {
+        if(playerID !== null) {
+            room.sendChat(msg, playerID);
+        } else {
+            room.sendChat(msg);
+        }
+    }
+
     // room.setDefaultStadium("Big");
     room.setCustomStadium(gameRule.defaultMap);
     room.setScoreLimit(gameRule.requisite.scoreLimit);
@@ -256,7 +265,7 @@ function initialiseRoom(): void {
                     afkmode: false,
                     afkreason: '',
                     captain: false,
-                    superadmin: loadedData.superadmin
+                    superadmin: false
                 }));
 
                 // update player information in placeholder
