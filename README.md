@@ -45,7 +45,9 @@ There are 2 steps for common players, and 1 step for especial users who have aut
 
 `Player` is basic level, `Admin` is administrative level who is able to operating the game, and `Super Admin` is super level who has permissions for operating the bot application wholly.
 
-Admin players have yellow colored name tag in the spectator room, but Super Admin players don't have that yellow name tag.
+Admin players have yellow colored name tag in the spectator window, but Super Admin players don't have that yellow name tag.
+
+Super admin players can ban other players, and use special `!super` commands.
 
 ## Game Commands for Players
 If you(the player) type a command by chat...
@@ -64,24 +66,20 @@ If you(the player) type a command by chat...
 
 `!poss` shows you possessions rate of both Read and Blue team.
 
-`!afk MSG` switchses to idle status, or return to active status if already in afk mode. MSG is the reason, and it can be skipped.
-
-`!list TEAM` shows you list of specific team player's numeric ID. TEAM should be red/blue/spec.
+`!afk MSG` switches to idle status, or return to active status if already in afk mode. MSG is the reason, and it can be skipped.
 
 ## Game Commands for Admin Players
-`!mute` prohibits all other players to chat.
+`!mute` prohibits all other players to chat. Or unmute if the players are already muted.
 
-`!mute PLAYER` prohibits the player whose name is PLAYER to chat.
-
-`!unmute` clears all of muted players list.
-
-`!unmute PLAYER` permits the player whose name is PLAYER to chat.
+`!mute PLAYER` prohibits the player whose name is PLAYER to chat. Or unmute if the player is already muted.
 
 `!kick PLAYER MSG` kicks the player whose name is PLAYER. If it contains MSG, the message as reason for kicking is shown for the user.
 
 ## Game Commands for Super Admin Players
 
 If you(the super admin) type a command by chat...
+
+`!super login KEY` makes you super admin. KEY is authentication key for login, and the keys can be made in the Electron-based UI.
 
 `!super thor` disqualify all admin players from admin permission, and makes admin player permission by self.
 

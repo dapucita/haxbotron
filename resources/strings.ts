@@ -8,7 +8,7 @@ export const announcement = {
 
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
-    ,help: '📄 !about !stats !poss !streak 📑 !help COMMAND for detail. '
+    ,help: '📄 !about,stats,afk,poss,streak 📑 !help COMMAND for detail. '
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
         ,help: '📑 !help COMMAND shows you how to use COMMAND command.'
@@ -17,11 +17,10 @@ export const command = {
         ,statsreset: '📑 !statsreset resets your statistical information. It cannot be recovered.'
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
-        ,afk: '📑 !afk MSG switchses to idle status. MSG is the reason, and it can be skipped.'
+        ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
+
     } 
     ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.'
-    ,super: '🔑 You are super admin now.'
-    ,debug: '🔑 Debug information has printed in console.'
     ,stats: '📊 {targetName}#{ticketTarget} Win {targetStatsWins}/{targetStatsTotal}({targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}.'
     ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
@@ -29,6 +28,19 @@ export const command = {
     ,afk: {
         setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
+    }
+    ,super: {
+        _ErrorWrongCommand : '❌ You did wrong command for super admin system.'
+        ,_ErrorNoPermission : '❌ You are not super admin. You can\'t do this command.'
+        ,defaultMessage: '📄 Super admin system for control Haxbotron bot in the game.'
+        ,loginSuccess: '🔑 Succeeded to login. You are super admin from now.'
+        ,logoutSuccess: '🔑 Succeeded to logout. You are not super admin from now.'
+        ,loginFail: '❌ Failed to login.'
+        ,loginFailNoKey: '❌ Failed to login. You should submit authentication key for login.'
+        ,thor: {
+            noAdmins: '❌ There are no admin players to disqualify.'
+            ,complete: '🔑 Succeeded to disqualify other admin players and make you admin.'
+        }
     }
 }
 

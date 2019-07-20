@@ -118,7 +118,9 @@ var parsingTimer = setInterval(function (): void {
         
         switch (timerTicket.type) {
             case "info": {
-                logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
+                if(timerTicket.action) {
+                    timerTicket.action(timerTicket.ownerPlayerID, playerList);
+                }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
                         room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
@@ -156,16 +158,33 @@ var parsingTimer = setInterval(function (): void {
                 break;
             }
             case "super": {
-                logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
-                playerList.get(timerTicket.ownerPlayerID).permissions.superadmin = true;
-                logger.c(`[SUPER] ${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID} is super admin now.(super:${playerList.get(timerTicket.ownerPlayerID).permissions['superadmin']})`);
-                room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
+                if(timerTicket.action) {
+                    timerTicket.action(timerTicket.ownerPlayerID, playerList, room);
+                }
+                if(timerTicket.messageString) {
+                    if(timerTicket.selfnotify == true) {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                    } else {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                    }
+                }
                 break;
             }
-            case "debug": {
-                logger.c(`[QUEUE] type(${timerTicket.type}),owner(${playerList.get(timerTicket.ownerPlayerID).name}#${timerTicket.ownerPlayerID})`);
-                logger.c(`[DEBUG] super:${playerList.get(timerTicket.ownerPlayerID).permissions['superadmin']}`);
-                room.sendChat(timerTicket.messageString, timerTicket.ownerPlayerID);
+            case "_ErrorWrongCommand": {
+                if(timerTicket.action) {
+                    timerTicket.action(timerTicket.ownerPlayerID, playerList, room);
+                }
+                if(timerTicket.messageString) {
+                    if(timerTicket.selfnotify == true) {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                    } else {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                    }
+                }
+                break;
+            }
+            default: {
+                logger.c("[QUEUE] Warning: not implemented type of ticket.");
                 break;
             }
         }
@@ -360,11 +379,11 @@ function initialiseRoom(): void {
 
         var msg = `[CHAT] ${player.name} said, "${message}"`;
         var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
-        if (evals.type != "none") { // if the message is command chat (not none type)
+        if (evals.type != "none") { // if the message is command chat (not 'none' type)
             // albeit this player is muted, the player can command by chat.
             actionQueue.push(evals); // and push it it queue.
             return false; // and filter the chat message to other players.
-        } else {
+        } else { // if the message is normal chat ('none' type)
             if (playerList.get(player.id).permissions['mute'] == true) { // if the player is muted
                 msg += ' but ignored.';
                 room.sendChat(parser.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id); // notify that fact
@@ -734,9 +753,9 @@ function updateAdmins(): void {
 
     // Get all players except the host (id = 0 is always the host)
     var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
-    if (players.length == 0) return; // No players left, do nothing.
-    if (players.find((player: PlayerObject) => player.admin) != null) return; // There's an admin left so do nothing.
-
+    if (players.length == 0) return; // If no players left, do nothing.
+    if (players.find((player: PlayerObject) => player.admin) != null) return; // Do nothing if any admin player is still left.
+    
     placeholderUpdateAdmins.playerID = players[0].id;
     placeholderUpdateAdmins.playerName = playerList.get(players[0].id).name;
 

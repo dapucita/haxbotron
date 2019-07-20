@@ -1,6 +1,7 @@
 import { ActionTicket } from "./Action";
 import { command as langCommand } from "../resources/strings";
 import { setPlayerData } from "./Storage";
+import { PlayerObject } from "./PlayerObject";
 
 export class Parser {
     // written in Singleton Pattern
@@ -59,6 +60,7 @@ export class Parser {
                             }
                             default: {
                                 ticket.messageString = langCommand.helpman._ErrorWrongMan;
+                                break;
                             }
                         }
                     } else {
@@ -138,19 +140,58 @@ export class Parser {
                     }
                     break;
                 }
-                case "super": { // temporal command in development stage. remove this command when you operate the bot with other players
+                case "super": {
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.super;
+                    ticket.messageString = langCommand.super.defaultMessage;
                     ticket.selfnotify = true;
+                    ticket.action = function(playerID: number, playerList: any, gameRoom: any): void {
+                        if(cutMsg[1] !== undefined) {
+                            switch(cutMsg[1]) {
+                                case "login": {
+                                    if(cutMsg[2] !== undefined) {
+                                        // key check and login
+                                    } else {
+                                        ticket.messageString = langCommand.super.loginFailNoKey;
+                                    }
+                                    break;
+                                }
+                                case "thor": {
+                                    if(playerList.get(playerID).permissions.superadmin == true) {
+                                        // Get all admin players except the bot host
+                                        var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.admin == true);
+                                        if (players.length == 0) { // If no players left, do nothing.
+                                            ticket.messageString = langCommand.super.thor.noAdmins;
+                                            return;
+                                        } else {
+                                            ticket.messageString = langCommand.super.thor.complete;
+                                            players.forEach((player: PlayerObject) => { // disqualify admin permission
+                                                gameRoom.setPlayerAdmin(player.id, false);
+                                                playerList.get(player.id).admin = false;
+                                            });
+                                            gameRoom.setPlayerAdmin(playerID, true);
+                                            playerList.get(playerID).admin = true;
+                                        }
+                                    } else {
+                                        ticket.messageString = langCommand.super._ErrorNoPermission;
+                                    }
+                                    break;
+                                }
+                                default: {
+                                    ticket.messageString = langCommand.super._ErrorWrongCommand;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     break;
-                }   
-                case "debug": { // temporal command in development stage. remove this command when you operate the bot with other players
-                    ticket.type = "debug";
+                }
+                default: {
+                    ticket.type = "_ErrorWrongCommand";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.debug;
+                    ticket.messageString = langCommand._ErrorWrongCommand;
                     ticket.selfnotify = true;
                     break;
                 }
