@@ -1,6 +1,6 @@
 {
   "name": "haxbotron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Haxbotron is a bot for HaxBall game.",
   "main": "index.js",
   "scripts": {
