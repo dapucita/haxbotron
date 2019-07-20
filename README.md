@@ -64,9 +64,7 @@ If you(the player) type a command by chat...
 
 `!poss` shows you possessions rate of both Read and Blue team.
 
-`!afk MSG` switchses to idle status. If it contains MSG, the message as reason for away from keyboards is shown when others call the player.
-
-`!unafk` switches to active status.
+`!afk MSG` switchses to idle status, or return to active status if already in afk mode. MSG is the reason, and it can be skipped.
 
 `!list TEAM` shows you list of specific team player's numeric ID. TEAM should be red/blue/spec.
 

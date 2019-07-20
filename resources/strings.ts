@@ -16,15 +16,20 @@ export const command = {
         ,stats: '📑 !stats shows all players your statistical information. 📑 If you want to reset, do !statsreset'
         ,statsreset: '📑 !statsreset resets your statistical information. It cannot be recovered.'
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
-        ,streak: '📊 !streak shows you which team is being on a winning streak.'
+        ,streak: '📑 !streak shows you which team is being on a winning streak.'
+        ,afk: '📑 !afk MSG switchses to idle status. MSG is the reason, and it can be skipped.'
     } 
     ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.'
-    ,super: '👑 You are super admin now.'
-    ,debug: '👑 Debug information has printed in console.'
+    ,super: '🔑 You are super admin now.'
+    ,debug: '🔑 Debug information has printed in console.'
     ,stats: '📊 {targetName}#{ticketTarget} Win {targetStatsWins}/{targetStatsTotal}({targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}.'
     ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName} is now hitting a winning streak of {streakTeamCount} games!'
+    ,afk: {
+        setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
+        ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
+    }
 }
 
 export const funcUpdateAdmins = {
@@ -44,7 +49,11 @@ export const onLeft = {
 }
 
 export const onChat = {
-    mutedChat: '🔇 You are muted. You can\'t send message to others.'
+    mutedChat: '🔇 You are muted. You can\'t send message to others, and only can command by chat.'
+}
+
+export const onTeamChange = {
+    afkPlayer: '🚫 Cannot to change team. {targetPlayerName}#{targetPlayerID} is away from keyboard. ({targetAfkReason})'
 }
 
 export const onStart = {

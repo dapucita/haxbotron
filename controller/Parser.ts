@@ -53,6 +53,10 @@ export class Parser {
                                 ticket.messageString = langCommand.helpman.poss;
                                 break;
                             }
+                            case "afk": {
+                                ticket.messageString = langCommand.helpman.afk;
+                                break;
+                            }
                             default: {
                                 ticket.messageString = langCommand.helpman._ErrorWrongMan;
                             }
@@ -110,6 +114,27 @@ export class Parser {
                         playerList.get(playerID).stats.ogs = 0;
                         playerList.get(playerID).stats.losePoints = 0;
                         setPlayerData(playerList.get(playerID));
+                    }
+                    break;
+                }
+                case "afk": {
+                    ticket.type = "status";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = langCommand.afk.setAfk;
+                    ticket.selfnotify = false;
+                    ticket.action = function(playerID: number, playerList: any, gameRoom: any): void {
+                        if(playerList.get(playerID).permissions.afkmode == true) { // if already in afk mode
+                            playerList.get(playerID).permissions.afkmode = false; // return to active mode
+                            playerList.get(playerID).permissions.afkreason = ''; // init
+                            ticket.messageString = langCommand.afk.unAfk;
+                        } else { // when not in afk mode
+                            playerList.get(playerID).permissions.afkmode = true; // set afk mode
+                            if(cutMsg[1] !== undefined) { // if the reason is not skipped
+                                playerList.get(playerID).permissions.afkreason = cutMsg[1]; // set reason
+                            }
+                            gameRoom.setPlayerTeam(playerID, 0) // Moves this player to Spectators team.
+                        }
                     }
                     break;
                 }

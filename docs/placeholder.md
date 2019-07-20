@@ -34,6 +34,8 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `targetTeamID` : the team which is the target of this ticket. (number 0 Spec / 1 Red / 2 Blue)
 
+`targetAfkReason`: the reason of the target of this ticket is AFK. (string)
+
 ### player statistical information for command
 `targetStatsWinRate` : winning games rate of the player
 
@@ -79,6 +81,11 @@ Usage sample : `'Welcome, {playerName}!'`
 `playerID` : numeric ID of this player.
 
 `playerName` : name of this player.
+
+### room.onPlayerTeamChange (onTeamChange)
+`targetPlayerID`: numeric ID of the player who is the target. (number)
+`targetPlayerName`: name of the player who is the target. (string)
+`targetAfkReason`: the reason of this target player is AFK. (string)
 
 ### room.onTeamVictory (onVictory)
 `teamID` : numeric ID of the team has winned.

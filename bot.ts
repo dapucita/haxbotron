@@ -97,6 +97,7 @@ var parsingTimer = setInterval(function (): void {
             ticketTarget: timerTicket.targetPlayerID,
             targetTeamID: timerTicket.targetTeamID,
             targetName: playerList.get(timerTicket.targetPlayerID).name,
+            targetAfkReason: playerList.get(timerTicket.targetPlayerID).permissions.afkreason,
             targetStatsTotal: playerList.get(timerTicket.targetPlayerID).stats.totals,
             targetStatsWins: playerList.get(timerTicket.targetPlayerID).stats.wins,
             targetStatsGoals: playerList.get(timerTicket.targetPlayerID).stats.goals,
@@ -132,6 +133,20 @@ var parsingTimer = setInterval(function (): void {
                     timerTicket.action(timerTicket.ownerPlayerID, playerList);
                 }
                 if(timerTicket.messageString) {
+                    if(timerTicket.selfnotify == true) {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                    } else {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                    }
+                }
+                break;
+            }
+            case "status": {
+                if(timerTicket.action) {
+                    timerTicket.action(timerTicket.ownerPlayerID, playerList, room);
+                }
+                if(timerTicket.messageString) {
+                    placeholderQueueCommand.targetAfkReason = playerList.get(timerTicket.targetPlayerID).permissions.afkreason; // update
                     if(timerTicket.selfnotify == true) {
                         room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
@@ -220,6 +235,7 @@ function initialiseRoom(): void {
                 }, {
                     mute: loadedData.mute,
                     afkmode: false,
+                    afkreason: '',
                     captain: false,
                     superadmin: loadedData.superadmin
                 }));
@@ -252,6 +268,7 @@ function initialiseRoom(): void {
             }, {
                 mute: false,
                 afkmode: false,
+                afkreason: '',
                 captain: false,
                 superadmin: false
             }));
@@ -343,7 +360,8 @@ function initialiseRoom(): void {
 
         var msg = `[CHAT] ${player.name} said, "${message}"`;
         var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
-        if (evals.type != "none") { // if the message is command chat
+        if (evals.type != "none") { // if the message is command chat (not none type)
+            // albeit this player is muted, the player can command by chat.
             actionQueue.push(evals); // and push it it queue.
             return false; // and filter the chat message to other players.
         } else {
@@ -360,9 +378,19 @@ function initialiseRoom(): void {
     room.onPlayerTeamChange = function (changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
         // Event called when a player team is changed.
         // byPlayer is the player which caused the event (can be null if the event wasn't caused by a player).
-        if (changedPlayer.id == 0) { //if the player changed into other team is host player(always id 0),
-            room.setPlayerTeam(0, 0); //stay host player in Spectators team.
+        var placeholderTeamChange = { // Parser.maketext(str, placeholder)
+            targetPlayerID: changedPlayer.id,
+            targetPlayerName: changedPlayer.name,
+            targetAfkReason: ''
+        }
+        if (changedPlayer.id == 0) { // if the player changed into other team is host player(always id 0),
+            room.setPlayerTeam(0, 0); // stay host player in Spectators team.
         } else {
+            if(byPlayer.id != 0 && playerList.get(changedPlayer.id).permissions.afkmode == true) {
+                placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
+                room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
+                room.sendChat(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange));
+            }
             playerList.get(changedPlayer.id).team = changedPlayer.team;
         }
 
