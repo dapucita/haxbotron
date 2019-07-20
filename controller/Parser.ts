@@ -37,6 +37,10 @@ export class Parser {
                                 ticket.messageString = langCommand.helpman.about;
                                 break;
                             }
+                            case "streak": {
+                                ticket.messageString = langCommand.helpman.streak;
+                                break;
+                            }
                             case "stats": {
                                 ticket.messageString = langCommand.helpman.stats;
                                 break;
@@ -72,7 +76,7 @@ export class Parser {
                     ticket.type = "stats";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.stats;
+                    ticket.messageString = langCommand.poss;
                     ticket.selfnotify = true;
                     break;
                 }
