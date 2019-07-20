@@ -97,8 +97,8 @@ export const onTouch = {
 }
 
 export const onGoal = {
-    goal: '⚽️ {scorerName}#{scorerID} made a goal!'
-    ,goalWithAssist: '⚽️ {scorerName}#{scorerID} made a goal! Assist by {assistName}#{assistID}'
+    goal: '⚽️ {scorerName}#{scorerID} scored!!'
+    ,goalWithAssist: '⚽️ {scorerName}#{scorerID} made a goal! (assisted by {assistName}#{assistID})'
     ,og: '⚽️ {ogName}#{ogID} made an OG.'
 
 }
