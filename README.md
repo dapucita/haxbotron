@@ -64,8 +64,6 @@ If you(the player) type a command by chat...
 
 `!poss` shows you possessions rate of both Read and Blue team.
 
-`!level` shows you your hierarchy level.
-
 `!afk MSG` switchses to idle status. If it contains MSG, the message as reason for away from keyboards is shown when others call the player.
 
 `!unafk` switches to active status.
