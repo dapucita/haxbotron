@@ -804,5 +804,8 @@ window.onEmergency = {
         } else {
             room.kickPlayer(playerID, 'by haxbotron', ban);
         }
+    },
+    banclear: function(): void {
+        room.clearBans();
     }
 }

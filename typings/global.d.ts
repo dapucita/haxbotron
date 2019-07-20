@@ -11,6 +11,7 @@ declare global {
             list(): void
             chat(msg: string, playerID?: number): void
             kick(playerID: number, ban: boolean, msg?: string): void
+            banclear(): void
         }
 
         // haxball
