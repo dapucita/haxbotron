@@ -2,76 +2,76 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const announcement = {
-    advertise: '📢 Haxbotron is in development. Open source and free to use!'
-    ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
+    advertise: '📢 Haxbotron - 무료 오픈소스 봇 (개발중)'
+    ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
 }
 
 export const command = {
-    _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
-    ,help: '📄 !about,stats,afk,poss,streak 📑 !help COMMAND for detail. '
+    _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
+    ,help: '📄 !about,stats,afk,poss,streak 📑 !help COMMAND로 자세히 보기 '
     ,helpman: { // detailed description for a command
-        _ErrorWrongMan : '❌ Failed to read manual about that command.'
-        ,help: '📑 !help COMMAND shows you how to use COMMAND command.'
-        ,about: '📑 !about shows you simple inforamtion of the bot running now.'
-        ,stats: '📑 !stats shows all players your statistical information. 📑 If you want to reset, do !statsreset'
-        ,statsreset: '📑 !statsreset resets your statistical information. It cannot be recovered.'
-        ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
-        ,streak: '📑 !streak shows you which team is being on a winning streak.'
-        ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
+        _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
+        ,help: '📑 !help COMMAND : COMMAND 명령어의 자세한 설명을 보여줍니다.'
+        ,about: '📑 !about : 봇의 정보를 보여줍니다.'
+        ,stats: '📑 !stats : 스탯을 다른 사람들에게 보여줍니다. 📑 !statsreset로 리셋합니다.'
+        ,statsreset: '📑 !statsreset : 스탯을 초기화합니다. 다시 복구할 수 없습니다.'
+        ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
+        ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
+        ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다.'
 
     } 
-    ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.'
-    ,stats: '📊 {targetName}#{ticketTarget} Win {targetStatsWins}/{targetStatsTotal}({targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}.'
-    ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
-    ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
-    ,streak: '📊 {streakTeamName} is now hitting a winning streak of {streakTeamCount} games!'
+    ,about: '📄 이 방은 Haxbotron 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.'
+    ,stats: '📊 {targetName}#{ticketTarget}님: 승리 {targetStatsWins}/{targetStatsTotal}판({targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}.'
+    ,statsreset: '📊 스탯을 초기화했습니다. 다시 복구할 수 없습니다.'
+    ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'
+    ,streak: '📊 {streakTeamName}팀이 {streakTeamCount}판째 연승중입니다!'
     ,afk: {
-        setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
-        ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
+        setAfk: '💤 {targetName}#{ticketTarget}님이 지금부터 잠수합니다... ({targetAfkReason})'
+        ,unAfk: '📢 {targetName}#{ticketTarget}님이 잠수를 풀고 복귀합니다!'
     }
     ,super: {
-        _ErrorWrongCommand : '❌ You did wrong command for super admin system.'
-        ,_ErrorNoPermission : '❌ You are not super admin. You can\'t do this command.'
-        ,_ErrorLoginAlready : '❌ You are already super admin. 📑 You can logout by command !super logout.'
-        ,defaultMessage: '📄 Super admin system for control Haxbotron bot in the game.'
-        ,loginSuccess: '🔑 Succeeded to login. You are super admin from now.'
-        ,logoutSuccess: '🔑 Succeeded to logout. You are not super admin from now.'
-        ,loginFail: '❌ Failed to login.'
-        ,loginFailNoKey: '❌ Failed to login. You should submit authentication key for login.'
+        _ErrorWrongCommand : '❌ 잘못된 super 명령어입니다.'
+        ,_ErrorNoPermission : '❌ super admin만 이 명령어를 사용할 수 있습니다.'
+        ,_ErrorLoginAlready : '❌ 이미 super admin입니다. 📑 !super logout로 로그아웃할 수 있습니다.'
+        ,defaultMessage: '📄 Haxbotron 봇을 관리하기 위한 super 명령어입니다.'
+        ,loginSuccess: '🔑 로그인 성공. super 권한을 부여받았습니다.'
+        ,logoutSuccess: '🔑 로그아웃 완료. super 권한을 반납하였습니다.'
+        ,loginFail: '❌ 로그인에 실패하였습니다.'
+        ,loginFailNoKey: '❌ 로그인에 실패하였습니다. 인증키를 입력해야 합니다.'
         ,thor: {
-            noAdmins: '❌ There are no admin players to disqualify.'
-            ,complete: '🔑 Succeeded to disqualify other admin players and make you admin.'
+            noAdmins: '❌ 방장권한을 회수할 플레이어가 남아있지 않습니다.'
+            ,complete: '🔑 다른 방장의 권한을 회수하고 대신하였습니다.'
         }
     }
 }
 
 export const funcUpdateAdmins = {
-    newAdmin: '📢 {playerName}#{playerID} has been new admin.'
+    newAdmin: '📢 {playerName}#{playerID}가 새로운 방장이 되었습니다.'
 }
 
 export const onJoin = {
-    welcome: '📢 Welcome, {playerName}#{playerID}! 📄 You can get informations by command !help'
-    ,changename: '📢 {playerName}#{playerID} has changed name from {playerNameOld}'
-    ,startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
-    ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
+    welcome: '📢 {playerName}#{playerID}님 반갑습니다! 📄 !help로 도움말을 볼 수 있습니다.'
+    ,changename: '📢 {playerName}#{playerID}님이 {playerNameOld}에서 닉네임을 변경하였습니다.'
+    ,startRecord: '📊 충분한 인원이 모였습니다. 지금부터 스탯 기록이 될 것입니다.'
+    ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
 }
 
 export const onLeft = {
-    startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
-    ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
+    startRecord: '📊 충분한 인원이 모였습니다. 지금부터 스탯 기록이 될 것입니다.'
+    ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
 }
 
 export const onChat = {
-    mutedChat: '🔇 You are muted. You can\'t send message to others, and only can command by chat.'
+    mutedChat: '🔇 음소거되어 채팅을 할 수 없습니다. 명령어는 사용할 수 있습니다.'
 }
 
 export const onTeamChange = {
-    afkPlayer: '🚫 Cannot to change team. {targetPlayerName}#{targetPlayerID} is away from keyboard. ({targetAfkReason})'
+    afkPlayer: '🚫 {targetPlayerName}#{targetPlayerID}님은 잠수중이라 팀을 옮길 수 없습니다. ({targetAfkReason})'
 }
 
 export const onStart = {
-    startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
-    ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
+    startRecord: '📊 충분한 인원이 모였습니다. 지금부터 스탯 기록이 될 것입니다.'
+    ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
 }
 
 export const onStop = {
@@ -79,17 +79,17 @@ export const onStop = {
 }
 
 export const onVictory = {
-    victory: '🎉 The game has ended. Scores {redScore}:{blueScore}!'
+    victory: '🎉 {redScore}vs{blueScore}으로 게임이 끝났습니다!'
 }
 
 export const onKick = {
-    cannotBan: '🚫 You can\'t ban other players. Act kicking if you need.'
-    ,notifyNotBan: '🚫 Banning {kickedName}#{kickedID} player is negated.'
+    cannotBan: '🚫 일반 퇴장만 시킬 수 있습니다. 영구퇴장은 취소됩니다.'
+    ,notifyNotBan: '🚫 {kickedName}#{kickedID}님의 영구퇴장이 취소되었습니다. 다시 접속할 수 있습니다.'
 }
 
 export const onStadium = {
-    loadNewStadium: '📁 {stadiumName} has been a new stadium.'
-    ,cannotChange: '🚫 You can\'t change the stadium.'
+    loadNewStadium: '📁 {stadiumName} 맵이 새로 열렸습니다.'
+    ,cannotChange: '🚫 맵을 변경할 수 없습니다.'
 }
 
 export const onTouch = {
@@ -97,8 +97,8 @@ export const onTouch = {
 }
 
 export const onGoal = {
-    goal: '⚽️ {scorerName}#{scorerID} scored!!'
-    ,goalWithAssist: '⚽️ {scorerName}#{scorerID} made a goal! (assisted by {assistName}#{assistID})'
-    ,og: '⚽️ {ogName}#{ogID} made an OG.'
+    goal: '⚽️ {scorerName}#{scorerID}님의 득점!'
+    ,goalWithAssist: '⚽️ {scorerName}#{scorerID}님의 득점! {assistName}#{assistID}님이 어시스트했습니다.'
+    ,og: '⚽️ {ogName}#{ogID}님이 자책골을 넣었습니다...'
 
 }
