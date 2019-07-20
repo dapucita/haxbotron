@@ -72,7 +72,15 @@ export class Parser {
                     ticket.type = "stats";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.poss;
+                    ticket.messageString = langCommand.stats;
+                    ticket.selfnotify = true;
+                    break;
+                }
+                case "streak": {
+                    ticket.type = "stats";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = langCommand.streak;
                     ticket.selfnotify = true;
                     break;
                 }

@@ -58,6 +58,23 @@ const roomConfig: RoomConfig = {
     playerName: botConfig.playerName
 }
 const playerList = new Map(); // playerList:Player is an Map object. // playerList.get(player.id).name; : usage for playerList
+const winningStreak = { // count of winning streak
+    red: 0, blue: 0,
+    getName: function(): string {
+        if(this.red >= this.blue) { // include when the value is red 0, blue 0
+            return "Red";
+        } else {
+            return "Blue";
+        }
+    },
+    getCount: function(): number {
+        if(this.red >= this.blue) { // include when the value is red 0, blue 0
+            return this.red;
+        } else {
+            return this.blue;
+        }
+    }
+};
 
 const actionQueue: ActionQueue < ActionTicket > = ActionQueue.getInstance();
 const ballStack: KickStack = KickStack.getInstance();
@@ -70,7 +87,7 @@ var gameMode: string = "ready"; // "ready", "stats"
 var room: any = window.HBInit(roomConfig);
 initialiseRoom();
 
-setInterval(function (): void {
+var parsingTimer = setInterval(function (): void {
     //Loop timer for processing ActionTicket Queue.
     var timerTicket: ActionTicket | undefined = actionQueue.pop();
     if (timerTicket !== undefined) {
@@ -93,7 +110,9 @@ setInterval(function (): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         }
         
         switch (timerTicket.type) {
@@ -138,6 +157,10 @@ setInterval(function (): void {
     }
 }, 0);
 
+var scheduledTimer = setInterval(function(): void {
+    room.sendChat(LangRes.announcement.advertise);
+}, 90000); // by 1m30s
+
 function initialiseRoom(): void {
     // Write initialising processes here.
     const nowDate: Date = new Date();
@@ -173,7 +196,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
         
         // logging into console (debug)
@@ -273,7 +298,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
         updateAdmins();
@@ -309,7 +336,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
         var msg = `[CHAT] ${player.name} said, "${message}"`;
@@ -362,7 +391,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
         
@@ -391,7 +422,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
 
@@ -418,7 +451,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
         if (gameRule.statsRecord == true && gameMode == "stats") { // records when game mode is for stats recording.
@@ -429,6 +464,8 @@ function initialiseRoom(): void {
                 // if Red wins
                 placeholderVictory.teamID = 1;
                 placeholderVictory.teamName = 'Red';
+                winningStreak.red++;
+                winningStreak.blue = 0;
                 redPlayers.forEach(function (eachPlayer: PlayerObject) {
                     playerList.get(eachPlayer.id).stats.wins++; //records a win
                 });
@@ -436,6 +473,8 @@ function initialiseRoom(): void {
                 // if Blue wins
                 placeholderVictory.teamID = 2;
                 placeholderVictory.teamName = 'Blue';
+                winningStreak.blue++;
+                winningStreak.red = 0;
                 bluePlayers.forEach(function (eachPlayer: PlayerObject) {
                     playerList.get(eachPlayer.id).stats.wins++; //records a win
                 });
@@ -470,7 +509,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
 
@@ -503,7 +544,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
         
@@ -537,7 +580,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
         ballStack.push(player.id);
@@ -561,7 +606,9 @@ function initialiseRoom(): void {
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
             possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2)
+            possTeamBlue: ballStack.possCalculate(2),
+            streakTeamName: winningStreak.getName(),
+            streakTeamCount: winningStreak.getCount()
         };
 
         if(team == 1) { 
@@ -652,7 +699,9 @@ function updateAdmins(): void {
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
         possTeamRed: ballStack.possCalculate(1),
-        possTeamBlue: ballStack.possCalculate(2)
+        possTeamBlue: ballStack.possCalculate(2),
+        streakTeamName: winningStreak.getName(),
+        streakTeamCount: winningStreak.getCount()
     };
 
     // Get all players except the host (id = 0 is always the host)

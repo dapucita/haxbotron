@@ -70,28 +70,24 @@ If you(the player) type a command by chat...
 
 `!unafk` switches to active status.
 
+`!list TEAM` shows you list of specific team player's numeric ID. TEAM should be red/blue/spec.
+
 ## Game Commands for Admin Players
-`!mute` prohibits other all players to chat.
+`!mute` prohibits all other players to chat.
 
 `!mute PLAYER` prohibits the player whose name is PLAYER to chat.
 
+`!unmute` clears all of muted players list.
+
 `!unmute PLAYER` permits the player whose name is PLAYER to chat.
 
-`!unmute!all` clears all of muted players list.
-
 `!kick PLAYER MSG` kicks the player whose name is PLAYER. If it contains MSG, the message as reason for kicking is shown for the user.
-
-`!kick!last` kicks the player who joined most recently.
-
-`!kick!og` kicks the player who made O.G. most recently.
-
-`!kick!afk` kicks all players who are away from keyboards.
 
 ## Game Commands for Super Admin Players
 
 If you(the super admin) type a command by chat...
 
-`!super!thor` disqualify all admin players from admin permission, and makes admin player permission by self.
+`!super thor` disqualify all admin players from admin permission, and makes admin player permission by self.
 
 `!ban PLAYER MSG` bans PLAYER forever. If it contains MSG, the message as reason for banning is shown for the user.
 

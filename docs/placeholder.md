@@ -14,10 +14,14 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `gameRuleNeedMin` : minimum number of players needs for apply loaded game rule
 
-### ball possession rate
-`possTeamRed`: numeric possession rate of red team
+### statistical information
+`possTeamRed`: numeric ball possession rate of red team
 
-`possTeamBlue`: numeric possession rate of blue team
+`possTeamBlue`: numeric ball possession rate of blue team
+
+`streakTeamName`: name of the team hits a winning streak (string Red / Blue)
+
+`streakTeamCount`: numeric count of winning streak
 
 ## in The event loop for ActionTicket Queue (command)
 `_LaunchTime` : the time the bot launched. (stringfied date)
@@ -30,7 +34,7 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `targetTeamID` : the team which is the target of this ticket. (number 0 Spec / 1 Red / 2 Blue)
 
-### statistical information
+### statistical information for command
 `targetStatsWinRate` : winning games rate of the player
 
 `targetStatsTotal` : count of the player played.
