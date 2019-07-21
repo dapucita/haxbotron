@@ -493,6 +493,8 @@ function initialiseRoom(): void {
         }
         logger.c(msg);
         setDefaultStadiums(); // check number of players and auto-set stadium
+        
+        ballStack.clear(); // clear the stack.
         ballStack.possClear(); // clear possession count
     }
 
@@ -546,6 +548,7 @@ function initialiseRoom(): void {
         }
 
         ballStack.clear(); // clear the stack.
+        ballStack.possClear(); // clear possession count
 
         logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
         room.sendChat(parser.maketext(LangRes.onVictory.victory, placeholderVictory));
