@@ -46,7 +46,7 @@ export const command = {
 }
 
 export const funcUpdateAdmins = {
-    newAdmin: '📢 {playerName}#{playerID}가 새로운 방장이 되었습니다.'
+    newAdmin: '📢 {playerName}#{playerID}님이 새로운 방장이 되었습니다.'
 }
 
 export const onJoin = {
