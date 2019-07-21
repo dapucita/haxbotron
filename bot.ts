@@ -433,6 +433,7 @@ function initialiseRoom(): void {
                 logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(value:${playerList.get(changedPlayer.id).admin},super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
             }
         }
+        updateAdmins(); // check when the last admin player disqulified by self
     }
 
     room.onGameStart = function (byPlayer: PlayerObject): void {
@@ -493,7 +494,7 @@ function initialiseRoom(): void {
         }
         logger.c(msg);
         setDefaultStadiums(); // check number of players and auto-set stadium
-        
+
         ballStack.clear(); // clear the stack.
         ballStack.possClear(); // clear possession count
     }
