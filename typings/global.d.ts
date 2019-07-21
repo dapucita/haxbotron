@@ -1,4 +1,4 @@
-import { RoomConfig } from '../controller/RoomConfig';
+import { RoomConfig } from '../model/RoomConfig';
 declare global {
     interface Window {
         // bot

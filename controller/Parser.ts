@@ -1,7 +1,7 @@
 import { ActionTicket } from "./Action";
 import * as LangRes from "../resources/strings";
 import { setPlayerData } from "./Storage";
-import { PlayerObject } from "./PlayerObject";
+import { PlayerObject } from "../model/PlayerObject";
 import { superAdminLogin } from "./SuperAdmin";
 
 export class Parser {

@@ -4,20 +4,20 @@
 // import modules
 import {
     RoomConfig
-} from "./controller/RoomConfig";
+} from "./model/RoomConfig";
 import {
     Player
-} from "./controller/Player";
+} from "./model/Player";
 import {
     Logger
 } from "./controller/Logger";
 import {
     PlayerObject,
     PlayerStorage
-} from "./controller/PlayerObject";
+} from "./model/PlayerObject";
 import {
     ScoresObject
-} from "./controller/ScoresObject";
+} from "./model/ScoresObject";
 import {
     ActionQueue,
     ActionTicket
