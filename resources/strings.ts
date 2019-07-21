@@ -79,7 +79,7 @@ export const onStop = {
 }
 
 export const onVictory = {
-    victory: '🎉 {redScore}vs{blueScore}으로 게임이 끝났습니다!'
+    victory: '🎉 경기 종료! 스코어 {redScore}:{blueScore} !! ⚽️'
 }
 
 export const onKick = {
