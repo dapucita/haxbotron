@@ -32,6 +32,7 @@ function createWindow() {
     electronWindow = new BrowserWindow({
         title: "Haxbotron",
         resizable: false,
+        useContentSize: true,
         width: 800,
         height: 600,
         webPreferences: {
