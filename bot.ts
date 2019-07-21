@@ -353,7 +353,7 @@ function initialiseRoom(): void {
             }
         }
 
-        setDefaultStadiums(); // check number of players and auto-set stadium
+        //setDefaultStadiums(); // check number of players and auto-set stadium
     }
 
     room.onPlayerLeave = function (player: PlayerObject): void {
@@ -394,7 +394,7 @@ function initialiseRoom(): void {
             }
         }
         playerList.delete(player.id); // delete from player list
-        setDefaultStadiums(); // check number of players and auto-set stadium
+        //setDefaultStadiums(); // check number of players and auto-set stadium
         updateAdmins();
     }
 
