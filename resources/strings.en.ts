@@ -10,7 +10,7 @@ export const scheduler = {
 
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
-    ,help: '📄 !about,stats,afk,poss,streak 📑 !help COMMAND for detail. '
+    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND for detail. '
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
         ,help: '📑 !help COMMAND shows you how to use COMMAND command.'
@@ -20,7 +20,7 @@ export const command = {
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
         ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
-
+        ,list: '📑 !list TEAM(red/blue/spec) shows you all players list of the team.'
     } 
     ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.'
     ,stats: '📊 {targetName}#{ticketTarget} Win {targetStatsWins}/{targetStatsTotal}({targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}.'
@@ -32,9 +32,9 @@ export const command = {
         ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
     }
     ,super: {
-        _ErrorWrongCommand : '❌ You did wrong command for super admin system.'
-        ,_ErrorNoPermission : '❌ You are not super admin. You can\'t do this command.'
-        ,_ErrorLoginAlready : '❌ You are already super admin. 📑 You can logout by command !super logout.'
+        _ErrorWrongCommand: '❌ You did wrong command for super admin system.'
+        ,_ErrorNoPermission: '❌ You are not super admin. You can\'t do this command.'
+        ,_ErrorLoginAlready: '❌ You are already super admin. 📑 You can logout by command !super logout.'
         ,defaultMessage: '📄 Super admin system for control Haxbotron bot in the game.'
         ,loginSuccess: '🔑 Succeeded to login. You are super admin from now.'
         ,logoutSuccess: '🔑 Succeeded to logout. You are not super admin from now.'
@@ -49,6 +49,11 @@ export const command = {
             ,kickMsg: '📢 kicked from the game'
             ,kickSuccess: '📢 That player is kicked.'
         }
+    }
+    ,list: {
+        _ErrorNoTeam: '❌ You can request only about red, blue, spec team.'
+        ,_ErrorNoOne: '❌ There\'s no one.'
+        ,whoisList: '📜 {whoisResult}'
     }
 }
 

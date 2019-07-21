@@ -31,7 +31,6 @@ Usage sample : `'Welcome, {playerName}!'`
 `targetName`: name of the player who is the target of this scheduled event. (string)
 
 
-
 ## in the event loop for ActionTicket Queue (command)
 `_LaunchTime` : the time the bot launched. (stringfied date)
 
@@ -44,6 +43,9 @@ Usage sample : `'Welcome, {playerName}!'`
 `targetTeamID` : the team which is the target of this ticket. (number 0 Spec / 1 Red / 2 Blue)
 
 `targetAfkReason`: the reason of the target of this ticket is AFK. (string)
+
+### player information for whois type command
+`whoisResult`: whois information. (string)
 
 ### player statistical information for command
 `targetStatsWinRate` : winning games rate of the player

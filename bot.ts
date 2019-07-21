@@ -113,13 +113,27 @@ var parsingTimer = setInterval(function (): void {
             possTeamRed: ballStack.possCalculate(1),
             possTeamBlue: ballStack.possCalculate(2),
             streakTeamName: winningStreak.getName(),
-            streakTeamCount: winningStreak.getCount()
+            streakTeamCount: winningStreak.getCount(),
+            whoisResult: ''
         }
         
         switch (timerTicket.type) {
             case "info": {
                 if(timerTicket.action) {
                     timerTicket.action(timerTicket.ownerPlayerID, playerList);
+                }
+                if(timerTicket.messageString) {
+                    if(timerTicket.selfnotify == true) {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                    } else {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                    }
+                }
+                break;
+            }
+            case "whois": {
+                if(timerTicket.action) {
+                    placeholderQueueCommand.whoisResult = timerTicket.action(timerTicket.ownerPlayerID, playerList, room);
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {

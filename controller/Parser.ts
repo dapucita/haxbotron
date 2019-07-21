@@ -59,6 +59,10 @@ export class Parser {
                                 ticket.messageString = LangRes.command.helpman.afk;
                                 break;
                             }
+                            case "list": {
+                                ticket.messageString = LangRes.command.helpman.list;
+                                break;
+                            }
                             default: {
                                 ticket.messageString = LangRes.command.helpman._ErrorWrongMan;
                                 break;
@@ -77,6 +81,65 @@ export class Parser {
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = LangRes.command.about;
                     ticket.selfnotify = true;
+                    break;
+                }
+                case "list": {
+                    ticket.type = "whois";
+                    ticket.targetPlayerID = playerID;
+                    ticket.selfnotify = true;
+                    ticket.action = function(playerID: number, playerList: any, gameRoom: any): string {
+                        if(cutMsg[1] !== undefined) {
+                            ticket.messageString = LangRes.command.list.whoisList;
+                            switch(cutMsg[1]) {
+                                case "red": {
+                                    let msg: string = '';
+                                    var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 1);
+                                    if(players.length == 0) {
+                                        ticket.messageString = LangRes.command.list._ErrorNoOne;
+                                    } else {
+                                        players.forEach((player: PlayerObject) => {
+                                            msg += player.name + '#' + player.id + ',';
+                                        });
+                                        return msg;
+                                    }
+                                    break;
+                                }
+                                case "blue": {
+                                    let msg: string = '';
+                                    var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 2);
+                                    if(players.length == 0) {
+                                        ticket.messageString = LangRes.command.list._ErrorNoOne;
+                                    } else {
+                                        players.forEach((player: PlayerObject) => {
+                                            msg += player.name + '#' + player.id + ',';
+                                        });
+                                        return msg;
+                                    }
+                                    break;
+                                }
+                                case "spec": {
+                                    let msg: string = '';
+                                    var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 0);
+                                    if(players.length == 0) {
+                                        ticket.messageString = LangRes.command.list._ErrorNoOne;
+                                    } else {
+                                        players.forEach((player: PlayerObject) => {
+                                            msg += player.name + '#' + player.id + ',';
+                                        });
+                                        return msg;
+                                    }
+                                    break;
+                                }
+                                default: {
+                                    ticket.messageString = LangRes.command.list._ErrorNoTeam;
+                                    break;
+                                }
+                            }
+                        } else {
+                            ticket.messageString = LangRes.command.list._ErrorNoTeam;
+                        }
+                        return '';
+                    }
                     break;
                 }
                 case "poss": {
@@ -145,6 +208,7 @@ export class Parser {
                     }
                     break;
                 }
+                
                 case "super": {
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;

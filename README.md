@@ -58,6 +58,8 @@ If you(the player) type a command by chat...
 
 `!about` shows you simple inforamtion of the bot running now.
 
+`!list TEAM` shows you that team's player list. (string red/blue/spec)
+
 `!stats` shows all players your statistical information.
 
 `!statsreset` resets your statistical information. It cannot be recovered.

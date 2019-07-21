@@ -10,7 +10,7 @@ export const scheduler = {
 
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
-    ,help: '📄 !about,stats,afk,poss,streak 📑 !help COMMAND로 자세히 보기 '
+    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND로 자세히 보기 '
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
         ,help: '📑 !help COMMAND : COMMAND 명령어의 자세한 설명을 보여줍니다.'
@@ -20,7 +20,7 @@ export const command = {
         ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
         ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다.'
-
+        ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.'
     } 
     ,about: '📄 이 방은 Haxbotron 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.'
     ,stats: '📊 {targetName}#{ticketTarget}님: 승리 {targetStatsWins}/{targetStatsTotal}판({targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}.'
@@ -49,6 +49,11 @@ export const command = {
             ,kickMsg: '📢 퇴장'
             ,kickSuccess: '📢 해당 플레이어를 퇴장시켰습니다.'
         }
+    }
+    ,list: {
+        _ErrorNoTeam: '❌ red, blue, spec 팀 중 하나를 지정해야 합니다.'
+        ,_ErrorNoOne: '❌ 해당 팀에 아무도 없습니다.'
+        ,whoisList: '📜 {whoisResult}'
     }
 }
 
