@@ -87,6 +87,8 @@ If you(the super admin) type a command by chat...
 
 `!super thor deprive` disqualify all admin players from admin permission, and makes admin player permission by self.
 
+`!super kick ID` kicks that player whose numeric ID is ID.
+
 `!ban PLAYER MSG` bans PLAYER forever. If it contains MSG, the message as reason for banning is shown for the user.
 
 `!unban PLAYER` unbans PLAYER.
@@ -98,7 +100,8 @@ If you(the super admin) type a command by chat...
 `!debug!log MSG` write a message contains MSG into logging system.
 
 ## Contacts
-https://github.com/dapucita/haxbotron
+[Github](https://github.com/dapucita/haxbotron)
+[Discord](https://discord.gg/qfg45B2)
 
 ## Copyrights
 MIT License.
