@@ -1,5 +1,5 @@
 import { ActionTicket } from "./Action";
-import { command as langCommand } from "../resources/strings";
+import * as LangRes from "../resources/strings";
 import { setPlayerData } from "./Storage";
 import { PlayerObject } from "./PlayerObject";
 import { superAdminLogin } from "./SuperAdmin";
@@ -32,40 +32,40 @@ export class Parser {
                     if(cutMsg[1] !== undefined) {
                         switch(cutMsg[1]) {
                             case "help": {
-                                ticket.messageString = langCommand.helpman.help;
+                                ticket.messageString = LangRes.command.helpman.help;
                                 break;
                             }
                             case "about": {
-                                ticket.messageString = langCommand.helpman.about;
+                                ticket.messageString = LangRes.command.helpman.about;
                                 break;
                             }
                             case "streak": {
-                                ticket.messageString = langCommand.helpman.streak;
+                                ticket.messageString = LangRes.command.helpman.streak;
                                 break;
                             }
                             case "stats": {
-                                ticket.messageString = langCommand.helpman.stats;
+                                ticket.messageString = LangRes.command.helpman.stats;
                                 break;
                             }
                             case "statsreset": {
-                                ticket.messageString = langCommand.helpman.statsreset;
+                                ticket.messageString = LangRes.command.helpman.statsreset;
                                 break;
                             }
                             case "poss": {
-                                ticket.messageString = langCommand.helpman.poss;
+                                ticket.messageString = LangRes.command.helpman.poss;
                                 break;
                             }
                             case "afk": {
-                                ticket.messageString = langCommand.helpman.afk;
+                                ticket.messageString = LangRes.command.helpman.afk;
                                 break;
                             }
                             default: {
-                                ticket.messageString = langCommand.helpman._ErrorWrongMan;
+                                ticket.messageString = LangRes.command.helpman._ErrorWrongMan;
                                 break;
                             }
                         }
                     } else {
-                        ticket.messageString = langCommand.help;
+                        ticket.messageString = LangRes.command.help;
                     }
                     ticket.type = "info";
                     ticket.targetPlayerID = playerID;
@@ -75,7 +75,7 @@ export class Parser {
                 case "about": {
                     ticket.type = "info";
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.about;
+                    ticket.messageString = LangRes.command.about;
                     ticket.selfnotify = true;
                     break;
                 }
@@ -83,7 +83,7 @@ export class Parser {
                     ticket.type = "stats";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.poss;
+                    ticket.messageString = LangRes.command.poss;
                     ticket.selfnotify = true;
                     break;
                 }
@@ -91,7 +91,7 @@ export class Parser {
                     ticket.type = "stats";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.streak;
+                    ticket.messageString = LangRes.command.streak;
                     ticket.selfnotify = true;
                     break;
                 }
@@ -99,7 +99,7 @@ export class Parser {
                     ticket.type = "stats";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.stats;
+                    ticket.messageString = LangRes.command.stats;
                     ticket.selfnotify = false;
                     break;
                 }
@@ -107,7 +107,7 @@ export class Parser {
                     ticket.type = "stats";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.statsreset;
+                    ticket.messageString = LangRes.command.statsreset;
                     ticket.selfnotify = true;
                     ticket.action = function(playerID: number, playerList: any): void {
                         playerList.get(playerID).stats.totals = 0;
@@ -124,14 +124,14 @@ export class Parser {
                     ticket.type = "status";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.afk.setAfk;
+                    ticket.messageString = LangRes.command.afk.setAfk;
                     ticket.selfnotify = false;
                     ticket.action = function(playerID: number, playerList: any, gameRoom: any): void {
                         if(playerList.get(playerID).permissions.afkmode == true) { // if already in afk mode
                             playerList.get(playerID).permissions.afkmode = false; // return to active mode
                             playerList.get(playerID).permissions.afkreason = ''; // init
                             playerList.get(playerID).afktrace = { exemption: false, count: 0}; // reset for afk trace
-                            ticket.messageString = langCommand.afk.unAfk;
+                            ticket.messageString = LangRes.command.afk.unAfk;
                         } else { // when not in afk mode
                             gameRoom.setPlayerTeam(playerID, 0) // Moves this player to Spectators team.
                             gameRoom.setPlayerAdmin(playerID, false) // disqulify admin permission
@@ -149,7 +149,7 @@ export class Parser {
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand.super.defaultMessage;
+                    ticket.messageString = LangRes.command.super.defaultMessage;
                     ticket.selfnotify = true;
                     ticket.action = function(playerID: number, playerList: any, gameRoom: any): void {
                         if(cutMsg[1] !== undefined) {
@@ -161,15 +161,15 @@ export class Parser {
                                             if(superAdminLogin(cutMsg[2]) == true) { // if login key is matched
                                                 playerList.get(playerID).permissions.superadmin = true; // set super admin
                                                 //setPlayerData(playerList.get(playerID)); // update
-                                                ticket.messageString = langCommand.super.loginSuccess;
+                                                ticket.messageString = LangRes.command.super.loginSuccess;
                                             } else {
-                                                ticket.messageString = langCommand.super.loginFail;
+                                                ticket.messageString = LangRes.command.super.loginFail;
                                             }
                                         } else {
-                                            ticket.messageString = langCommand.super.loginFailNoKey;
+                                            ticket.messageString = LangRes.command.super.loginFailNoKey;
                                         }
                                     } else { // if already loginned
-                                        ticket.messageString = langCommand.super._ErrorLoginAlready;
+                                        ticket.messageString = LangRes.command.super._ErrorLoginAlready;
                                     }
                                     break;
                                 }
@@ -177,9 +177,9 @@ export class Parser {
                                     if(playerList.get(playerID).permissions.superadmin == true) { // only when loginned
                                         playerList.get(playerID).permissions.superadmin = false; // disqualify super admin
                                         //setPlayerData(playerList.get(playerID)); // update
-                                        ticket.messageString = langCommand.super.logoutSuccess;
+                                        ticket.messageString = LangRes.command.super.logoutSuccess;
                                     } else {
-                                        ticket.messageString = langCommand.super._ErrorNoPermission;
+                                        ticket.messageString = LangRes.command.super._ErrorNoPermission;
                                     }
                                     break;
                                 }
@@ -189,10 +189,10 @@ export class Parser {
                                         if(cutMsg[2] !== undefined && cutMsg[2] == 'deprive') {
                                             var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.admin == true);
                                             if (players.length == 0) { // If no players left, do nothing.
-                                                ticket.messageString = langCommand.super.thor.noAdmins;
+                                                ticket.messageString = LangRes.command.super.thor.noAdmins;
                                                 return;
                                             } else {
-                                                ticket.messageString = langCommand.super.thor.complete;
+                                                ticket.messageString = LangRes.command.super.thor.complete;
                                                 players.forEach((player: PlayerObject) => { // disqualify admin permission
                                                     gameRoom.setPlayerAdmin(player.id, false);
                                                     playerList.get(player.id).admin = false;
@@ -202,12 +202,29 @@ export class Parser {
                                         gameRoom.setPlayerAdmin(playerID, true);
                                         playerList.get(playerID).admin = true;
                                     } else {
-                                        ticket.messageString = langCommand.super._ErrorNoPermission;
+                                        ticket.messageString = LangRes.command.super._ErrorNoPermission;
+                                    }
+                                    break;
+                                }
+                                case "kick": {
+                                    if(playerList.get(playerID).permissions.superadmin == true) {
+                                        if(cutMsg[2] !== undefined) {
+                                            if(playerList.get(playerID) !== null) {
+                                                gameRoom.kickPlayer(parseInt(cutMsg[2], 10), LangRes.command.super.kick.kickMsg, false); // kick
+                                                ticket.messageString = LangRes.command.super.kick.kickSuccess;
+                                            } else {
+                                                ticket.messageString = LangRes.command.super.kick.noID;
+                                            }
+                                        } else {
+                                            ticket.messageString = LangRes.command.super.kick.noID;
+                                        }
+                                    } else {
+                                        ticket.messageString = LangRes.command.super._ErrorNoPermission;
                                     }
                                     break;
                                 }
                                 default: {
-                                    ticket.messageString = langCommand.super._ErrorWrongCommand;
+                                    ticket.messageString = LangRes.command.super._ErrorWrongCommand;
                                     break;
                                 }
                             }
@@ -219,7 +236,7 @@ export class Parser {
                     ticket.type = "_ErrorWrongCommand";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = langCommand._ErrorWrongCommand;
+                    ticket.messageString = LangRes.command._ErrorWrongCommand;
                     ticket.selfnotify = true;
                     break;
                 }
