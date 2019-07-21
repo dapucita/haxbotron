@@ -66,6 +66,8 @@ export const onJoin = {
     ,changename: '📢 {playerName}#{playerID} has changed name from {playerNameOld}'
     ,startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
     ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
+    ,doubleJoinningMsg: '🚫 {playerName}#{playerID} has already joined.'
+    ,doubleJoinningKick: '🚫 You did double joinning.'
 }
 
 export const onLeft = {

@@ -288,6 +288,16 @@ function initialiseRoom(): void {
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
+
+        // if this player has already joinned by other connection
+        playerList.forEach((eachPlayer: Player) => {
+            if(eachPlayer.conn == player.conn) {
+                logger.c(`[JOIN] ${player.name} was joined but kicked for double joinning.(origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
+                room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
+                room.sendChat(parser.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin)); // notify
+                return; // exit from this join event
+            }
+        });
         
         // logging into console (debug)
         logger.c(`[JOIN] ${player.name} has joined.`);
