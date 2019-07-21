@@ -25,7 +25,6 @@ const MenuItemSwitch = {
     superAdminKey: false
 };
 
-var botConsoleCount: number = 0;
 var superKeyList: string;
 
 function createWindow() {
@@ -256,8 +255,7 @@ async function bot(hostConfig: string) {
             for(var loopCount = 0; loopCount < window.logQueue.length; loopCount++) {
                 msgChunk = window.logQueue.pop() + '\\r\\n' + msgChunk;
             }
-            botConsoleCount++;
-            return '[bot log] (line ' + botConsoleCount + ')\\r\\n' + msgChunk;
+            return msgChunk;
         });
 
         // and print it on electron's textarea
