@@ -130,13 +130,17 @@ export class Parser {
                         if(playerList.get(playerID).permissions.afkmode == true) { // if already in afk mode
                             playerList.get(playerID).permissions.afkmode = false; // return to active mode
                             playerList.get(playerID).permissions.afkreason = ''; // init
+                            playerList.get(playerID).afktrace = { exemption: false, count: 0}; // reset for afk trace
                             ticket.messageString = langCommand.afk.unAfk;
                         } else { // when not in afk mode
+                            gameRoom.setPlayerTeam(playerID, 0) // Moves this player to Spectators team.
+                            gameRoom.setPlayerAdmin(playerID, false) // disqulify admin permission
                             playerList.get(playerID).permissions.afkmode = true; // set afk mode
+                            playerList.get(playerID).afktrace = { exemption: true, count: 0}; // reset for afk trace
                             if(cutMsg[1] !== undefined) { // if the reason is not skipped
                                 playerList.get(playerID).permissions.afkreason = cutMsg[1]; // set reason
                             }
-                            gameRoom.setPlayerTeam(playerID, 0) // Moves this player to Spectators team.
+                            
                         }
                     }
                     break;

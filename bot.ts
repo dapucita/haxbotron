@@ -209,17 +209,19 @@ var scheduledTimer = setInterval(function(): void {
                     room.setPlayerAdmin(player.id, false);
                 }
                 if(player.permissions.afkmode != true) { // if this player isn't in afk mode
-                room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
+                    room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 }
             } else {
                 room.sendChat(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler)); // warning for all
             }
             playerList.get(player.id).afktrace.count++; // add afk detection count
         } else { // (value: true) if this player is exempted from afk system
-            if(player.afktrace.count >= 1) { // just one chance because the count can be reset when the player had any activity.
-                playerList.get(player.id).afktrace.exemption = false; // now start detecting this player
-            } else {
-                playerList.get(player.id).afktrace.count++;
+            if(player.permissions.afkmode != true) { // if this player isn't in afk mode
+                if(player.afktrace.count >= 1) { // just one chance because the count can be reset when the player had any activity.
+                    playerList.get(player.id).afktrace.exemption = false; // now start detecting this player
+                } else {
+                    playerList.get(player.id).afktrace.count++;
+                }
             }
         }
     });
@@ -456,7 +458,7 @@ function initialiseRoom(): void {
     room.onPlayerAdminChange = function (changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
         /* Event called when a player's admin rights are changed.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
-        if (playerList.size != 0 && playerList.get(changedPlayer.id).admin != true) {
+        if (playerList.size != 0 && playerList.get(changedPlayer.id).admin != true && changedPlayer.admin == true) {
             playerList.get(changedPlayer.id).admin = true;
             if (byPlayer !== null) {
                 logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(value:${playerList.get(changedPlayer.id).admin},super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
