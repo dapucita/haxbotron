@@ -203,7 +203,7 @@ var scheduledTimer = setInterval(function(): void {
         placeholderScheduler.targetName = player.name;
         // add afk detection count
         if(player.afktrace.exemption != true) { // (value: false) if this player isn't exempted from afk system
-            if(player.afktrace.count >= 2) { // if over 2 times ( applied from 2 times)
+            if(player.afktrace.count >= 2 && player.team != 0) { // if over 2 times ( applied from 2 times) and player's team is not spec team
                 if(player.admin == true) {
                     playerList.get(player.id).admin = false; // disqualify
                     room.setPlayerAdmin(player.id, false);
