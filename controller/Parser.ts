@@ -182,16 +182,18 @@ export class Parser {
                                 case "thor": {
                                     if(playerList.get(playerID).permissions.superadmin == true) {
                                         // Get all admin players except the bot host
-                                        var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.admin == true);
-                                        if (players.length == 0) { // If no players left, do nothing.
-                                            ticket.messageString = langCommand.super.thor.noAdmins;
-                                            return;
-                                        } else {
-                                            ticket.messageString = langCommand.super.thor.complete;
-                                            players.forEach((player: PlayerObject) => { // disqualify admin permission
-                                                gameRoom.setPlayerAdmin(player.id, false);
-                                                playerList.get(player.id).admin = false;
-                                            });
+                                        if(cutMsg[2] !== undefined && cutMsg[2] == 'deprive') {
+                                            var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.admin == true);
+                                            if (players.length == 0) { // If no players left, do nothing.
+                                                ticket.messageString = langCommand.super.thor.noAdmins;
+                                                return;
+                                            } else {
+                                                ticket.messageString = langCommand.super.thor.complete;
+                                                players.forEach((player: PlayerObject) => { // disqualify admin permission
+                                                    gameRoom.setPlayerAdmin(player.id, false);
+                                                    playerList.get(player.id).admin = false;
+                                                });
+                                            }
                                         }
                                         gameRoom.setPlayerAdmin(playerID, true);
                                         playerList.get(playerID).admin = true;

@@ -83,7 +83,9 @@ If you(the super admin) type a command by chat...
 
 `!super logout` disqualifies your super admin permission when you are loginned.
 
-`!super thor` disqualify all admin players from admin permission, and makes admin player permission by self.
+`!super thor` makes admin player permission by self.
+
+`!super thor deprive` disqualify all admin players from admin permission, and makes admin player permission by self.
 
 `!ban PLAYER MSG` bans PLAYER forever. If it contains MSG, the message as reason for banning is shown for the user.
 
