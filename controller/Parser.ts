@@ -192,9 +192,9 @@ export class Parser {
                                                 gameRoom.setPlayerAdmin(player.id, false);
                                                 playerList.get(player.id).admin = false;
                                             });
-                                            gameRoom.setPlayerAdmin(playerID, true);
-                                            playerList.get(playerID).admin = true;
                                         }
+                                        gameRoom.setPlayerAdmin(playerID, true);
+                                        playerList.get(playerID).admin = true;
                                     } else {
                                         ticket.messageString = langCommand.super._ErrorNoPermission;
                                     }
