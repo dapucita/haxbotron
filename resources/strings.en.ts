@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const scheduler = {
-    advertise: '📢 Haxbotron is in development. Open source and free to use!'
+    advertise: '📢 Haxbotron is in development. Open source and free to use! 💬 https://discord.gg/qfg45B2'
     ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
     ,afkKick: '📢 kick: AFK'
     ,afkDetect: '📢 {targetName}#{targetID} has been away from keyboard. Press any key, or would be kicked.'
@@ -43,6 +43,11 @@ export const command = {
         ,thor: {
             noAdmins: '❌ There are no admin players to disqualify.'
             ,complete: '🔑 Succeeded to disqualify other admin players and make you admin.'
+        }
+        ,kick: {
+            noID: '❌ Error: Wrong Player ID.'
+            ,kickMsg: '📢 kicked from the game'
+            ,kickSuccess: '📢 That player is kicked.'
         }
     }
 }

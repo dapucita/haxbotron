@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const scheduler = {
-    advertise: '📢 Haxbotron - 무료 오픈소스 봇 (개발중)'
+    advertise: '📢 Haxbotron 💬 [디스코드 채팅] https://discord.gg/qfg45B2'
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
     ,afkDetect: '📢 {targetName}#{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
@@ -43,6 +43,11 @@ export const command = {
         ,thor: {
             noAdmins: '❌ 방장권한을 회수할 플레이어가 남아있지 않습니다.'
             ,complete: '🔑 다른 방장의 권한을 회수하고 대신하였습니다.'
+        }
+        ,kick: {
+            noID: '❌ 잘못된 플레이어ID입니다. 퇴장시킬 수 없습니다.'
+            ,kickMsg: '📢 퇴장'
+            ,kickSuccess: '📢 해당 플레이어를 퇴장시켰습니다.'
         }
     }
 }
