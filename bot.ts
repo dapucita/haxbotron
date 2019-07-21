@@ -192,7 +192,37 @@ var parsingTimer = setInterval(function (): void {
 }, 0);
 
 var scheduledTimer = setInterval(function(): void {
-    room.sendChat(LangRes.announcement.advertise);
+    var placeholderScheduler = {
+        targetID: 0,
+        targetName: '',
+    }
+    room.sendChat(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler)); // advertisement
+    playerList.forEach((player: Player) => { // afk detection system
+        // init placeholder
+        placeholderScheduler.targetID = player.id;
+        placeholderScheduler.targetName = player.name;
+        // add afk detection count
+        if(player.afktrace.exemption != true) { // (value: false) if this player isn't exempted from afk system
+            if(player.afktrace.count >= 2) { // if over 2 times ( applied from 2 times)
+                if(player.admin == true) {
+                    playerList.get(player.id).admin = false; // disqualify
+                    room.setPlayerAdmin(player.id, false);
+                }
+                if(player.permissions.afkmode != true) { // if this player isn't in afk mode
+                room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
+                }
+            } else {
+                room.sendChat(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler)); // warning for all
+            }
+            playerList.get(player.id).afktrace.count++; // add afk detection count
+        } else { // (value: true) if this player is exempted from afk system
+            if(player.afktrace.count >= 1) { // just one chance because the count can be reset when the player had any activity.
+                playerList.get(player.id).afktrace.exemption = false; // now start detecting this player
+            } else {
+                playerList.get(player.id).afktrace.count++;
+            }
+        }
+    });
 }, 90000); // by 1m30s
 
 function initialiseRoom(): void {
@@ -221,8 +251,7 @@ function initialiseRoom(): void {
     room.setTeamsLock(gameRule.requisite.teamLock);
 
     room.onPlayerJoin = function (player: PlayerObject): void {
-        // Event called when a new player joins the room.
-
+    // Event called when a new player joins the room.
         var placeholderJoin = { // Parser.maketext(str, placeholder)
             playerID: player.id,
             playerName: player.name,
@@ -348,7 +377,6 @@ function initialiseRoom(): void {
             streakTeamCount: winningStreak.getCount()
         };
 
-        updateAdmins();
         logger.c(`[LEFT] ${player.name} has left.`);
 
         // check number of players joined and change game mode
@@ -363,8 +391,9 @@ function initialiseRoom(): void {
                 gameMode = "ready";
             }
         }
-
+        playerList.delete(player.id); // delete from player list
         setDefaultStadiums(); // check number of players and auto-set stadium
+        updateAdmins();
     }
 
     room.onPlayerChat = function (player: PlayerObject, message: string): boolean {
@@ -433,6 +462,7 @@ function initialiseRoom(): void {
                 logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(value:${playerList.get(changedPlayer.id).admin},super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
             }
         }
+        playerList.get(changedPlayer.id).afktrace.exemption = false; // switch this admin player to be detected by afk system
         updateAdmins(); // check when the last admin player disqulified by self
     }
 
@@ -722,6 +752,16 @@ function initialiseRoom(): void {
         }
     }
 
+    room.onPlayerActivity = function(player : PlayerObject): void {
+        // Event called when a player gives signs of activity, such as pressing a key.
+        // This is useful for detecting inactive players.
+        if(playerList.get(player.id).afktrace.count >= 1) {
+            // if this player has afk count
+            playerList.get(player.id).afktrace.exemption = true; // reset
+            playerList.get(player.id).afktrace.count = 0 ;
+        }
+    }
+
     room.onRoomLink = function (url: string): void {
         // Event called when the room link is created.
         // this bot application provides some informations by DOM control.
@@ -768,7 +808,7 @@ function updateAdmins(): void {
     };
 
     // Get all players except the host (id = 0 is always the host)
-    var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
+    var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && playerList.get(player.id).permissions.afkmode != true); // only no afk mode players
     if (players.length == 0) return; // If no players left, do nothing.
     if (players.find((player: PlayerObject) => player.admin) != null) return; // Do nothing if any admin player is still left.
     

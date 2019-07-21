@@ -1,4 +1,4 @@
-import { PlayerObject, PlayerPosition, PlayerStats, PlayerPermissions } from "./PlayerObject";
+import { PlayerObject, PlayerPosition, PlayerStats, PlayerPermissions, PlayerAfkTrace } from "./PlayerObject";
 export class Player implements PlayerObject {
     // PlayerObject holds information about a player
 
@@ -32,6 +32,9 @@ export class Player implements PlayerObject {
     // permissions the player has.
     permissions: PlayerPermissions;
 
+    // detection data for trace afk
+    afktrace: PlayerAfkTrace;
+
     // init
     constructor(player: PlayerObject, stats: PlayerStats, permissions: PlayerPermissions) {
         this.id = player.id;
@@ -43,5 +46,9 @@ export class Player implements PlayerObject {
         this.position = player.position;
         this.stats = stats;
         this.permissions = permissions;
+        this.afktrace = {
+            exemption: true,
+            count: 0
+        }
     }
 }

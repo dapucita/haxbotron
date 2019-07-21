@@ -51,6 +51,11 @@ export interface PlayerPermissions {
     // admin permission is already decleared by admin: boolean.
 }
 
+export interface PlayerAfkTrace {
+    exemption: boolean; // is this player exempted from detecting and tracing afk players?
+    count: number; // afk detection count
+}
+
 export interface PlayerStorage {
     // object literal that will be stored in LocalStorage as JSON.
     // however, JSON stringify should be done in LocalStorage not Node.js Map() object.

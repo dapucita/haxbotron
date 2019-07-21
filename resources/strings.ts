@@ -1,9 +1,11 @@
 // YOU CAN USE A PLACEHOLDER FOR INTERPOLATION. FOR EXAMPLE, 'Hello, My name is {name}.'
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
-export const announcement = {
+export const scheduler = {
     advertise: '📢 Haxbotron - 무료 오픈소스 봇 (개발중)'
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
+    ,afkKick: '📢 잠수로 인한 퇴장'
+    ,afkDetect: '📢 {targetName}#{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
 }
 
 export const command = {

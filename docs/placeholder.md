@@ -23,7 +23,16 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `streakTeamCount`: numeric count of winning streak
 
-## in The event loop for ActionTicket Queue (command)
+## in the scheduler loop (scheduler)
+**in this part, you can use only these placeholders.**
+
+`targetID` : numeric ID of the player who is target of this scheduled event. (number PlayerID)
+
+`targetName`: name of the player who is the target of this scheduled event. (string)
+
+
+
+## in the event loop for ActionTicket Queue (command)
 `_LaunchTime` : the time the bot launched. (stringfied date)
 
 `ticketOwner` : the player who made this ticket. (number PlayerID)
