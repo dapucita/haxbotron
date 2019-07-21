@@ -834,27 +834,27 @@ function roomPlayersNumberCheck(): number {
 
 // on dev-console tools for emergency
 window.onEmergency = {
-    list: function(): void {
+    list: function(): void { // print list of players joined
         var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
         players.forEach((player: PlayerObject) => {
             console.log(`[EMERGENCY][LIST]${player.name}#${player.id}:team(${player.team}):admin(${player.admin})`);
         });
     },
-    chat: function(msg: string, playerID?: number): void {
+    chat: function(msg: string, playerID?: number): void { // send chat
         if(playerID) {
             room.sendChat(msg, playerID);
         } else {
             room.sendChat(msg);
         }
     },
-    kick: function(playerID: number, ban: boolean, msg?: string): void {
+    kick: function(playerID: number, ban: boolean, msg?: string): void { // kick the player
         if(msg) {
             room.kickPlayer(playerID, msg, ban);
         } else {
             room.kickPlayer(playerID, 'by haxbotron', ban);
         }
     },
-    banclear: function(): void {
+    banclear: function(): void { // clear all of ban list
         room.clearBans();
     }
 }
