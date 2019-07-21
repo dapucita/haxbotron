@@ -99,6 +99,20 @@ If you(the super admin) type a command by chat...
 
 `!debug!log MSG` write a message contains MSG into logging system.
 
+## Emergency tools
+You can use some tools for emergency on the devtools console in the puppeteer.
+
+If you want to use these, you need to uncheck headless option for open the puppeteer window.
+
+`list()`
+
+`chat(msg: string, playerID?: number)`
+
+`kick(playerID: number, ban: boolean, msg?: string)`
+
+`banclear()`
+
+
 ## Contacts
 [Github](https://github.com/dapucita/haxbotron)
 [Discord](https://discord.gg/qfg45B2)
