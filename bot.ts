@@ -474,7 +474,7 @@ function initialiseRoom(): void {
                 room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
                 room.sendChat(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange));
             } else {
-                if(changedPlayer.team == 0){
+                if(changedPlayer.team == 0 && changedPlayer.admin != true){
                     playerList.get(changedPlayer.id).afktrace.exemption = true;
                 } else {
                     playerList.get(changedPlayer.id).afktrace.exemption = false;
