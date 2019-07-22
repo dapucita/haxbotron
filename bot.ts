@@ -473,6 +473,12 @@ function initialiseRoom(): void {
                 placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
                 room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
                 room.sendChat(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange));
+            } else {
+                if(changedPlayer.team == 0){
+                    playerList.get(changedPlayer.id).afktrace.exemption = true;
+                } else {
+                    playerList.get(changedPlayer.id).afktrace.exemption = false;
+                } 
             }
             playerList.get(changedPlayer.id).team = changedPlayer.team;
         }
