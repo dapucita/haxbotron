@@ -6,11 +6,13 @@ export interface GameRule {
     requisite: {
         minimumPlayers: number; // minimum number of players needs for apply this rule
         // maximumPlayers?: number; // maximum number of players limits for apply this rule // deprecated
+        eachTeamLimit: number; // how many players can be in each team?
         timeLimit: number; // limit time for end the game
         scoreLimit: number; // limit score for end the game
         teamLock: boolean; // limit moving teams by self
     }
     autoOperating: boolean; // auto emcee mode
+    captain: boolean; // captain mode. captain of each team can pick their team player.
     statsRecord: boolean; // record game results on statistics system.
     defaultMap: string; // default stadium data for the game.
     readyMap: string; // stadium data for using until the game starts. If statsRecord options is false, S E T this same as defaultMap option.
