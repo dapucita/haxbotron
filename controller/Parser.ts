@@ -33,6 +33,10 @@ export class Parser {
                 case "help": {
                     if(cutMsg[1] !== undefined) {
                         switch(cutMsg[1]) {
+                            case "admin": {
+                                ticket.messageString = LangRes.command.helpadmin;
+                                break
+                            }
                             case "help": {
                                 ticket.messageString = LangRes.command.helpman.help;
                                 break;
@@ -63,6 +67,10 @@ export class Parser {
                             }
                             case "list": {
                                 ticket.messageString = LangRes.command.helpman.list;
+                                break;
+                            }
+                            case "freeze": {
+                                ticket.messageString = LangRes.command.helpman.freeze;
                                 break;
                             }
                             default: {

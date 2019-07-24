@@ -10,7 +10,9 @@ export const scheduler = {
 
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
-    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND for detail. '
+    ,_ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
+    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND for detail. 📑 !help admin for administrator.'
+    ,helpadmin: '📄 !freeze 📑 !help COMMAND for detail.'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
         ,help: '📑 !help COMMAND shows you how to use COMMAND command.'
@@ -21,6 +23,7 @@ export const command = {
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
         ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
         ,list: '📑 !list TEAM(red/blue/spec) shows you all players list of the team.'
+        ,freeze: '📑 !freeze mutes or unmutes all players.'
     } 
     ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.'
     ,stats: '📊 {targetName}#{ticketTarget} Win {targetStatsWins}/{targetStatsTotal}({targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}.'

@@ -10,7 +10,9 @@ export const scheduler = {
 
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
-    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND로 자세히 보기 '
+    ,_ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
+    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND로 자세히 보기 📑 !help admin 관리자용 보기'
+    ,helpadmin: '📄 !freeze 📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
         ,help: '📑 !help COMMAND : COMMAND 명령어의 자세한 설명을 보여줍니다.'
@@ -21,6 +23,7 @@ export const command = {
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
         ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다.'
         ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.'
+        ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
     } 
     ,about: '📄 이 방은 Haxbotron 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.'
     ,stats: '📊 {targetName}#{ticketTarget}님: 승리 {targetStatsWins}/{targetStatsTotal}판({targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}.'

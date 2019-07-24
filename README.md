@@ -56,6 +56,8 @@ If you(the player) type a command by chat...
 
 `!help COMMAND` shows you how to use COMMAND command.
 
+`!help admin` shows you available commands when you are admin.
+
 `!about` shows you simple inforamtion of the bot running now.
 
 `!list TEAM` shows you that team's player list. (string red/blue/spec)
