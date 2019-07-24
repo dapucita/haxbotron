@@ -47,6 +47,11 @@ export class Ban {
         }
     }
 
+    public clearBan(): void {
+        this._list.clear();
+        this.save();
+    }
+
     private save(): void {
         localStorage.setItem('_BanList', JSON.stringify(this._list));
     }
