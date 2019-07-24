@@ -198,20 +198,22 @@ export class Parser {
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
                     ticket.selfnotify = false;
-                    ticket.action = function(playerID: number, playerList: any, muteMode: boolean): void {
+                    ticket.action = function(playerID: number, playerList: any, muteMode: boolean): boolean|null {
+                        console.log("freeze 1 : " + muteMode);
                         if(playerList.get(playerID).admin == true) { // if admin
                             if(muteMode == true) { // if already on
                                 ticket.messageString = LangRes.command.freeze.offFreeze;
-                                muteMode = false; // off
+                                return false; // off
                             } else { // if already off
                                 ticket.messageString = LangRes.command.freeze.onFreeze;
-                                muteMode = true; // on
+                                return true; // on
                             }
                         } else { // if not admin
                             ticket.messageString = LangRes.command.freeze._ErrorNoPermission;
+                            return null;
                         }
                     }
-                    break
+                    break;
                 }
                 case "afk": {
                     ticket.type = "status";
@@ -226,14 +228,14 @@ export class Parser {
                             playerList.get(playerID).afktrace = { exemption: false, count: 0}; // reset for afk trace
                             ticket.messageString = LangRes.command.afk.unAfk;
                         } else { // when not in afk mode
-                            gameRoom.setPlayerTeam(playerID, 0) // Moves this player to Spectators team.
-                            gameRoom.setPlayerAdmin(playerID, false) // disqulify admin permission
+                            gameRoom.setPlayerTeam(playerID, 0); // Moves this player to Spectators team.
+                            gameRoom.setPlayerAdmin(playerID, false); // disqulify admin permission
+                            playerList.get(playerID).admin = false;
                             playerList.get(playerID).permissions.afkmode = true; // set afk mode
                             playerList.get(playerID).afktrace = { exemption: true, count: 0}; // reset for afk trace
                             if(cutMsg[1] !== undefined) { // if the reason is not skipped
                                 playerList.get(playerID).permissions.afkreason = cutMsg[1]; // set reason
                             }
-                            
                         }
                     }
                     break;

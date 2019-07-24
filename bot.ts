@@ -138,7 +138,10 @@ var parsingTimer = setInterval(function (): void {
             }
             case "freeze": {
                 if(timerTicket.action) {
-                    timerTicket.action(timerTicket.ownerPlayerID, playerList, muteMode);
+                    let tmpMuteMode: boolean|null = timerTicket.action(timerTicket.ownerPlayerID, playerList, muteMode);
+                    if(tmpMuteMode !== null) {
+                        muteMode = tmpMuteMode;
+                    }
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
