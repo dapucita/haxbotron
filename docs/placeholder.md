@@ -88,6 +88,8 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `playerStatsLosepoints` : count of points the player lose.
 
+`banListReason` : the reason why this player has registered in ban list.
+
 ### room.onPlayerChat (onChat), room.onGameStart (onStart), room.onGameStop (onStop), room.onPlayerBallKick (onTouch)
 `playerID` : numeric ID of this player.
 

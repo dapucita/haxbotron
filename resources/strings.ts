@@ -68,6 +68,7 @@ export const onJoin = {
     ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID}님이 중복 접속하였습니다.'
     ,doubleJoinningKick: '🚫 중복 접속으로 퇴장'
+    ,banList: '🚫 자동밴:{banListReason}'
 }
 
 export const onLeft = {

@@ -36,6 +36,7 @@ import {
 } from "./model/BallTrace";
 import * as StatCalc from "./controller/Statistics";
 import * as LangRes from "./resources/strings";
+import { Ban } from "./controller/Ban";
 
 window.logQueue = []; // init
 
@@ -81,6 +82,9 @@ const ballStack: KickStack = KickStack.getInstance();
 
 const logger: Logger = Logger.getInstance();
 const parser: Parser = Parser.getInstance();
+const banList: Ban = Ban.getInstance();
+
+banList.init();
 
 var gameMode: string = "ready"; // "ready", "stats"
 
@@ -286,8 +290,16 @@ function initialiseRoom(): void {
             possTeamRed: ballStack.possCalculate(1),
             possTeamBlue: ballStack.possCalculate(2),
             streakTeamName: winningStreak.getName(),
-            streakTeamCount: winningStreak.getCount()
+            streakTeamCount: winningStreak.getCount(),
+            banListReason: ''
         };
+
+        if(banList.isBan(player.conn)) {
+            placeholderJoin.banListReason = banList.getReason(player.conn);
+            logger.c(`[JOIN] ${player.name}#${player.id} was joined but kicked for registered in ban list. (conn:${player.conn},reason:${placeholderJoin.banListReason})`);
+            room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.banList, placeholderJoin), true); // ban
+            return;
+        }
 
         // if this player has already joinned by other connection
         playerList.forEach((eachPlayer: Player) => {
@@ -650,6 +662,7 @@ function initialiseRoom(): void {
                 logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
             } else {
                 logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
+                banList.setBan({conn: kickedPlayer.conn, reason: reason});
             }
         } else {
             // kick
@@ -877,11 +890,11 @@ window.onEmergency = {
             room.sendChat(msg);
         }
     },
-    kick: function(playerID: number, ban: boolean, msg?: string): void { // kick the player
+    kick: function(playerID: number, msg?: string): void { // kick the player
         if(msg) {
-            room.kickPlayer(playerID, msg, ban);
+            room.kickPlayer(playerID, msg, false);
         } else {
-            room.kickPlayer(playerID, 'by haxbotron', ban);
+            room.kickPlayer(playerID, 'by haxbotron', false);
         }
     },
     banclear: function(): void { // clear all of ban list

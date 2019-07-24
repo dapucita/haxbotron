@@ -110,7 +110,7 @@ If you want to use these, you need to uncheck headless option for open the puppe
 
 `chat(msg: string, playerID?: number)`
 
-`kick(playerID: number, ban: boolean, msg?: string)`
+`kick(playerID: number, msg?: string)`
 
 `banclear()`
 
