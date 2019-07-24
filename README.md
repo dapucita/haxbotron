@@ -71,11 +71,9 @@ If you(the player) type a command by chat...
 `!afk MSG` switches to idle status, or return to active status if already in afk mode. MSG is the reason, and it can be skipped.
 
 ## Game Commands for Admin Players
-`!mute` prohibits all other players to chat. Or unmute if the players are already muted.
+`!freeze` prohibits all players without admin to chat. Or unmute if the players are already muted.
 
-`!mute PLAYER` prohibits the player whose name is PLAYER to chat. Or unmute if the player is already muted.
-
-`!kick PLAYER MSG` kicks the player whose name is PLAYER. If it contains MSG, the message as reason for kicking is shown for the user.
+`!mute ID` prohibits the player whose id is ID to chat. Or unmute if the player is already muted. 
 
 ## Game Commands for Super Admin Players
 
@@ -91,28 +89,18 @@ If you(the super admin) type a command by chat...
 
 `!super kick ID` kicks that player whose numeric ID is ID.
 
-`!ban PLAYER MSG` bans PLAYER forever. If it contains MSG, the message as reason for banning is shown for the user.
-
-`!unban PLAYER` unbans PLAYER.
-
-`!unban!all` unbans all players who banned.
-
-`!debug!brake` pauses the game, stops operating the bot, and just waiting until restart. The system only can be restared by reloading the application manually.
-
-`!debug!log MSG` write a message contains MSG into logging system.
-
 ## Emergency tools
 You can use some tools for emergency on the devtools console in the puppeteer.
 
 If you want to use these, you need to uncheck headless option for open the puppeteer window.
 
-`list()`
+`window.onEmergency.list()`
 
-`chat(msg: string, playerID?: number)`
+`window.onEmergency.chat(msg: string, playerID?: number)`
 
-`kick(playerID: number, msg?: string)`
+`window.onEmergency.kick(playerID: number, msg?: string)`
 
-`banclear()`
+`window.onEmergency.banclear()`
 
 
 ## Contacts

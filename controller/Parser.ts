@@ -3,11 +3,13 @@ import * as LangRes from "../resources/strings";
 import { setPlayerData } from "./Storage";
 import { PlayerObject } from "../model/PlayerObject";
 import { superAdminLogin } from "./SuperAdmin";
+import { Ban } from "./Ban";
 
 export class Parser {
     // written in Singleton Pattern
     // If the bot created Parser object once, never create ever until the bot instance dead. 
     private static instance: Parser = new Parser();
+    private banList: Ban = Ban.getInstance();
 
     private Parser() { } // not use
     public static getInstance(): Parser {
@@ -182,6 +184,26 @@ export class Parser {
                         setPlayerData(playerList.get(playerID));
                     }
                     break;
+                }
+                case "freeze": {
+                    ticket.type = "freeze";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.selfnotify = false;
+                    ticket.action = function(playerID: number, playerList: any, muteMode: boolean): void {
+                        if(playerList.get(playerID).admin == true) { // if admin
+                            if(muteMode == true) { // if already on
+                                ticket.messageString = LangRes.command.freeze.offFreeze;
+                                muteMode = false; // off
+                            } else { // if already off
+                                ticket.messageString = LangRes.command.freeze.onFreeze;
+                                muteMode = true; // on
+                            }
+                        } else { // if not admin
+                            ticket.messageString = LangRes.command.freeze._ErrorNoPermission;
+                        }
+                    }
+                    break
                 }
                 case "afk": {
                     ticket.type = "status";

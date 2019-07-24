@@ -55,6 +55,11 @@ export const command = {
         ,_ErrorNoOne: '❌ There\'s no one.'
         ,whoisList: '📜 {whoisResult}'
     }
+    ,freeze: {
+        _ErrorNoPermission : '❌ You are not admin. You can\'t do this command.'
+        ,onFreeze: '🔇 The administrator freezed chatting on this room. Commands are available. 📄 !help'
+        ,offFreeze: '🔊 The administrator unfreezed chatting.' 
+    }
 }
 
 export const funcUpdateAdmins = {

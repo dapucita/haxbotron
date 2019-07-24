@@ -87,6 +87,7 @@ const banList: Ban = Ban.getInstance();
 banList.init();
 
 var gameMode: string = "ready"; // "ready", "stats"
+var muteMode: boolean = false; // true for mute all players
 
 var room: any = window.HBInit(roomConfig);
 initialiseRoom();
@@ -125,6 +126,19 @@ var parsingTimer = setInterval(function (): void {
             case "info": {
                 if(timerTicket.action) {
                     timerTicket.action(timerTicket.ownerPlayerID, playerList);
+                }
+                if(timerTicket.messageString) {
+                    if(timerTicket.selfnotify == true) {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                    } else {
+                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                    }
+                }
+                break;
+            }
+            case "freeze": {
+                if(timerTicket.action) {
+                    timerTicket.action(timerTicket.ownerPlayerID, playerList, muteMode);
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
@@ -453,20 +467,21 @@ function initialiseRoom(): void {
             streakTeamCount: winningStreak.getCount()
         };
 
-        var msg = `[CHAT] ${player.name} said, "${message}"`;
+        logger.c(`[CHAT] ${player.name} said, "${message}"`);
         var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
         if (evals.type != "none") { // if the message is command chat (not 'none' type)
             // albeit this player is muted, the player can command by chat.
             actionQueue.push(evals); // and push it it queue.
             return false; // and filter the chat message to other players.
         } else { // if the message is normal chat ('none' type)
-            if (playerList.get(player.id).permissions['mute'] == true) { // if the player is muted
-                msg += ' but ignored.';
+            if(player.admin == true) { // if the player is admin
+                return true; // send chat regardless of mute
+            }
+            if (muteMode == true || playerList.get(player.id).permissions['mute'] == true) { // if the player is muted
                 room.sendChat(parser.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id); // notify that fact
                 return false; // and filter the chat message to other players.
             }
         }
-        logger.c(msg);
         return true;
     }
 
