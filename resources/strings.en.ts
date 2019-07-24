@@ -5,7 +5,7 @@ export const scheduler = {
     advertise: '📢 Haxbotron is in development. Open source and free to use! 💬 https://discord.gg/qfg45B2'
     ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
     ,afkKick: '📢 kick: AFK'
-    ,afkDetect: '📢 {targetName}#{targetID} has been away from keyboard. Press any key, or would be kicked.'
+    ,afkDetect: '📢 @{targetName}#{targetID} has been away from keyboard. Press any key, or would be kicked.'
 }
 
 export const command = {
