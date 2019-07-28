@@ -68,6 +68,7 @@
     "out",
     "docs",
     ".node-persist",
+    ".VSCodeCounter",
     "webpack.config.bot.js",
     "webRender.js"
   ]
