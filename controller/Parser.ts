@@ -241,7 +241,7 @@ export class Parser {
                     break;
                 }
                 
-                case "super": {
+                case "super": { // TODO:  ban clearing command for super admin
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
