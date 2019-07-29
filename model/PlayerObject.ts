@@ -23,7 +23,7 @@ export interface PlayerObject {
     /* Spectators: 0
     Red Team: 1
     Blue Team: 2 */
-    team: number;
+    team: TeamID;
     // The player's position in the field, if the player is not in the field the value will be null.
     position: PlayerPosition;
 }
@@ -70,4 +70,10 @@ export interface PlayerStorage {
     losePoints: number; // it means the points this player lost (in Korean, '실점')
     mute: boolean; // is this player muted?
     //superadmin: boolean; // is this player super admin? // not save
+}
+
+export enum TeamID {
+    SPEC = 0, // Spectators
+    RED = 1, // Red Team
+    BLUE = 2 // Blue Team
 }

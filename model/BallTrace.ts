@@ -1,3 +1,5 @@
+import { TeamID } from "./PlayerObject";
+
 export class KickStack {
     /*
     KickStack is a Stack for tracing who kicked the ball.
@@ -30,20 +32,20 @@ export class KickStack {
         this._store = []; // clear
     }
 
-    possCount(team: number): void { // 1: red team, 2: blue team
-        if(team == 1) { 
+    possCount(team: TeamID): void { // 1: red team, 2: blue team
+        if(team == TeamID.RED) { 
             this.ballPossession.red++;
-        } else if(team == 2) {
+        } else if(team == TeamID.BLUE) {
             this.ballPossession.blue++;
         }
     }
-    possCalculate(team: number): number { // 1: red team, 2: blue team
+    possCalculate(team: TeamID): number { // 1: red team, 2: blue team
         if(this.ballPossession.red == 0 && this.ballPossession.blue == 0) {
             return 0;
         } else {
-            if(team == 1) {
+            if(team == TeamID.RED) {
                 return Math.round((this.ballPossession.red / (this.ballPossession.red + this.ballPossession.blue)) * 100);
-            } else if(team == 2) {
+            } else if(team == TeamID.BLUE) {
                 return Math.round((this.ballPossession.blue / (this.ballPossession.red + this.ballPossession.blue)) * 100);
             }
         }

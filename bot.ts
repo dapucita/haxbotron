@@ -13,7 +13,8 @@ import {
 } from "./controller/Logger";
 import {
     PlayerObject,
-    PlayerStorage
+    PlayerStorage,
+    TeamID
 } from "./model/PlayerObject";
 import {
     ScoresObject
@@ -115,8 +116,8 @@ var parsingTimer = setInterval(function (): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount(),
             whoisResult: ''
@@ -238,7 +239,7 @@ var scheduledTimer = setInterval(function(): void {
         placeholderScheduler.targetName = player.name;
         // add afk detection count
         if(player.afktrace.exemption != true) { // (value: false) if this player isn't exempted from afk system
-            if(player.afktrace.count >= 2 && player.team != 0) { // if over 2 times ( applied from 2 times) and player's team is not spec team
+            if(player.afktrace.count >= 2 && player.team != TeamID.SPEC) { // if over 2 times ( applied from 2 times) and player's team is not spec team
                 if(player.admin == true) {
                     playerList.get(player.id).admin = false; // disqualify
                     room.setPlayerAdmin(player.id, false);
@@ -304,8 +305,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount(),
             banListReason: ''
@@ -426,8 +427,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
@@ -464,8 +465,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
@@ -497,14 +498,14 @@ function initialiseRoom(): void {
             targetAfkReason: ''
         }
         if (changedPlayer.id == 0) { // if the player changed into other team is host player(always id 0),
-            room.setPlayerTeam(0, 0); // stay host player in Spectators team.
+            room.setPlayerTeam(0, TeamID.SPEC); // stay host player in Spectators team.
         } else {
             if(byPlayer.id != 0 && playerList.get(changedPlayer.id).permissions.afkmode == true) {
                 placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
-                room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
+                room.setPlayerTeam(changedPlayer.id, TeamID.SPEC); // stay the player in Spectators team.
                 room.sendChat(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange));
             } else {
-                if(changedPlayer.team == 0 && changedPlayer.admin != true){
+                if(changedPlayer.team == TeamID.SPEC && changedPlayer.admin != true){
                     playerList.get(changedPlayer.id).afktrace.exemption = true;
                 } else {
                     playerList.get(changedPlayer.id).afktrace.exemption = false;
@@ -539,8 +540,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
@@ -570,8 +571,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
@@ -595,7 +596,7 @@ function initialiseRoom(): void {
         // Event called when a team 'wins'. not just when game ended.
         // recors vicotry in stats. total games also counted in this event.
         var placeholderVictory = { // Parser.maketext(str, placeholder)
-            teamID: 0,
+            teamID: TeamID.SPEC,
             teamName: '',
             redScore: scores.red,
             blueScore: scores.blue,
@@ -604,19 +605,19 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
 
         if (gameRule.statsRecord == true && gameMode == "stats") { // records when game mode is for stats recording.
-            var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0); // except Spectators players
-            var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 1); // except non Red players
-            var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 2); // except non Blue players
+            var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != TeamID.SPEC); // except Spectators players
+            var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == TeamID.RED); // except non Red players
+            var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == TeamID.BLUE); // except non Blue players
             if (scores.red > scores.blue) {
                 // if Red wins
-                placeholderVictory.teamID = 1;
+                placeholderVictory.teamID = TeamID.RED;
                 placeholderVictory.teamName = 'Red';
                 winningStreak.red++;
                 winningStreak.blue = 0;
@@ -625,7 +626,7 @@ function initialiseRoom(): void {
                 });
             } else {
                 // if Blue wins
-                placeholderVictory.teamID = 2;
+                placeholderVictory.teamID = TeamID.BLUE;
                 placeholderVictory.teamName = 'Blue';
                 winningStreak.blue++;
                 winningStreak.red = 0;
@@ -663,8 +664,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
@@ -699,8 +700,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
@@ -735,8 +736,8 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
@@ -745,7 +746,7 @@ function initialiseRoom(): void {
         ballStack.possCount(player.team); // 1: red team, 2: blue team
     }
 
-    room.onTeamGoal = function (team: number): void {
+    room.onTeamGoal = function (team: TeamID): void {
         // Event called when a team scores a goal.
         var placeholderGoal = { // Parser.maketext(str, placeholder)
             teamID: team,
@@ -761,13 +762,13 @@ function initialiseRoom(): void {
             gameRuleLimitTime: gameRule.requisite.timeLimit,
             gameRuleLimitScore: gameRule.requisite.scoreLimit,
             gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: ballStack.possCalculate(1),
-            possTeamBlue: ballStack.possCalculate(2),
+            possTeamRed: ballStack.possCalculate(TeamID.RED),
+            possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
 
-        if(team == 1) { 
+        if(team == TeamID.RED) { 
             // if red team win
             placeholderGoal.teamName = 'Red';
         } else {
@@ -806,7 +807,7 @@ function initialiseRoom(): void {
                 logger.c(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
             }
             // except spectators and filter who were lose a point
-            var losePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0 && player.team != team);
+            var losePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != TeamID.SPEC && player.team != team);
             losePlayers.forEach(function (eachPlayer: PlayerObject) {
                 // records a lost point
                 playerList.get(eachPlayer.id).stats.losePoints++;
@@ -864,8 +865,8 @@ function updateAdmins(): void {
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: ballStack.possCalculate(1),
-        possTeamBlue: ballStack.possCalculate(2),
+        possTeamRed: ballStack.possCalculate(TeamID.RED),
+        possTeamBlue: ballStack.possCalculate(TeamID.BLUE),
         streakTeamName: winningStreak.getName(),
         streakTeamCount: winningStreak.getCount()
     };
