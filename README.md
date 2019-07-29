@@ -26,9 +26,12 @@ Built-in maps: especially popular in Korea
 You don't have to build again if you did it already.
 
 ```
+npm install
 npm run build
 npm start
 ```
+
+You need to install dependencies if you didn't.
 
 ## How to Use
 You need to prepare headless token key. You can get it from [here](https://www.haxball.com/headlesstoken).
@@ -107,6 +110,7 @@ If you want to use these, you need to uncheck headless option for open the puppe
 
 ## Contacts
 [Github](https://github.com/dapucita/haxbotron)
+
 [Discord](https://discord.gg/qfg45B2)
 
 ## Copyrights
