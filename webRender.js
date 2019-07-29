@@ -23,7 +23,8 @@ roomInfoSubmitBtn.addEventListener('click', function() {
         public : roomPublicCheck.checked,
         playerName : roomHostName.value,
         maxPlayers : roomMaxPlayers.value,
-        token : roomAuthToken.value
+        token : roomAuthToken.value,
+        noPlayer : true
     };
     ipcRenderer.send('room-make-action', renderedRoomInfo); // send
 });

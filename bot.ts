@@ -55,9 +55,10 @@ const roomConfig: RoomConfig = {
     password: botConfig.password,
     maxPlayers: botConfig.maxPlayers,
     // https://www.haxball.com/headlesstoken
-    token: botConfig.token, //If this value doesn't exist, headless host api page will require to solving recaptcha.
+    token: botConfig.token, // If this value doesn't exist, headless host api page will require to solving recaptcha.
     public: botConfig.public,
-    playerName: botConfig.playerName
+    playerName: botConfig.playerName,
+    noPlayer: botConfig.noPlayer // If set to true the room player list will be empty, the playerName setting will be ignored.
 }
 const playerList = new Map(); // playerList:Player is an Map object. // playerList.get(player.id).name; : usage for playerList
 const winningStreak = { // count of winning streak
@@ -130,9 +131,9 @@ var parsingTimer = setInterval(function (): void {
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
                     }
                 }
                 break;
@@ -146,9 +147,9 @@ var parsingTimer = setInterval(function (): void {
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
                     }
                 }
                 break;
@@ -159,9 +160,9 @@ var parsingTimer = setInterval(function (): void {
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
                     }
                 }
                 break;
@@ -172,9 +173,9 @@ var parsingTimer = setInterval(function (): void {
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
                     }
                 }
                 break;
@@ -186,9 +187,9 @@ var parsingTimer = setInterval(function (): void {
                 if(timerTicket.messageString) {
                     placeholderQueueCommand.targetAfkReason = playerList.get(timerTicket.targetPlayerID).permissions.afkreason; // update
                     if(timerTicket.selfnotify == true) {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
                     }
                 }
                 break;
@@ -199,9 +200,9 @@ var parsingTimer = setInterval(function (): void {
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
                     }
                 }
                 break;
@@ -212,9 +213,9 @@ var parsingTimer = setInterval(function (): void {
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID);
                     } else {
-                        room.sendChat(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
+                        room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand));
                     }
                 }
                 break;
@@ -232,7 +233,7 @@ var scheduledTimer = setInterval(function(): void {
         targetID: 0,
         targetName: '',
     }
-    room.sendChat(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler)); // advertisement
+    room.sendAnnouncement(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler)); // advertisement
     playerList.forEach((player: Player) => { // afk detection system
         // init placeholder
         placeholderScheduler.targetID = player.id;
@@ -248,7 +249,7 @@ var scheduledTimer = setInterval(function(): void {
                     room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 }
             } else {
-                room.sendChat(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler)); // warning for all
+                room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler)); // warning for all
             }
             playerList.get(player.id).afktrace.count++; // add afk detection count
         } else { // (value: true) if this player is exempted from afk system
@@ -276,9 +277,9 @@ function initialiseRoom(): void {
     // declare function in window object
     window.sendRoomChat = function(msg: string, playerID?: number): void {
         if(playerID !== null) {
-            room.sendChat(msg, playerID);
+            room.sendAnnouncement(msg, playerID);
         } else {
-            room.sendChat(msg);
+            room.sendAnnouncement(msg);
         }
     }
 
@@ -324,7 +325,7 @@ function initialiseRoom(): void {
             if(eachPlayer.conn == player.conn) {
                 logger.c(`[JOIN] ${player.name} was joined but kicked for double joinning.(origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
                 room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
-                room.sendChat(parser.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin)); // notify
+                room.sendAnnouncement(parser.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin)); // notify
                 return; // exit from this join event
             }
         });
@@ -365,7 +366,7 @@ function initialiseRoom(): void {
                     // if this player changed his/her name
                     // notify that fact to other players only once ( it will never be notified if he/she rejoined next time)
                     placeholderJoin.playerNameOld = loadedData.name
-                    room.sendChat(parser.maketext(LangRes.onJoin.changename, placeholderJoin));
+                    room.sendAnnouncement(parser.maketext(LangRes.onJoin.changename, placeholderJoin));
                 }
             }
         } else {
@@ -392,17 +393,17 @@ function initialiseRoom(): void {
         updateAdmins(); // check there are any admin players, if not make an admin player.
 
         // send welcome message to new player. other players cannot read this message.
-        room.sendChat(parser.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id);
+        room.sendAnnouncement(parser.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id);
 
         // check number of players joined and change game mode
         if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
             if(gameMode != "stats") {
-                room.sendChat(parser.maketext(LangRes.onJoin.startRecord, placeholderJoin));
+                room.sendAnnouncement(parser.maketext(LangRes.onJoin.startRecord, placeholderJoin));
                 gameMode = "stats";
             }
         } else {
             if(gameMode != "ready") {
-                room.sendChat(parser.maketext(LangRes.onJoin.stopRecord, placeholderJoin));
+                room.sendAnnouncement(parser.maketext(LangRes.onJoin.stopRecord, placeholderJoin));
                 gameMode = "ready";
             }
         }
@@ -438,12 +439,12 @@ function initialiseRoom(): void {
         // check number of players joined and change game mode
         if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
             if(gameMode != "stats") {
-                room.sendChat(parser.maketext(LangRes.onLeft.startRecord, placeholderLeft));
+                room.sendAnnouncement(parser.maketext(LangRes.onLeft.startRecord, placeholderLeft));
                 gameMode = "stats";
             }
         } else {
             if(gameMode != "ready") {
-                room.sendChat(parser.maketext(LangRes.onLeft.stopRecord, placeholderLeft));
+                room.sendAnnouncement(parser.maketext(LangRes.onLeft.stopRecord, placeholderLeft));
                 gameMode = "ready";
             }
         }
@@ -482,7 +483,7 @@ function initialiseRoom(): void {
                 return true; // send chat regardless of mute
             }
             if (muteMode == true || playerList.get(player.id).permissions['mute'] == true) { // if the player is muted
-                room.sendChat(parser.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id); // notify that fact
+                room.sendAnnouncement(parser.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id); // notify that fact
                 return false; // and filter the chat message to other players.
             }
         }
@@ -503,7 +504,7 @@ function initialiseRoom(): void {
             if(byPlayer.id != 0 && playerList.get(changedPlayer.id).permissions.afkmode == true) {
                 placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
                 room.setPlayerTeam(changedPlayer.id, TeamID.SPEC); // stay the player in Spectators team.
-                room.sendChat(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange));
+                room.sendAnnouncement(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange));
             } else {
                 if(changedPlayer.team == TeamID.SPEC && changedPlayer.admin != true){
                     playerList.get(changedPlayer.id).afktrace.exemption = true;
@@ -553,9 +554,9 @@ function initialiseRoom(): void {
         }
         if (gameRule.statsRecord == true && gameMode == "stats") {
             // if the game mode is stats, records the result of this game.
-            room.sendChat(parser.maketext(LangRes.onStart.startRecord, placeholderStart));
+            room.sendAnnouncement(parser.maketext(LangRes.onStart.startRecord, placeholderStart));
         } else {
-            room.sendChat(parser.maketext(LangRes.onStart.stopRecord, placeholderStart));
+            room.sendAnnouncement(parser.maketext(LangRes.onStart.stopRecord, placeholderStart));
         }
         logger.c(msg);
     }
@@ -645,7 +646,7 @@ function initialiseRoom(): void {
         ballStack.possClear(); // clear possession count
 
         logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
-        room.sendChat(parser.maketext(LangRes.onVictory.victory, placeholderVictory));
+        room.sendAnnouncement(parser.maketext(LangRes.onVictory.victory, placeholderVictory));
 
         setDefaultStadiums(); // check number of players and auto-set stadium
     }
@@ -675,8 +676,8 @@ function initialiseRoom(): void {
             // ban
             if (playerList.get(byPlayer.id).permissions['superadmin'] != true) {
                 // if the player who acted banning is not super admin
-                room.sendChat(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id);
-                room.sendChat(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick));
+                room.sendAnnouncement(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id);
+                room.sendAnnouncement(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick));
                 room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
                 logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
             } else {
@@ -712,12 +713,12 @@ function initialiseRoom(): void {
             if (playerList.get(byPlayer.id).permissions['superadmin'] == true) {
                 //There are two ways for access to map value, permissions['superadmin'] and permissions.superadmin.
                 logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
-                room.sendChat(parser.maketext(LangRes.onStadium.loadNewStadium, placeholderStadium));
+                room.sendAnnouncement(parser.maketext(LangRes.onStadium.loadNewStadium, placeholderStadium));
             } else {
                 // If trying for chaning stadium is rejected, reload default stadium.
                 logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
                 // logger.c(`[DEBUG] ${playerList.get(byPlayer.id).name}`); for debugging
-                room.sendChat(parser.maketext(LangRes.onStadium.cannotChange, placeholderStadium), byPlayer.id);
+                room.sendAnnouncement(parser.maketext(LangRes.onStadium.cannotChange, placeholderStadium), byPlayer.id);
                 setDefaultStadiums();
             }
         } else {
@@ -795,7 +796,7 @@ function initialiseRoom(): void {
                     setPlayerData(playerList.get(assistPlayer));
                     goalMsg = parser.maketext(LangRes.onGoal.goalWithAssist, placeholderGoal);
                 }
-                room.sendChat(goalMsg);
+                room.sendAnnouncement(goalMsg);
                 logger.c(goalMsg);
             } else {
                 // if the goal is OG
@@ -803,7 +804,7 @@ function initialiseRoom(): void {
                 placeholderGoal.ogName = playerList.get(touchPlayer).name;
                 playerList.get(touchPlayer).stats.ogs++;
                 setPlayerData(playerList.get(touchPlayer));
-                room.sendChat(parser.maketext(LangRes.onGoal.og, placeholderGoal));
+                room.sendAnnouncement(parser.maketext(LangRes.onGoal.og, placeholderGoal));
                 logger.c(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
             }
             // except spectators and filter who were lose a point
@@ -882,7 +883,7 @@ function updateAdmins(): void {
     room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
     playerList.get(players[0].id).admin = true;
     logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
-    room.sendChat(parser.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins));
+    room.sendAnnouncement(parser.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins));
 }
 
 function printPlayerInfo(player: PlayerObject): void {
@@ -904,9 +905,9 @@ window.onEmergency = {
     },
     chat: function(msg: string, playerID?: number): void { // send chat
         if(playerID) {
-            room.sendChat(msg, playerID);
+            room.sendAnnouncement(msg, playerID);
         } else {
-            room.sendChat(msg);
+            room.sendAnnouncement(msg);
         }
     },
     kick: function(playerID: number, msg?: string): void { // kick the player
