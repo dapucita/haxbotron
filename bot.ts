@@ -500,7 +500,7 @@ function initialiseRoom(): void {
         if (changedPlayer.id == 0) { // if the player changed into other team is host player(always id 0),
             room.setPlayerTeam(0, 0); // stay host player in Spectators team.
         } else {
-            if(byPlayer.id != 0 && playerList.get(changedPlayer.id).permissions.afkmode == true) {
+            if(byPlayer !== null && byPlayer.id != 0 && playerList.get(changedPlayer.id).permissions.afkmode == true) {
                 placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
                 room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
                 room.sendAnnouncement(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange));
@@ -533,8 +533,8 @@ function initialiseRoom(): void {
         /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
         var placeholderStart = { // Parser.maketext(str, placeholder)
-            playerID: byPlayer.id,
-            playerName: byPlayer.name,
+            playerID: 0,
+            playerName: '',
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
@@ -549,6 +549,8 @@ function initialiseRoom(): void {
         
         let msg = `[GAME] The game(mode:${gameMode}) has been started.`;
         if (byPlayer !== null && byPlayer.id != 0) {
+            placeholderStart.playerID = byPlayer.id;
+            placeholderStart.playerName = byPlayer.name;
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
         if (gameRule.statsRecord == true && gameMode == "stats") {
@@ -656,9 +658,9 @@ function initialiseRoom(): void {
         var placeholderKick = { // Parser.maketext(str, placeholder)
             kickedID : kickedPlayer.id,
             kickedName : kickedPlayer.name,
-            kickerID : byPlayer.id,
-            kickerName : byPlayer.name,
-            reason : reason,
+            kickerID : 0,
+            kickerName : '',
+            reason : '',
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
@@ -669,31 +671,37 @@ function initialiseRoom(): void {
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
-
-
-        if (byPlayer !== null && byPlayer.id != 0 && ban == true) {
-            // ban
-            if (playerList.get(byPlayer.id).permissions['superadmin'] != true) {
-                // if the player who acted banning is not super admin
-                room.sendAnnouncement(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id);
-                room.sendAnnouncement(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick));
-                room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
-                logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
+        if(reason !== null) {
+            placeholderKick.reason = reason;
+        }
+        if(byPlayer !== null && byPlayer.id != 0) {
+            placeholderKick.kickedID = byPlayer.id;
+            placeholderKick.kickedName = byPlayer.name;
+            if(ban == true) { // ban
+                if (playerList.get(byPlayer.id).permissions['superadmin'] != true) {
+                    // if the player who acted banning is not super admin
+                    room.sendAnnouncement(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id);
+                    room.sendAnnouncement(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick));
+                    room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
+                    logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
+                } else {
+                    logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
+                    banList.setBan({conn: kickedPlayer.conn, reason: reason});
+                }
             } else {
-                logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
-                banList.setBan({conn: kickedPlayer.conn, reason: reason});
+                // kick
+                logger.c(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked by ${byPlayer.name}#${byPlayer.id}. (reason:${reason})`);
             }
         } else {
-            // kick
-            logger.c(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked by ${byPlayer.name}#${byPlayer.id}. (reason:${reason})`);
+            logger.c(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked. (ban:${ban},reason:${reason})`);
         }
     }
 
     //room.onStadiumChange = function(newStadiumName: string, byPlayer: PlayerObject ): void {
     room.onStadiumChange = function (newStadiumName: string, byPlayer: PlayerObject) {
         var placeholderStadium = { // Parser.maketext(str, placeholder)
-            playerID: byPlayer.id,
-            playerName: byPlayer.name,
+            playerID: 0,
+            playerName: '',
             stadiumName: newStadiumName,
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
@@ -708,7 +716,9 @@ function initialiseRoom(): void {
 
         
         // Event called when the stadium is changed.
-        if (playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
+        if (byPlayer !== null && playerList.size != 0 && byPlayer.id != 0) { // if size == 0, that means there's no players. byPlayer !=0  means that the map is changed by system, not player.
+            placeholderStadium.playerID = byPlayer.id;
+            placeholderStadium.playerName = byPlayer.name;
             if (playerList.get(byPlayer.id).permissions['superadmin'] == true) {
                 //There are two ways for access to map value, permissions['superadmin'] and permissions.superadmin.
                 logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
