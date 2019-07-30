@@ -227,7 +227,7 @@ var parsingTimer = setInterval(function (): void {
     }
 }, 0);
 
-var scheduledTimer = setInterval(function(): void {
+var scheduledTimer = setInterval(function(): void { // FIXME: afk warning doesn't works well
     var placeholderScheduler = {
         targetID: 0,
         targetName: '',
