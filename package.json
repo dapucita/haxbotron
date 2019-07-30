@@ -1,12 +1,11 @@
 {
   "name": "haxbotron",
-  "version": "0.0.4",
-  "description": "Haxbotron is a bot for HaxBall game.",
+  "version": "0.0.5",
+  "description": "Haxbotron is a Host Bot Application for HaxBall game.",
   "main": "index.js",
   "scripts": {
     "start": "electron out/index.js",
-    "build": "tsc && webpack --config webpack.config.bot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc && webpack --config webpack.config.bot.js"
   },
   "author": "dapucita",
   "license": "MIT",
