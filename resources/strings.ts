@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const scheduler = {
-    advertise: '📢 Haxbotron 💬 [디스코드 채팅] https://discord.gg/qfg45B2'
+    advertise: '📢 Haxbotron - Open source, Free to use\n💬 [디스코드 채팅] https://discord.gg/qfg45B2'
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
     ,afkDetect: '📢 @{targetName}#{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
@@ -11,7 +11,7 @@ export const scheduler = {
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
     ,_ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
-    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND로 자세히 보기 📑 !help admin 관리자용 보기'
+    ,help: '📄 !about,stats,statsreset,afk,poss,streak,list\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
     ,helpadmin: '📄 !freeze 📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'

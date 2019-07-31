@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const scheduler = {
-    advertise: '📢 Haxbotron is in development. Open source and free to use! 💬 https://discord.gg/qfg45B2'
+    advertise: '📢 Haxbotron is in development. Open source and free to use!\n💬 Discord Chatting https://discord.gg/qfg45B2'
     ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
     ,afkKick: '📢 kick: AFK'
     ,afkDetect: '📢 @{targetName}#{targetID} has been away from keyboard. Press any key, or would be kicked.'
@@ -11,7 +11,7 @@ export const scheduler = {
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
     ,_ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
-    ,help: '📄 !about,stats,afk,poss,streak,list 📑 !help COMMAND for detail. 📑 !help admin for administrator.'
+    ,help: '📄 !about,stats,statsreset,afk,poss,streak,list\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
     ,helpadmin: '📄 !freeze 📑 !help COMMAND for detail.'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
