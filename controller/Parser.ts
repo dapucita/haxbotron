@@ -199,7 +199,6 @@ export class Parser {
                     ticket.targetPlayerID = playerID;
                     ticket.selfnotify = false;
                     ticket.action = function(playerID: number, playerList: any, muteMode: boolean): boolean|null {
-                        console.log("freeze 1 : " + muteMode);
                         if(playerList.get(playerID).admin == true) { // if admin
                             if(muteMode == true) { // if already on
                                 ticket.messageString = LangRes.command.freeze.offFreeze;
