@@ -1,5 +1,5 @@
 import { GameRule } from "../GameRule";
-import * as huge from "../../stadium/huge.hbs";
+import * as huge from "../../resources/stadium/huge.hbs";
 // import * as tiny from "../../stadium/tiny.hbs";
 
 export var gameRule: GameRule = {
