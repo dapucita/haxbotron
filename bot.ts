@@ -678,7 +678,7 @@ function initialiseRoom(): void {
             placeholderKick.kickedID = byPlayer.id;
             placeholderKick.kickedName = byPlayer.name;
             if(ban == true) { // ban
-                if (playerList.get(byPlayer.id).permissions['superadmin'] != true) {
+                if (playerList.get(byPlayer.id).permissions.superadmin != true) { // FIXME: Error caught-TypeError: Cannot read property 'permissions' of undefined 
                     // if the player who acted banning is not super admin
                     room.sendAnnouncement(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id, 0xFF0000, "bold", 2);
                     room.sendAnnouncement(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick), null, 0xFF0000, "bold", 2);
