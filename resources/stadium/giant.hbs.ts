@@ -1,6 +1,6 @@
 ﻿export var stadiumText: string=` {
-
     "name":"Haxbotron Giant",
+    "canBeStored": false,
     "width":920,
     "height":550,
     "spawnDistance":350,

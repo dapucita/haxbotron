@@ -1,5 +1,6 @@
 export var stadiumText: string = `{
     "name": "Haxbotron Huge",
+    "canBeStored": false,
     "width": 840,
     "height": 380,
     "bg": {
@@ -67,62 +68,50 @@ export var stadiumText: string = `{
     }, {
         "x": -740,
         "y": -340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": 740,
         "y": -340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": -740,
         "y": 340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": 740,
         "y": 340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": 740,
         "y": 110,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": 740,
         "y": 340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": -740,
         "y": 110,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": -740,
         "y": 340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": -740,
         "y": -340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": -740,
         "y": -110,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": 740,
         "y": -340,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": 740,
         "y": -110,
-        "bCoef": 0.1,
         "cMask": ["wall"]
     }, {
         "x": 0,
@@ -187,268 +176,202 @@ export var stadiumText: string = `{
     }, {
         "x": 740,
         "y": 110,
-        "cMask": ["ball"]
-    }, {
-        "x": -742,
-        "y": -340,
-        "bCoef": 0.1,
         "cMask": ["ball"]
     }, {
         "x": -741,
-        "y": -112,
-        "bCoef": 0.1,
-        "cMask": ["ball"]
-    }, {
-        "x": -743,
-        "y": -340,
-        "cMask": ["ball"]
-    }, {
-        "x": -743,
-        "y": -112,
-        "cMask": ["ball"]
-    }, {
-        "x": -744,
-        "y": -340,
-        "cMask": ["ball"]
-    }, {
-        "x": -744,
-        "y": -115,
-        "cMask": ["ball"]
-    }, {
-        "x": -744,
-        "y": -341,
-        "cMask": ["ball"]
-    }, {
-        "x": -742,
-        "y": -340,
-        "cMask": ["ball"]
-    }, {
-        "x": -743,
-        "y": -340,
-        "cMask": ["ball"]
-    }, {
-        "x": -743,
-        "y": -112,
-        "cMask": ["ball"]
-    }, {
-        "x": -744,
-        "y": -340,
-        "cMask": ["ball"]
-    }, {
-        "x": -744,
-        "y": -115,
-        "cMask": ["ball"]
-    }, {
-        "x": -744,
-        "y": -341,
-        "cMask": ["ball"]
-    }, {
-        "x": -742,
-        "y": 113,
-        "cMask": ["ball"]
-    }, {
-        "x": -742,
-        "y": 113,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -340,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -115,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -341,
-        "cMask": ["ball"]
-    }, {
-        "x": 743,
-        "y": -341,
-        "cMask": ["ball"]
-    }, {
-        "x": 743,
-        "y": -116,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -341,
-        "cMask": ["ball"]
-    }, {
-        "x": 743,
-        "y": -341,
-        "bCoef": 0.1,
-        "cMask": ["ball"]
-    }, {
-        "x": 743,
-        "y": -113,
-        "bCoef": 0.1,
-        "cMask": ["ball"]
-    }, {
-        "x": 742,
-        "y": 109,
-        "cMask": ["ball"]
-    }, {
-        "x": 742,
-        "y": 334,
-        "cMask": ["ball"]
-    }, {
-        "x": 742,
-        "y": 109,
-        "bCoef": 0.1,
-        "cMask": ["ball"]
-    }, {
-        "x": 742,
-        "y": 337,
-        "bCoef": 0.1,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -342,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -117,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -342,
-        "cMask": ["ball"]
-    }, {
-        "x": 744,
-        "y": -114,
-        "cMask": ["ball"]
-    }, {
-        "x": 751,
-        "y": -343,
-        "cMask": ["ball"]
-    }, {
-        "x": 752,
-        "y": -117,
-        "cMask": ["ball"]
-    }, {
-        "x": 757,
-        "y": -345,
-        "cMask": ["ball"]
-    }, {
-        "x": 760,
-        "y": -115,
-        "cMask": ["ball"]
-    }, {
-        "x": 764,
-        "y": -346,
-        "cMask": ["ball"]
-    }, {
-        "x": 767,
-        "y": -113,
-        "cMask": ["ball"]
-    }, {
-        "x": 748,
-        "y": 338,
-        "cMask": ["ball"]
-    }, {
-        "x": 749,
-        "y": 112,
-        "cMask": ["ball"]
-    }, {
-        "x": 755,
-        "y": 110,
-        "cMask": ["ball"]
-    }, {
-        "x": 755,
         "y": 340,
         "cMask": ["ball"]
     }, {
-        "x": 764,
-        "y": 107,
+        "x": -748,
+        "y": 340,
         "cMask": ["ball"]
     }, {
-        "x": 765,
+        "x": -748,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": -748,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": -748,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": -756,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": -756,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": -756,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": -756,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": -762,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": -762,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": -762,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": -762,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": -770,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": -770,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": -770,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": -770,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": 748,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": 748,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": 748,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": 748,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": 756,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": 756,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": 756,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": 756,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": 762,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": 762,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": 762,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": 762,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": 770,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": 770,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": 770,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": 770,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": -747,
+        "y": 340,
+        "cMask": ["ball"]
+    }, {
+        "x": -747,
+        "y": 110,
+        "cMask": ["ball"]
+    }, {
+        "x": -747,
+        "y": -110,
+        "cMask": ["ball"]
+    }, {
+        "x": -747,
+        "y": -340,
+        "cMask": ["ball"]
+    }, {
+        "x": -746,
         "y": 340,
         "cMask": ["ball"]
     }, {
         "x": -746,
-        "y": 334,
+        "y": 110,
         "cMask": ["ball"]
     }, {
-        "x": -752,
-        "y": 111,
+        "x": -746,
+        "y": -110,
         "cMask": ["ball"]
     }, {
-        "x": -756,
-        "y": 332,
+        "x": -746,
+        "y": -340,
         "cMask": ["ball"]
     }, {
-        "x": -762,
-        "y": 108,
+        "x": 747,
+        "y": 340,
         "cMask": ["ball"]
     }, {
-        "x": -764,
-        "y": 331,
+        "x": 747,
+        "y": 110,
         "cMask": ["ball"]
     }, {
-        "x": -769,
-        "y": 109,
+        "x": 747,
+        "y": -110,
         "cMask": ["ball"]
     }, {
-        "x": -774,
-        "y": 328,
+        "x": 747,
+        "y": -340,
         "cMask": ["ball"]
     }, {
-        "x": -758,
-        "y": 113,
+        "x": 746,
+        "y": 340,
         "cMask": ["ball"]
     }, {
-        "x": -747,
-        "y": 117,
+        "x": 746,
+        "y": 110,
         "cMask": ["ball"]
     }, {
-        "x": -752,
-        "y": 328,
+        "x": 746,
+        "y": -110,
         "cMask": ["ball"]
     }, {
-        "x": -751,
-        "y": -341,
-        "cMask": ["ball"]
-    }, {
-        "x": -752,
-        "y": -113,
-        "cMask": ["ball"]
-    }, {
-        "x": -769,
-        "y": -344,
-        "cMask": ["ball"]
-    }, {
-        "x": -771,
-        "y": -115,
-        "cMask": ["ball"]
-    }, {
-        "x": -763,
-        "y": -346,
-        "cMask": ["ball"]
-    }, {
-        "x": -765,
-        "y": -111,
-        "cMask": ["ball"]
-    }, {
-        "x": -758,
-        "y": -347,
-        "cMask": ["ball"]
-    }, {
-        "x": -759,
-        "y": -121,
-        "cMask": ["ball"]
-    }, {
-        "x": -777,
-        "y": -347,
-        "cMask": ["ball"]
-    }, {
-        "x": -776,
-        "y": -113,
-        "cMask": ["ball"]
-    }, {
-        "x": -748,
-        "y": -120,
+        "x": 746,
+        "y": -340,
         "cMask": ["ball"]
     }],
     "segments": [{
@@ -506,37 +429,31 @@ export var stadiumText: string = `{
     }, {
         "v0": 12,
         "v1": 13,
-        "bCoef": 0.1,
         "cMask": ["wall"],
         "color": "C7E6BD"
     }, {
         "v0": 14,
         "v1": 15,
-        "bCoef": 0.1,
         "cMask": ["wall"],
         "color": "C7E6BD"
     }, {
         "v0": 16,
         "v1": 17,
-        "bCoef": 0.1,
         "cMask": ["wall"],
         "color": "C7E6BD"
     }, {
         "v0": 18,
         "v1": 19,
-        "bCoef": 0.1,
         "cMask": ["wall"],
         "color": "C7E6BD"
     }, {
         "v0": 20,
         "v1": 21,
-        "bCoef": 0.1,
         "cMask": ["wall"],
         "color": "C7E6BD"
     }, {
         "v0": 22,
         "v1": 23,
-        "bCoef": 0.1,
         "cMask": ["wall"],
         "color": "C7E6BD"
     }, {
@@ -592,29 +509,50 @@ export var stadiumText: string = `{
         "cMask": ["ball"],
         "color": "C7E6BD"
     }, {
-        "v0": 40,
-        "v1": 41,
-        "bCoef": 0.1,
+        "v0": 37,
+        "v1": 38,
+        "curve": 20,
+        "curveF": 5.671281819617709,
+        "color": "C7E6BD"
+    }, {
+        "v0": 35,
+        "v1": 33,
+        "curve": 20,
+        "curveF": 5.671281819617709,
+        "color": "C7E6BD"
+    }, {
+        "v0": 41,
+        "v1": 42,
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 42,
-        "v1": 43,
+        "v0": 43,
+        "v1": 44,
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 44,
-        "v1": 45,
+        "v0": 45,
+        "v1": 46,
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 48,
-        "v1": 49,
+        "v0": 47,
+        "v1": 48,
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 50,
-        "v1": 51,
+        "v0": 49,
+        "v1": 50,
+        "vis": false,
+        "cMask": ["ball"]
+    }, {
+        "v0": 51,
+        "v1": 52,
+        "vis": false,
+        "cMask": ["ball"]
+    }, {
+        "v0": 53,
+        "v1": 54,
         "vis": false,
         "cMask": ["ball"]
     }, {
@@ -623,14 +561,18 @@ export var stadiumText: string = `{
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 58,
-        "v1": 59,
+        "v0": 57,
+        "v1": 58,
+        "vis": false,
+        "cMask": ["ball"]
+    }, {
+        "v0": 59,
+        "v1": 60,
         "vis": false,
         "cMask": ["ball"]
     }, {
         "v0": 61,
         "v1": 62,
-        "bCoef": 0.1,
         "vis": false,
         "cMask": ["ball"]
     }, {
@@ -644,30 +586,8 @@ export var stadiumText: string = `{
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 37,
-        "v1": 38,
-        "curve": 20,
-        "curveF": 5.671281819617709,
-        "color": "C7E6BD"
-    }, {
-        "v0": 35,
-        "v1": 33,
-        "curve": 20,
-        "curveF": 5.671281819617709,
-        "color": "C7E6BD"
-    }, {
         "v0": 67,
         "v1": 68,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 69,
-        "v1": 70,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 69,
-        "v1": 70,
         "vis": false,
         "cMask": ["ball"]
     }, {
@@ -691,24 +611,8 @@ export var stadiumText: string = `{
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 65,
-        "v1": 66,
-        "bCoef": 0.1,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 65,
-        "v1": 77,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 65,
-        "v1": 77,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 78,
-        "v1": 77,
+        "v0": 77,
+        "v1": 78,
         "vis": false,
         "cMask": ["ball"]
     }, {
@@ -722,73 +626,18 @@ export var stadiumText: string = `{
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 81,
-        "v1": 82,
+        "v0": 83,
+        "v1": 84,
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 54,
-        "v1": 83,
+        "v0": 85,
+        "v1": 86,
         "vis": false,
         "cMask": ["ball"]
     }, {
-        "v0": 84,
-        "v1": 85,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 86,
-        "v1": 87,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 88,
-        "v1": 89,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 84,
-        "v1": 85,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 90,
-        "v1": 87,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 91,
-        "v1": 92,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 93,
-        "v1": 94,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 95,
-        "v1": 96,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 97,
-        "v1": 98,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 99,
-        "v1": 100,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 101,
-        "v1": 102,
-        "vis": false,
-        "cMask": ["ball"]
-    }, {
-        "v0": 50,
-        "v1": 103,
+        "v0": 87,
+        "v1": 88,
         "vis": false,
         "cMask": ["ball"]
     }],
@@ -827,6 +676,10 @@ export var stadiumText: string = `{
         "team": "blue"
     }],
     "discs": [{
+        "radius": 6.4,
+        "color": "DEE8D1",
+        "cGroup": ["ball", "kick", "score"]
+    }, {
         "pos": [740, -110],
         "radius": 5.5,
         "bCoef": 1,
@@ -854,9 +707,6 @@ export var stadiumText: string = `{
         "kickingDamping": 0.97,
         "kickStrength": 5.7
     },
-    "ballPhysics": {
-        "radius": 6.4,
-        "color": "DEE8D1"
-    },
+    "ballPhysics": "disc0",
     "spawnDistance": 350
 }`;

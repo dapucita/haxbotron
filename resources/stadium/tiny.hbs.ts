@@ -1,5 +1,6 @@
 export var stadiumText: string = `{
     "name": "Haxbotron Tiny",
+    "canBeStored": false,
     "width": 420,
     "height": 200,
     "bg": {
