@@ -89,6 +89,7 @@ const banList: Ban = Ban.getInstance();
 banList.init();
 
 var gameMode: string = "ready"; // "ready", "stats"
+var isGamingNow: boolean = false; // true : in gaming
 var muteMode: boolean = false; // true for mute all players
 
 var room: any = window.HBInit(roomConfig);
@@ -235,26 +236,34 @@ var scheduledTimer = setInterval(function(): void {
     }
 
     if(Math.random() < 0.5) {
-        room.sendAnnouncement(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x00FF00, "normal", 0); // advertisement
+        room.sendAnnouncement(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x777777, "normal", 0); // advertisement
     }
 
     playerList.forEach((player: Player) => { // afk detection system
         // init placeholder
         placeholderScheduler.targetID = player.id;
         placeholderScheduler.targetName = player.name;
-        //
-        if(player.admin == true || player.team != 0) { // if the player is admin or not spectators(include afk mode)
-            if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
+        // check afk
+        if(player.admin == true) { // if the player is admin
+            if(isGamingNow == false && player.afktrace.count >= BotSettings.afkCountLimit) { // if the game is not in playing and the admin player is over afk count
                 room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
             } else {
-                if(player.afktrace.count >= 1) { // only when the player's count is not 0
-                    room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF0000, "bold", 2); // warning for all
-                }
                 player.afktrace.count++; // add afk detection count
             }
+        } else { // or not admin
+            if(isGamingNow == true && player.team != 0) { // and the player is not spectators(include afk mode)
+                if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
+                    room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
+                } else {
+                    if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
+                        room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF0000, "bold", 1); // warning for all
+                    }
+                    player.afktrace.count++; // add afk detection count
+                }
+            } 
         }
     });
-}, 30000); // by 30seconds
+}, 15000); // by 15seconds
 
 function initialiseRoom(): void {
     // Write initialising processes here.
@@ -496,14 +505,14 @@ function initialiseRoom(): void {
             if(byPlayer !== null && byPlayer.id != 0 && playerList.get(changedPlayer.id).permissions.afkmode == true) {
                 placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
                 room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
-                room.sendAnnouncement(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), 0xFF0000, "normal", 0);
-            } else {
+                room.sendAnnouncement(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), null, 0xFF0000, "normal", 0);
+            }/* else {
                 if(changedPlayer.team == 0 && changedPlayer.admin != true){
                     playerList.get(changedPlayer.id).afktrace.exemption = true;
                 } else {
                     playerList.get(changedPlayer.id).afktrace.exemption = false;
                 } 
-            }
+            } */
             playerList.get(changedPlayer.id).team = changedPlayer.team;
         }
 
@@ -551,7 +560,8 @@ function initialiseRoom(): void {
             streakTeamCount: winningStreak.getCount()
         };
 
-        
+        isGamingNow = true; // turn on
+
         let msg = `[GAME] The game(mode:${gameMode}) has been started.`;
         if (byPlayer !== null && byPlayer.id != 0) {
             placeholderStart.playerID = byPlayer.id;
@@ -588,6 +598,8 @@ function initialiseRoom(): void {
             placeholderStop.playerName = byPlayer.name;
         }
 
+        isGamingNow = false; // turn off
+
         let msg = "[GAME] The game has been stopped.";
         if (byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
@@ -617,6 +629,8 @@ function initialiseRoom(): void {
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount()
         };
+
+        isGamingNow = false; // turn off
 
         if (gameRule.statsRecord == true && gameMode == "stats") { // records when game mode is for stats recording.
             var gamePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0); // except Spectators players
@@ -829,6 +843,14 @@ function initialiseRoom(): void {
                 setPlayerData(playerList.get(eachPlayer.id)); // updates lost points count
             });
         }
+    }
+
+    room.onGamePause = function(byPlayer : PlayerObject): void {
+        isGamingNow = false; // turn off
+    }
+
+    room.onGameUnpause = function(byPlayer : PlayerObject): void {
+        isGamingNow = true; // turn on
     }
 
     room.onPlayerActivity = function(player : PlayerObject): void {
