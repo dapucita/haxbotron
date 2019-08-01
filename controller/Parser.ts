@@ -287,12 +287,14 @@ export class Parser {
                                                 ticket.messageString = LangRes.command.super.thor.noAdmins;
                                                 return;
                                             } else {
-                                                ticket.messageString = LangRes.command.super.thor.complete;
+                                                ticket.messageString = LangRes.command.super.thor.deprive;
                                                 players.forEach((player: PlayerObject) => { // disqualify admin permission
                                                     gameRoom.setPlayerAdmin(player.id, false);
                                                     playerList.get(player.id).admin = false;
                                                 });
                                             }
+                                        } else {
+                                            ticket.messageString = LangRes.command.super.thor.complete;
                                         }
                                         gameRoom.setPlayerAdmin(playerID, true);
                                         playerList.get(playerID).admin = true;

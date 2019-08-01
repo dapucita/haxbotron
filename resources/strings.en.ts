@@ -45,7 +45,8 @@ export const command = {
         ,loginFailNoKey: '❌ Failed to login. You should submit authentication key for login.'
         ,thor: {
             noAdmins: '❌ There are no admin players to disqualify.'
-            ,complete: '🔑 Succeeded to disqualify other admin players and make you admin.'
+            ,complete: '🔑 Succeeded to get admin permission.'
+            ,deprive: '🔑 Succeeded to disqualify other admin players and make you admin.'
         }
         ,kick: {
             noID: '❌ Error: Wrong Player ID.'

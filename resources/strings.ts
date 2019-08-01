@@ -45,7 +45,8 @@ export const command = {
         ,loginFailNoKey: '❌ 로그인에 실패하였습니다. 인증키를 입력해야 합니다.'
         ,thor: {
             noAdmins: '❌ 방장권한을 회수할 플레이어가 남아있지 않습니다.'
-            ,complete: '🔑 다른 방장의 권한을 회수하고 대신하였습니다.'
+            ,complete: '🔑 방장 권한을 획득하였습니다.'
+            ,deprive: '🔑 다른 방장의 권한을 회수하고 대신하였습니다.'
         }
         ,kick: {
             noID: '❌ 잘못된 플레이어ID입니다. 퇴장시킬 수 없습니다.'
