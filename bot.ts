@@ -237,31 +237,19 @@ var scheduledTimer = setInterval(function(): void { // FIXME: afk warning doesn'
         // init placeholder
         placeholderScheduler.targetID = player.id;
         placeholderScheduler.targetName = player.name;
-        // add afk detection count
-        if(player.afktrace.exemption != true) { // (value: false) if this player isn't exempted from afk system
-            if(player.afktrace.count >= 2 && player.team != 0) { // if over 2 times ( applied from 2 times) and player's team is not spec team
-                if(player.admin == true) {
-                    playerList.get(player.id).admin = false; // disqualify
-                    room.setPlayerAdmin(player.id, false);
-                }
-                if(player.permissions.afkmode != true) { // if this player isn't in afk mode
-                    room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
-                }
+        //
+        if(player.admin == true || player.team != 0) { // if the player is admin or not spectators(include afk mode)
+            if(player.afktrace.count >= 2) { // if the player's count is over than 3times
+                room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
             } else {
-                room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF0000, "bold", 2); // warning for all
-            }
-            playerList.get(player.id).afktrace.count++; // add afk detection count
-        } else { // (value: true) if this player is exempted from afk system
-            if(player.permissions.afkmode != true) { // if this player isn't in afk mode
-                if(player.afktrace.count >= 1) { // just one chance because the count can be reset when the player had any activity.
-                    playerList.get(player.id).afktrace.exemption = false; // now start detecting this player
-                } else {
-                    playerList.get(player.id).afktrace.count++;
+                if(player.afktrace.count >= 1) { // only when the player's count is not 0
+                    room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF0000, "bold", 2); // warning for all
                 }
+                player.afktrace.count++; // add afk detection count
             }
         }
     });
-}, 90000); // by 1m30s
+}, 30000); // by 30seconds
 
 function initialiseRoom(): void {
     // Write initialising processes here.
@@ -527,7 +515,7 @@ function initialiseRoom(): void {
             if (playerList.get(changedPlayer.id).permissions.afkmode == true) {
                 // if changedPlayer is in afk mode, reject
                 room.setPlayerAdmin(changedPlayer.id, false);
-                room.sendAnnouncement(parser.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), 0xFF0000, "normal", 0);
+                room.sendAnnouncement(parser.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), 0xFF0000, "normal", 2);
                 return;
             } else {
                 // make this player admin
@@ -841,11 +829,7 @@ function initialiseRoom(): void {
     room.onPlayerActivity = function(player : PlayerObject): void {
         // Event called when a player gives signs of activity, such as pressing a key.
         // This is useful for detecting inactive players.
-        if(playerList.get(player.id).afktrace.count >= 1) {
-            // if this player has afk count
-            playerList.get(player.id).afktrace.exemption = true; // reset
-            playerList.get(player.id).afktrace.count = 0 ;
-        }
+        playerList.get(player.id).afktrace.count = 0;
     }
 
     room.onRoomLink = function (url: string): void {
