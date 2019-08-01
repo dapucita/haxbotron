@@ -29,3 +29,10 @@ export function calcAssistsPerGame(totalGames: number, totalAssists: number): nu
     }
     return Math.round((totalAssists / totalGames) * 100);
 }
+
+export function calcPassSuccessRate(totalPasses: number, totalSuccess: number): number {
+    if(totalPasses == 0 && totalSuccess == 0) {
+        return 0;
+    }
+    return Math.round((totalSuccess / totalPasses) * 100);
+}
