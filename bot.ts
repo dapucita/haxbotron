@@ -232,14 +232,18 @@ var scheduledTimer = setInterval(function(): void { // FIXME: afk warning doesn'
         targetID: 0,
         targetName: '',
     }
-    room.sendAnnouncement(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x00FF00, "normal", 0); // advertisement
+
+    if(Math.random() < 0.5) {
+        room.sendAnnouncement(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x00FF00, "normal", 0); // advertisement
+    }
+
     playerList.forEach((player: Player) => { // afk detection system
         // init placeholder
         placeholderScheduler.targetID = player.id;
         placeholderScheduler.targetName = player.name;
         //
         if(player.admin == true || player.team != 0) { // if the player is admin or not spectators(include afk mode)
-            if(player.afktrace.count >= 2) { // if the player's count is over than 3times
+            if(player.afktrace.count >= 2) { // if the player's count is over than 2times
                 room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
             } else {
                 if(player.afktrace.count >= 1) { // only when the player's count is not 0
