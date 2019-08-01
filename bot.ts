@@ -519,13 +519,25 @@ function initialiseRoom(): void {
     room.onPlayerAdminChange = function (changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
         /* Event called when a player's admin rights are changed.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
-        if (playerList.size != 0 && playerList.get(changedPlayer.id).admin != true && changedPlayer.admin == true) {
-            playerList.get(changedPlayer.id).admin = true;
-            if (byPlayer !== null) {
-                logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(value:${playerList.get(changedPlayer.id).admin},super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
+        var placeholderAdminChange = { // Parser.maketext(str, placeholder)
+            playerID: changedPlayer.id,
+            playerName: changedPlayer.name
+        }
+        if(changedPlayer.admin == true) { // if this event means that the player has been admin
+            if (playerList.get(changedPlayer.id).permissions.afkmode == true) {
+                // if changedPlayer is in afk mode, reject
+                room.setPlayerAdmin(changedPlayer.id, false);
+                room.sendAnnouncement(parser.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), 0xFF0000, "normal", 0);
+                return;
+            } else {
+                // make this player admin
+                playerList.get(changedPlayer.id).admin = true;
+                if (byPlayer !== null) {
+                    logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
+                }
+                return;
             }
         }
-        playerList.get(changedPlayer.id).afktrace.exemption = false; // switch this admin player to be detected by afk system
         updateAdmins(); // check when the last admin player disqulified by self
     }
 

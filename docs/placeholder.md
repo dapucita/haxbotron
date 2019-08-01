@@ -90,7 +90,7 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `banListReason` : the reason why this player has registered in ban list.
 
-### room.onPlayerChat (onChat), room.onGameStart (onStart), room.onGameStop (onStop), room.onPlayerBallKick (onTouch)
+### room.onPlayerChat (onChat), room.onGameStart (onStart), room.onGameStop (onStop), room.onPlayerBallKick (onTouch), room.onPlayerAdminChange (onAdminChange)
 `playerID` : numeric ID of this player.
 
 `playerName` : name of this player.

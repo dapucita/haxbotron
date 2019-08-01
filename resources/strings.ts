@@ -123,5 +123,8 @@ export const onGoal = {
     goal: '⚽️ {scorerName}#{scorerID}님의 득점!'
     ,goalWithAssist: '⚽️ {scorerName}#{scorerID}님의 득점! {assistName}#{assistID}님이 어시스트했습니다.'
     ,og: '⚽️ {ogName}#{ogID}님이 자책골을 넣었습니다...'
+}
 
+export const onAdminChange = {
+    afknoadmin: '🚫 잠수 중인 플레이어는 admin이 될 수 없습니다.'
 }

@@ -123,5 +123,8 @@ export const onGoal = {
     goal: '⚽️ {scorerName}#{scorerID} scored!!'
     ,goalWithAssist: '⚽️ {scorerName}#{scorerID} made a goal! (assisted by {assistName}#{assistID})'
     ,og: '⚽️ {ogName}#{ogID} made an OG.'
+}
 
+export const onAdminChange = {
+    afknoadmin: '🚫 The player in afk mode can\'t be admin.'
 }
