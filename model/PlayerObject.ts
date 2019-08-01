@@ -52,7 +52,7 @@ export interface PlayerPermissions {
 }
 
 export interface PlayerAfkTrace {
-    exemption: boolean; // is this player exempted from detecting and tracing afk players?
+    exemption: boolean; // deprecated // is this player exempted from detecting and tracing afk players?
     count: number; // afk detection count
 }
 
