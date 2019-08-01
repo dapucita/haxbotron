@@ -1,5 +1,5 @@
 import { GameRule } from "../GameRule";
-import * as huge from "../../resources/stadium/huge.hbs";
+import * as gbhothuge from "../../resources/stadium/gbhothuge.hbs";
 // import * as tiny from "../../stadium/tiny.hbs";
 
 export var gameRule: GameRule = {
@@ -17,6 +17,6 @@ export var gameRule: GameRule = {
     autoOperating: false,
     captain: true,
     statsRecord: true,
-    defaultMap: huge.stadiumText,
-    readyMap: huge.stadiumText
+    defaultMap: gbhothuge.stadiumText,
+    readyMap: gbhothuge.stadiumText
 }
