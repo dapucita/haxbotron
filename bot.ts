@@ -2,6 +2,7 @@
 // This is the main part of the bot
 
 // import modules
+import * as BotSettings from "./resources/settings.json";
 import {
     RoomConfig
 } from "./model/RoomConfig";
@@ -227,7 +228,7 @@ var parsingTimer = setInterval(function (): void {
     }
 }, 0);
 
-var scheduledTimer = setInterval(function(): void { // FIXME: afk warning doesn't works well
+var scheduledTimer = setInterval(function(): void {
     var placeholderScheduler = {
         targetID: 0,
         targetName: '',
@@ -243,7 +244,7 @@ var scheduledTimer = setInterval(function(): void { // FIXME: afk warning doesn'
         placeholderScheduler.targetName = player.name;
         //
         if(player.admin == true || player.team != 0) { // if the player is admin or not spectators(include afk mode)
-            if(player.afktrace.count >= 2) { // if the player's count is over than 2times
+            if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
                 room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
             } else {
                 if(player.afktrace.count >= 1) { // only when the player's count is not 0
