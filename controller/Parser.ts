@@ -231,7 +231,7 @@ export class Parser {
                             gameRoom.setPlayerAdmin(playerID, false); // disqulify admin permission
                             playerList.get(playerID).admin = false;
                             playerList.get(playerID).permissions.afkmode = true; // set afk mode
-                            playerList.get(playerID).afktrace = { exemption: true, count: 0}; // reset for afk trace
+                            playerList.get(playerID).afktrace = { exemption: false, count: 0}; // reset for afk trace
                             if(cutMsg[1] !== undefined) { // if the reason is not skipped
                                 playerList.get(playerID).permissions.afkreason = cutMsg[1]; // set reason
                             }
