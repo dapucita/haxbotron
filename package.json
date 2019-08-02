@@ -18,15 +18,15 @@
     "url": "https://github.com/dapucita/haxbotron.git"
   },
   "dependencies": {
-    "node-persist": "^3.0.4",
-    "puppeteer": "^1.18.1"
+    "node-persist": "^3.0.5",
+    "puppeteer": "^1.19.0"
   },
   "devDependencies": {
     "@types/node-persist": "0.0.33",
-    "@types/puppeteer": "^1.12.4",
-    "electron": "^5.0.6",
-    "typescript": "^3.5.2",
-    "webpack": "^4.35.2",
-    "webpack-cli": "^3.3.5"
+    "@types/puppeteer": "^1.19.0",
+    "electron": "^6.0.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.0",
+    "webpack-cli": "^3.3.6"
   }
 }
