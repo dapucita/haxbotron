@@ -36,14 +36,14 @@ npm start
 ```
 
 ## How to Use
-You need to prepare headless token key. You can get it from [here](https://www.haxball.com/headlesstoken).
+You need to prepare `headless token key`. You can get it from [here](https://www.haxball.com/headlesstoken).
 
 If you got the token, you have to launch the application and input your room's configuration values.
 
 Then, you can launch your own game room.
 
 ## How to backup
-If you want to backup players' data on your own bot, you should copy .node-persist directory and paste it when you need.
+If you want to backup players' data on your own bot, you should copy `.node-persist` directory and paste it when you need.
 
 All data are reserved in that directory and you can also modify them using text editor.
 
@@ -120,9 +120,9 @@ If you want to use these, you need to uncheck headless option for open the puppe
 [Discord](https://discord.gg/qfg45B2)
 
 ## Special thanks to
-G.Buffon made great custom maps and they are very popular in Korea.
+`G.Buffon` made great custom maps and they are very popular in Korea.
 
 ## Copyrights
 MIT License.
 
-Some maps by G.Buffon.
+Some maps by `G.Buffon`.
