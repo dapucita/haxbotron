@@ -671,14 +671,17 @@ function initialiseRoom(): void {
                 playerList.get(eachPlayer.id).stats.totals++;
                 setPlayerData(playerList.get(eachPlayer.id)); // updates wins and totals count
             });
+            if(winningStreak.red >= 3 || winningStreak.blue >= 3) {
+                room.sendAnnouncement(parser.maketext(LangRes.onVictory.burning, placeholderVictory), null, 0x00FF00, "bold", 1);
+            }
         }
 
         ballStack.initTouchInfo(); // clear touch info
         ballStack.clear(); // clear the stack.
         ballStack.possClear(); // clear possession count
 
-        logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`)
-        room.sendAnnouncement(parser.maketext(LangRes.onVictory.victory, placeholderVictory), null, 0x00FF00, "bold", 2);
+        logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`);
+        room.sendAnnouncement(parser.maketext(LangRes.onVictory.victory, placeholderVictory), null, 0x00FF00, "bold", 1);
 
         setDefaultStadiums(); // check number of players and auto-set stadium
     }

@@ -104,6 +104,7 @@ export const onStop = {
 
 export const onVictory = {
     victory: '🎉 The game has ended. Scores {redScore}:{blueScore}!'
+    ,burning: '🔥 {streakTeamName} team is now hitting a winning streak of {streakTeamCount}games !!!'
 }
 
 export const onKick = {

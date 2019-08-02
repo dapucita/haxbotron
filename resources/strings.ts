@@ -104,6 +104,7 @@ export const onStop = {
 
 export const onVictory = {
     victory: '🎉 경기 종료! 스코어 {redScore}:{blueScore} !! ⚽️'
+    ,burning: '🔥 {streakTeamName} 팀이 {streakTeamCount}연승중입니다 !!'
 }
 
 export const onKick = {
