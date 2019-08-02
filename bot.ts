@@ -346,6 +346,10 @@ function initialiseRoom(): void {
             // if this player is not new player
             var loadedData: PlayerStorage | null = getPlayerData(player.auth);
             if (loadedData !== null) {
+                if(loadedData.balltouch === null) { // init for old players who don't have balltouch, pass value.
+                    loadedData.balltouch = 0;
+                    loadedData.passed = 0;
+                }
                 playerList.set(player.id, new Player(player, {
                     totals: loadedData.totals,
                     wins: loadedData.wins,
