@@ -189,6 +189,8 @@ export class Parser {
                         playerList.get(playerID).stats.assists = 0;
                         playerList.get(playerID).stats.ogs = 0;
                         playerList.get(playerID).stats.losePoints = 0;
+                        playerList.get(playerID).stats.balltouch = 0;
+                        playerList.get(playerID).stats.passed = 0;
                         setPlayerData(playerList.get(playerID));
                     }
                     break;
@@ -281,7 +283,7 @@ export class Parser {
                                 case "thor": {
                                     if(playerList.get(playerID).permissions.superadmin == true) {
                                         // Get all admin players except the bot host
-                                        if(cutMsg[2] !== undefined && cutMsg[2] == 'deprive') {
+                                        if(cutMsg[2] !== undefined && cutMsg[2] == 'deprive') { // FIXME: doesn't works well
                                             var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.admin == true);
                                             if (players.length == 0) { // If no players left, do nothing.
                                                 ticket.messageString = LangRes.command.super.thor.noAdmins;
