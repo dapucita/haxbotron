@@ -10,7 +10,8 @@ declare global {
         onEmergency: {
             list(): void
             chat(msg: string, playerID?: number): void
-            kick(playerID: number,  msg?: string): void
+            kick(playerID: number, msg?: string): void
+            ban(playerID: number, msg?: string): void
             banclear(): void
         }
 

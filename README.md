@@ -114,6 +114,8 @@ If you want to use these, you need to uncheck headless option for open the puppe
 
 `window.onEmergency.kick(playerID: number, msg?: string)`
 
+`window.onEmergency.ban(playerID: number, msg?: string)`
+
 `window.onEmergency.banclear()`
 
 ## Contacts

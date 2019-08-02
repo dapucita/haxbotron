@@ -978,6 +978,13 @@ window.onEmergency = {
             room.kickPlayer(playerID, 'by haxbotron', false);
         }
     },
+    ban: function(playerID: number, msg?: string): void { // ban the player
+        if(msg) {
+            room.kickPlayer(playerID, msg, true);
+        } else {
+            room.kickPlayer(playerID, 'by haxbotron', true);
+        }
+    },
     banclear: function(): void { // clear all of ban list
         room.clearBans();
     }
