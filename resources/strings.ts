@@ -25,7 +25,7 @@ export const command = {
         ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.'
         ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
     } 
-    ,about: '📄 이 방은 Haxbotron 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.'
+    ,about: '📄 이 방은 Haxbotron 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드 채팅] https://discord.gg/qfg45B2'
     ,stats: '📊 {targetName}#{ticketTarget}님: 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.'
     ,statsreset: '📊 스탯을 초기화했습니다. 다시 복구할 수 없습니다.'
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'

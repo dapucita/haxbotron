@@ -25,7 +25,7 @@ export const command = {
         ,list: '📑 !list TEAM(red/blue/spec) shows you all players list of the team.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
     } 
-    ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.'
+    ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.\n💬 Discord Chatting https://discord.gg/qfg45B2'
     ,stats: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.'
     ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
