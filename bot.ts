@@ -244,14 +244,8 @@ var scheduledTimer = setInterval(function(): void {
         placeholderScheduler.targetID = player.id;
         placeholderScheduler.targetName = player.name;
         // check afk
-        if(player.admin == true) { // if the player is admin
-            if(isGamingNow == false && player.afktrace.count >= BotSettings.afkCountLimit) { // if the game is not in playing and the admin player is over afk count
-                room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
-            } else {
-                player.afktrace.count++; // add afk detection count
-            }
-        } else { // or not admin
-            if(isGamingNow == true && player.team != 0) { // and the player is not spectators(include afk mode)
+        if(isGamingNow == true) { // if the game is in playing
+            if(player.team != 0) { // if the player is not spectators(include afk mode)
                 if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
                     room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
@@ -260,7 +254,18 @@ var scheduledTimer = setInterval(function(): void {
                     }
                     player.afktrace.count++; // add afk detection count
                 }
-            } 
+            }
+        } else {
+            if(player.admin == true) { // if the player is admin
+                if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
+                    room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
+                } else {
+                    if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
+                        room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF0000, "bold", 1); // warning for all
+                    }
+                    player.afktrace.count++; // add afk detection count
+                }
+            }
         }
     });
 }, 15000); // by 15seconds
