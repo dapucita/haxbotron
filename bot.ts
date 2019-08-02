@@ -236,7 +236,7 @@ var scheduledTimer = setInterval(function(): void {
         targetName: '',
     }
 
-    if(Math.random() < 0.5) {
+    if(Math.random() < 0.25) {
         room.sendAnnouncement(parser.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x777777, "normal", 0); // advertisement
     }
 
@@ -709,8 +709,8 @@ function initialiseRoom(): void {
             placeholderKick.reason = reason;
         }
         if(byPlayer !== null && byPlayer.id != 0) {
-            placeholderKick.kickedID = byPlayer.id;
-            placeholderKick.kickedName = byPlayer.name;
+            placeholderKick.kickerID = byPlayer.id;
+            placeholderKick.kickerName = byPlayer.name;
             if(ban == true) { // ban
                 if (playerList.get(byPlayer.id).permissions.superadmin != true) { // FIXME: Error caught-TypeError: Cannot read property 'permissions' of undefined 
                     // if the player who acted banning is not super admin
@@ -788,7 +788,7 @@ function initialiseRoom(): void {
 
         playerList.get(player.id).stats.balltouch++; // add count of ball touch
         
-        if(ballStack.passJudgment(player.team) == true) {
+        if(ballStack.passJudgment(player.team) == true && playerList.has(ballStack.getLastTouchPlayerID()) == true) {
             playerList.get(ballStack.getLastTouchPlayerID()).stats.passed++;
         }
 
