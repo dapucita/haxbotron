@@ -101,6 +101,8 @@ If you(the super admin) type a command by chat...
 
 `!super kick ID` kicks that player whose numeric ID is ID.
 
+`!super banclear all` clears the list of banned players.
+
 ## Emergency tools
 You can use some tools for emergency on the devtools console in the puppeteer.
 

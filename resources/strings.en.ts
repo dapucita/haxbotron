@@ -53,6 +53,9 @@ export const command = {
             ,kickMsg: '📢 kicked from the game'
             ,kickSuccess: '📢 That player is kicked.'
         }
+        ,banclear: {
+            complete: '🔑 Succeeded to clear ban list.'
+        }
     }
     ,list: {
         _ErrorNoTeam: '❌ You can request only about red, blue, spec team.'

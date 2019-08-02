@@ -53,6 +53,9 @@ export const command = {
             ,kickMsg: '📢 퇴장'
             ,kickSuccess: '📢 해당 플레이어를 퇴장시켰습니다.'
         }
+        ,banclear: {
+            complete: '🔑 밴 목록을 초기화했습니다.'
+        }
     }
     ,list: {
         _ErrorNoTeam: '❌ red, blue, spec 팀 중 하나를 지정해야 합니다.'

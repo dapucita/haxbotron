@@ -5,11 +5,13 @@ import { PlayerObject } from "../model/PlayerObject";
 import { superAdminLogin } from "./SuperAdmin";
 import { Ban } from "./Ban";
 
+const banList: Ban = Ban.getInstance();
+
 export class Parser {
     // written in Singleton Pattern
     // If the bot created Parser object once, never create ever until the bot instance dead. 
     private static instance: Parser = new Parser();
-    private banList: Ban = Ban.getInstance();
+    //private banList: Ban = Ban.getInstance();
 
     private Parser() { } // not use
     public static getInstance(): Parser {
@@ -242,7 +244,7 @@ export class Parser {
                     break;
                 }
                 
-                case "super": { // TODO:  ban clearing command for super admin
+                case "super": {
                     ticket.type = "super";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
@@ -316,6 +318,18 @@ export class Parser {
                                             }
                                         } else {
                                             ticket.messageString = LangRes.command.super.kick.noID;
+                                        }
+                                    } else {
+                                        ticket.messageString = LangRes.command.super._ErrorNoPermission;
+                                    }
+                                    break;
+                                }
+                                case "banclear": {
+                                    if(playerList.get(playerID).permissions.superadmin == true) {
+                                        if(cutMsg[2] !== undefined && cutMsg[2] == 'all') {
+                                            gameRoom.clearBans();
+                                            banList.clearBan();
+                                            ticket.messageString = LangRes.command.super.banclear.complete;
                                         }
                                     } else {
                                         ticket.messageString = LangRes.command.super._ErrorNoPermission;
