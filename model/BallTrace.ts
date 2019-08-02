@@ -11,6 +11,10 @@ export class KickStack {
         red: 0,
         blue: 0
     };
+    private lastTouched = {
+        id: 0,
+        team: 0
+    };
 
     private KickStack<Number>() { } // not use
     public static getInstance(): KickStack {
@@ -28,6 +32,29 @@ export class KickStack {
     }
     clear(): void {
         this._store = []; // clear
+    }
+    
+    initTouchInfo(): void {
+        this.lastTouched = {
+            id: 0,
+            team: 0
+        };
+    }
+    getLastTouchPlayerID(): number {
+        return this.lastTouched.id; // playerID
+    }
+    touchPlayerSubmit(id: number) { // playerID
+        this.lastTouched.id = id;
+    }
+    touchTeamSubmit(team: number) { // 1: red team, 2: blue team
+        this.lastTouched.team = team;
+    }
+    passJudgment(team: number): boolean { // 1: red team, 2: blue team
+        if(this.lastTouched.team == team) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     possCount(team: number): void { // 1: red team, 2: blue team

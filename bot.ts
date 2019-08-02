@@ -113,6 +113,7 @@ var parsingTimer = setInterval(function (): void {
             targetStatsOgs: playerList.get(timerTicket.targetPlayerID).stats.ogs,
             targetStatsLosepoints: playerList.get(timerTicket.targetPlayerID).stats.losePoints,
             targetStatsWinRate: StatCalc.calcWinsRate(playerList.get(timerTicket.targetPlayerID).stats.totals, playerList.get(timerTicket.targetPlayerID).stats.wins),
+            targetStatsPassSuccess: StatCalc.calcPassSuccessRate(playerList.get(timerTicket.targetPlayerID).stats.balltouch, playerList.get(timerTicket.targetPlayerID).stats.passed),
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
@@ -351,7 +352,9 @@ function initialiseRoom(): void {
                     goals: loadedData.goals,
                     assists: loadedData.assists,
                     ogs: loadedData.ogs,
-                    losePoints: loadedData.losePoints
+                    losePoints: loadedData.losePoints,
+                    balltouch: loadedData.balltouch,
+                    passed: loadedData.passed
                 }, {
                     mute: loadedData.mute,
                     afkmode: false,
@@ -384,7 +387,9 @@ function initialiseRoom(): void {
                 goals: 0,
                 assists: 0,
                 ogs: 0,
-                losePoints: 0
+                losePoints: 0,
+                balltouch: 0,
+                passed: 0
             }, {
                 mute: false,
                 afkmode: false,
@@ -612,6 +617,7 @@ function initialiseRoom(): void {
         logger.c(msg);
         setDefaultStadiums(); // check number of players and auto-set stadium
 
+        ballStack.initTouchInfo(); // clear touch info
         ballStack.clear(); // clear the stack.
         ballStack.possClear(); // clear possession count
     }
@@ -667,6 +673,7 @@ function initialiseRoom(): void {
             });
         }
 
+        ballStack.initTouchInfo(); // clear touch info
         ballStack.clear(); // clear the stack.
         ballStack.possClear(); // clear possession count
 
@@ -776,6 +783,15 @@ function initialiseRoom(): void {
             streakTeamCount: winningStreak.getCount()
         };
 
+        playerList.get(player.id).stats.balltouch++; // add count of ball touch
+        
+        if(ballStack.passJudgment(player.team) == true) {
+            playerList.get(ballStack.getLastTouchPlayerID()).stats.passed++;
+        }
+
+        ballStack.touchTeamSubmit(player.team);
+        ballStack.touchPlayerSubmit(player.id); // refresh who touched the ball in last
+
         ballStack.push(player.id);
         ballStack.possCount(player.team); // 1: red team, 2: blue team
     }
@@ -813,6 +829,7 @@ function initialiseRoom(): void {
         var touchPlayer: number | undefined = ballStack.pop();
         var assistPlayer: number | undefined = ballStack.pop();
         ballStack.clear(); // clear the stack.
+        ballStack.initTouchInfo(); // clear touch info
         if (gameMode == "stats" && touchPlayer !== undefined) { // records when game mode is for stats recording.
             if (playerList.get(touchPlayer).team == team) {
                 // if the goal is not OG

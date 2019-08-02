@@ -24,6 +24,8 @@ export function setPlayerData(player: Player): void {
         assists: player.stats.assists, // count for assist goal
         ogs: player.stats.ogs, // it means 'own goal' (in Korean, '자책골')
         losePoints: player.stats.losePoints, // it means the points this player lost (in Korean, '실점')
+        balltouch: player.stats.balltouch, // total count of touch(kick) ball
+        passed: player.stats.passed, // total count of pass success
         mute: player.permissions.mute, // is this player muted?
         //superadmin: player.permissions.superadmin // is this player super admin? // not save
     }

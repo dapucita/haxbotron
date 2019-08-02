@@ -35,6 +35,8 @@ export interface PlayerStats {
     assists: number; // count for assist goal
     ogs: number; // it means 'own goal' (in Korean, '자책골')
     losePoints: number; // it means the points this player lost (in Korean, '실점')
+    balltouch: number; // total count of touch(kick) ball
+    passed: number; // total count of pass success
 }
 
 export interface PlayerPosition {
@@ -68,6 +70,8 @@ export interface PlayerStorage {
     assists: number; // count for assist goal
     ogs: number; // it means 'own goal' (in Korean, '자책골')
     losePoints: number; // it means the points this player lost (in Korean, '실점')
+    balltouch: number; // total count of touch(kick) ball
+    passed: number; // total count of pass success
     mute: boolean; // is this player muted?
     //superadmin: boolean; // is this player super admin? // not save
 }

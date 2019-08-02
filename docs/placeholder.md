@@ -62,6 +62,8 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `targetStatsLosepoints` : count of points the player lose.
 
+`targetStatsPassSuccess` : pass success rate of the player.
+
 ## in Functions in code
 ### function updateAdmins (funcUpdateAdmins)
 `playerID` : numeric ID of the player who has been admin.
