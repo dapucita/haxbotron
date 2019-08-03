@@ -243,6 +243,33 @@ export class Parser {
                     }
                     break;
                 }
+                case "mute": {
+                    ticket.type = "freeze";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = LangRes.command.mute._ErrorNoPlayer;
+                    ticket.selfnotify = false;
+                    ticket.action = function(playerID: number, playerList: any, muteMode: boolean): boolean|null {
+                        if(playerList.get(playerID).admin == true) {
+                            if(cutMsg[1] !== undefined && cutMsg[1].charAt(0) == "#") {
+                                let target: number = parseInt(cutMsg[1].substr(1), 10);
+                                if(isNaN(target) != true && playerList.has(target) == true) { // if the value is not NaN and there's the player
+                                    if(playerList.get(target).permissions.mute == true) {
+                                        ticket.messageString = LangRes.command.mute.successUnmute;
+                                        playerList.get(target).permissions.mute = false;
+                                    } else {
+                                        ticket.messageString = LangRes.command.mute.successMute;
+                                        playerList.get(target).permissions.mute = true;
+                                    }
+                                }
+                            }
+                        } else {
+                            ticket.messageString = LangRes.command.mute._ErrorNoPermission;
+                        }
+                        return null; // always return null
+                    }
+                    break;
+                }
                 
                 case "super": {
                     ticket.type = "super";

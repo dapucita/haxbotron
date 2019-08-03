@@ -11,8 +11,8 @@ export const scheduler = {
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
     ,_ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
-    ,help: '📄 !about,stats,statsreset,afk,poss,streak,list\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
-    ,helpadmin: '📄 !freeze 📑 !help COMMAND for detail.'
+    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
+    ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND for detail.'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
         ,help: '📑 !help COMMAND shows you how to use COMMAND command.'
@@ -24,6 +24,7 @@ export const command = {
         ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
         ,list: '📑 !list TEAM(red/blue/spec) shows you all players list of the team.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
+        ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n 📑 You can check IDs by command /list red,blue,spec'
     } 
     ,about: '📄 This room is powered by Haxbotron bot. The host started on {_LaunchTime}.\n💬 Discord Chatting https://discord.gg/qfg45B2'
     ,stats: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.'
@@ -33,6 +34,12 @@ export const command = {
     ,afk: {
         setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
+    }
+    ,mute: {
+        _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
+        ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: /mute #12)\n📑 You can check IDs by command /list red,blue,spec'
+        ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.'
+        ,successUnmute: '🔊 {targetName}#{ticketTarget} player is unmuted.'
     }
     ,super: {
         _ErrorWrongCommand: '❌ You did wrong command for super admin system.'
