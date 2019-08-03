@@ -110,7 +110,7 @@ export class Parser {
                                         ticket.messageString = LangRes.command.list._ErrorNoOne;
                                     } else {
                                         players.forEach((player: PlayerObject) => {
-                                            msg += player.name + '#' + player.id + ',';
+                                            msg += player.name + '#' + player.id + ' / ';
                                         });
                                         return msg;
                                     }
@@ -123,7 +123,7 @@ export class Parser {
                                         ticket.messageString = LangRes.command.list._ErrorNoOne;
                                     } else {
                                         players.forEach((player: PlayerObject) => {
-                                            msg += player.name + '#' + player.id + ',';
+                                            msg += player.name + '#' + player.id + ' / ';
                                         });
                                         return msg;
                                     }
@@ -136,7 +136,7 @@ export class Parser {
                                         ticket.messageString = LangRes.command.list._ErrorNoOne;
                                     } else {
                                         players.forEach((player: PlayerObject) => {
-                                            msg += player.name + '#' + player.id + ',';
+                                            msg += player.name + '#' + player.id + ' / ';
                                         });
                                         return msg;
                                     }
