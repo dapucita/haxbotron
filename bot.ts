@@ -888,7 +888,7 @@ function initialiseRoom(): void {
         playerList.get(player.id).afktrace.count = 0;
     }
 
-    room.onRoomLink = function (url: string): void {
+    room.onRoomLink = function(url: string): void {
         // Event called when the room link is created.
         // this bot application provides some informations by DOM control.
         
@@ -901,6 +901,15 @@ function initialiseRoom(): void {
         */
         window.roomURIlink = url;
         logger.c(`[ROOM] This room has a link : ${window.roomURIlink}`);
+    }
+
+    room.onKickRateLimitSet = function(min: number, rate: number, burst: number, byPlayer : PlayerObject): void {
+        // Event called when the kick rate is set.
+        let byPlayerInfo = '';
+        if(byPlayer !== null) {
+            byPlayerInfo = byPlayer.name + '#' + byPlayer.id;
+        }
+        logger.c(`[LIMIT] the kick rate is changed. (min:${min},rate:${rate},burst:${burst}) (by ` + byPlayerInfo + ')');
     }
 }
 
