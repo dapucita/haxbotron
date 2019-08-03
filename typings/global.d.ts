@@ -13,6 +13,7 @@ declare global {
             kick(playerID: number, msg?: string): void
             ban(playerID: number, msg?: string): void
             banclear(): void
+            password(password?: string): void
         }
 
         // haxball

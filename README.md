@@ -118,6 +118,8 @@ If you want to use these, you need to uncheck headless option for open the puppe
 
 `window.onEmergency.banclear()`
 
+`window.onEmergency.password(password?: string)`
+
 ## Contacts
 [Github](https://github.com/dapucita/haxbotron)
 

@@ -909,7 +909,7 @@ function initialiseRoom(): void {
         if(byPlayer !== null) {
             byPlayerInfo = byPlayer.name + '#' + byPlayer.id;
         }
-        logger.c(`[LIMIT] the kick rate is changed. (min:${min},rate:${rate},burst:${burst}) (by ` + byPlayerInfo + ')');
+        logger.c(`[LIMIT] The kick rate is changed. (min:${min},rate:${rate},burst:${burst}) (by ` + byPlayerInfo + ')');
     }
 }
 
@@ -970,31 +970,47 @@ window.onEmergency = {
     list: function(): void { // print list of players joined
         var players = room.getPlayerList().filter((player: PlayerObject) => player.id != 0);
         players.forEach((player: PlayerObject) => {
-            console.log(`[EMERGENCY][LIST]${player.name}#${player.id}:team(${player.team}):admin(${player.admin})`);
+            console.log(`[EMERGENCY][LIST]${player.name}#${player.id} team(${player.team}) admin(${player.admin})`);
         });
     },
     chat: function(msg: string, playerID?: number): void { // send chat
         if(playerID) {
             room.sendAnnouncement(msg, playerID, 0xFFFF00, "bold", 2);
+            console.log(`[EMERGENCY][CHAT] the message is sent to #${playerID}. message: ${msg}`);
         } else {
             room.sendAnnouncement(msg, null, 0xFFFF00, "bold", 2);
+            console.log(`[EMERGENCY][CHAT] the message is sent. message: ${msg}`);
         }
     },
     kick: function(playerID: number, msg?: string): void { // kick the player
         if(msg) {
             room.kickPlayer(playerID, msg, false);
+            console.log(`[EMERGENCY][KICK] #${playerID} is kicked. reason:${msg}`);
         } else {
             room.kickPlayer(playerID, 'by haxbotron', false);
+            console.log(`[EMERGENCY][BAN] #${playerID} is kicked.`);
         }
     },
     ban: function(playerID: number, msg?: string): void { // ban the player
         if(msg) {
             room.kickPlayer(playerID, msg, true);
+            console.log(`[EMERGENCY][BAN] #${playerID} is banned. reason:${msg}`);
         } else {
             room.kickPlayer(playerID, 'by haxbotron', true);
+            console.log(`[EMERGENCY][BAN] #${playerID} is banned.`);
         }
     },
     banclear: function(): void { // clear all of ban list
         room.clearBans();
+        console.log(`[EMERGENCY][CLEARBANS] ban list is cleared.`);
+    },
+    password: function(password?: string): void { // set or clear the password key of the room
+        if(password) {
+            room.setPassword(password);
+            console.log(`[EMERGENCY][PASSWORD] password is changed. key:${password}`);
+        } else { // can be null
+            room.setPassword();
+            console.log(`[EMERGENCY][PASSWORD] password is cleared.`);
+        }
     }
 }
