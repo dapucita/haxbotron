@@ -254,6 +254,7 @@ export class Parser {
                             if(cutMsg[1] !== undefined && cutMsg[1].charAt(0) == "#") {
                                 let target: number = parseInt(cutMsg[1].substr(1), 10);
                                 if(isNaN(target) != true && playerList.has(target) == true) { // if the value is not NaN and there's the player
+                                    ticket.targetPlayerID = target;
                                     if(playerList.get(target).permissions.mute == true) {
                                         ticket.messageString = LangRes.command.mute.successUnmute;
                                         playerList.get(target).permissions.mute = false;
