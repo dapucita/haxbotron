@@ -85,7 +85,7 @@ If you(the player) type a command by chat...
 ## Game Commands for Admin Players
 `!freeze` prohibits all players without admin to chat. Or unmute if the players are already muted.
 
-`!mute ID` prohibits the player whose id is ID to chat. Or unmute if the player is already muted. 
+`!mute #ID` prohibits the player whose id is ID to chat. Or unmute if the player is already muted. 
 
 ## Game Commands for Super Admin Players
 
