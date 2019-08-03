@@ -110,7 +110,11 @@ export class Parser {
                                         ticket.messageString = LangRes.command.list._ErrorNoOne;
                                     } else {
                                         players.forEach((player: PlayerObject) => {
-                                            msg += player.name + '#' + player.id + ' / ';
+                                            let muteFlag: string = '';
+                                            if(playerList.get(player.id).permissions.mute == true) {
+                                                muteFlag = '🔇';
+                                            }
+                                            msg += player.name + '#' + player.id + muteFlag + ' / ';
                                         });
                                         return msg;
                                     }
@@ -123,7 +127,11 @@ export class Parser {
                                         ticket.messageString = LangRes.command.list._ErrorNoOne;
                                     } else {
                                         players.forEach((player: PlayerObject) => {
-                                            msg += player.name + '#' + player.id + ' / ';
+                                            let muteFlag: string = '';
+                                            if(playerList.get(player.id).permissions.mute == true) {
+                                                muteFlag = '🔇';
+                                            }
+                                            msg += player.name + '#' + player.id + muteFlag + ' / ';
                                         });
                                         return msg;
                                     }
@@ -136,7 +144,11 @@ export class Parser {
                                         ticket.messageString = LangRes.command.list._ErrorNoOne;
                                     } else {
                                         players.forEach((player: PlayerObject) => {
-                                            msg += player.name + '#' + player.id + ' / ';
+                                            let muteFlag: string = '';
+                                            if(playerList.get(player.id).permissions.mute == true) {
+                                                muteFlag = '🔇';
+                                            }
+                                            msg += player.name + '#' + player.id + muteFlag + ' / ';
                                         });
                                         return msg;
                                     }
