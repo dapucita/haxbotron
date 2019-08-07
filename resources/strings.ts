@@ -11,7 +11,7 @@ export const scheduler = {
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
     ,_ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
-    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
+    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, auto, rand\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
@@ -25,6 +25,8 @@ export const command = {
         ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.'
         ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
         ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n 📑 /list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
+        ,auto: '📑 !auto : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 차례대로 데려옵니다.'
+        ,rand: '📑 !rand : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 임의로 데려옵니다.'
     } 
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드 채팅] https://discord.gg/qfg45B2'
     ,stats: '📊 {targetName}#{ticketTarget}님: 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.'
@@ -40,6 +42,14 @@ export const command = {
         ,_ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: /mute #12)\n📑 /list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
         ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
+    }
+    ,auto: {
+        _ErrorNoPermission: '❌ 주장만 이 명령어를 사용할 수 있습니다.'
+        ,_ErrorNoOrder: '❌ 현재 이 명령어를 사용할 수 없습니다.'
+    }
+    ,rand: {
+        _ErrorNoPermission: '❌ 주장만 이 명령어를 사용할 수 있습니다.'
+        ,_ErrorNoOrder: '❌ 현재 이 명령어를 사용할 수 없습니다.'
     }
     ,super: {
         _ErrorWrongCommand: '❌ 잘못된 super 명령어입니다.'

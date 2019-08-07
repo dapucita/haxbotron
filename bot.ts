@@ -367,7 +367,6 @@ function initialiseRoom(): void {
                     mute: loadedData.mute,
                     afkmode: false,
                     afkreason: '',
-                    captain: false,
                     superadmin: false
                 }));
 
@@ -402,7 +401,6 @@ function initialiseRoom(): void {
                 mute: false,
                 afkmode: false,
                 afkreason: '',
-                captain: false,
                 superadmin: false
             }));
         }
@@ -469,7 +467,7 @@ function initialiseRoom(): void {
         }
         playerList.delete(player.id); // delete from player list
         //setDefaultStadiums(); // check number of players and auto-set stadium
-        updateAdmins();
+        updateAdmins(); // update admin
     }
 
     room.onPlayerChat = function (player: PlayerObject, message: string): boolean {
@@ -520,20 +518,15 @@ function initialiseRoom(): void {
         if (changedPlayer.id == 0) { // if the player changed into other team is host player(always id 0),
             room.setPlayerTeam(0, 0); // stay host player in Spectators team.
         } else {
-            if(byPlayer !== null && byPlayer.id != 0 && playerList.get(changedPlayer.id).permissions.afkmode == true) {
-                placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
-                room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
-                room.sendAnnouncement(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), null, 0xFF0000, "normal", 0);
-            }/* else {
-                if(changedPlayer.team == 0 && changedPlayer.admin != true){
-                    playerList.get(changedPlayer.id).afktrace.exemption = true;
-                } else {
-                    playerList.get(changedPlayer.id).afktrace.exemption = false;
-                } 
-            } */
+            if(byPlayer !== null && byPlayer.id != 0) {
+                if(playerList.get(changedPlayer.id).permissions.afkmode == true) {
+                    placeholderTeamChange.targetAfkReason = playerList.get(changedPlayer.id).permissions.afkreason;
+                    room.setPlayerTeam(changedPlayer.id, 0); // stay the player in Spectators team.
+                    room.sendAnnouncement(parser.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), null, 0xFF0000, "normal", 0);
+                }
+            }
             playerList.get(changedPlayer.id).team = changedPlayer.team;
         }
-
     }
 
     room.onPlayerAdminChange = function (changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
@@ -968,6 +961,26 @@ function roomPlayersNumberCheck(): number {
     // return number of players joined this room
     return room.getPlayerList().filter((player: PlayerObject) => player.id != 0).length;
 }
+
+/* replaced by each command
+function setTeamCaptain(): void { // set a new captain and disqualify old captains
+    var players = {
+        red: room.getPlayerList().filter((player: PlayerObject) => player.team == 1),
+        blue: room.getPlayerList().filter((player: PlayerObject) => player.team == 2)
+    };
+    
+    if(players.red.length != 0 && players.blue.length != 0) { // qualify captain
+        playerList.get(players.red[0].id).permissions.captain = true;
+        playerList.get(players.blue[0].id).permissions.captain = true;
+    }
+
+    playerList.forEach((player: Player) => { // disqualify captain
+        if(player.id != players.red[0].id || player.id != players.blue[0].id) {
+            playerList.get(player.id).permissions.captain = false;
+        }
+    });
+}
+*/
 
 // on dev-console tools for emergency
 window.onEmergency = {

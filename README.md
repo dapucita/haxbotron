@@ -82,6 +82,11 @@ If you(the player) type a command by chat...
 
 `!afk MSG` switches to idle status, or return to active status if already in afk mode. MSG is the reason, and it can be skipped.
 
+## Game Commands for Captain Players
+`!auto` picks players from spectators by descending order when you are captain.
+
+`!rand` picks players from spectators by random when you are captain.
+
 ## Game Commands for Admin Players
 `!freeze` prohibits all players without admin to chat. Or unmute if the players are already muted.
 

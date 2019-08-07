@@ -4,6 +4,9 @@ import { setPlayerData } from "./Storage";
 import { PlayerObject } from "../model/PlayerObject";
 import { superAdminLogin } from "./SuperAdmin";
 import { Ban } from "./Ban";
+import {
+    gameRule
+} from "../model/rules/captain.rule";
 
 const banList: Ban = Ban.getInstance();
 
@@ -73,6 +76,18 @@ export class Parser {
                             }
                             case "freeze": {
                                 ticket.messageString = LangRes.command.helpman.freeze;
+                                break;
+                            }
+                            case "mute": {
+                                ticket.messageString = LangRes.command.helpman.mute;
+                                break;
+                            }
+                            case "auto": {
+                                ticket.messageString = LangRes.command.helpman.auto;
+                                break;
+                            }
+                            case "rand": {
+                                ticket.messageString = LangRes.command.helpman.rand;
                                 break;
                             }
                             default: {
@@ -209,27 +224,32 @@ export class Parser {
                     }
                     break;
                 }
-                case "freeze": {
-                    ticket.type = "freeze";
+                /*
+                case "auto": {
+                    ticket.type = "captain";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
+                    ticket.messageString = LangRes.command.auto._ErrorNoPermission;
                     ticket.selfnotify = false;
-                    ticket.action = function(playerID: number, playerList: any, muteMode: boolean): boolean|null {
-                        if(playerList.get(playerID).admin == true) { // if admin
-                            if(muteMode == true) { // if already on
-                                ticket.messageString = LangRes.command.freeze.offFreeze;
-                                return false; // off
-                            } else { // if already off
-                                ticket.messageString = LangRes.command.freeze.onFreeze;
-                                return true; // on
+                    ticket.action = function(playerID: number, playerList: any, gameRoom: any): void {
+                        let players = {
+                            red: gameRoom.getPlayerList().filter((player: PlayerObject) => player.team == 1),
+                            blue: gameRoom.getPlayerList().filter((player: PlayerObject) => player.team == 2),
+                            spec: gameRoom.getPlayerList().filter((player: PlayerObject) => player.team == 0 && playerList.get(player.id).permissions.afkmode != true)
+                        }
+                        if(playerID == players.red[0]) {
+                            ticket.messageString = LangRes.command.auto._ErrorNoOrder;
+                            if(players.red.length < gameRule.requisite.eachTeamLimit) {
+                                
                             }
-                        } else { // if not admin
-                            ticket.messageString = LangRes.command.freeze._ErrorNoPermission;
-                            return null;
+                        }
+                        if(playerID == players.blue[0]) {
+                            ticket.messageString = LangRes.command.auto._ErrorNoOrder;
                         }
                     }
                     break;
                 }
+                */
                 case "afk": {
                     ticket.type = "status";
                     ticket.ownerPlayerID = playerID;
@@ -251,6 +271,27 @@ export class Parser {
                             if(cutMsg[1] !== undefined) { // if the reason is not skipped
                                 playerList.get(playerID).permissions.afkreason = cutMsg[1]; // set reason
                             }
+                        }
+                    }
+                    break;
+                }
+                case "freeze": {
+                    ticket.type = "freeze";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.selfnotify = false;
+                    ticket.action = function(playerID: number, playerList: any, muteMode: boolean): boolean|null {
+                        if(playerList.get(playerID).admin == true) { // if admin
+                            if(muteMode == true) { // if already on
+                                ticket.messageString = LangRes.command.freeze.offFreeze;
+                                return false; // off
+                            } else { // if already off
+                                ticket.messageString = LangRes.command.freeze.onFreeze;
+                                return true; // on
+                            }
+                        } else { // if not admin
+                            ticket.messageString = LangRes.command.freeze._ErrorNoPermission;
+                            return null;
                         }
                     }
                     break;
