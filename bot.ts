@@ -146,10 +146,10 @@ var parsingTimer = setInterval(function (): void {
                     if(tmpMuteMode !== null) {
                         muteMode = tmpMuteMode;
                     }
-                    if(placeholderQueueCommand.ticketTarget != timerTicket.targetPlayerID) {
-                        placeholderQueueCommand.ticketTarget = timerTicket.targetPlayerID;
-                        placeholderQueueCommand.targetName = playerList.get(timerTicket.targetPlayerID);
-                    }
+                    
+                    placeholderQueueCommand.ticketTarget = timerTicket.targetPlayerID;
+                    placeholderQueueCommand.targetName = playerList.get(timerTicket.targetPlayerID);
+                    
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
