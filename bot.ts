@@ -713,7 +713,7 @@ function initialiseRoom(): void {
             placeholderKick.kickerID = byPlayer.id;
             placeholderKick.kickerName = byPlayer.name;
             if(ban == true) { // ban
-                if (playerList.get(byPlayer.id).permissions.superadmin != true) { // FIXME: Error caught-TypeError: Cannot read property 'permissions' of undefined 
+                if (playerList.get(byPlayer.id).permissions.superadmin == false) { // FIXME: Error caught-TypeError: Cannot read property 'permissions' of undefined 
                     // if the player who acted banning is not super admin
                     room.sendAnnouncement(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id, 0xFF0000, "bold", 2);
                     room.sendAnnouncement(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick), null, 0xFF0000, "bold", 2);
@@ -721,7 +721,7 @@ function initialiseRoom(): void {
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
                 } else {
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
-                    banList.setBan({conn: kickedPlayer.conn, reason: reason});
+                    banList.setBan({conn: kickedPlayer.conn, reason: reason}); // FIXME: BanList hasn't updated.
                 }
             } else {
                 // kick
