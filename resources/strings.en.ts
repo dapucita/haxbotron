@@ -24,7 +24,7 @@ export const command = {
         ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
         ,list: '📑 !list TEAM(red/blue/spec) shows you all players list of the team.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
-        ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n 📑 You can check IDs by command /list red,blue,spec'
+        ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n 📑 You can check IDs by command !list red,blue,spec'
         ,auto: '📑 !auto : You can pick players from spectators by descending order when you are captain.'
         ,rand: '📑 !rand : You can pick players from spectators by random when you are captain.'
     } 
@@ -39,7 +39,7 @@ export const command = {
     }
     ,mute: {
         _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
-        ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: /mute #12)\n📑 You can check IDs by command /list red,blue,spec'
+        ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec'
         ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget} player is unmuted.'
     }
