@@ -81,8 +81,8 @@ export const command = {
     }
     ,freeze: {
         _ErrorNoPermission : '❌ admin만 이 명령어를 사용할 수 있습니다.'
-        ,onFreeze: '🔇 방장이 채팅을 비활성화했습니다. 명령어는 사용할 수 있습니다. 📄 !help'
-        ,offFreeze: '🔊 방장이 채팅을 활성화했습니다. 이제 말할 수 있습니다.' 
+        ,onFreeze: '🔇 방장이 채팅을 전체 비활성화했습니다. 명령어는 사용할 수 있습니다. 📄 !help'
+        ,offFreeze: '🔊 방장이 채팅을 전체 활성화했습니다. 이제 말할 수 있습니다.' 
     }
 }
 
