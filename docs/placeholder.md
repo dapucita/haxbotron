@@ -64,6 +64,12 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `targetStatsPassSuccess` : pass success rate of the player.
 
+`teamExpectationSpec` : the spectators' winning expectation.
+
+`teamExpectationRed` : the red team's winning expectation.
+
+`teamExpectationBlue` : the blue team's winning expectation. 
+
 ## in Functions in code
 ### function updateAdmins (funcUpdateAdmins)
 `playerID` : numeric ID of the player who has been admin.
@@ -96,6 +102,11 @@ Usage sample : `'Welcome, {playerName}!'`
 `playerID` : numeric ID of this player.
 
 `playerName` : name of this player.
+
+### room.onGameStart (onStart)
+`teamExpectationRed` : the red team's winning expectation.
+
+`teamExpectationBlue` : the blue team's winning expectation. 
 
 ### room.onPlayerTeamChange (onTeamChange)
 `targetPlayerID`: numeric ID of the player who is the target. (number)

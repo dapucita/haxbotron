@@ -11,7 +11,7 @@ export const scheduler = {
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
     ,_ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
-    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, auto, rand\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
+    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, scout\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND for detail.'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
@@ -27,6 +27,7 @@ export const command = {
         ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n 📑 You can check IDs by command !list red,blue,spec'
         ,auto: '📑 !auto : You can pick players from spectators by descending order when you are captain.'
         ,rand: '📑 !rand : You can pick players from spectators by random when you are captain.'
+        ,scout: '📑 !scout shows you expectation of each teams.'
     } 
     ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord Chatting https://discord.gg/qfg45B2'
     ,stats: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.'
@@ -116,6 +117,7 @@ export const onTeamChange = {
 export const onStart = {
     startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
     ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
+    ,expectedWinRate: '📊 The red team \'s expectation is {teamExpectationRed}%, and the blue\'s is {teamExpectationBlue}%.'
 }
 
 export const onStop = {

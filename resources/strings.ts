@@ -11,7 +11,7 @@ export const scheduler = {
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
     ,_ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
-    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, auto, rand\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
+    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, scout\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
@@ -27,6 +27,7 @@ export const command = {
         ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n 📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
         ,auto: '📑 !auto : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 차례대로 데려옵니다.'
         ,rand: '📑 !rand : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 임의로 데려옵니다.'
+        ,scout: '📑 !scout : 각 팀의 경기 기대치를 보여줍니다.'
     } 
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드 채팅] https://discord.gg/qfg45B2'
     ,stats: '📊 {targetName}#{ticketTarget}님: 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.'
@@ -84,6 +85,10 @@ export const command = {
         ,onFreeze: '🔇 방장이 채팅을 전체 비활성화했습니다. 명령어는 사용할 수 있습니다. 📄 !help'
         ,offFreeze: '🔊 방장이 채팅을 전체 활성화했습니다. 이제 말할 수 있습니다.' 
     }
+    ,scout: {
+        _ErrorNoMode : '❌ 충분한 인원이 모이지 않아 기대승률을 확인할 수 없습니다.'
+        ,scouting: '📊 기대승률 : Red 팀 {teamExpectationRed}%, Blue 팀 {teamExpectationBlue}%, 대기팀 {teamExpectationSpec}%.'
+    }
 }
 
 export const funcUpdateAdmins = {
@@ -116,6 +121,7 @@ export const onTeamChange = {
 export const onStart = {
     startRecord: '📊 충분한 인원이 모였습니다. 지금부터 스탯 기록이 될 것입니다.'
     ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
+    ,expectedWinRate: '📊 Red 팀의 기대승률은 {teamExpectationRed}%이고, Blue 팀의 기대승률은 {teamExpectationBlue}%입니다.'
 }
 
 export const onStop = {

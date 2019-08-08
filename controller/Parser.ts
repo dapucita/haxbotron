@@ -90,6 +90,10 @@ export class Parser {
                                 ticket.messageString = LangRes.command.helpman.rand;
                                 break;
                             }
+                            case "scout": {
+                                ticket.messageString = LangRes.command.helpman.scout;
+                                break;
+                            }
                             default: {
                                 ticket.messageString = LangRes.command.helpman._ErrorWrongMan;
                                 break;
@@ -422,6 +426,19 @@ export class Parser {
                                     break;
                                 }
                             }
+                        }
+                    }
+                    break;
+                }
+                case "scout": {
+                    ticket.type = "stats";
+                    ticket.ownerPlayerID = playerID;
+                    ticket.targetPlayerID = playerID;
+                    ticket.messageString = LangRes.command.scout._ErrorNoMode;
+                    ticket.selfnotify = true;
+                    ticket.action = function(playerID: number, playerList: any): void {
+                        if(gameRule.statsRecord == true && playerList.length >= gameRule.requisite.minimumPlayers) {
+                            ticket.messageString = LangRes.command.scout.scouting;
                         }
                     }
                     break;

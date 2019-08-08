@@ -60,7 +60,7 @@ const roomConfig: RoomConfig = {
     playerName: botConfig.playerName,
     noPlayer: botConfig.noPlayer // If set to true the room player list will be empty, the playerName setting will be ignored.
 }
-const playerList = new Map(); // playerList:Player is an Map object. // playerList.get(player.id).name; : usage for playerList
+const playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
 const winningStreak = { // count of winning streak
     red: 0, blue: 0,
     getName: function(): string {
@@ -123,7 +123,10 @@ var parsingTimer = setInterval(function (): void {
             possTeamBlue: ballStack.possCalculate(2),
             streakTeamName: winningStreak.getName(),
             streakTeamCount: winningStreak.getCount(),
-            whoisResult: ''
+            whoisResult: '',
+            teamExpectationSpec: 0,
+            teamExpectationRed: 0,
+            teamExpectationBlue: 0
         }
         
         switch (timerTicket.type) {
@@ -174,6 +177,13 @@ var parsingTimer = setInterval(function (): void {
                 break;
             }
             case "stats": {
+                if (gameRule.statsRecord == true && gameMode == "stats") {
+                    let expectations: number[] = getTeamWinningExpectation(true);
+
+                    placeholderQueueCommand.teamExpectationSpec = expectations[0];
+                    placeholderQueueCommand.teamExpectationRed = expectations[1];
+                    placeholderQueueCommand.teamExpectationBlue = expectations[2];
+                }
                 if(timerTicket.action) {
                     timerTicket.action(timerTicket.ownerPlayerID, playerList);
                 }
@@ -568,7 +578,9 @@ function initialiseRoom(): void {
             possTeamRed: ballStack.possCalculate(1),
             possTeamBlue: ballStack.possCalculate(2),
             streakTeamName: winningStreak.getName(),
-            streakTeamCount: winningStreak.getCount()
+            streakTeamCount: winningStreak.getCount(),
+            teamExpectationRed: 0,
+            teamExpectationBlue: 0
         };
 
         isGamingNow = true; // turn on
@@ -581,7 +593,13 @@ function initialiseRoom(): void {
         }
         if (gameRule.statsRecord == true && gameMode == "stats") {
             // if the game mode is stats, records the result of this game.
+            let expectations: number[] = getTeamWinningExpectation(true);
+
+            placeholderStart.teamExpectationRed = expectations[1];
+            placeholderStart.teamExpectationBlue = expectations[2];
+
             room.sendAnnouncement(parser.maketext(LangRes.onStart.startRecord, placeholderStart), null, 0x00FF00, "normal", 0);
+            room.sendAnnouncement(parser.maketext(LangRes.onStart.expectedWinRate, placeholderStart), null, 0x00FF00, "normal", 0);
         } else {
             room.sendAnnouncement(parser.maketext(LangRes.onStart.stopRecord, placeholderStart), null, 0x00FF00, "normal", 0);
         }
@@ -960,6 +978,32 @@ function printPlayerInfo(player: PlayerObject): void {
 function roomPlayersNumberCheck(): number {
     // return number of players joined this room
     return room.getPlayerList().filter((player: PlayerObject) => player.id != 0).length;
+}
+
+function getTeamWinningExpectation(statsMode: boolean): number[] {
+    if (statsMode == true) { // if the game mode is stats
+        // init for count
+        let winsCount: number[] = [
+            0, 0, 0 // spec, red, blue team
+        ];
+        let losesCount: number[] = [
+            0, 0, 0 // spec, red, blue team
+        ]
+
+        room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && playerList.get(player.id).permissions.afkmode != true).forEach((player: PlayerObject) => {
+            // count win and lose games
+            winsCount[player.team] += playerList.get(player.id).stats.wins;
+            losesCount[player.team] += (playerList.get(player.id).stats.totals - playerList.get(player.id).stats.wins);
+        });
+
+        return [
+            StatCalc.calcExpectedWinRate(winsCount[0], losesCount[0]),
+            StatCalc.calcExpectedWinRate(winsCount[1], losesCount[1]),
+            StatCalc.calcExpectedWinRate(winsCount[2], losesCount[2])
+        ];
+    } else {
+        return [0, 0, 0];
+    }
 }
 
 /* replaced by each command
