@@ -87,7 +87,7 @@ export const command = {
 }
 
 export const funcUpdateAdmins = {
-    newAdmin: '📢 {playerName}#{playerID}님이 새로운 방장이 되었습니다.'
+    newAdmin: '📢 {playerName}#{playerID}님이 새로운 방장이 되었습니다.\n📑 맵을 변경하거나, 다른 플레이어를 영구퇴장할 수는 없습니다.\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
 }
 
 export const onJoin = {
