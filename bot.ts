@@ -148,7 +148,7 @@ var parsingTimer = setInterval(function (): void {
                     }
                     
                     placeholderQueueCommand.ticketTarget = timerTicket.targetPlayerID;
-                    placeholderQueueCommand.targetName = playerList.get(timerTicket.targetPlayerID);
+                    placeholderQueueCommand.targetName = playerList.get(timerTicket.targetPlayerID).name;
                     
                 }
                 if(timerTicket.messageString) {
