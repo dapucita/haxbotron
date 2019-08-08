@@ -27,10 +27,13 @@ export const command = {
         ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n 📑 You can check IDs by command !list red,blue,spec'
         ,auto: '📑 !auto : You can pick players from spectators by descending order when you are captain.'
         ,rand: '📑 !rand : You can pick players from spectators by random when you are captain.'
-        ,scout: '📑 !scout shows you expectation of each teams.'
+        ,scout: '📑 !scout shows you expectation of each teams by customed Pythagorean Expectation.'
     } 
     ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord Chatting https://discord.gg/qfg45B2'
-    ,stats: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.'
+    ,stats: {
+        firstLine: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.'
+        ,secondLine: '📊 and Per Game : {targetStatsGoalsPerGame}goals, {targetStatsAssistsPerGame}assists, {targetStatsOgsPerGame}ogs, {targetStatsLostGoalsPerGame}lose goals.'
+    }
     ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName} is now hitting a winning streak of {streakTeamCount} games!'
@@ -85,6 +88,10 @@ export const command = {
         ,onFreeze: '🔇 The administrator freezed chatting on this room. Commands are available. 📄 !help'
         ,offFreeze: '🔊 The administrator unfreezed chatting.' 
     }
+    ,scout: {
+        _ErrorNoMode : '❌ There are not enough players for calculating winning expectation.'
+        ,scouting: '📊 Pythagorean Expectation : Red {teamExpectationRed}%, Blue {teamExpectationBlue}%, Spec {teamExpectationSpec}%.'
+    }
 }
 
 export const funcUpdateAdmins = {
@@ -117,7 +124,7 @@ export const onTeamChange = {
 export const onStart = {
     startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
     ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
-    ,expectedWinRate: '📊 The red team \'s expectation is {teamExpectationRed}%, and the blue\'s is {teamExpectationBlue}%.'
+    ,expectedWinRate: '📊 The red team \'s expectation is {teamExpectationRed}%, and the blue\'s is {teamExpectationBlue}%. (Pythagorean Expectation)'
 }
 
 export const onStop = {

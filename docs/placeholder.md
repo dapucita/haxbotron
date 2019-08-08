@@ -64,6 +64,14 @@ Usage sample : `'Welcome, {playerName}!'`
 
 `targetStatsPassSuccess` : pass success rate of the player.
 
+`targetStatsGoalsPerGame` : goals per game of the player
+
+`targetStatsAssistsPerGame` : assists per game of the player
+
+`targetStatsOgsPerGame` : OGs per game of the player
+
+`targetStatsLostGoalsPerGame` : lost goals per game of the player
+
 `teamExpectationSpec` : the spectators' winning expectation.
 
 `teamExpectationRed` : the red team's winning expectation.
@@ -110,7 +118,9 @@ Usage sample : `'Welcome, {playerName}!'`
 
 ### room.onPlayerTeamChange (onTeamChange)
 `targetPlayerID`: numeric ID of the player who is the target. (number)
+
 `targetPlayerName`: name of the player who is the target. (string)
+
 `targetAfkReason`: the reason of this target player is AFK. (string)
 
 ### room.onTeamVictory (onVictory)

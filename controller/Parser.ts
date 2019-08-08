@@ -205,7 +205,7 @@ export class Parser {
                     ticket.type = "stats";
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
-                    ticket.messageString = LangRes.command.stats;
+                    ticket.messageString = LangRes.command.stats.firstLine + '\n' + LangRes.command.stats.secondLine;
                     ticket.selfnotify = false;
                     break;
                 }
@@ -215,7 +215,7 @@ export class Parser {
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = LangRes.command.statsreset;
                     ticket.selfnotify = true;
-                    ticket.action = function(playerID: number, playerList: any): void {
+                    ticket.action = function(playerID: number, playerList: any, statsMode: boolean): void {
                         playerList.get(playerID).stats.totals = 0;
                         playerList.get(playerID).stats.wins = 0;
                         playerList.get(playerID).stats.goals = 0;
@@ -294,6 +294,7 @@ export class Parser {
                                 return true; // on
                             }
                         } else { // if not admin
+                            ticket.selfnotify = true;
                             ticket.messageString = LangRes.command.freeze._ErrorNoPermission;
                             return null;
                         }
@@ -305,12 +306,13 @@ export class Parser {
                     ticket.ownerPlayerID = playerID;
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = LangRes.command.mute._ErrorNoPlayer;
-                    ticket.selfnotify = false;
+                    ticket.selfnotify = true;
                     ticket.action = function(playerID: number, playerList: any, muteMode: boolean): boolean|null {
                         if(playerList.get(playerID).admin == true) {
                             if(cutMsg[1] !== undefined && cutMsg[1].charAt(0) == "#") {
                                 let target: number = parseInt(cutMsg[1].substr(1), 10);
                                 if(isNaN(target) != true && playerList.has(target) == true) { // if the value is not NaN and there's the player
+                                    ticket.selfnotify = false;
                                     ticket.targetPlayerID = target;
                                     if(playerList.get(target).permissions.mute == true) {
                                         ticket.messageString = LangRes.command.mute.successUnmute;
@@ -436,8 +438,8 @@ export class Parser {
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = LangRes.command.scout._ErrorNoMode;
                     ticket.selfnotify = true;
-                    ticket.action = function(playerID: number, playerList: any): void {
-                        if(gameRule.statsRecord == true && playerList.length >= gameRule.requisite.minimumPlayers) {
+                    ticket.action = function(playerID: number, playerList: any, statsMode: boolean): void {
+                        if(statsMode == true) {
                             ticket.messageString = LangRes.command.scout.scouting;
                         }
                     }

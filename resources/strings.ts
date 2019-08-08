@@ -27,10 +27,13 @@ export const command = {
         ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n 📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
         ,auto: '📑 !auto : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 차례대로 데려옵니다.'
         ,rand: '📑 !rand : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 임의로 데려옵니다.'
-        ,scout: '📑 !scout : 각 팀의 경기 기대치를 보여줍니다.'
+        ,scout: '📑 !scout : 각 팀의 기대승률치를 보여줍니다. 팀 간의 비교는 아니며, 피타고리안 승률 공식의 변형을 사용합니다.'
     } 
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드 채팅] https://discord.gg/qfg45B2'
-    ,stats: '📊 {targetName}#{ticketTarget}님: 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.'
+    ,stats: {
+        firstLine: '📊 {targetName}#{ticketTarget}님의 전적 : 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.'
+        ,secondLine: '📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
+    }
     ,statsreset: '📊 스탯을 초기화했습니다. 다시 복구할 수 없습니다.'
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName}팀이 {streakTeamCount}판째 연승중입니다!'
@@ -87,7 +90,7 @@ export const command = {
     }
     ,scout: {
         _ErrorNoMode : '❌ 충분한 인원이 모이지 않아 기대승률을 확인할 수 없습니다.'
-        ,scouting: '📊 기대승률 : Red 팀 {teamExpectationRed}%, Blue 팀 {teamExpectationBlue}%, 대기팀 {teamExpectationSpec}%.'
+        ,scouting: '📊 피타고리안 기대승률 : Red 팀 {teamExpectationRed}%, Blue 팀 {teamExpectationBlue}%, 대기팀 {teamExpectationSpec}%.'
     }
 }
 
@@ -121,7 +124,7 @@ export const onTeamChange = {
 export const onStart = {
     startRecord: '📊 충분한 인원이 모였습니다. 지금부터 스탯 기록이 될 것입니다.'
     ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
-    ,expectedWinRate: '📊 Red 팀의 기대승률은 {teamExpectationRed}%이고, Blue 팀의 기대승률은 {teamExpectationBlue}%입니다.'
+    ,expectedWinRate: '📊 Red 팀의 기대승률은 {teamExpectationRed}%이고, Blue 팀의 기대승률은 {teamExpectationBlue}%입니다. (양 팀간의 비교가 아닙니다)'
 }
 
 export const onStop = {

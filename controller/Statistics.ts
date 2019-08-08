@@ -11,7 +11,7 @@ export function calcGoalsPerGame(totalGames: number, totalGoals: number): number
     if(totalGames == 0) {
         return 0;
     }
-    return Math.round((totalGoals / totalGames) * 100);
+    return parseFloat((totalGoals / totalGames).toFixed(1));
 }
 
 export function calcOGsPerGame(totalGames: number, totalOGs: number): number {
@@ -19,7 +19,15 @@ export function calcOGsPerGame(totalGames: number, totalOGs: number): number {
     if(totalGames == 0) {
         return 0;
     }
-    return Math.round((totalOGs / totalGames) * 100);
+    return parseFloat((totalOGs / totalGames).toFixed(1));
+}
+
+export function calcLoseGoalsPerGame(totalGames: number, totalLosePoints: number): number {
+    // calculate the given Player's lost goals rate per game
+    if(totalGames == 0) {
+        return 0;
+    }
+    return parseFloat((totalLosePoints / totalGames).toFixed(1));
 }
 
 export function calcAssistsPerGame(totalGames: number, totalAssists: number): number {
@@ -27,7 +35,7 @@ export function calcAssistsPerGame(totalGames: number, totalAssists: number): nu
     if(totalGames == 0) {
         return 0;
     }
-    return Math.round((totalAssists / totalGames) * 100);
+    return parseFloat((totalAssists / totalGames).toFixed(1));
 }
 
 export function calcPassSuccessRate(totalPasses: number, totalSuccess: number): number {
@@ -38,8 +46,8 @@ export function calcPassSuccessRate(totalPasses: number, totalSuccess: number): 
 }
 
 export function calcExpectedWinRate(wins: number, loses: number): number { // Pythagorean expectation(PE)
-    let winsPow: number = Math.pow(wins, 1.83);
-    let losesPow: number = Math.pow(loses, 1.83);
+    let winsPow: number = Math.pow(wins, 2); // 1.83 or 2.00
+    let losesPow: number = Math.pow(loses, 2);
     return Math.round((winsPow / (winsPow + losesPow)) * 100);
 }
 

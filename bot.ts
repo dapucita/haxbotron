@@ -114,6 +114,10 @@ var parsingTimer = setInterval(function (): void {
             targetStatsLosepoints: playerList.get(timerTicket.targetPlayerID).stats.losePoints,
             targetStatsWinRate: StatCalc.calcWinsRate(playerList.get(timerTicket.targetPlayerID).stats.totals, playerList.get(timerTicket.targetPlayerID).stats.wins),
             targetStatsPassSuccess: StatCalc.calcPassSuccessRate(playerList.get(timerTicket.targetPlayerID).stats.balltouch, playerList.get(timerTicket.targetPlayerID).stats.passed),
+            targetStatsGoalsPerGame: StatCalc.calcGoalsPerGame(playerList.get(timerTicket.targetPlayerID).stats.totals, playerList.get(timerTicket.targetPlayerID).stats.goals),
+            targetStatsAssistsPerGame: StatCalc.calcAssistsPerGame(playerList.get(timerTicket.targetPlayerID).stats.totals, playerList.get(timerTicket.targetPlayerID).stats.assists),
+            targetStatsOgsPerGame: StatCalc.calcOGsPerGame(playerList.get(timerTicket.targetPlayerID).stats.totals, playerList.get(timerTicket.targetPlayerID).stats.ogs),
+            targetStatsLostGoalsPerGame: StatCalc.calcLoseGoalsPerGame(playerList.get(timerTicket.targetPlayerID).stats.totals, playerList.get(timerTicket.targetPlayerID).stats.losePoints),
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
@@ -177,7 +181,10 @@ var parsingTimer = setInterval(function (): void {
                 break;
             }
             case "stats": {
+                let statsMode: boolean = false;
                 if (gameRule.statsRecord == true && gameMode == "stats") {
+                    statsMode = true;
+
                     let expectations: number[] = getTeamWinningExpectation(true);
 
                     placeholderQueueCommand.teamExpectationSpec = expectations[0];
@@ -185,7 +192,7 @@ var parsingTimer = setInterval(function (): void {
                     placeholderQueueCommand.teamExpectationBlue = expectations[2];
                 }
                 if(timerTicket.action) {
-                    timerTicket.action(timerTicket.ownerPlayerID, playerList);
+                    timerTicket.action(timerTicket.ownerPlayerID, playerList, statsMode);
                 }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
@@ -983,23 +990,23 @@ function roomPlayersNumberCheck(): number {
 function getTeamWinningExpectation(statsMode: boolean): number[] {
     if (statsMode == true) { // if the game mode is stats
         // init for count
-        let winsCount: number[] = [
+        let goalsCount: number[] = [
             0, 0, 0 // spec, red, blue team
         ];
         let losesCount: number[] = [
             0, 0, 0 // spec, red, blue team
         ]
 
-        room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && playerList.get(player.id).permissions.afkmode != true).forEach((player: PlayerObject) => {
+        room.getPlayerList().filter((player: PlayerObject) => player.id != 0).forEach((player: PlayerObject) => {
             // count win and lose games
-            winsCount[player.team] += playerList.get(player.id).stats.wins;
-            losesCount[player.team] += (playerList.get(player.id).stats.totals - playerList.get(player.id).stats.wins);
+            goalsCount[player.team] += playerList.get(player.id).stats.goals;
+            losesCount[player.team] += playerList.get(player.id).stats.losePoint;
         });
 
         return [
-            StatCalc.calcExpectedWinRate(winsCount[0], losesCount[0]),
-            StatCalc.calcExpectedWinRate(winsCount[1], losesCount[1]),
-            StatCalc.calcExpectedWinRate(winsCount[2], losesCount[2])
+            StatCalc.calcExpectedWinRate(goalsCount[0], losesCount[0]),
+            StatCalc.calcExpectedWinRate(goalsCount[1], losesCount[1]),
+            StatCalc.calcExpectedWinRate(goalsCount[2], losesCount[2])
         ];
     } else {
         return [0, 0, 0];
