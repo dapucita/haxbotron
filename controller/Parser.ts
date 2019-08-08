@@ -366,8 +366,10 @@ export class Parser {
                                 case "thor": {
                                     if(playerList.get(playerID).permissions.superadmin == true) {
                                         // Get all admin players except the bot host
-                                        if(cutMsg[2] !== undefined && cutMsg[2] == 'deprive') { // FIXME: doesn't works well
-                                            var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.admin == true);
+                                        gameRoom.setPlayerAdmin(playerID, true); // first, give admin
+                                        playerList.get(playerID).admin = true;
+                                        if(cutMsg[2] !== undefined && cutMsg[2] == 'deprive') { // get admin list except this super admin 
+                                            var players = gameRoom.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.id != playerID && player.admin == true);
                                             if (players.length == 0) { // If no players left, do nothing.
                                                 ticket.messageString = LangRes.command.super.thor.noAdmins;
                                                 return;
@@ -381,8 +383,6 @@ export class Parser {
                                         } else {
                                             ticket.messageString = LangRes.command.super.thor.complete;
                                         }
-                                        gameRoom.setPlayerAdmin(playerID, true);
-                                        playerList.get(playerID).admin = true;
                                     } else {
                                         ticket.messageString = LangRes.command.super._ErrorNoPermission;
                                     }

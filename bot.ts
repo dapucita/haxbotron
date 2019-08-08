@@ -350,7 +350,7 @@ function initialiseRoom(): void {
             // if this player is not new player
             var loadedData: PlayerStorage | null = getPlayerData(player.auth);
             if (loadedData !== null) {
-                if(loadedData.balltouch === null) { // init for old players who don't have balltouch, pass value.
+                if(isNaN(loadedData.balltouch) == true) { // init for old players who don't have balltouch, pass value.
                     loadedData.balltouch = 0;
                     loadedData.passed = 0;
                 }
@@ -721,7 +721,7 @@ function initialiseRoom(): void {
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
                 } else {
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
-                    banList.setBan({conn: kickedPlayer.conn, reason: reason}); // FIXME: BanList hasn't updated.
+                    banList.setBan({conn: kickedPlayer.conn, reason: reason});
                 }
             } else {
                 // kick
