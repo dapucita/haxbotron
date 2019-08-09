@@ -1067,10 +1067,16 @@ window.onEmergency = {
             console.log(`[EMERGENCY][BAN] #${playerID} is banned.`);
         }
     },
-    banclear: function(): void { // clear all of ban list
+    banclearall: function(): void { // clear all of ban list
         room.clearBans();
         Ban.bListClear();
         console.log(`[EMERGENCY][CLEARBANS] ban list is cleared.`);
+    },
+    banlist: function(): void {
+        let bannedList: BanList[] = Ban.bListGetArray();
+        bannedList.forEach((item: BanList) => {
+            console.log(`[BANLIST] (${item.conn})is banned connection. (reason: ${item.reason})`);
+        });
     },
     password: function(password?: string): void { // set or clear the password key of the room
         if(password) {

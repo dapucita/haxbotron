@@ -38,7 +38,7 @@ function bListClear(): void {
     localStorage.removeItem('_BanList'); // clear it
 }
 
-function bListCheck(conn: string): string|undefined {
+function bListCheck(conn: string): string|undefined { // if banned, returns the reason by string type
     // init
     let list: Map < string, string >;
     let reason: string|undefined;
@@ -49,4 +49,16 @@ function bListCheck(conn: string): string|undefined {
     return reason; // if not banned, returns undefined.
 }
 
-export { bListAdd, bListDelete, bListClear, bListCheck };
+function bListGetArray(): BanList[] { // get all banned players and returns by array
+    // init
+    let list: Map < string, string >;
+    let banArray: BanList[] = [];
+    // load
+    list = bListLoad();
+    list.forEach((value: string, key: string) => {
+        banArray.push({conn: key, reason: value});
+    });
+    return banArray; // it can be 0 size if there are no banned players.
+}
+
+export { bListAdd, bListDelete, bListClear, bListCheck, bListGetArray };

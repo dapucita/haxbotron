@@ -121,7 +121,9 @@ If you want to use these, you need to uncheck headless option for open the puppe
 
 `window.onEmergency.ban(playerID: number, msg?: string)`
 
-`window.onEmergency.banclear()`
+`window.onEmergency.banclearall()`
+
+`window.onEmergency.banlist()`
 
 `window.onEmergency.password(password?: string)`
 

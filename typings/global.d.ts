@@ -12,7 +12,8 @@ declare global {
             chat(msg: string, playerID?: number): void
             kick(playerID: number, msg?: string): void
             ban(playerID: number, msg?: string): void
-            banclear(): void
+            banclearall(): void
+            banlist(): void
             password(password?: string): void
         }
 
