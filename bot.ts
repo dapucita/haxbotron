@@ -719,7 +719,7 @@ function initialiseRoom(): void {
             kickedName : kickedPlayer.name,
             kickerID : 0,
             kickerName : '',
-            reason : '',
+            reason : 'by Haxbotron',
             gameRuleName: gameRule.ruleName,
             gameRuleDescription: gameRule.ruleDescripttion,
             gameRuleLimitTime: gameRule.requisite.timeLimit,
@@ -743,7 +743,8 @@ function initialiseRoom(): void {
                     room.sendAnnouncement(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick), null, 0xFF0000, "bold", 2);
                     room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
-                } else {
+                } else { // if by super admin player
+                    Ban.bListAdd({conn: kickedPlayer.conn, reason: placeholderKick.reason}); // register into ban list
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
                 }
             } else {
@@ -1068,6 +1069,7 @@ window.onEmergency = {
     },
     banclear: function(): void { // clear all of ban list
         room.clearBans();
+        Ban.bListClear();
         console.log(`[EMERGENCY][CLEARBANS] ban list is cleared.`);
     },
     password: function(password?: string): void { // set or clear the password key of the room
