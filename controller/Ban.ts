@@ -1,58 +1,52 @@
-export class Ban {
-    // written in Singleton Pattern
-    // If the bot created Parser object once, never create ever until the bot instance dead. 
-    private static instance: Ban = new Ban();
-    private _list = new Map();
+// header
 
-    private Ban() { } // not use
-    public static getInstance(): Ban {
-        if (this.instance == null) {
-            this.instance = new Ban();
-        }
-        return this.instance;
+function bListLoad(): Map < string, string > { // init and load
+    let list: Map < string, string > = new Map(); // init
+    let storage: string | null = localStorage.getItem('_BanList'); // get
+    if (storage !== null) { // if list in storage is,
+        list = JSON.parse(storage); // load it
     }
+    return list; // return it
+}
 
-    public init(): void {
-        let tmpList: string|null = localStorage.getItem('_BanList');
-        if(tmpList !== null) {
-            this._list = JSON.parse(tmpList);
-        }
-    }
+function bListSave(list: Map < string, string > ): void {
+    localStorage.setItem('_BanList', JSON.stringify(list)); // set on localStorage
+}
 
-    public isBan(conn: string): boolean {
-        if(this._list.has(conn)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+// exports
 
-    public getReason(conn: string): string {
-        if(this._list.has(conn)) {
-            return this._list.get(conn);
-        } else {
-            return '';
-        }
-    }
+function bListAdd(item: BanList): void { // add or update
+    let list: Map < string, string >; // init
+    list = bListLoad(); // load
+    list.set(item.conn, item.reason); // add
+    bListSave(list); // and save it
+}
 
-    public setBan(item: BanList): void {
-        this._list.set(item.conn, item.reason);
-        this.save();
-    }
-
-    public deleteBan(conn: string): void {
-        if(this._list.has(conn)) {
-            this._list.delete(conn);
-            this.save();
-        }
-    }
-
-    public clearBan(): void {
-        this._list.clear();
-        this.save();
-    }
-
-    private save(): void {
-        localStorage.setItem('_BanList', JSON.stringify(this._list));
+function bListDelete(conn: string): boolean { // if the player is not banned yet, return false
+    let list: Map < string, string >; // init
+    list = bListLoad(); // load
+    if(list.has(conn) == true) { // if the player is banned
+        list.delete(conn); // delete
+        bListSave(list); // and save it
+        return true;
+    } else {
+        return false;
     }
 }
+
+function bListClear(): void {
+    localStorage.removeItem('_BanList'); // clear it
+}
+
+function bListCheck(conn: string): string|undefined {
+    // init
+    let list: Map < string, string >;
+    let reason: string|undefined;
+    // load
+    list = bListLoad();
+    reason = list.get(conn);
+    // return
+    return reason; // if not banned, returns undefined.
+}
+
+export { bListAdd, bListDelete, bListClear, bListCheck };

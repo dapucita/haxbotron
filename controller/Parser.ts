@@ -3,18 +3,15 @@ import * as LangRes from "../resources/strings";
 import { setPlayerData } from "./Storage";
 import { PlayerObject } from "../model/PlayerObject";
 import { superAdminLogin } from "./SuperAdmin";
-import { Ban } from "./Ban";
+import * as Ban from "../controller/Ban";
 import {
     gameRule
 } from "../model/rules/captain.rule";
-
-const banList: Ban = Ban.getInstance();
 
 export class Parser {
     // written in Singleton Pattern
     // If the bot created Parser object once, never create ever until the bot instance dead. 
     private static instance: Parser = new Parser();
-    //private banList: Ban = Ban.getInstance();
 
     private Parser() { } // not use
     public static getInstance(): Parser {
@@ -413,10 +410,13 @@ export class Parser {
                                 }
                                 case "banclear": {
                                     if(playerList.get(playerID).permissions.superadmin == true) {
-                                        if(cutMsg[2] !== undefined && cutMsg[2] == 'all') {
-                                            gameRoom.clearBans();
-                                            banList.clearBan();
-                                            ticket.messageString = LangRes.command.super.banclear.complete;
+                                        if(cutMsg[2] !== undefined) {
+                                            if(cutMsg[2] == 'all') {
+                                                gameRoom.clearBans();
+                                                Ban.bListClear();
+                                                ticket.messageString = LangRes.command.super.banclear.complete;
+                                            }
+                                            
                                         }
                                     } else {
                                         ticket.messageString = LangRes.command.super._ErrorNoPermission;

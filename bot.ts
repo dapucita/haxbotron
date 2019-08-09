@@ -37,7 +37,7 @@ import {
 } from "./model/BallTrace";
 import * as StatCalc from "./controller/Statistics";
 import * as LangRes from "./resources/strings";
-import { Ban } from "./controller/Ban";
+import * as Ban from "./controller/Ban";
 
 window.logQueue = []; // init
 
@@ -84,9 +84,6 @@ const ballStack: KickStack = KickStack.getInstance();
 
 const logger: Logger = Logger.getInstance();
 const parser: Parser = Parser.getInstance();
-const banList: Ban = Ban.getInstance();
-
-banList.init();
 
 var gameMode: string = "ready"; // "ready", "stats"
 var isGamingNow: boolean = false; // true : in gaming
@@ -341,10 +338,12 @@ function initialiseRoom(): void {
             banListReason: ''
         };
 
-        if(banList.isBan(player.conn)) {
-            placeholderJoin.banListReason = banList.getReason(player.conn);
-            logger.c(`[JOIN] ${player.name}#${player.id} was joined but kicked for registered in ban list. (conn:${player.conn},reason:${placeholderJoin.banListReason})`);
-            room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.banList, placeholderJoin), true); // ban
+        // check ban list
+        let playerBanChecking: string|undefined = Ban.bListCheck(player.conn);
+        if(typeof playerBanChecking !== "undefined") { // if banned (bListCheck would had returned string or undefined)
+            placeholderJoin.banListReason = playerBanChecking;
+            logger.c(`[JOIN] ${player.name}#${player.id} was joined but kicked for registered in ban list. (conn:${player.conn},reason:${playerBanChecking})`);
+            room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.banList, placeholderJoin), false); // auto kick
             return;
         }
 
@@ -746,7 +745,6 @@ function initialiseRoom(): void {
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
                 } else {
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
-                    banList.setBan({conn: kickedPlayer.conn, reason: reason});
                 }
             } else {
                 // kick
