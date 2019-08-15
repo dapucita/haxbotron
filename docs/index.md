@@ -5,6 +5,10 @@ a bot application for operating Haxball host
 - current version : none
 - in development version : 0.1.0
 
+## How to Run
+- [Manual(English)](https://github.com/dapucita/haxbotron/wiki/How-to-Run)
+- [설치와 실행 방법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%84%A4%EC%B9%98%EC%99%80-%EC%8B%A4%ED%96%89-%EB%B0%A9%EB%B2%95)
+
 ## Features
 - multi platforms
 - various languages support
