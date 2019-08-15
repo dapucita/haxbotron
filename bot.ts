@@ -1006,7 +1006,7 @@ function getTeamWinningExpectation(statsMode: boolean): number[] {
         room.getPlayerList().filter((player: PlayerObject) => player.id != 0).forEach((player: PlayerObject) => {
             // count win and lose games
             goalsCount[player.team] += playerList.get(player.id).stats.goals;
-            losesCount[player.team] += playerList.get(player.id).stats.losePoint;
+            losesCount[player.team] += playerList.get(player.id).stats.losePoints;
         });
 
         return [
