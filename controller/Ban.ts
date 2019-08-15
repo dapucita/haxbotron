@@ -1,36 +1,60 @@
+import { BanList } from "../model/BanList";
+
 // header
 
-function bListLoad(): Map < string, string > { // init and load
-    let list: Map < string, string > = new Map(); // init
-    let storage: string | null = localStorage.getItem('_BanList'); // get
+function bListLoad(): BanList[] { // init and load
+    // init
+    let list: BanList[] = [];
+    // load
+    let storage: string | null = localStorage.getItem('_BanList');
     if (storage !== null) { // if list in storage is,
         list = JSON.parse(storage); // load it
     }
-    return list; // return it
+    // return it
+    return list; // it can be empty array
 }
 
-function bListSave(list: Map < string, string > ): void {
-    localStorage.setItem('_BanList', JSON.stringify(list)); // set on localStorage
+function bListSave(list: BanList[]): void {
+    localStorage.setItem('_BanList', JSON.stringify(list)); // save(set) on localStorage
 }
 
 // exports
 
-function bListAdd(item: BanList): void { // add or update
-    let list: Map < string, string >; // init
+function bListAdd(banItem: BanList): void { // add or update
+    // init
+    let list: BanList[] = [];
+    let itemIndex: number;
+    // load
     list = bListLoad(); // load
-    list.set(item.conn, item.reason); // add
+    itemIndex = list.findIndex((element: BanList) => { // if the player is already banned, return index. Or return -1
+        return element.conn === banItem.conn;
+    });
+    // check and add(update)
+    if(itemIndex == -1) { // if not yet banned
+        list.push(banItem); // register
+    } else { // if banned already
+        list[itemIndex] = banItem; // update
+    }
+    // save
     bListSave(list); // and save it
 }
 
 function bListDelete(conn: string): boolean { // if the player is not banned yet, return false
-    let list: Map < string, string >; // init
+    // init
+    let list: BanList[] = [];
+    let itemIndex: number;
+    // load
     list = bListLoad(); // load
-    if(list.has(conn) == true) { // if the player is banned
-        list.delete(conn); // delete
+    itemIndex = list.findIndex((element: BanList) => { // if the player is, return index. Or return -1
+        return element.conn === conn;
+    });
+    // check and delete
+    if(itemIndex == -1) {
+        return false;
+    } else {
+        list.splice(itemIndex, 1); // delete
         bListSave(list); // and save it
         return true;
-    } else {
-        return false;
     }
 }
 
@@ -38,27 +62,30 @@ function bListClear(): void {
     localStorage.removeItem('_BanList'); // clear it
 }
 
-function bListCheck(conn: string): string|undefined { // if banned, returns the reason by string type
+function bListCheck(conn: string): string|boolean { // if banned, returns the reason by string type
     // init
-    let list: Map < string, string >;
-    let reason: string|undefined;
+    let list: BanList[] = [];
+    let itemIndex: number;
     // load
-    list = bListLoad();
-    reason = list.get(conn);
+    list = bListLoad(); // load
+    itemIndex = list.findIndex((element: BanList) => { // if the player is, return index. Or return -1
+        return element.conn === conn;
+    });    
     // return
-    return reason; // if not banned, returns undefined.
+    if(itemIndex == -1) {
+        return false; // if not banned, returns false(boolean value).
+    } else {
+        return list[itemIndex].reason;
+    }
 }
 
 function bListGetArray(): BanList[] { // get all banned players and returns by array
     // init
-    let list: Map < string, string >;
-    let banArray: BanList[] = [];
+    let list: BanList[] = [];
     // load
     list = bListLoad();
-    list.forEach((value: string, key: string) => {
-        banArray.push({conn: key, reason: value});
-    });
-    return banArray; // it can be 0 size if there are no banned players.
+    // return
+    return list; // it can be 0 size if there are no banned players.
 }
 
 export { bListAdd, bListDelete, bListClear, bListCheck, bListGetArray };

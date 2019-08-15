@@ -74,3 +74,9 @@ export interface PlayerStorage {
     mute: boolean; // is this player muted?
     //superadmin: boolean; // is this player super admin? // not save
 }
+
+export interface PlayerLeftList { // for reserving who left
+    id: number;
+    auth: string;
+    conn: string;
+}

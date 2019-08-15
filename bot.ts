@@ -15,6 +15,7 @@ import {
 import {
     PlayerObject,
     PlayerStorage,
+    PlayerLeftList,
 } from "./model/PlayerObject";
 import {
     ScoresObject
@@ -38,6 +39,7 @@ import {
 import * as StatCalc from "./controller/Statistics";
 import * as LangRes from "./resources/strings";
 import * as Ban from "./controller/Ban";
+import { BanList } from "./model/BanList.js";
 
 window.logQueue = []; // init
 
@@ -61,6 +63,7 @@ const roomConfig: RoomConfig = {
     noPlayer: botConfig.noPlayer // If set to true the room player list will be empty, the playerName setting will be ignored.
 }
 const playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
+const playerLeftList = new Map();
 const winningStreak = { // count of winning streak
     red: 0, blue: 0,
     getName: function(): string {
@@ -339,8 +342,8 @@ function initialiseRoom(): void {
         };
 
         // check ban list
-        let playerBanChecking: string|undefined = Ban.bListCheck(player.conn);
-        if(typeof playerBanChecking !== "undefined") { // if banned (bListCheck would had returned string or undefined)
+        let playerBanChecking: string|boolean = Ban.bListCheck(player.conn);
+        if(typeof playerBanChecking !== "boolean") { // if banned (bListCheck would had returned string or boolean)
             placeholderJoin.banListReason = playerBanChecking;
             logger.c(`[JOIN] ${player.name}#${player.id} was joined but kicked for registered in ban list. (conn:${player.conn},reason:${playerBanChecking})`);
             room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.banList, placeholderJoin), false); // auto kick
@@ -358,8 +361,7 @@ function initialiseRoom(): void {
         });
         
         // logging into console (debug)
-        logger.c(`[JOIN] ${player.name} has joined.`);
-        printPlayerInfo(player);
+        logger.c(`[JOIN] ${player.name} has joined. ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
 
         // add the player who joined into playerList by creating class instance
         if (localStorage.getItem(player.auth) !== null) {
@@ -447,6 +449,14 @@ function initialiseRoom(): void {
     room.onPlayerLeave = function (player: PlayerObject): void {
         // Event called when a player leaves the room.
 
+        if(playerList.has(player.id) == false) { // if the player wasn't registered in playerList (like banned player...)
+            // YOU NEED TO ADD SOME CODE REGISTERING INTO playerLeftList IF YOU MADE THE BANLIST CHECKING SYSTEM NOT KICK BUT BAN
+            /*
+                playerLeftList.set(player.id, {id: player.id, auth: playerList.get(player.id).auth, conn: playerList.get(player.id).conn});
+            */
+            return; // exit this event
+        }
+
         var placeholderLeft = { // Parser.maketext(str, placeholder)
             playerID: player.id,
             playerName: player.name,
@@ -481,6 +491,7 @@ function initialiseRoom(): void {
                 gameMode = "ready";
             }
         }
+        playerLeftList.set(player.id, {id: player.id, auth: playerList.get(player.id).auth, conn: playerList.get(player.id).conn});
         playerList.delete(player.id); // delete from player list
         //setDefaultStadiums(); // check number of players and auto-set stadium
         updateAdmins(); // update admin
@@ -744,7 +755,7 @@ function initialiseRoom(): void {
                     room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
                 } else { // if by super admin player
-                    Ban.bListAdd({conn: kickedPlayer.conn, reason: placeholderKick.reason}); // register into ban list
+                    Ban.bListAdd({conn: playerLeftList.get(kickedPlayer.id).conn, reason: placeholderKick.reason}); // register into ban list
                     logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
                 }
             } else {
@@ -975,10 +986,6 @@ function updateAdmins(): void {
     playerList.get(players[0].id).admin = true;
     logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
     room.sendAnnouncement(parser.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
-}
-
-function printPlayerInfo(player: PlayerObject): void {
-    logger.c(`[INFO] NAME(${player.name}),ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
 }
 
 function roomPlayersNumberCheck(): number {
