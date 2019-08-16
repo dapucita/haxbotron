@@ -6,6 +6,7 @@ export interface ActionTicket {
     messageString?: string;
     selfnotify?: boolean;
     action?: Function;
+    makeplaceholder?: Function;
 }
 
 export class ActionQueue<T extends ActionTicket> {

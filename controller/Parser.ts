@@ -4,6 +4,7 @@ import { setPlayerData } from "./Storage";
 import { PlayerObject } from "../model/PlayerObject";
 import { superAdminLogin } from "./SuperAdmin";
 import * as Ban from "../controller/Ban";
+import * as StatCalc from "../controller/Statistics";
 import {
     gameRule
 } from "../model/rules/captain.rule";
@@ -204,6 +205,38 @@ export class Parser {
                     ticket.targetPlayerID = playerID;
                     ticket.messageString = LangRes.command.stats.firstLine + '\n' + LangRes.command.stats.secondLine;
                     ticket.selfnotify = false;
+                    ticket.action = function(playerID: number, playerList: any, statsMode: boolean): void {
+                        if(cutMsg[1] !== undefined) {
+                            if(cutMsg[1].charAt(0) == "#") {
+                                let target: number = parseInt(cutMsg[1].substr(1), 10);
+                                if(isNaN(target) != true && playerList.has(target) == true) { // if the value is not NaN and there's the player
+                                    ticket.selfnotify = true;
+                                    ticket.targetPlayerID = target;
+                                } else {
+                                    ticket.messageString = LangRes.command.stats._ErrorNoPlayer;
+                                }
+                            } else {
+                                ticket.messageString = LangRes.command.stats._ErrorNoPlayer;
+                            }
+                        }
+                    }
+                    ticket.makeplaceholder = (placeholder: any, playerList: any): void => {
+                        placeholder.ticketTarget = ticket.targetPlayerID;
+                        placeholder.targetName = playerList.get(ticket.targetPlayerID).name;
+                        placeholder.targetAfkReason = playerList.get(ticket.targetPlayerID).permissions.afkreason;
+                        placeholder.targetStatsTotal = playerList.get(ticket.targetPlayerID).stats.totals;
+                        placeholder.targetStatsWins = playerList.get(ticket.targetPlayerID).stats.wins;
+                        placeholder.targetStatsGoals = playerList.get(ticket.targetPlayerID).stats.goals;
+                        placeholder.targetStatsAssists = playerList.get(ticket.targetPlayerID).stats.assists;
+                        placeholder.targetStatsOgs = playerList.get(ticket.targetPlayerID).stats.ogs;
+                        placeholder.targetStatsLosepoints = playerList.get(ticket.targetPlayerID).stats.losePoints;
+                        placeholder.targetStatsWinRate =  StatCalc .calcWinsRate(playerList.get(ticket.targetPlayerID).stats.totals, playerList.get(ticket.targetPlayerID).stats.wins);
+                        placeholder.targetStatsPassSuccess = StatCalc.calcPassSuccessRate(playerList.get(ticket.targetPlayerID).stats.balltouch, playerList.get(ticket.targetPlayerID).stats.passed);
+                        placeholder.targetStatsGoalsPerGame =  StatCalc.calcGoalsPerGame(playerList.get(ticket.targetPlayerID).stats.totals, playerList.get(ticket.targetPlayerID).stats.goals);
+                        placeholder.targetStatsAssistsPerGame =  StatCalc.calcAssistsPerGame(playerList.get(ticket.targetPlayerID).stats.totals, playerList.get(ticket.targetPlayerID).stats.assists);
+                        placeholder.targetStatsOgsPerGame = StatCalc.calcOGsPerGame(playerList.get(ticket.targetPlayerID).stats.totals, playerList.get(ticket.targetPlayerID).stats.ogs);
+                        placeholder.targetStatsLostGoalsPerGame = StatCalc.calcLoseGoalsPerGame(playerList.get(ticket.targetPlayerID).stats.totals, playerList.get(ticket.targetPlayerID).stats.losePoints);
+                    }
                     break;
                 }
                 case "statsreset": {

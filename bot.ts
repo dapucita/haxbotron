@@ -194,6 +194,9 @@ var parsingTimer = setInterval(function (): void {
                 if(timerTicket.action) {
                     timerTicket.action(timerTicket.ownerPlayerID, playerList, statsMode);
                 }
+                if(timerTicket.makeplaceholder) {
+                    timerTicket.makeplaceholder(placeholderQueueCommand, playerList);
+                }
                 if(timerTicket.messageString) {
                     if(timerTicket.selfnotify == true) {
                         room.sendAnnouncement(parser.maketext(timerTicket.messageString, placeholderQueueCommand), timerTicket.ownerPlayerID, 0x00FF00, "normal", 0);
