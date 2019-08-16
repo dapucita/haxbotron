@@ -711,6 +711,8 @@ function initialiseRoom(): void {
                 setPlayerData(playerList.get(eachPlayer.id)); // updates wins and totals count
             });
             if(winningStreak.red >= 3 || winningStreak.blue >= 3) {
+                placeholderVictory.streakTeamName = winningStreak.getName();
+                placeholderVictory.streakTeamCount = winningStreak.getCount();
                 room.sendAnnouncement(parser.maketext(LangRes.onVictory.burning, placeholderVictory), null, 0x00FF00, "bold", 1);
             }
         }
