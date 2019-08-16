@@ -23,6 +23,11 @@ Useful facilities for actual game
 
 Built-in maps: especially popular in Korea
 
+## Installation for Beginners
+
+- [Manual(English)](https://github.com/dapucita/haxbotron/wiki/How-to-Run)
+- [설치와 실행 방법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%84%A4%EC%B9%98%EC%99%80-%EC%8B%A4%ED%96%89-%EB%B0%A9%EB%B2%95)
+
 
 ## How to Build
 You need to install dependencies if you didn't.
