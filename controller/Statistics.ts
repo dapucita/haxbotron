@@ -46,8 +46,8 @@ export function calcPassSuccessRate(totalPasses: number, totalSuccess: number): 
 }
 
 export function calcExpectedWinRate(wins: number, loses: number): number { // Pythagorean expectation(PE)
-    let winsPow: number = Math.pow(wins, 2); // 1.83 or 2.00
-    let losesPow: number = Math.pow(loses, 2);
+    let winsPow: number = Math.pow(wins, 1.83); // 1.83 or 2.00
+    let losesPow: number = Math.pow(loses, 1.83);
     return Math.round((winsPow / (winsPow + losesPow)) * 100);
 }
 

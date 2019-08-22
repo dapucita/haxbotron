@@ -26,7 +26,7 @@ export function setPlayerData(player: Player): void {
         losePoints: player.stats.losePoints, // it means the points this player lost (in Korean, '실점')
         balltouch: player.stats.balltouch, // total count of touch(kick) ball
         passed: player.stats.passed, // total count of pass success
-        mute: player.permissions.mute, // is this player muted?
+        mute: player.permissions.mute, // is this player muted? // FIXME: mute value hasn't benn saved because setPlayerData isn't called when mute command act.
         //superadmin: player.permissions.superadmin // is this player super admin? // not save
     }
     localStorage.setItem(player.auth, JSON.stringify(playerData)); // convert object to json for store in localStorage // for decode: JSON.parse

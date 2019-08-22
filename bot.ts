@@ -275,7 +275,7 @@ var scheduledTimer = setInterval(function(): void {
                     room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
                     if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
-                        room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF0000, "bold", 1); // warning for all
+                        room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF7777, "bold", 1); // warning for all
                     }
                     player.afktrace.count++; // add afk detection count
                 }
@@ -286,7 +286,7 @@ var scheduledTimer = setInterval(function(): void {
                     room.kickPlayer(player.id, parser.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
                     if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
-                        room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF0000, "bold", 1); // warning for all
+                        room.sendAnnouncement(parser.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF7777, "bold", 1); // warning for all
                     }
                     player.afktrace.count++; // add afk detection count
                 }
@@ -308,9 +308,9 @@ function initialiseRoom(): void {
     // declare function in window object
     window.sendRoomChat = function(msg: string, playerID?: number): void {
         if(playerID !== null) {
-            room.sendAnnouncement(msg, playerID, 0xFFFF00, "bold", 2);
+            room.sendAnnouncement(msg, playerID, 0xFFFF84, "bold", 2);
         } else {
-            room.sendAnnouncement(msg, null, 0xFFFF00, "bold", 2);
+            room.sendAnnouncement(msg, null, 0xFFFF84, "bold", 2);
         }
     }
 
