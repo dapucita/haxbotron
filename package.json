@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/node-persist": "0.0.33",
     "@types/puppeteer": "^1.19.0",
-    "electron": "^6.0.0",
+    "electron": "^7.2.4",
     "typescript": "^3.5.3",
     "webpack": "^4.39.0",
     "webpack-cli": "^3.3.6"
