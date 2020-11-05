@@ -50,7 +50,7 @@ const template = [{
         submenu: [{
             id: 'headlessModeMenuItem',
             type: 'checkbox',
-            checked: false,
+            checked: true,
             label: 'headless mode'
         }
         ]
