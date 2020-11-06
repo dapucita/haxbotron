@@ -61,6 +61,15 @@ const roomConfig: RoomConfig = {
     public: botConfig.public,
     playerName: botConfig.playerName,
     noPlayer: botConfig.noPlayer // If set to true the room player list will be empty, the playerName setting will be ignored.
+
+    // TWEAKS : If your bot has wrong location, use this patch
+    /*
+    ,geo: {
+        code: "KR"
+        ,lat: 37.5665
+        ,lon: 126.978
+    }
+    */
 }
 const playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
 const playerLeftList = new Map();
