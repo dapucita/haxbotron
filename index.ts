@@ -185,9 +185,15 @@ async function bot(hostConfig: string) {
     console.log('\x1b[32m%s\x1b[0m', "The headless host has started.");
     //await nodeStorage.init();
 
+
+    /*
+    If you are hosting on a VPS using Chrome version 78 or greater
+    then it is required to disable the Local IP WebRTC Anonymization feature for the host to work.
+    Run chrome with the command flag --disable-features=WebRtcHideLocalIpsWithMdns to disable the feature.
+    */
     const browser = await puppeteer.launch({
         headless: isOpenHeadless,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: ['--no-sandbox', '--disable-setuid-sandbox'] // add -disable-features=WebRtcHideLocalIpsWithMdns if you are using vps
     });
     await browser.on('disconnected', () => {
         clearInterval(storageLoop);
