@@ -1,6 +1,6 @@
 {
   "name": "haxbotron",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Haxbotron is a Host Bot Application for HaxBall game.",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "node-persist": "^3.1.0",
-    "puppeteer": "^5.4.1"
+    "puppeteer": "^5.4.1",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
     "@types/node-persist": "3.1.0",

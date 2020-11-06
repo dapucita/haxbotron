@@ -8,6 +8,9 @@ const {
 } = require('electron');
 const menuTemplate = require('./view/menuTemplate');
 
+import { LogMessage } from "./model/LogMessage";
+import { winstonLogger } from "./winstonLoggerSystem";
+
 //BOT Loader
 const puppeteer = require('puppeteer');
 const nodeStorage = require('node-persist');
@@ -257,22 +260,46 @@ async function bot(hostConfig: string) {
 
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
     var storageLoop = setInterval(async function () {
-        var msgContext: any = await page.evaluate(() => { // get log message
-            var msgChunk: string = '';
-            for(var loopCount = 0; loopCount < window.logQueue.length; loopCount++) {
-                msgChunk = window.logQueue.pop() + '\\r\\n' + msgChunk;
-            }
-            return msgChunk;
+        // log system with winston module. winstonLoggerSystem
+        // log message queue copy
+        var msgQueue: LogMessage[] = await page.evaluate(() => {
+            var msgQueueCopy = window.logQueue;
+            window.logQueue = [];
+            return msgQueueCopy;
         });
+        // log it and make new text for electron
+        var msgChunk: string = '';
+        for (var loopCount = 0; loopCount < msgQueue.length; loopCount++) {
+            var msgQueueChunk: LogMessage | undefined = msgQueue.pop();
+            msgChunk = msgQueueChunk?.context + '\\r\\n' + msgChunk;
+            switch (msgQueueChunk?.type) {
+                case 0: {
+                    winstonLogger.error(msgQueueChunk.context);
+                    break;
+                }
+                case 1: {
+                    winstonLogger.warn(msgQueueChunk.context);
+                    break;
+                }
+                case 2: {
+                    winstonLogger.info(msgQueueChunk.context);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
 
-        // and print it on electron's textarea
-        if(await msgContext != '') {
-            await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgContext + "' + document.getElementById('botConsole').value;");
+        // now print it on electron's textarea
+        if(await msgChunk != '') {
+            await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgChunk + "' + document.getElementById('botConsole').value;");
         } // TODO: replace logging system using textarea to rest api server
         // FIXME: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame". Maybe it was caused by quotation marks..
 
         // TODO: 접속중인 인원수 표시하기.
 
+        // data from bot
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};
             for (let i = 0; i < localStorage.length; i++) {

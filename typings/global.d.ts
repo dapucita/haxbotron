@@ -1,9 +1,10 @@
 import { RoomConfig } from '../model/RoomConfig';
+import { LogMessage } from "../model/LogMessage";
 declare global {
     interface Window {
         // bot
         roomURIlink: string // for sharing URI link of the room
-        logQueue: string[] // for sharing log message
+        logQueue: LogMessage[] // for sharing log message
         sendRoomChat(msg: string, playerID?: number): void // for send chat message to the game
 
         // on dev-console tools for emergency

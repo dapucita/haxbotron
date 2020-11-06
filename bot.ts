@@ -256,7 +256,7 @@ var parsingTimer = setInterval(function (): void {
                 break;
             }
             default: {
-                logger.c("[QUEUE] Warning: not implemented type of ticket.");
+                logger.i("[QUEUE] Warning: not implemented type of ticket.");
                 break;
             }
         }
@@ -309,10 +309,10 @@ function initialiseRoom(): void {
     const nowDate: Date = new Date();
     localStorage.setItem('_LaunchTime', nowDate.toString()); // save time the bot launched in localStorage
 
-    logger.c(`[HAXBOTRON] The game room is opened at ${nowDate.toString()}.`);
+    logger.i(`[HAXBOTRON] The game room is opened at ${nowDate.toString()}.`);
 
     gameMode = "ready" // no 'stats' not yet
-    logger.c(`[MODE] Game mode is '${gameMode}'(by default).`);
+    logger.i(`[MODE] Game mode is '${gameMode}'(by default).`);
 
     // declare function in window object
     window.sendRoomChat = function(msg: string, playerID?: number): void {
@@ -357,7 +357,7 @@ function initialiseRoom(): void {
         let playerBanChecking: string|boolean = Ban.bListCheck(player.conn);
         if(typeof playerBanChecking !== "boolean") { // if banned (bListCheck would had returned string or boolean)
             placeholderJoin.banListReason = playerBanChecking;
-            logger.c(`[JOIN] ${player.name}#${player.id} was joined but kicked for registered in ban list. (conn:${player.conn},reason:${playerBanChecking})`);
+            logger.i(`[JOIN] ${player.name}#${player.id} was joined but kicked for registered in ban list. (conn:${player.conn},reason:${playerBanChecking})`);
             room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.banList, placeholderJoin), false); // auto kick
             return;
         }
@@ -365,7 +365,7 @@ function initialiseRoom(): void {
         // if this player has already joinned by other connection
         playerList.forEach((eachPlayer: Player) => {
             if(eachPlayer.conn == player.conn) {
-                logger.c(`[JOIN] ${player.name} was joined but kicked for double joinning.(origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
+                logger.i(`[JOIN] ${player.name} was joined but kicked for double joinning.(origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
                 room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
                 room.sendAnnouncement(parser.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin), null, 0xFF0000, "normal", 0); // notify
                 return; // exit from this join event
@@ -373,7 +373,7 @@ function initialiseRoom(): void {
         });
         
         // logging into console (debug)
-        logger.c(`[JOIN] ${player.name} has joined. ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
+        logger.i(`[JOIN] ${player.name} has joined. ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
 
         // add the player who joined into playerList by creating class instance
         if (localStorage.getItem(player.auth) !== null) {
@@ -489,7 +489,7 @@ function initialiseRoom(): void {
             streakTeamCount: winningStreak.getCount()
         };
 
-        logger.c(`[LEFT] ${player.name} has left.`);
+        logger.i(`[LEFT] ${player.name} has left.`);
 
         // check number of players joined and change game mode
         if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
@@ -528,7 +528,7 @@ function initialiseRoom(): void {
             streakTeamCount: winningStreak.getCount()
         };
 
-        logger.c(`[CHAT] ${player.name} said, "${message}"`);
+        logger.i(`[CHAT] ${player.name} said, "${message}"`);
         var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
         if (evals.type != "none") { // if the message is command chat (not 'none' type)
             // albeit this player is muted, the player can command by chat.
@@ -585,7 +585,7 @@ function initialiseRoom(): void {
                 // make this player admin
                 playerList.get(changedPlayer.id).admin = true;
                 if (byPlayer !== null) {
-                    logger.c(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
+                    logger.i(`[INFO] ${changedPlayer.name}#${changedPlayer.id} has been admin(super:${playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
                 }
                 return;
             }
@@ -632,7 +632,7 @@ function initialiseRoom(): void {
         } else {
             room.sendAnnouncement(parser.maketext(LangRes.onStart.stopRecord, placeholderStart), null, 0x00FF00, "normal", 0);
         }
-        logger.c(msg);
+        logger.i(msg);
     }
 
     room.onGameStop = function (byPlayer: PlayerObject): void {
@@ -662,7 +662,7 @@ function initialiseRoom(): void {
         if (byPlayer !== null && byPlayer.id != 0) {
             msg += `(by ${byPlayer.name}#${byPlayer.id})`;
         }
-        logger.c(msg);
+        logger.i(msg);
         setDefaultStadiums(); // check number of players and auto-set stadium
 
         ballStack.initTouchInfo(); // clear touch info
@@ -730,7 +730,7 @@ function initialiseRoom(): void {
         ballStack.clear(); // clear the stack.
         ballStack.possClear(); // clear possession count
 
-        logger.c(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`);
+        logger.i(`[RESULT] The game has ended. Scores ${scores.red}:${scores.blue}.`);
         room.sendAnnouncement(parser.maketext(LangRes.onVictory.victory, placeholderVictory), null, 0x00FF00, "bold", 1);
 
         setDefaultStadiums(); // check number of players and auto-set stadium
@@ -767,17 +767,17 @@ function initialiseRoom(): void {
                     room.sendAnnouncement(parser.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id, 0xFF0000, "bold", 2);
                     room.sendAnnouncement(parser.maketext(LangRes.onKick.notifyNotBan, placeholderKick), null, 0xFF0000, "bold", 2);
                     room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
-                    logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
+                    logger.i(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${reason}), but it is negated.`);
                 } else { // if by super admin player
                     Ban.bListAdd({conn: playerLeftList.get(kickedPlayer.id).conn, reason: placeholderKick.reason}); // register into ban list
-                    logger.c(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
+                    logger.i(`[BAN] ${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${reason}).`);
                 }
             } else {
                 // kick
-                logger.c(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked by ${byPlayer.name}#${byPlayer.id}. (reason:${reason})`);
+                logger.i(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked by ${byPlayer.name}#${byPlayer.id}. (reason:${reason})`);
             }
         } else {
-            logger.c(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked. (ban:${ban},reason:${reason})`);
+            logger.i(`[KICK] ${kickedPlayer.name}#${kickedPlayer.id} has been kicked. (ban:${ban},reason:${reason})`);
         }
     }
 
@@ -805,17 +805,17 @@ function initialiseRoom(): void {
             placeholderStadium.playerName = byPlayer.name;
             if (playerList.get(byPlayer.id).permissions['superadmin'] == true) {
                 //There are two ways for access to map value, permissions['superadmin'] and permissions.superadmin.
-                logger.c(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
+                logger.i(`[MAP] ${newStadiumName} has been loaded by ${byPlayer.name}#${byPlayer.id}.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
                 room.sendAnnouncement(parser.maketext(LangRes.onStadium.loadNewStadium, placeholderStadium),null , 0x00FF00, "normal", 0);
             } else {
                 // If trying for chaning stadium is rejected, reload default stadium.
-                logger.c(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
+                logger.i(`[MAP] ${byPlayer.name}#${byPlayer.id} tried to set a new stadium(${newStadiumName}), but it is rejected.(super:${playerList.get(byPlayer.id).permissions['superadmin']})`);
                 // logger.c(`[DEBUG] ${playerList.get(byPlayer.id).name}`); for debugging
                 room.sendAnnouncement(parser.maketext(LangRes.onStadium.cannotChange, placeholderStadium), byPlayer.id, 0xFF0000, "bold", 2);
                 setDefaultStadiums();
             }
         } else {
-            logger.c(`[MAP] ${newStadiumName} has been loaded as default map.`);
+            logger.i(`[MAP] ${newStadiumName} has been loaded as default map.`);
         }
     }
 
@@ -900,7 +900,7 @@ function initialiseRoom(): void {
                     goalMsg = parser.maketext(LangRes.onGoal.goalWithAssist, placeholderGoal);
                 }
                 room.sendAnnouncement(goalMsg, null, 0x00FF00, "normal", 0);
-                logger.c(goalMsg);
+                logger.i(goalMsg);
             } else {
                 // if the goal is OG
                 placeholderGoal.ogID = playerList.get(touchPlayer).id;
@@ -908,7 +908,7 @@ function initialiseRoom(): void {
                 playerList.get(touchPlayer).stats.ogs++;
                 setPlayerData(playerList.get(touchPlayer));
                 room.sendAnnouncement(parser.maketext(LangRes.onGoal.og, placeholderGoal), null, 0x00FF00, "normal", 0);
-                logger.c(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
+                logger.i(`[GOAL] ${playerList.get(touchPlayer).name}#${playerList.get(touchPlayer).id} made an OG.`);
             }
             // except spectators and filter who were lose a point
             var losePlayers: PlayerObject[] = room.getPlayerList().filter((player: PlayerObject) => player.team != 0 && player.team != team);
@@ -946,7 +946,7 @@ function initialiseRoom(): void {
         console.log(roomLinkValue[0].href); // room link (url)
         */
         window.roomURIlink = url;
-        logger.c(`[ROOM] This room has a link : ${window.roomURIlink}`);
+        logger.i(`[ROOM] This room has a link : ${window.roomURIlink}`);
     }
 
     room.onKickRateLimitSet = function(min: number, rate: number, burst: number, byPlayer : PlayerObject): void {
@@ -955,7 +955,7 @@ function initialiseRoom(): void {
         if(byPlayer !== null) {
             byPlayerInfo = byPlayer.name + '#' + byPlayer.id;
         }
-        logger.c(`[LIMIT] The kick rate is changed. (min:${min},rate:${rate},burst:${burst}) (by ` + byPlayerInfo + ')');
+        logger.i(`[LIMIT] The kick rate is changed. (min:${min},rate:${rate},burst:${burst}) (by ` + byPlayerInfo + ')');
     }
 }
 
@@ -998,7 +998,7 @@ function updateAdmins(): void {
 
     room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
     playerList.get(players[0].id).admin = true;
-    logger.c(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
+    logger.i(`[INFO] ${playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${playerList.get(players[0].id).admin},super:${playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
     room.sendAnnouncement(parser.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
 }
 
