@@ -196,7 +196,7 @@ async function bot(hostConfig: string) {
     */
     const browser = await puppeteer.launch({
         headless: isOpenHeadless,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // add -disable-features=WebRtcHideLocalIpsWithMdns if you are using vps
+        args: ['--no-sandbox', '--disable-setuid-sandbox'] // add --disable-features=WebRtcHideLocalIpsWithMdns if you are using vps
     });
     await browser.on('disconnected', () => {
         clearInterval(storageLoop);
