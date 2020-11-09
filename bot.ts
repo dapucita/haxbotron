@@ -365,7 +365,7 @@ function initialiseRoom(): void {
         // if this player has already joinned by other connection
         playerList.forEach((eachPlayer: Player) => {
             if(eachPlayer.conn == player.conn) {
-                logger.i(`[JOIN] ${player.name} was joined but kicked for double joinning.(origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
+                logger.i(`[JOIN] ${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
                 room.kickPlayer(player.id, parser.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
                 room.sendAnnouncement(parser.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin), null, 0xFF0000, "normal", 0); // notify
                 return; // exit from this join event
@@ -373,7 +373,7 @@ function initialiseRoom(): void {
         });
         
         // logging into console (debug)
-        logger.i(`[JOIN] ${player.name} has joined. ID(${player.id}),CONN(${player.conn}),AUTH(${player.auth})`);
+        logger.i(`[JOIN] ${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
 
         // add the player who joined into playerList by creating class instance
         if (localStorage.getItem(player.auth) !== null) {
@@ -528,7 +528,7 @@ function initialiseRoom(): void {
             streakTeamCount: winningStreak.getCount()
         };
 
-        logger.i(`[CHAT] ${player.name} said, "${message}"`);
+        logger.i(`[CHAT] ${player.name}#${player.id} said, "${message}"`);
         var evals: ActionTicket = parser.eval(message, player.id); // evaluate whether the message is command chat
         if (evals.type != "none") { // if the message is command chat (not 'none' type)
             // albeit this player is muted, the player can command by chat.
