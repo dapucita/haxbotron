@@ -5,7 +5,7 @@ export class Logger {
     // If the bot created Logger object once, never create ever until the bot instance dead. 
     private static instance: Logger = new Logger();
 
-    private Parser() { } // not use
+    private Logger() { } // not use
     
     public static getInstance(): Logger {
         if (this.instance == null) {
