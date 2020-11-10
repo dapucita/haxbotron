@@ -54,9 +54,11 @@ If you got the token, you have to launch the application and input your room's c
 Then, you can launch your own game room.
 
 ## How to backup
-If you want to backup players' data on your own bot, you should copy `.node-persist` directory and paste it when you need.
+You have to make and keep a copy of `.node-persist` directory to preserve important player data.
 
-All data are reserved in that directory and you can also modify them using text editor.
+All data would be reserved in that directory and you can also modify them using text editor.
+
+And you can also check the log in `.logs` directory. These data will be kept for 30 days.
 
 ## Player Hierarchy
 
