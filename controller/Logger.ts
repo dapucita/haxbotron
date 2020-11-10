@@ -27,11 +27,11 @@ export class Logger {
     }
 
     public e(msg: string): void { // for error log
-        this.push({type: 2, context: msg});
+        this.push({type: 0, context: msg});
     }
 
     public w(msg: string): void { // for warning log
-        this.push({type: 2, context: msg});
+        this.push({type: 1, context: msg});
     }
     
 }
