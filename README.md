@@ -5,13 +5,17 @@
 ![Our Discrod Online Members](https://img.shields.io/discord/602402864647634954?style=flat-square)
 ![MIT Licence](https://img.shields.io/github/license/dapucita/haxbotron?style=flat-square)
 
-
 ## What is this
 Haxbotron is a bot application for launch Haxball game room.
 
 You can power your own host by electron-based launcher.
 
 This Project is open source and free to use. Enjoy it :)
+
+## Donate
+Please donate and support this project by [Patreon](https://www.patreon.com/dapucita) !
+
+위 페이지에서 기부하여 이 프로젝트를 지원해주세요!
 
 ## Versions
 ### Released Version

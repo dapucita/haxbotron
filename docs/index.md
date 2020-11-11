@@ -1,6 +1,11 @@
 # Haxbotron 🤖
 a bot application for operating Haxball host
 
+## Donate
+Please donate and support this project by [Patreon](https://www.patreon.com/dapucita) !
+
+위 페이지에서 기부하여 이 프로젝트를 지원해주세요!
+
 ## Versions
 - current version : none
 - in development version : 0.1.0
