@@ -29,7 +29,7 @@ export const command = {
         ,rand: '📑 !rand : You can pick players from spectators by random when you are captain.'
         ,scout: '📑 !scout shows you expectation of each teams by customed Pythagorean Expectation.'
     } 
-    ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord Chatting https://discord.gg/qfg45B2'
+    ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !stats #12)\n📑 You can check IDs by command !list red,blue,spec'
         ,firstLine: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.'
