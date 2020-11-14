@@ -10,6 +10,7 @@ const menuTemplate = require('./view/menuTemplate');
 
 import { LogMessage } from "./model/LogMessage";
 import { winstonLogger } from "./winstonLoggerSystem";
+import { tweaks_geoLocationOverride, tweaks_WebRTCAnoym } from "./tweaks";
 
 //BOT Loader
 const puppeteer = require('puppeteer');
@@ -22,6 +23,11 @@ var isOpenHeadless: boolean = false; // option for open chromium in headless mod
 
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
 var puppeteerContainer: any; // puppeteer page object
+
+var puppeteerCustomArgs: string[] = ['--no-sandbox', '--disable-setuid-sandbox'];
+if (tweaks_WebRTCAnoym === false) { // tweaks_WebRTCAnoym : Local IP WebRTC Anonymization for the bot. MORE INFO : tweaks.ts
+    puppeteerCustomArgs.push('--disable-features=WebRtcHideLocalIpsWithMdns');
+}
 
 const MenuItemSwitch = {
     announceMsg: false,
@@ -65,6 +71,13 @@ ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
         arg.password = null;
     }
     hostRoomConfig = arg;
+    if (tweaks_geoLocationOverride.patch === true) { // tweaks_geoLocationOverride : GeoLocation overriding for the room. MORE INFO : tweaks.ts
+        hostRoomConfig.geo = {
+            code: tweaks_geoLocationOverride.code
+            , lat: tweaks_geoLocationOverride.lat
+            , lon: tweaks_geoLocationOverride.lon
+        }
+    }
     hostRoomConfig.maxPlayers = parseInt(arg.maxPlayers, 10); // do type casting because conveyed maxPlayers value is string type
     if(isBotLaunched != true) {
         if(Menu.getApplicationMenu().getMenuItemById('headlessModeMenuItem').checked == true) { // if headless mode checkbox is checked
@@ -186,17 +199,12 @@ async function nodeStorageInit() {
 
 async function bot(hostConfig: string) {
     console.log('\x1b[32m%s\x1b[0m', "The headless host has started.");
+    
     //await nodeStorage.init();
 
-
-    /*
-    If you are hosting on a VPS using Chrome version 78 or greater
-    then it is required to disable the Local IP WebRTC Anonymization feature for the host to work.
-    Run chrome with the command flag --disable-features=WebRtcHideLocalIpsWithMdns to disable the feature.
-    */
     const browser = await puppeteer.launch({
         headless: isOpenHeadless,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // add --disable-features=WebRtcHideLocalIpsWithMdns if you are using vps
+        args: puppeteerCustomArgs
     });
     await browser.on('disconnected', () => {
         clearInterval(storageLoop);
