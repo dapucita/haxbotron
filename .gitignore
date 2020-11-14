@@ -1,6 +1,5 @@
 .logs/
 .node-persist/
-.VSCodeCounter/
 node_modules/
 out/
 !webpack.config.js
