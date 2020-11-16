@@ -1,3 +1,6 @@
+// DEPRECATED at v0.1.0 (legacy for under v0.0.9)
+
+
 export interface ActionTicket {
     type: string;
     ownerPlayerID?: number;

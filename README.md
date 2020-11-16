@@ -17,13 +17,6 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 
 위 페이지에서 기부하여 이 프로젝트를 지원해주세요!
 
-## Versions
-### Released Version
-Not yet :)
-
-### Schduled Version
-0.1.0 for first release
-
 ## Features
 launch on Multi platforms: Windows, Linux, OS X and so on
 
@@ -124,6 +117,8 @@ If you(the super admin) type a command by chat...
 `!super thor deprive` disqualify all admin players from admin permission, and makes admin player permission by self.
 
 `!super kick ID` kicks that player whose numeric ID is ID.
+
+`!super ban ID` bans that player whose numeric ID is ID.
 
 `!super banclear all` clears the list of banned players.
 

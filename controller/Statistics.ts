@@ -1,3 +1,5 @@
+import { PlayerObject } from "../model/PlayerObject";
+
 export function calcWinsRate(totalGames: number, winGames: number): number {
     // calculate the given Player's winning games rate
     if(totalGames == 0) {
@@ -51,6 +53,32 @@ export function calcExpectedWinRate(wins: number, loses: number): number { // Py
     return Math.round((winsPow / (winsPow + losesPow)) * 100);
 }
 
-export function calcCombatPower() {
+export function calcCombatPower() { //TODO: implement this
 
+}
+
+export function getTeamWinningExpectation(): number[] {
+    if (window.isStatRecord == true) { // if the game mode is stats
+        // init for count
+        let goalsCount: number[] = [
+            0, 0, 0 // spec, red, blue team
+        ];
+        let losesCount: number[] = [
+            0, 0, 0 // spec, red, blue team
+        ]
+
+        window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0).forEach((player: PlayerObject) => {
+            // count win and lose games
+            goalsCount[player.team] += window.playerList.get(player.id).stats.goals;
+            losesCount[player.team] += window.playerList.get(player.id).stats.losePoints;
+        });
+
+        return [
+            calcExpectedWinRate(goalsCount[0], losesCount[0]),
+            calcExpectedWinRate(goalsCount[1], losesCount[1]),
+            calcExpectedWinRate(goalsCount[2], losesCount[2])
+        ];
+    } else {
+        return [0, 0, 0];
+    }
 }

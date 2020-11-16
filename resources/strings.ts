@@ -17,7 +17,7 @@ export const command = {
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
         ,help: '📑 !help COMMAND : COMMAND 명령어의 자세한 설명을 보여줍니다.'
         ,about: '📑 !about : 봇의 정보를 보여줍니다.'
-        ,stats: '📑 !stats : 스탯을 다른 사람들에게 보여줍니다. 📑 !statsreset로 리셋합니다.\n📑 !stats #ID : 해당 ID의 플레이어 스탯을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
+        ,stats: '📑 !stats : 스탯을 보여줍니다. 📑 !statsreset로 리셋합니다.\n📑 !stats #ID : 해당 ID의 플레이어 스탯을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
         ,statsreset: '📑 !statsreset : 스탯을 초기화합니다. 다시 복구할 수 없습니다.'
         ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
@@ -25,15 +25,12 @@ export const command = {
         ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.'
         ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
         ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
-        ,auto: '📑 !auto : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 차례대로 데려옵니다.'
-        ,rand: '📑 !rand : 팀의 주장일 경우 픽 순서가 됐을때 잠수중이지 않은 대기자를 임의로 데려옵니다.'
         ,scout: '📑 !scout : 각 팀의 기대승률치를 보여줍니다. 팀 간의 비교는 아니며, 피타고리안 승률 공식의 변형을 사용합니다.'
     } 
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
-        ,firstLine: '📊 {targetName}#{ticketTarget}님의 전적 : 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.'
-        ,secondLine: '📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
+        ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 : 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
     }
     ,statsreset: '📊 스탯을 초기화했습니다. 다시 복구할 수 없습니다.'
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'
@@ -47,14 +44,6 @@ export const command = {
         ,_ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
         ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
-    }
-    ,auto: {
-        _ErrorNoPermission: '❌ 주장만 이 명령어를 사용할 수 있습니다.'
-        ,_ErrorNoOrder: '❌ 현재 이 명령어를 사용할 수 없습니다.'
-    }
-    ,rand: {
-        _ErrorNoPermission: '❌ 주장만 이 명령어를 사용할 수 있습니다.'
-        ,_ErrorNoOrder: '❌ 현재 이 명령어를 사용할 수 없습니다.'
     }
     ,super: {
         _ErrorWrongCommand: '❌ 잘못된 super 명령어입니다.'
@@ -71,12 +60,18 @@ export const command = {
             ,deprive: '🔑 다른 방장의 권한을 회수하고 대신하였습니다.'
         }
         ,kick: {
-            noID: '❌ 잘못된 플레이어ID입니다. 퇴장시킬 수 없습니다.'
+            noID: '❌ 잘못된 플레이어ID입니다. 퇴장시킬 수 없습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !super kick #12)'
             ,kickMsg: '📢 퇴장'
             ,kickSuccess: '📢 해당 플레이어를 퇴장시켰습니다.'
         }
+        ,ban: {
+            noID: '❌ 잘못된 플레이어ID입니다. 영구퇴장시킬 수 없습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !super ban #12)'
+            ,banMsg: '📢 영구퇴장'
+            ,banSuccess: '📢 해당 플레이어를 영구퇴장시켰습니다.'
+        }
         ,banclear: {
-            complete: '🔑 밴 목록을 초기화했습니다.'
+            noTarget: '❌ 잘못된 밴 초기화 형식입니다. 현재는 📑 !super banclear all 만 가능합니다.'
+            ,complete: '🔑 밴 목록을 초기화했습니다.'
         }
     }
     ,list: {

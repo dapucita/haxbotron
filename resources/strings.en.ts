@@ -17,7 +17,7 @@ export const command = {
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
         ,help: '📑 !help COMMAND shows you how to use COMMAND command.'
         ,about: '📑 !about shows you simple inforamtion of the bot running now.'
-        ,stats: '📑 !stats shows all players your statistical information. 📑 If you want to reset, do !statsreset\n📑 !stats #ID : shows you statistical inforamtion of the player who has ID.\n📑 You can check IDs by command !list red,blue,spec'
+        ,stats: '📑 !stats shows you your statistical information. 📑 If you want to reset, do !statsreset\n📑 !stats #ID : shows you statistical inforamtion of the player who has ID.\n📑 You can check IDs by command !list red,blue,spec'
         ,statsreset: '📑 !statsreset resets your statistical information. It cannot be recovered.'
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
@@ -25,15 +25,12 @@ export const command = {
         ,list: '📑 !list TEAM(red/blue/spec) shows you all players list of the team.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
         ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec'
-        ,auto: '📑 !auto : You can pick players from spectators by descending order when you are captain.'
-        ,rand: '📑 !rand : You can pick players from spectators by random when you are captain.'
         ,scout: '📑 !scout shows you expectation of each teams by customed Pythagorean Expectation.'
     } 
     ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !stats #12)\n📑 You can check IDs by command !list red,blue,spec'
-        ,firstLine: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.'
-        ,secondLine: '📊 and Per Game : {targetStatsGoalsPerGame}goals, {targetStatsAssistsPerGame}assists, {targetStatsOgsPerGame}ogs, {targetStatsLostGoalsPerGame}lose goals.'
+        ,statsMsg: '📊 {targetName}#{ticketTarget} Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.\n📊 and Per Game : {targetStatsGoalsPerGame}goals, {targetStatsAssistsPerGame}assists, {targetStatsOgsPerGame}ogs, {targetStatsLostGoalsPerGame}lose goals.'
     }
     ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
@@ -47,14 +44,6 @@ export const command = {
         ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec'
         ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget} player is unmuted.'
-    }
-    ,auto: {
-        _ErrorNoPermission: '❌ You are not captain. You can\'t do this command.'
-        ,_ErrorNoOrder: '❌ You can\'t do this command not yet.'
-    }
-    ,rand: {
-        _ErrorNoPermission: '❌ You are not captain. You can\'t do this command.'
-        ,_ErrorNoOrder: '❌ You can\'t do this command not yet.'
     }
     ,super: {
         _ErrorWrongCommand: '❌ You did wrong command for super admin system.'
@@ -71,12 +60,18 @@ export const command = {
             ,deprive: '🔑 Succeeded to disqualify other admin players and make you admin.'
         }
         ,kick: {
-            noID: '❌ Error: Wrong Player ID.'
+            noID: '❌ Error: Wrong Player ID. You can only target numeric ID.(eg: !super kick #12)'
             ,kickMsg: '📢 kicked from the game'
             ,kickSuccess: '📢 That player is kicked.'
         }
+        ,ban: {
+            noID: '❌ Error: Wrong Player ID. You can only target numeric ID.(eg: !super ban #12)'
+            ,banMsg: '📢 banned from the game'
+            ,banSuccess: '📢 That player is banned.'
+        }
         ,banclear: {
-            complete: '🔑 Succeeded to clear ban list.'
+            noTarget: '❌ Error: You can\'t this. 📑 !super banclear all'
+            ,complete: '🔑 Succeeded to clear ban list.'
         }
     }
     ,list: {
