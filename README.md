@@ -6,7 +6,7 @@
 ![MIT Licence](https://img.shields.io/github/license/dapucita/haxbotron?style=flat-square)
 
 ## What is this
-Haxbotron is a bot application for launch Haxball game room.
+Haxbotron is a host bot application for Haxball game.
 
 You can power your own host by electron-based launcher.
 
@@ -18,24 +18,26 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 위 페이지에서 기부하여 이 프로젝트를 지원해주세요!
 
 ## Features
-launch on Multi platforms: Windows, Linux, OS X and so on
+- launch on Multi platforms: Windows, Linux, OS X and so on.
+- Detailed player data and statistics
+- Practical tools for actual gaming
+- Built-in maps, especially popular in Korea.
 
-Detailed player data
+## Manuals for Use
 
-Useful facilities for actual game
-
-Built-in maps: especially popular in Korea
-
-## Installation for Beginners
-
-- [Manual(English)](https://github.com/dapucita/haxbotron/wiki/How-to-Run)
-- [설치와 실행 방법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%84%A4%EC%B9%98%EC%99%80-%EC%8B%A4%ED%96%89-%EB%B0%A9%EB%B2%95)
-
+- [How to Run(English)](https://github.com/dapucita/haxbotron/wiki/How-to-Run) / [설치와 실행 방법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%84%A4%EC%B9%98%EC%99%80-%EC%8B%A4%ED%96%89-%EB%B0%A9%EB%B2%95)
+- [How to use Tweaks(English)](https://github.com/dapucita/haxbotron/wiki/How-to-use-Tweaks) / [여러가지 문제 해결법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%97%AC%EB%9F%AC%EA%B0%80%EC%A7%80-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%EB%B2%95-(%ED%8A%B8%EC%9C%85))
+- [Commands available in game](docs/command.md)
+- [Emergency tools in game](docs/emergencytool.md)
+- [Player Hierarchy](docs/playerhierarchy.md)
+- [Placeholders for interpolation](docs/placeholder.md)
+- [Colorset for Game Messages](https://github.com/dapucita/haxbotron/wiki/Colorset-for-Game-Messages)
+- [Other Utilities](https://github.com/dapucita/haxbotron/wiki/Utilities-for-this-bot)
 
 ## How to Build
 You need to install dependencies if you didn't.
 
-You don't have to build again if you did it already.
+You don't have to build again if you did it already unless any changes made.
 
 ```
 npm install
@@ -50,104 +52,19 @@ If you got the token, you have to launch the application and input your room's c
 
 Then, you can launch your own game room.
 
-## How to backup
-You have to make and keep a copy of `.node-persist` directory to preserve important player data.
+## How to Backup
+You have to keep a copy of `.node-persist` directory to preserve important player data.
 
-All data would be reserved in that directory and you can also modify them using text editor.
+All data would be saved in that directory and you can also modify them using text editor.
 
-And you can also check the log in `.logs` directory. These data will be kept for 30 days.
-
-## Player Hierarchy
-
-All players who joined the game have their own player level.
-
-There are 2 steps for common players, and 1 step for especial users who have authorization.
-
-`Player` is basic level, `Admin` is administrative level who is able to operating the game, and `Super Admin` is super level who has permissions for operating the bot application wholly.
-
-Admin players have yellow colored name tag in the spectator window, but Super Admin players don't have that yellow name tag.
-
-Super admin players can ban other players, and use special `!super` commands.
-
-## Game Commands for Players
-If you(the player) type a command by chat...
-
-`!help` shows you a simple list of commands you can use.
-
-`!help COMMAND` shows you how to use COMMAND command.
-
-`!help admin` shows you available commands when you are admin.
-
-`!about` shows you simple inforamtion of the bot running now.
-
-`!list TEAM` shows you that team's player list. (string red/blue/spec)
-
-`!stats` shows all players your statistical information.
-
-`!stats #ID` shows you statistical information of the player whose id is ID.
-
-`!statsreset` resets your statistical information. It cannot be recovered.
-
-`!streak` shows you which team is being on a winning streak.
-
-`!poss` shows you possessions rate of both Read and Blue team.
-
-`!afk MSG` switches to idle status, or return to active status if already in afk mode. MSG is the reason, and it can be skipped.
-
-## Game Commands for Captain Players
-`!auto` picks players from spectators by descending order when you are captain.
-
-`!rand` picks players from spectators by random when you are captain.
-
-## Game Commands for Admin Players
-`!freeze` prohibits all players without admin to chat. Or unmute if the players are already muted.
-
-`!mute #ID` prohibits the player whose id is ID to chat. Or unmute if the player is already muted. 
-
-## Game Commands for Super Admin Players
-
-If you(the super admin) type a command by chat...
-
-`!super login KEY` makes you super admin. KEY is authentication key for login, and the keys can be made in the Electron-based UI.
-
-`!super logout` disqualifies your super admin permission when you are loginned.
-
-`!super thor` makes admin player permission by self.
-
-`!super thor deprive` disqualify all admin players from admin permission, and makes admin player permission by self.
-
-`!super kick ID` kicks that player whose numeric ID is ID.
-
-`!super ban ID` bans that player whose numeric ID is ID.
-
-`!super banclear all` clears the list of banned players.
-
-## Emergency tools
-You can use some tools for emergency on the devtools console in the puppeteer.
-
-If you want to use these, you need to uncheck headless option for open the puppeteer window.
-
-`window.onEmergency.list()`
-
-`window.onEmergency.chat(msg: string, playerID?: number)`
-
-`window.onEmergency.kick(playerID: number, msg?: string)`
-
-`window.onEmergency.ban(playerID: number, msg?: string)`
-
-`window.onEmergency.banclearall()`
-
-`window.onEmergency.banlist()`
-
-`window.onEmergency.password(password?: string)`
+And you can also check the log in `.logs` directory. These log data will be kept for 30 days.
 
 ## Contacts
-[Github](https://github.com/dapucita/haxbotron)
-
-[Discord](https://discord.gg/qfg45B2)
+- [Github](https://github.com/dapucita/haxbotron)
+- [Discord](https://discord.gg/qfg45B2)
 
 ## Special thanks to
-`G.Buffon` made great custom maps and they are very popular in Korea.
+`G.Buffon` made great custom maps that are especially popular in Korea.
 
 ## Copyrights
 MIT License.
