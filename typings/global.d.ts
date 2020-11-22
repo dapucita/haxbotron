@@ -17,7 +17,6 @@ declare global {
         isMuteAll: boolean // is All players muted?
 
         playerList: Map // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
-        playerLeftList: Map // cf. interface BanList
         ballStack: KickStack // stack for ball tracing
         winningStreak: any //  how many wins straight (streak)
 

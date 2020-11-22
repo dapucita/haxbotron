@@ -1,7 +1,6 @@
 import { BanList } from "../model/BanList";
 
-// header
-
+// header ------------------------------------------------------------------------
 function bListLoad(): BanList[] { // init and load
     // init
     let list: BanList[] = [];
@@ -17,9 +16,10 @@ function bListLoad(): BanList[] { // init and load
 function bListSave(list: BanList[]): void {
     localStorage.setItem('_BanList', JSON.stringify(list)); // save(set) on localStorage
 }
+// ------------------------------------------------------------------------ header
 
-// exports
-
+// exports ------------------------------------------------------------------------
+// export
 function bListAdd(banItem: BanList): void { // add or update
     // init
     let list: BanList[] = [];
@@ -39,6 +39,7 @@ function bListAdd(banItem: BanList): void { // add or update
     bListSave(list); // and save it
 }
 
+// export
 function bListDelete(conn: string): boolean { // if the player is not banned yet, return false
     // init
     let list: BanList[] = [];
@@ -58,10 +59,12 @@ function bListDelete(conn: string): boolean { // if the player is not banned yet
     }
 }
 
+// export
 function bListClear(): void {
     localStorage.removeItem('_BanList'); // clear it
 }
 
+// export
 function bListCheck(conn: string): string|boolean { // if banned, returns the reason by string type
     // init
     let list: BanList[] = [];
@@ -79,6 +82,40 @@ function bListCheck(conn: string): string|boolean { // if banned, returns the re
     }
 }
 
+function bListCheckRegisterTime(conn: string): number {
+    // init
+    let list: BanList[] = [];
+    let itemIndex: number;
+    // load
+    list = bListLoad(); // load
+    itemIndex = list.findIndex((element: BanList) => { // if the player is, return index. Or return -1
+        return element.conn === conn;
+    });    
+    // return
+    if(itemIndex == -1) {
+        return 0; // if not banned, returns 0.
+    } else {
+        return list[itemIndex].register;
+    }
+}
+function bListCheckExpireTime(conn: string): number {
+    // init
+    let list: BanList[] = [];
+    let itemIndex: number;
+    // load
+    list = bListLoad(); // load
+    itemIndex = list.findIndex((element: BanList) => { // if the player is, return index. Or return -1
+        return element.conn === conn;
+    });    
+    // return
+    if(itemIndex == -1) {
+        return 0; // if not banned, returns 0.
+    } else {
+        return list[itemIndex].expire;
+    }
+}
+
+// export
 function bListGetArray(): BanList[] { // get all banned players and returns by array
     // init
     let list: BanList[] = [];
@@ -87,5 +124,7 @@ function bListGetArray(): BanList[] { // get all banned players and returns by a
     // return
     return list; // it can be 0 size if there are no banned players.
 }
+// ------------------------------------------------------------------------ exports
 
-export { bListAdd, bListDelete, bListClear, bListCheck, bListGetArray };
+
+export { bListAdd, bListDelete, bListClear, bListCheck, bListGetArray, bListCheckRegisterTime, bListCheckExpireTime };

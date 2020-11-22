@@ -81,9 +81,3 @@ export interface PlayerStorage {
     joinDate: number; // player join time
     leftDate: number; // player left time
 }
-
-export interface PlayerLeftList { // for reserving who left
-    id: number;
-    auth: string;
-    conn: string;
-}

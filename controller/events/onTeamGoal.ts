@@ -64,7 +64,7 @@ export function onTeamGoalListener(team: number): void {
             window.playerList.get(touchPlayer).stats.ogs++;
             setPlayerData(window.playerList.get(touchPlayer));
             window.room.sendAnnouncement(Tst.maketext(LangRes.onGoal.og, placeholderGoal), null, 0x00FF00, "normal", 0);
-            window.logger.i(`[GOAL] ${window.playerList.get(touchPlayer).name}#${window.playerList.get(touchPlayer).id} made an OG.`);
+            window.logger.i(`${window.playerList.get(touchPlayer).name}#${window.playerList.get(touchPlayer).id} made an OG.`);
         }
         // except spectators and filter who were lose a point
         var losePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team != 0 && player.team != team);

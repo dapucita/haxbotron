@@ -35,16 +35,30 @@ export function onPlayerJoinListener(player: PlayerObject): void {
     // check ban list
     let playerBanChecking: string | boolean = Ban.bListCheck(player.conn);
     if (typeof playerBanChecking !== "boolean") { // if banned (bListCheck would had returned string or boolean)
+        let playerBanExpireTime: number = Ban.bListCheckExpireTime(player.conn);
         placeholderJoin.banListReason = playerBanChecking;
-        window.logger.i(`[JOIN] ${player.name}#${player.id} was joined but kicked for registered in ban list. (conn:${player.conn},reason:${playerBanChecking})`);
-        window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList, placeholderJoin), false); // auto kick
-        return;
+
+        if(playerBanExpireTime == -1) { // Permanent ban
+            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking})`);
+            window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), false); // auto kick
+            return;
+        }
+        if(playerBanExpireTime > getUnixTimestamp()) { // Fixed-term ban (time limited ban)
+            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking})`);
+            window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.fixedTermBan, placeholderJoin), false); // auto kick
+            return;
+        }
+        if(playerBanExpireTime != -1 && playerBanExpireTime <= getUnixTimestamp()) { // time-over from expiration date
+            // ban clear for this player
+            window.logger.i(`${player.name}#${player.id} has deleted from the ban list because it has expired. (conn:${player.conn},reason:${playerBanChecking})`);
+            Ban.bListDelete(player.conn);
+        }
     }
 
     // if this player has already joinned by other connection
     window.playerList.forEach((eachPlayer: Player) => {
         if (eachPlayer.conn == player.conn) {
-            window.logger.i(`[JOIN] ${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
+            window.logger.i(`${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
             window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin), null, 0xFF0000, "normal", 0); // notify
             return; // exit from this join event
@@ -52,7 +66,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
     });
 
     // logging into console (debug)
-    window.logger.i(`[JOIN] ${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
+    window.logger.i(`${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
 
     // add the player who joined into playerList by creating class instance
     if (localStorage.getItem(player.auth) !== null) {

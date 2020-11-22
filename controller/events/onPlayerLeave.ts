@@ -34,7 +34,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         streakTeamCount: window.winningStreak.getCount()
     };
 
-    window.logger.i(`[LEFT] ${player.name} has left.`);
+    window.logger.i(`${player.name}#${player.id} has left.`);
 
     // check number of players joined and change game mode
     if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
@@ -49,12 +49,6 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         }
     }
 
-    let playerBanChecking: string | boolean = Ban.bListCheck(player.conn);
-    if (typeof playerBanChecking !== "boolean") { // if banned (bListCheck would had returned string or boolean)
-        window.playerLeftList.set(player.id, { id: player.id, auth: window.playerList.get(player.id).auth, conn: window.playerList.get(player.id).conn, reason: playerBanChecking });
-    } else { // not banned player
-        window.playerLeftList.set(player.id, { id: player.id, auth: window.playerList.get(player.id).auth, conn: window.playerList.get(player.id).conn });
-    }
     window.playerList.get(player.id).entrytime.leftDate = getUnixTimestamp(); // save left time
     setPlayerData(window.playerList.get(player.id)); // save
     window.playerList.delete(player.id); // delete from player list

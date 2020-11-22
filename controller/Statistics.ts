@@ -1,7 +1,7 @@
 import { PlayerObject } from "../model/PlayerObject";
 
 export function getUnixTimestamp(): number {
-    return Math.floor(new Date().getTime()); // return Unix timestamp (milliseconds)
+    return Math.floor(Date.now()); // return Unix timestamp (milliseconds)
 }
 
 export function calcWinsRate(totalGames: number, winGames: number): number {

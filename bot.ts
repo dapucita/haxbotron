@@ -27,7 +27,6 @@ console.log(`The authentication token is conveyed via cookie(${botRoomConfig.tok
 console.log("====");
 
 window.playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
-window.playerLeftList = new Map();
 
 window.winningStreak = { // count of winning streak
     red: 0, blue: 0,

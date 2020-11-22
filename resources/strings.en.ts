@@ -101,7 +101,10 @@ export const onJoin = {
     ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID} has already joined.'
     ,doubleJoinningKick: '🚫 You did double joinning.'
-    ,banList: '🚫 automatically banned. {banListReason}'
+    ,banList: {
+        permanentBan: '🚫 permanent ban:{banListReason}'
+        ,fixedTermBan: '🚫 ban:{banListReason}'
+    }
 }
 
 export const onLeft = {
