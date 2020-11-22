@@ -50,7 +50,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         }
         if(playerBanExpireTime != -1 && playerBanExpireTime <= getUnixTimestamp()) { // time-over from expiration date
             // ban clear for this player
-            window.logger.i(`${player.name}#${player.id} has deleted from the ban list because it has expired. (conn:${player.conn},reason:${playerBanChecking})`);
+            window.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking})`);
             Ban.bListDelete(player.conn);
         }
     }
