@@ -5,6 +5,7 @@ import * as LangRes from "../../resources/strings";
 import { roomPlayersNumberCheck, updateAdmins } from "../RoomTools";
 import * as Ban from "../Ban";
 import { setPlayerData } from "../Storage";
+import { getUnixTimestamp } from "../Statistics";
 
 export function onPlayerLeaveListener(player: PlayerObject): void {
     // Event called when a player leaves the room.
@@ -54,6 +55,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     } else { // not banned player
         window.playerLeftList.set(player.id, { id: player.id, auth: window.playerList.get(player.id).auth, conn: window.playerList.get(player.id).conn });
     }
+    window.playerList.get(player.id).entrytime.leftDate = getUnixTimestamp(); // save left time
     setPlayerData(window.playerList.get(player.id)); // save
     window.playerList.delete(player.id); // delete from player list
 

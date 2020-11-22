@@ -6,6 +6,7 @@ import { roomPlayersNumberCheck, updateAdmins } from "../RoomTools";
 import * as Ban from "../Ban";
 import { Player } from "../../model/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
+import { getUnixTimestamp } from "../Statistics";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     // Event called when a new player joins the room.
@@ -55,7 +56,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
 
     // add the player who joined into playerList by creating class instance
     if (localStorage.getItem(player.auth) !== null) {
-        // if this player is not new player
+        // if this player is not new player (existing player)
         var loadedData: PlayerStorage | null = getPlayerData(player.auth);
         if (loadedData !== null) {
             if (isNaN(loadedData.balltouch) == true) { // init for old players who don't have balltouch, pass value.
@@ -76,6 +77,9 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 afkmode: false,
                 afkreason: '',
                 superadmin: false
+            }, {
+                joinDate: getUnixTimestamp(),
+                leftDate: loadedData.leftDate
             }));
 
             // update player information in placeholder
@@ -110,6 +114,9 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             afkmode: false,
             afkreason: '',
             superadmin: false
+        }, {
+            joinDate: getUnixTimestamp(),
+            leftDate: 0
         }));
     }
 

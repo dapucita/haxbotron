@@ -57,6 +57,11 @@ export interface PlayerAfkTrace {
     count: number; // afk detection count
 }
 
+export interface PlayerEntryTime {
+    joinDate: number, // player join time stamp 0 means no data.
+    leftDate: number // player left time stamp. 0 means no data.
+}
+
 export interface PlayerStorage {
     // object literal that will be stored in LocalStorage as JSON.
     // however, JSON stringify should be done in LocalStorage not Node.js Map() object.
@@ -73,6 +78,8 @@ export interface PlayerStorage {
     passed: number; // total count of pass success
     mute: boolean; // is this player muted?
     //superadmin: boolean; // is this player super admin? // not save
+    joinDate: number; // player join time
+    leftDate: number; // player left time
 }
 
 export interface PlayerLeftList { // for reserving who left
