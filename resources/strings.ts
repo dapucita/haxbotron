@@ -8,6 +8,18 @@ export const scheduler = {
     ,afkDetect: '📢 @{targetName}#{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
 }
 
+export const antitrolling = {
+    joinFlood: {
+        banReason: '🚫 잦은 재접속'
+    }
+    ,chatFlood: {
+        muteReason: '🔇 채팅 도배로 음소거됐습니다.'
+    }
+    ,ogFlood: {
+        banReason: '🚫 연속 자책골'
+    }
+}
+
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
     ,_ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'

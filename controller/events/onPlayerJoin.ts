@@ -40,7 +40,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
 
         if(playerBanExpireTime == -1) { // Permanent ban
             window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking})`);
-            window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), false); // auto kick
+            window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), true); // auto ban
             return;
         }
         if(playerBanExpireTime > getUnixTimestamp()) { // Fixed-term ban (time limited ban)
@@ -52,6 +52,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             // ban clear for this player
             window.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking})`);
             Ban.bListDelete(player.conn);
+            // window.room.clearBan(player.id); //useless cuz banned player in haxball couldn't make join-event.
         }
     }
 
@@ -73,7 +74,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         // if this player is not new player (existing player)
         var loadedData: PlayerStorage | null = getPlayerData(player.auth);
         if (loadedData !== null) {
-            if (isNaN(loadedData.balltouch) == true) { // init for old players who don't have balltouch, pass value.
+            if (isNaN(loadedData.balltouch) == true) { // init for old players who don't have balltouch, pass value. (this is legacy)
                 loadedData.balltouch = 0;
                 loadedData.passed = 0;
             }

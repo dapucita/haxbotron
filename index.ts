@@ -1,11 +1,5 @@
 //Electron Loader
-const {
-    app,
-    BrowserWindow,
-    Menu,
-    dialog,
-    ipcMain
-} = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const menuTemplate = require('./view/menuTemplate');
 
 import { LogMessage } from "./model/LogMessage";
@@ -302,10 +296,8 @@ async function bot(hostConfig: string) {
         // now print it on electron's textarea
         if(await msgChunk != '') {
             await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgChunk + "' + document.getElementById('botConsole').value;");
-        } // TODO: replace logging system using textarea to rest api server
+        }
         // FIXME: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame". Maybe it was caused by quotation marks..
-
-        // TODO: 접속중인 인원수 표시하기.
 
         // data from bot
         var localStorageData: any[] = await page.evaluate(() => {

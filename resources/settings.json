@@ -1,3 +1,15 @@
 {
-    "afkCountLimit" : 4
+    "afkCountLimit" : 4,
+
+    "chatFiltering" : true,
+
+    "antiJoinFlood" : true,
+    "joinFloodBanMillisecs" : 600000,
+
+    "antiChatFlood" : true,
+    "chatFloodCriterion" : 3,
+
+    "antiOgFlood" : true,
+    "ogFloodCriterion" : 2,
+    "ogFloodBanMillisecs" : 600000
 }

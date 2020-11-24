@@ -54,6 +54,8 @@ window.isStatRecord = false;
 window.isGamingNow = false;
 window.isMuteAll = false;
 
+window.antiTrolling.chatFloodCount = [];
+
 window.room = window.HBInit(botRoomConfig);
 initialiseRoom();
 
@@ -78,7 +80,7 @@ var scheduledTimer = setInterval(function(): void {
                 window.room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
                     if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
-                    window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF7777, "bold", 1); // warning for all
+                    window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), player.id, 0xFF7777, "bold", 2); // warning for all
                     }
                     player.afktrace.count++; // add afk detection count
                 }
@@ -89,7 +91,7 @@ var scheduledTimer = setInterval(function(): void {
                     window.room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
                     if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
-                        window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), null, 0xFF7777, "bold", 1); // warning for all
+                        window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), player.id, 0xFF7777, "bold", 2); // warning for all
                     }
                     player.afktrace.count++; // add afk detection count
                 }

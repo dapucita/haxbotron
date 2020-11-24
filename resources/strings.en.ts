@@ -8,6 +8,18 @@ export const scheduler = {
     ,afkDetect: '📢 @{targetName}#{targetID} has been away from keyboard. Press any key, or would be kicked.'
 }
 
+export const antitrolling = {
+    joinFlood: {
+        banReason: '🚫 too much rejoin'
+    }
+    ,chatFlood: {
+        muteReason: '🔇 You are muted for too many chats.'
+    }
+    ,ogFlood: {
+        banReason: '🚫 too much OGs'
+    }
+}
+
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
     ,_ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'

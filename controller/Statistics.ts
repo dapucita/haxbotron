@@ -57,10 +57,6 @@ export function calcExpectedWinRate(wins: number, loses: number): number { // Py
     return Math.round((winsPow / (winsPow + losesPow)) * 100);
 }
 
-export function calcCombatPower() { //TODO: implement this
-
-}
-
 export function getTeamWinningExpectation(): number[] {
     if (window.isStatRecord == true) { // if the game mode is stats
         // init for count

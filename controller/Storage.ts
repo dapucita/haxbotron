@@ -29,7 +29,7 @@ export function setPlayerData(player: Player): void {
         mute: player.permissions.mute, // is this player muted? 
         //superadmin: player.permissions.superadmin // is this player super admin? // not save
         joinDate: player.entrytime.joinDate, // player join time
-        leftDate: player.entrytime.leftDate // player left time
+        leftDate: player.entrytime.leftDate, // player left time
     }
     localStorage.setItem(player.auth, JSON.stringify(playerData)); // convert object to json for store in localStorage // for decode: JSON.parse
 }
