@@ -31,6 +31,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 - [Emergency tools in game](docs/emergencytool.md)
 - [Player Hierarchy](docs/playerhierarchy.md)
 - [Placeholders for interpolation](docs/placeholder.md)
+- [Anti-Trolling options](docs/antitrolling.md)
 - [Colorset for Game Messages](https://github.com/dapucita/haxbotron/wiki/Colorset-for-Game-Messages)
 - [Other Utilities](https://github.com/dapucita/haxbotron/wiki/Utilities-for-this-bot)
 
