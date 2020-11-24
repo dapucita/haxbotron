@@ -32,7 +32,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
     }
     
 
-    var placeholderChat = { // Parser.maketext(str, placeholder)
+    var placeholderChat = { 
         playerID: player.id,
         playerName: player.name,
         gameRuleName: gameRule.ruleName,
