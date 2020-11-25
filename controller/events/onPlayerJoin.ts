@@ -120,7 +120,9 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 if (joinTimeStamp - loadedData.leftDate <= BotSettings.joinFloodIntervalMillisecs) { // when rejoin flood
                     // kick this player
                     window.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
-                    window.room.kickPlayer(player.id, LangRes.antitrolling.joinFlood, false); // kick
+                    window.room.kickPlayer(player.id, LangRes.antitrolling.joinFlood.banReason, false); // kick
+                    //and add into ban list (not permanent ban, but fixed-term ban)
+                    Ban.bListAdd({ conn: player.conn, reason: LangRes.antitrolling.joinFlood.banReason, register: joinTimeStamp, expire: joinTimeStamp+BotSettings.joinFloodBanMillisecs });
                     return; // exit from this join event
                 }
             }
