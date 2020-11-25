@@ -10,6 +10,8 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
     // The event function can return false in order to filter the chat message.
     // Then It prevents the chat message from reaching other players in the room.
 
+    //TODO: CHAT FILTERING
+
     window.logger.i(`${player.name}#${player.id} said, "${message}"`);
 
     if(BotSettings.antiChatFlood === true && player.admin === false) { // if anti chat flood options is enabled (admin player can say anytime)

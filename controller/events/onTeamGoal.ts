@@ -5,6 +5,8 @@ import { setPlayerData } from "../Storage";
 import { PlayerObject } from "../../model/PlayerObject";
 
 export function onTeamGoalListener(team: number): void {
+    // TODO: ANTI OG FLOOD
+
     // Event called when a team scores a goal.
     var placeholderGoal = { // Parser.maketext(str, placeholder)
         teamID: team,

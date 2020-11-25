@@ -1,14 +1,17 @@
 import { PlayerObject, PlayerStorage } from "../../model/PlayerObject";
 import { gameRule } from "../../model/rules/rule";
-import * as Tst from "../Translator";
-import * as LangRes from "../../resources/strings";
-import { roomPlayersNumberCheck, updateAdmins } from "../RoomTools";
-import * as Ban from "../Ban";
 import { Player } from "../../model/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
+import { roomPlayersNumberCheck, updateAdmins } from "../RoomTools";
+import * as Ban from "../Ban";
+import * as BotSettings from "../../resources/settings.json";
+import * as Tst from "../Translator";
+import * as LangRes from "../../resources/strings";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
+    const joinTimeStamp: number = getUnixTimestamp();
+
     // Event called when a new player joins the room.
     var placeholderJoin = { // Parser.maketext(str, placeholder)
         playerID: player.id,
@@ -38,17 +41,17 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         let playerBanExpireTime: number = Ban.bListCheckExpireTime(player.conn);
         placeholderJoin.banListReason = playerBanChecking;
 
-        if(playerBanExpireTime == -1) { // Permanent ban
+        if (playerBanExpireTime == -1) { // Permanent ban
             window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking})`);
             window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), true); // auto ban
             return;
         }
-        if(playerBanExpireTime > getUnixTimestamp()) { // Fixed-term ban (time limited ban)
+        if (playerBanExpireTime > getUnixTimestamp()) { // Fixed-term ban (time limited ban)
             window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking})`);
             window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.fixedTermBan, placeholderJoin), false); // auto kick
             return;
         }
-        if(playerBanExpireTime != -1 && playerBanExpireTime <= getUnixTimestamp()) { // time-over from expiration date
+        if (playerBanExpireTime != -1 && playerBanExpireTime <= getUnixTimestamp()) { // time-over from expiration date
             // ban clear for this player
             window.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking})`);
             Ban.bListDelete(player.conn);
@@ -71,7 +74,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
 
     // add the player who joined into playerList by creating class instance
     if (localStorage.getItem(player.auth) !== null) {
-        // if this player is not new player (existing player)
+        // if this player is existing player (not new player)
         var loadedData: PlayerStorage | null = getPlayerData(player.auth);
         if (loadedData !== null) {
             if (isNaN(loadedData.balltouch) == true) { // init for old players who don't have balltouch, pass value. (this is legacy)
@@ -93,7 +96,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 afkreason: '',
                 superadmin: false
             }, {
-                joinDate: getUnixTimestamp(),
+                joinDate: joinTimeStamp,
                 leftDate: loadedData.leftDate
             }));
 
@@ -110,6 +113,16 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 // notify that fact to other players only once ( it will never be notified if he/she rejoined next time)
                 placeholderJoin.playerNameOld = loadedData.name
                 window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.changename, placeholderJoin), null, 0x00FF00, "normal", 0);
+            }
+
+            // check anti-rejoin flood when this option is enabled
+            if (BotSettings.antiJoinFlood === true) {
+                if (joinTimeStamp - loadedData.leftDate <= BotSettings.joinFloodIntervalMillisecs) { // when rejoin flood
+                    // kick this player
+                    window.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
+                    window.room.kickPlayer(player.id, LangRes.antitrolling.joinFlood, false); // kick
+                    return; // exit from this join event
+                }
             }
         }
     } else {
@@ -130,7 +143,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             afkreason: '',
             superadmin: false
         }, {
-            joinDate: getUnixTimestamp(),
+            joinDate: joinTimeStamp,
             leftDate: 0
         }));
     }
