@@ -2,6 +2,7 @@ import { PlayerObject } from "../../model/PlayerObject";
 import { gameRule } from "../../model/rules/rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import * as BotSettings from "../../resources/settings.json";
 import { getTeamWinningExpectation } from "../Statistics";
 
 export function onGameStartListener(byPlayer: PlayerObject): void {
@@ -25,6 +26,10 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
 
         window.isGamingNow = true; // turn on
 
+        if(BotSettings.antiOgFlood === true) { // if anti-OG flood option is enabled
+            window.antiTrolling.ogFloodCount = []; // clear and init again
+        }
+        
         let msg = `[GAME] The game(stat record:${window.isStatRecord}) has been started.`;
         if (byPlayer !== null && byPlayer.id != 0) {
             placeholderStart.playerID = byPlayer.id;

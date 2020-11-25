@@ -1,21 +1,22 @@
 import { gameRule } from "../../model/rules/rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import * as BotSettings from "../../resources/settings.json";
+import * as Ban from "../Ban";
 import { setPlayerData } from "../Storage";
 import { PlayerObject } from "../../model/PlayerObject";
+import { getUnixTimestamp } from "../Statistics";
 
 export function onTeamGoalListener(team: number): void {
-    // TODO: ANTI OG FLOOD
-
     // Event called when a team scores a goal.
     var placeholderGoal = { // Parser.maketext(str, placeholder)
         teamID: team,
         teamName: '',
-        scorerID: '',
+        scorerID: 0,
         scorerName: '',
         assistID: '',
         assistName: '',
-        ogID: '',
+        ogID: 0,
         ogName: '',
         gameRuleName: gameRule.ruleName,
         gameRuleDescription: gameRule.ruleDescripttion,
@@ -42,8 +43,16 @@ export function onTeamGoalListener(team: number): void {
     window.ballStack.clear(); // clear the stack.
     window.ballStack.initTouchInfo(); // clear touch info
     if (window.isStatRecord == true && touchPlayer !== undefined) { // records when game mode is for stats recording.
-        if (window.playerList.get(touchPlayer).team == team) {
-            // if the goal is not OG
+        // except spectators and filter who were lose a point
+        var losePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team != 0 && player.team != team);
+        losePlayers.forEach(function (eachPlayer: PlayerObject) {
+            // records a lost point
+            window.playerList.get(eachPlayer.id).stats.losePoints++;
+            setPlayerData(window.playerList.get(eachPlayer.id)); // updates lost points count
+        });
+
+        // check whether or not it is an OG. and process it!
+        if (window.playerList.get(touchPlayer).team == team) { // if the goal is normal goal (not OG)
             placeholderGoal.scorerID = window.playerList.get(touchPlayer).id;
             placeholderGoal.scorerName = window.playerList.get(touchPlayer).name;
             window.playerList.get(touchPlayer).stats.goals++;
@@ -59,21 +68,34 @@ export function onTeamGoalListener(team: number): void {
             }
             window.room.sendAnnouncement(goalMsg, null, 0x00FF00, "normal", 0);
             window.logger.i(goalMsg);
-        } else {
-            // if the goal is OG
-            placeholderGoal.ogID = window.playerList.get(touchPlayer).id;
+        } else { // if the goal is OG
+            placeholderGoal.ogID = touchPlayer;
             placeholderGoal.ogName = window.playerList.get(touchPlayer).name;
             window.playerList.get(touchPlayer).stats.ogs++;
             setPlayerData(window.playerList.get(touchPlayer));
             window.room.sendAnnouncement(Tst.maketext(LangRes.onGoal.og, placeholderGoal), null, 0x00FF00, "normal", 0);
-            window.logger.i(`${window.playerList.get(touchPlayer).name}#${window.playerList.get(touchPlayer).id} made an OG.`);
+            window.logger.i(`${window.playerList.get(touchPlayer).name}#${touchPlayer} made an OG.`);
+
+            if(BotSettings.antiOgFlood === true) { // if anti-OG flood option is enabled
+                window.antiTrolling.ogFloodCount.push(touchPlayer); // record it
+
+                let ogCountByPlayer: number = 0;
+                window.antiTrolling.ogFloodCount.forEach((record) =>  { //check how many times OG made by this player
+                    if(record === touchPlayer) {
+                        ogCountByPlayer++; //count
+                    }
+                });
+
+                if(ogCountByPlayer >= BotSettings.ogFloodCriterion) { // if too many OGs were made
+                    // kick this player
+                    const banTimeStamp: number = getUnixTimestamp(); // get current timestamp
+                    window.logger.i(`${window.playerList.get(touchPlayer).name}#${touchPlayer} was kicked for anti-OGs flood. He made ${ogCountByPlayer} OGs. (conn:${window.playerList.get(touchPlayer).conn})`);
+                    window.room.kickPlayer(touchPlayer, LangRes.antitrolling.ogFlood.banReason, false); // kick
+                    //and add into ban list (not permanent ban, but fixed-term ban)
+                    Ban.bListAdd({ conn: window.playerList.get(touchPlayer).conn, reason: LangRes.antitrolling.ogFlood.banReason, register: banTimeStamp, expire: banTimeStamp+BotSettings.ogFloodBanMillisecs });
+                }
+            }
+            
         }
-        // except spectators and filter who were lose a point
-        var losePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team != 0 && player.team != team);
-        losePlayers.forEach(function (eachPlayer: PlayerObject) {
-            // records a lost point
-            window.playerList.get(eachPlayer.id).stats.losePoints++;
-            setPlayerData(window.playerList.get(eachPlayer.id)); // updates lost points count
-        });
     }
 }

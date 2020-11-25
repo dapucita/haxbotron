@@ -21,6 +21,7 @@ declare global {
         winningStreak: any //  how many wins straight (streak)
 
         antiTrolling: {
+            ogFloodCount: number[] // flood counter for OG (player id: number)
             chatFloodCount: number[] // flood counter for chat. (player id: number)
         }
 
