@@ -10,15 +10,15 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
     // The event function can return false in order to filter the chat message.
     // Then It prevents the chat message from reaching other players in the room.
 
-    //TODO: CHAT FILTERING
+    //TODO: CHAT FILTERING : https://github.com/web-mech/badwords
 
     window.logger.i(`${player.name}#${player.id} said, "${message}"`);
 
     if(BotSettings.antiChatFlood === true && player.admin === false) { // if anti chat flood options is enabled (admin player can say anytime)
         let chatFloodCritFlag: boolean = false;
-        window.antiTrolling.chatFloodCount.push(player.id); // record who said this chat
+        window.antiTrollingChatFloodCount.push(player.id); // record who said this chat
         for(let floodCritCount = 0; floodCritCount < BotSettings.chatFloodCriterion; floodCritCount++) {
-            if(window.antiTrolling.chatFloodCount.pop() === player.id) {
+            if(window.antiTrollingChatFloodCount.pop() === player.id) {
                 chatFloodCritFlag = true;
             } else {
                 chatFloodCritFlag = false;

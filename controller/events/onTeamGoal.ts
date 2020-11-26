@@ -77,10 +77,10 @@ export function onTeamGoalListener(team: number): void {
             window.logger.i(`${window.playerList.get(touchPlayer).name}#${touchPlayer} made an OG.`);
 
             if(BotSettings.antiOgFlood === true) { // if anti-OG flood option is enabled
-                window.antiTrolling.ogFloodCount.push(touchPlayer); // record it
+                window.antiTrollingOgFloodCount.push(touchPlayer); // record it
 
                 let ogCountByPlayer: number = 0;
-                window.antiTrolling.ogFloodCount.forEach((record) =>  { //check how many times OG made by this player
+                window.antiTrollingOgFloodCount.forEach((record) =>  { //check how many times OG made by this player
                     if(record === touchPlayer) {
                         ogCountByPlayer++; //count
                     }

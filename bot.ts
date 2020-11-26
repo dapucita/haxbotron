@@ -54,8 +54,8 @@ window.isStatRecord = false;
 window.isGamingNow = false;
 window.isMuteAll = false;
 
-window.antiTrolling.chatFloodCount = [];
-window.antiTrolling.ogFloodCount = [];
+window.antiTrollingOgFloodCount = [];
+window.antiTrollingChatFloodCount = [];
 
 window.room = window.HBInit(botRoomConfig);
 initialiseRoom();

@@ -27,7 +27,7 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
         window.isGamingNow = true; // turn on
 
         if(BotSettings.antiOgFlood === true) { // if anti-OG flood option is enabled
-            window.antiTrolling.ogFloodCount = []; // clear and init again
+            window.antiTrollingOgFloodCount = []; // clear and init again
         }
         
         let msg = `[GAME] The game(stat record:${window.isStatRecord}) has been started.`;

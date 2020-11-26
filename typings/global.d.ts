@@ -20,10 +20,8 @@ declare global {
         ballStack: KickStack // stack for ball tracing
         winningStreak: any //  how many wins straight (streak)
 
-        antiTrolling: {
-            ogFloodCount: number[] // flood counter for OG (player id: number)
-            chatFloodCount: number[] // flood counter for chat. (player id: number)
-        }
+        antiTrollingOgFloodCount: number[] // flood counter for OG (player id: number)
+        antiTrollingChatFloodCount: number[] // flood counter for chat. (player id: number)
 
         sendRoomChat(msg: string, playerID?: number): void // for send chat message to the game
 
