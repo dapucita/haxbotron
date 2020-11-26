@@ -310,6 +310,8 @@ async function bot(hostConfig: string) {
             }
             return jsonData;
         });
+        
+        // save data
         Object.keys(localStorageData).forEach(function (elementKey: any) {
             nodeStorage.setItem(elementKey, localStorageData[elementKey]);
         });
