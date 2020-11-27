@@ -12,6 +12,9 @@ import * as LangRes from "../../resources/strings";
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();
 
+    // logging into console
+    window.logger.i(`${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
+
     // Event called when a new player joins the room.
     var placeholderJoin = { // Parser.maketext(str, placeholder)
         playerID: player.id,
@@ -34,7 +37,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         streakTeamCount: window.winningStreak.getCount(),
         banListReason: ''
     };
-    
+
     // check ban list
     let playerBanChecking: string | boolean = Ban.bListCheck(player.conn);
     if (typeof playerBanChecking !== "boolean") { // if banned (bListCheck would had returned string or boolean)
@@ -69,9 +72,6 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         }
     });
 
-    // logging into console (debug)
-    window.logger.i(`${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
-
     // add the player who joined into playerList by creating class instance
     if (localStorage.getItem(player.auth) !== null) {
         // if this player is existing player (not new player)
@@ -96,6 +96,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 afkreason: '',
                 superadmin: false
             }, {
+                rejoinCount: loadedData.rejoinCount,
                 joinDate: joinTimeStamp,
                 leftDate: loadedData.leftDate
             }));
@@ -118,12 +119,20 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             // check anti-rejoin flood when this option is enabled
             if (BotSettings.antiJoinFlood === true) { //FIXME: Connection Closed Message is shown when anti-rejoin flooding kick (FIND the reason why)
                 if (joinTimeStamp - loadedData.leftDate <= BotSettings.joinFloodIntervalMillisecs) { // when rejoin flood
-                    // kick this player
-                    window.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
-                    window.room.kickPlayer(player.id, LangRes.antitrolling.joinFlood.banReason, false); // kick
-                    //and add into ban list (not permanent ban, but fixed-term ban)
-                    Ban.bListAdd({ conn: player.conn, reason: LangRes.antitrolling.joinFlood.banReason, register: joinTimeStamp, expire: joinTimeStamp+BotSettings.joinFloodBanMillisecs });
-                    return; // exit from this join event
+                    if (loadedData.rejoinCount > BotSettings.joinFloodAllowLimitation) {
+                        // kick this player
+                        window.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
+                        window.room.kickPlayer(player.id, LangRes.antitrolling.joinFlood.banReason, false); // kick
+                        //and add into ban list (not permanent ban, but fixed-term ban)
+                        Ban.bListAdd({ conn: player.conn, reason: LangRes.antitrolling.joinFlood.banReason, register: joinTimeStamp, expire: joinTimeStamp + BotSettings.joinFloodBanMillisecs });
+                        return; // exit from this join event
+                    } else { //just warn
+                        window.room.sendAnnouncement(LangRes.antitrolling.joinFlood.floodWarning, player.id, 0xFF0000, "bold", 2);
+                        window.playerList.get(player.id).entrytime.rejoinCount++; // and add count
+                    }
+                } else {
+                    // init rejoin count
+                    window.playerList.get(player.id).entrytime.rejoinCount = 0;
                 }
             }
         }
@@ -145,6 +154,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             afkreason: '',
             superadmin: false
         }, {
+            rejoinCount: 0,
             joinDate: joinTimeStamp,
             leftDate: 0
         }));

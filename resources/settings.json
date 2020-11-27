@@ -4,6 +4,7 @@
     "chatFiltering" : true,
 
     "antiJoinFlood" : true,
+    "joinFloodAllowLimitation" : 1,
     "joinFloodIntervalMillisecs" : 30000,
     "joinFloodBanMillisecs" : 300000,
 

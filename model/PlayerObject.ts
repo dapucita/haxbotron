@@ -58,6 +58,7 @@ export interface PlayerAfkTrace {
 }
 
 export interface PlayerEntryTime {
+    rejoinCount: number, // How many rejoins this player has made.
     joinDate: number, // player join time stamp 0 means no data.
     leftDate: number // player left time stamp. 0 means no data.
 }
@@ -78,6 +79,7 @@ export interface PlayerStorage {
     passed: number; // total count of pass success
     mute: boolean; // is this player muted?
     //superadmin: boolean; // is this player super admin? // not save
+    rejoinCount: number; // How many rejoins this player has made.
     joinDate: number; // player join time
     leftDate: number; // player left time
 }

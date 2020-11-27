@@ -11,6 +11,7 @@ export const scheduler = {
 export const antitrolling = {
     joinFlood: {
         banReason: '🚫 잦은 재접속'
+        ,floodWarning: '📢 너무 짧은 시간에 재접속하면 퇴장될 수 있습니다.'
     }
     ,chatFlood: {
         muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다. 방장이 해제할 수 있습니다.'

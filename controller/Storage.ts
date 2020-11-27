@@ -28,6 +28,7 @@ export function setPlayerData(player: Player): void {
         passed: player.stats.passed, // total count of pass success
         mute: player.permissions.mute, // is this player muted? 
         //superadmin: player.permissions.superadmin // is this player super admin? // not save
+        rejoinCount: player.entrytime.rejoinCount, // How many rejoins this player has made.
         joinDate: player.entrytime.joinDate, // player join time
         leftDate: player.entrytime.leftDate, // player left time
     }
