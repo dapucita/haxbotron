@@ -26,6 +26,9 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
 
         window.isGamingNow = true; // turn on
 
+        if(BotSettings.antiChatFlood === true) { // if anti-chat flood option is enabled
+            window.antiTrollingOgFloodCount = []; // clear and init again
+        }
         if(BotSettings.antiOgFlood === true) { // if anti-OG flood option is enabled
             window.antiTrollingOgFloodCount = []; // clear and init again
         }

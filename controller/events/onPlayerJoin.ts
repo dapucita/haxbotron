@@ -34,7 +34,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         streakTeamCount: window.winningStreak.getCount(),
         banListReason: ''
     };
-    //FIXME: anti rejoin flood시 Connectio closed로 뜨는 현상
+    
     // check ban list
     let playerBanChecking: string | boolean = Ban.bListCheck(player.conn);
     if (typeof playerBanChecking !== "boolean") { // if banned (bListCheck would had returned string or boolean)
@@ -116,7 +116,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             }
 
             // check anti-rejoin flood when this option is enabled
-            if (BotSettings.antiJoinFlood === true) {
+            if (BotSettings.antiJoinFlood === true) { //FIXME: Connection Closed Message is shown when anti-rejoin flooding kick (FIND the reason why)
                 if (joinTimeStamp - loadedData.leftDate <= BotSettings.joinFloodIntervalMillisecs) { // when rejoin flood
                     // kick this player
                     window.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
