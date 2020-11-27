@@ -1,5 +1,7 @@
 import { PlayerObject } from "../model/PlayerObject";
 
+// TODO: Elo https://ryanmadden.net/posts/Adapting-Elo
+
 export function getUnixTimestamp(): number {
     return Math.floor(Date.now()); // return Unix timestamp (milliseconds)
 }
