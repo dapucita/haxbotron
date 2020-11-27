@@ -27,6 +27,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 
 - [How to Run(English)](https://github.com/dapucita/haxbotron/wiki/How-to-Run) / [설치와 실행 방법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%84%A4%EC%B9%98%EC%99%80-%EC%8B%A4%ED%96%89-%EB%B0%A9%EB%B2%95)
 - [How to use Tweaks(English)](https://github.com/dapucita/haxbotron/wiki/How-to-use-Tweaks) / [여러가지 문제 해결법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%97%AC%EB%9F%AC%EA%B0%80%EC%A7%80-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%EB%B2%95-(%ED%8A%B8%EC%9C%85))
+- [How to launch via CLI](https://github.com/dapucita/haxbotron/wiki/How-to-launch-via-CLI)
 - [Commands available in game](docs/command.md)
 - [Emergency tools in game](docs/emergencytool.md)
 - [Player Hierarchy](docs/playerhierarchy.md)
