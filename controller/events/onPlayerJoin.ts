@@ -34,7 +34,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         streakTeamCount: window.winningStreak.getCount(),
         banListReason: ''
     };
-
+    //FIXME: anti rejoin flood시 Connectio closed로 뜨는 현상
     // check ban list
     let playerBanChecking: string | boolean = Ban.bListCheck(player.conn);
     if (typeof playerBanChecking !== "boolean") { // if banned (bListCheck would had returned string or boolean)

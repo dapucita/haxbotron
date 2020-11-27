@@ -13,7 +13,7 @@ export const antitrolling = {
         banReason: '🚫 too much rejoin'
     }
     ,chatFlood: {
-        muteReason: '🔇 You are muted for too many chats.'
+        muteReason: '🔇 You are muted for too many chats. Admin player can release it.'
     }
     ,ogFlood: {
         banReason: '🚫 too much OGs'
@@ -114,8 +114,8 @@ export const onJoin = {
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID} has already joined.'
     ,doubleJoinningKick: '🚫 You did double joinning.'
     ,banList: {
-        permanentBan: '🚫 permanent ban:{banListReason}'
-        ,fixedTermBan: '🚫 ban:{banListReason}'
+        permanentBan: '{banListReason}'
+        ,fixedTermBan: '{banListReason}'
     }
 }
 

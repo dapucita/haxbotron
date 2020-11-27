@@ -8,7 +8,7 @@
     "joinFloodBanMillisecs" : 600000,
 
     "antiChatFlood" : true,
-    "chatFloodCriterion" : 3,
+    "chatFloodCriterion" : 5,
 
     "antiOgFlood" : true,
     "ogFloodCriterion" : 2,

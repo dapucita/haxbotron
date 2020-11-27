@@ -13,7 +13,7 @@ export const antitrolling = {
         banReason: '🚫 잦은 재접속'
     }
     ,chatFlood: {
-        muteReason: '🔇 채팅 도배로 음소거됐습니다.'
+        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다. 방장이 해제할 수 있습니다.'
     }
     ,ogFlood: {
         banReason: '🚫 연속 자책골'
@@ -114,8 +114,8 @@ export const onJoin = {
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID}님이 중복 접속하였습니다.'
     ,doubleJoinningKick: '🚫 중복 접속으로 퇴장'
     ,banList: {
-        permanentBan: '🚫 영구퇴장:{banListReason}'
-        ,fixedTermBan: '🚫 퇴장:{banListReason}'
+        permanentBan: '{banListReason}'
+        ,fixedTermBan: '{banListReason}'
     }
 }
 
