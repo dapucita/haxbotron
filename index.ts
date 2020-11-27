@@ -192,7 +192,7 @@ async function nodeStorageInit() {
 }
 
 async function bot(hostConfig: string) {
-    console.log('\x1b[32m%s\x1b[0m', "The headless host has started.");
+    console.log('\x1b[32m%s\x1b[0m', "The game host has started.");
     
     //await nodeStorage.init();
 
@@ -218,7 +218,7 @@ async function bot(hostConfig: string) {
             document.getElementById('roomLinkIndicator').innerHTML = "link";
             document.getElementById('botConsole').value = "";
         `);
-        console.log('\x1b[31m%s\x1b[0m', "The headless host is closed.");
+        console.log('\x1b[31m%s\x1b[0m', "The game host is closed.");
         return;
     });
 
