@@ -11,6 +11,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
             case "red": {
                 let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 1);
                 if (players.length >= 1) {
+                    placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
                         let muteFlag: string = '';
                         if (window.playerList.get(player.id).permissions.mute == true) {
@@ -25,6 +26,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
             case "blue": {
                 let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 2);
                 if (players.length >= 1) {
+                    placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
                         let muteFlag: string = '';
                         if (window.playerList.get(player.id).permissions.mute == true) {
@@ -39,6 +41,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
             case "spec": {
                 let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 0);
                 if (players.length >= 1) {
+                    placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
                         let muteFlag: string = '';
                         if (window.playerList.get(player.id).permissions.mute == true) {
