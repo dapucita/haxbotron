@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const scheduler = {
-    advertise: '📢 Haxbotron🤖 is in development. Open source and free to use!\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
+    advertise: '📢 Haxbotron🤖 - Open Source Bot Project\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
     ,afkKick: '📢 kicked: AFK'
     ,afkDetect: '📢 @{targetName}#{targetID} has been away from keyboard. Press any key, or would be kicked.'
@@ -34,9 +34,9 @@ export const command = {
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
         ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
-        ,list: '📑 !list TEAM(red/blue/spec) shows you all players list of the team.'
+        ,list: '📑 !list red/blue/spec/mute shows you all players list of that type.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
-        ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec'
+        ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
         ,scout: '📑 !scout shows you expectation of each teams by customed Pythagorean Expectation.'
     } 
     ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
@@ -53,7 +53,7 @@ export const command = {
     }
     ,mute: {
         _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
-        ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec'
+        ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
         ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget} player is unmuted.'
     }
@@ -87,7 +87,7 @@ export const command = {
         }
     }
     ,list: {
-        _ErrorNoTeam: '❌ You can request only about red, blue, spec team.'
+        _ErrorNoTeam: '❌ You can only request red,blue,spec,mute players list.'
         ,_ErrorNoOne: '❌ There\'s no one.'
         ,whoisList: '📜 {whoisResult}'
     }

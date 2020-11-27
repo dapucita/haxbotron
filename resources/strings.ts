@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const scheduler = {
-    advertise: '📢 Haxbotron🤖 - Open source, Free to use\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
+    advertise: '📢 Haxbotron🤖 - Open Source Bot Project\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
     ,afkDetect: '📢 @{targetName}#{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
@@ -29,19 +29,19 @@ export const command = {
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
         ,help: '📑 !help COMMAND : COMMAND 명령어의 자세한 설명을 보여줍니다.'
         ,about: '📑 !about : 봇의 정보를 보여줍니다.'
-        ,stats: '📑 !stats : 스탯을 보여줍니다. 📑 !statsreset로 리셋합니다.\n📑 !stats #ID : 해당 ID의 플레이어 스탯을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
+        ,stats: '📑 !stats : 스탯을 보여줍니다. 📑 !statsreset로 리셋합니다.\n📑 !stats #ID : 해당 ID의 플레이어 스탯을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,statsreset: '📑 !statsreset : 스탯을 초기화합니다. 다시 복구할 수 없습니다.'
         ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
         ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다.'
-        ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.'
+        ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.\n📑 !list mute : 음소거된 플레이어의 명단을 보여줍니다.'
         ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
-        ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
+        ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,scout: '📑 !scout : 각 팀의 기대승률치를 보여줍니다. 팀 간의 비교는 아니며, 피타고리안 승률 공식의 변형을 사용합니다.'
     } 
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
-        _ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
+        _ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 : 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
     }
     ,statsreset: '📊 스탯을 초기화했습니다. 다시 복구할 수 없습니다.'
@@ -53,7 +53,7 @@ export const command = {
     }
     ,mute: {
         _ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
-        ,_ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
+        ,_ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
         ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
     }
@@ -87,8 +87,8 @@ export const command = {
         }
     }
     ,list: {
-        _ErrorNoTeam: '❌ red, blue, spec 팀 중 하나를 지정해야 합니다.'
-        ,_ErrorNoOne: '❌ 해당 팀에 아무도 없습니다.'
+        _ErrorNoTeam: '❌ red, blue, spec, mute 중 명단 종류를 지정해야 합니다.'
+        ,_ErrorNoOne: '❌ 해당 명단에 아무도 없습니다.'
         ,whoisList: '📜 {whoisResult}'
     }
     ,freeze: {

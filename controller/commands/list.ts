@@ -8,6 +8,17 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
             whoisResult: LangRes.command.list._ErrorNoOne
         }
         switch (message) {
+            case "mute": {
+                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && window.playerList.get(player.id).permissions.mute === true);
+                if (players.length >= 1) {
+                    placeholder.whoisResult = '🔇 '; //init
+                    players.forEach((player: PlayerObject) => {
+                        placeholder.whoisResult += player.name + '#' + player.id + ', ';
+                    });
+                }
+                window.room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
+                break;
+            }
             case "red": {
                 let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 1);
                 if (players.length >= 1) {
