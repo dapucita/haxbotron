@@ -14,6 +14,7 @@ const nodeStorage = require('node-persist');
 
 var hostRoomConfig: RoomConfig; //room settings and information
 
+var isOpenHeadless: boolean = true; // option for open chromium in headless mode
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
 var puppeteerContainer: any; // puppeteer page object
 
@@ -82,6 +83,11 @@ async function makeBot(hostConfig: any) {
                 name: "inputRoomTokenKey",
                 type: "input",
                 message: "Set your Token Key",
+            },
+            {
+                name: "inputHeadlessModeSelect",
+                type: "confirm",
+                message: "Do you want Headless Mode?",
             }
         ])
         .then((answerConfig: any) => {
@@ -94,9 +100,10 @@ async function makeBot(hostConfig: any) {
             hostConfig.maxPlayers = answerConfig.inputRoomMaxPlayers;
             hostConfig.public = answerConfig.inputRoomPublic;
             hostConfig.token = answerConfig.inputRoomTokenKey;
+            isOpenHeadless = answerConfig.inputHeadlessModeSelect;
         });
 
-    winstonLogger.info("The headless host has started.");
+    winstonLogger.info("The game host has started.");
     //await nodeStorage.init();
 
     /*
@@ -105,7 +112,7 @@ async function makeBot(hostConfig: any) {
     */
 
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: isOpenHeadless,
         args: puppeteerCustomArgs
     });
 
@@ -113,7 +120,7 @@ async function makeBot(hostConfig: any) {
         clearInterval(storageLoop);
         // browser.close();
         isBotLaunched = false;
-        winstonLogger.info("The headless host is closed.");
+        winstonLogger.info("The game host is closed.");
         return;
     });
 
@@ -192,12 +199,14 @@ async function makeBot(hostConfig: any) {
         });
     }, 5000); // by each 5seconds
 
+    /*
     await page.waitForFunction(() => window.roomURIlink !== undefined); // wait until window.roomURIlink is created. That object is made when room.onRoomLink event is called.
     var conveyedRoomLink: string = await page.evaluate(() => {
         return window.roomURIlink; // get the link
     });
 
     await console.log(`This room has a link now : ${conveyedRoomLink}`); // print the link
+    */
 
     return page;
 }
