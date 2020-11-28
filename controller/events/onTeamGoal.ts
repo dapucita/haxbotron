@@ -14,7 +14,7 @@ export function onTeamGoalListener(team: number): void {
         teamName: '',
         scorerID: 0,
         scorerName: '',
-        assistID: '',
+        assistID: 0,
         assistName: '',
         ogID: 0,
         ogName: '',
