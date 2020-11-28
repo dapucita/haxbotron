@@ -9,7 +9,7 @@ import { getUnixTimestamp } from "../Statistics";
 
 export function onTeamGoalListener(team: number): void {
     // Event called when a team scores a goal.
-    var placeholderGoal = { // Parser.maketext(str, placeholder)
+    var placeholderGoal = { 
         teamID: team,
         teamName: '',
         scorerID: 0,

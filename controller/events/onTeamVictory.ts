@@ -9,7 +9,7 @@ import { setDefaultStadiums } from "../RoomTools";
 export function onTeamVictoryListener(scores: ScoresObject): void {
     // Event called when a team 'wins'. not just when game ended.
     // recors vicotry in stats. total games also counted in this event.
-    var placeholderVictory = { // Parser.maketext(str, placeholder)
+    var placeholderVictory = { 
         teamID: 0,
         teamName: '',
         redScore: scores.red,

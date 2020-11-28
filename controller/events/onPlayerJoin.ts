@@ -16,7 +16,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
     window.logger.i(`${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
 
     // Event called when a new player joins the room.
-    var placeholderJoin = { // Parser.maketext(str, placeholder)
+    var placeholderJoin = { 
         playerID: player.id,
         playerName: player.name,
         playerNameOld: player.name,

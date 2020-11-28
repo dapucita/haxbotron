@@ -7,7 +7,7 @@ import { updateAdmins } from "../RoomTools";
 export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
     /* Event called when a player's admin rights are changed.
             byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
-    var placeholderAdminChange = { // Parser.maketext(str, placeholder)
+    var placeholderAdminChange = {
         playerID: changedPlayer.id,
         playerName: changedPlayer.name
     }

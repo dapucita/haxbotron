@@ -5,7 +5,7 @@ import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 
 export function onStadiumChangeListner(newStadiumName: string, byPlayer: PlayerObject): void {
-    var placeholderStadium = { // Parser.maketext(str, placeholder)
+    var placeholderStadium = { 
         playerID: 0,
         playerName: '',
         stadiumName: newStadiumName,

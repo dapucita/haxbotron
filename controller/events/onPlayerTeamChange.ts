@@ -5,7 +5,7 @@ import * as LangRes from "../../resources/strings";
 export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
     // Event called when a player team is changed.
         // byPlayer is the player which caused the event (can be null if the event wasn't caused by a player).
-        var placeholderTeamChange = { // Parser.maketext(str, placeholder)
+        var placeholderTeamChange = { 
             targetPlayerID: changedPlayer.id,
             targetPlayerName: changedPlayer.name,
             targetAfkReason: ''

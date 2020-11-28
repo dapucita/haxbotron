@@ -4,7 +4,7 @@ import { PlayerObject } from "../../model/PlayerObject";
 export function onPlayerBallKickListener(player: PlayerObject): void {
     // Event called when a player kicks the ball.
         // records player's id, team when the ball was kicked
-        var placeholderBall = { // Parser.maketext(str, placeholder)
+        var placeholderBall = {
             playerID: player.id,
             playerName: player.name,
             gameRuleName: gameRule.ruleName,

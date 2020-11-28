@@ -14,7 +14,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         return; // exit this event
     }
 
-    var placeholderLeft = { // Parser.maketext(str, placeholder)
+    var placeholderLeft = { 
         playerID: player.id,
         playerName: player.name,
         playerStatsTotal: window.playerList.get(player.id).stats.totals,

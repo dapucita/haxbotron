@@ -18,7 +18,7 @@ export function roomPlayersNumberCheck(): number {
 }
 
 export function updateAdmins(): void {
-    var placeholderUpdateAdmins = { // Parser.maketext(str, placeholder)
+    var placeholderUpdateAdmins = {
         playerID: 0,
         playerName: '',
         gameRuleName: gameRule.ruleName,

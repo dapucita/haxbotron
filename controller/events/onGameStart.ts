@@ -8,7 +8,7 @@ import { getTeamWinningExpectation } from "../Statistics";
 export function onGameStartListener(byPlayer: PlayerObject): void {
     /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
-        var placeholderStart = { // Parser.maketext(str, placeholder)
+        var placeholderStart = {
             playerID: 0,
             playerName: '',
             gameRuleName: gameRule.ruleName,

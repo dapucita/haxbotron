@@ -6,7 +6,7 @@ import { setDefaultStadiums } from "../RoomTools";
 export function onGameStopListener(byPlayer: PlayerObject): void {
     /* Event called when a game stops.
     byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
-    var placeholderStop = { // Parser.maketext(str, placeholder)
+    var placeholderStop = {
         playerID: 0,
         playerName: '',
         gameRuleName: gameRule.ruleName,
