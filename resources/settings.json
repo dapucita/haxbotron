@@ -13,5 +13,8 @@
 
     "antiOgFlood" : true,
     "ogFloodCriterion" : 2,
-    "ogFloodBanMillisecs" : 300000
+    "ogFloodBanMillisecs" : 300000,
+
+    "antiBanNoPermission" : true,
+    "banNoPermissionBanMillisecs" : 60000
 }

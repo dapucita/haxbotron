@@ -10,14 +10,17 @@ export const scheduler = {
 
 export const antitrolling = {
     joinFlood: {
-        banReason: '🚫 too much rejoin'
+        banReason: '🚫 too much rejoin(5mins)'
         ,floodWarning: '📢 If you reconnect several times in a short period of time, you may be kicked.'
     }
     ,chatFlood: {
         muteReason: '🔇 You are muted for too many chats. Admin player can release it.'
     }
     ,ogFlood: {
-        banReason: '🚫 too much OGs'
+        banReason: '🚫 too much OGs(5mins)'
+    }
+    ,banNoPermission: {
+        banReason: '🚫 do not ban(1min)'
     }
 }
 

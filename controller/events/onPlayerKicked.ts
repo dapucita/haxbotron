@@ -3,6 +3,7 @@ import { gameRule } from "../../model/rules/rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as Ban from "../Ban";
+import * as BotSettings from "../../resources/settings.json";
 import { getUnixTimestamp } from "../Statistics";
 
 export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: string, ban: boolean, byPlayer: PlayerObject): void {
@@ -38,6 +39,11 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
                 window.room.sendAnnouncement(Tst.maketext(LangRes.onKick.notifyNotBan, placeholderKick), null, 0xFF0000, "bold", 1);
                 window.room.clearBan(kickedPlayer.id); // Clears the ban for a playerId that belonged to a player that was previously banned.
                 window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${placeholderKick.reason}), but it is negated.`);
+                if(BotSettings.antiBanNoPermission === true) {
+                    // if this player has banned other player without permission (when is not superadmin)
+                    window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.banNoPermission.banReason, false); // auto kick (fixed-term ban)
+                    Ban.bListAdd({ conn: byPlayer.conn, reason: LangRes.antitrolling.banNoPermission.banReason, register: kickedTime, expire: kickedTime + BotSettings.banNoPermissionBanMillisecs }); // register into ban list
+                }
             } else { // if by super admin player
                 Ban.bListAdd({ conn: kickedPlayer.conn, reason: placeholderKick.reason, register: kickedTime, expire: -1 }); // register into ban list
                 window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${placeholderKick.reason}).`);
