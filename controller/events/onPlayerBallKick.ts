@@ -3,24 +3,26 @@ import { PlayerObject } from "../../model/PlayerObject";
 
 export function onPlayerBallKickListener(player: PlayerObject): void {
     // Event called when a player kicks the ball.
-        // records player's id, team when the ball was kicked
-        var placeholderBall = {
-            playerID: player.id,
-            playerName: player.name,
-            gameRuleName: gameRule.ruleName,
-            gameRuleDescription: gameRule.ruleDescripttion,
-            gameRuleLimitTime: gameRule.requisite.timeLimit,
-            gameRuleLimitScore: gameRule.requisite.scoreLimit,
-            gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-            possTeamRed: window.ballStack.possCalculate(1),
-            possTeamBlue: window.ballStack.possCalculate(2),
-            streakTeamName: window.winningStreak.getName(),
-            streakTeamCount: window.winningStreak.getCount()
-        };
+    // records player's id, team when the ball was kicked
+    var placeholderBall = {
+        playerID: player.id,
+        playerName: player.name,
+        gameRuleName: gameRule.ruleName,
+        gameRuleDescription: gameRule.ruleDescripttion,
+        gameRuleLimitTime: gameRule.requisite.timeLimit,
+        gameRuleLimitScore: gameRule.requisite.scoreLimit,
+        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        possTeamRed: window.ballStack.possCalculate(1),
+        possTeamBlue: window.ballStack.possCalculate(2),
+        streakTeamName: window.winningStreak.getName(),
+        streakTeamCount: window.winningStreak.getCount()
+    };
+
+    if (gameRule.statsRecord == true && window.isStatRecord == true) { // record only when stat record mode
 
         window.playerList.get(player.id).stats.balltouch++; // add count of ball touch
-        
-        if(window.ballStack.passJudgment(player.team) == true && window.playerList.has(window.ballStack.getLastTouchPlayerID()) == true) {
+
+        if (window.ballStack.passJudgment(player.team) == true && window.playerList.has(window.ballStack.getLastTouchPlayerID()) == true) {
             window.playerList.get(window.ballStack.getLastTouchPlayerID()).stats.passed++;
         }
 
@@ -29,4 +31,6 @@ export function onPlayerBallKickListener(player: PlayerObject): void {
 
         window.ballStack.push(player.id);
         window.ballStack.possCount(player.team); // 1: red team, 2: blue team
+
+    }
 }
