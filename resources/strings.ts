@@ -58,7 +58,7 @@ export const command = {
     ,mute: {
         _ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
         ,_ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
-        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다. 해제하려면 명령어를 다시 사용하세요.'
+        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다. 해제하려면 mute 명령어를 다시 사용하세요.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
     }
     ,super: {
