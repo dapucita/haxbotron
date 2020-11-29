@@ -14,7 +14,7 @@ export const antitrolling = {
         ,floodWarning: '📢 너무 짧은 시간에 재접속하면 퇴장될 수 있습니다.'
     }
     ,chatFlood: {
-        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다. 방장이 해제할 수 있습니다.'
+        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다. 관리자가 해제할 수 있습니다.'
     }
     ,ogFlood: {
         banReason: '🚫 연속 자책골(5분)'
@@ -26,14 +26,14 @@ export const antitrolling = {
 
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
-    ,_ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
+    ,_ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
     ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, scout\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
-        ,help: '📑 !help COMMAND : COMMAND 명령어의 자세한 설명을 보여줍니다.'
+        ,help: '📑 !help COMMAND : 해당 COMMAND 명령어에 대한 자세한 설명을 보여줍니다.'
         ,about: '📑 !about : 봇의 정보를 보여줍니다.'
-        ,stats: '📑 !stats : 스탯을 보여줍니다. 📑 !statsreset로 리셋합니다.\n📑 !stats #ID : 해당 ID의 플레이어 스탯을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
+        ,stats: '📑 !stats : 전적을 보여줍니다. 📑 !statsreset로 리셋합니다.\n📑 !stats #ID : 해당 ID의 플레이어 전적을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,statsreset: '📑 !statsreset : 스탯을 초기화합니다. 다시 복구할 수 없습니다.'
         ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
@@ -45,10 +45,10 @@ export const command = {
     } 
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
-        _ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
+        _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 : 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
     }
-    ,statsreset: '📊 스탯을 초기화했습니다. 다시 복구할 수 없습니다.'
+    ,statsreset: '📊 전적을 초기화했습니다. 다시 복구할 수 없습니다.'
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName}팀이 {streakTeamCount}판째 연승중입니다!'
     ,afk: {
@@ -56,24 +56,24 @@ export const command = {
         ,unAfk: '📢 {targetName}#{ticketTarget}님이 잠수를 풀고 복귀합니다!'
     }
     ,mute: {
-        _ErrorNoPermission: '❌ admin만 이 명령어를 사용할 수 있습니다.'
-        ,_ErrorNoPlayer: '❌ 접속중이지 않은 player입니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 각 팀의 숫자아이디를 확인할 수 있습니다.'
+        _ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
+        ,_ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다. 해제하려면 mute 명령어를 다시 사용하세요.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
     }
     ,super: {
-        _ErrorWrongCommand: '❌ 잘못된 super 명령어입니다.'
-        ,_ErrorNoPermission: '❌ super admin만 이 명령어를 사용할 수 있습니다.'
-        ,_ErrorLoginAlready: '❌ 이미 super admin입니다. 📑 !super logout로 로그아웃할 수 있습니다.'
+        _ErrorWrongCommand: '❌ 잘못된 슈퍼 관리자 명령어입니다.'
+        ,_ErrorNoPermission: '❌ 슈퍼 관리자만 이 명령어를 사용할 수 있습니다.'
+        ,_ErrorLoginAlready: '❌ 이미 슈퍼 관리자입니다. 📑 !super logout로 로그아웃할 수 있습니다.'
         ,defaultMessage: '📄 Haxbotron 봇을 관리하기 위한 super 명령어입니다.'
         ,loginSuccess: '🔑 로그인 성공. super 권한을 부여받았습니다.'
         ,logoutSuccess: '🔑 로그아웃 완료. super 권한을 반납하였습니다.'
         ,loginFail: '❌ 로그인에 실패하였습니다.'
         ,loginFailNoKey: '❌ 로그인에 실패하였습니다. 인증키를 입력해야 합니다.'
         ,thor: {
-            noAdmins: '❌ 방장권한을 회수할 플레이어가 남아있지 않습니다.'
-            ,complete: '🔑 방장 권한을 획득하였습니다.'
-            ,deprive: '🔑 다른 방장의 권한을 회수하고 대신하였습니다.'
+            noAdmins: '❌ 일반 관리자 권한을 회수할 플레이어가 남아있지 않습니다.'
+            ,complete: '🔑 일반 관리자 권한을 획득하였습니다.'
+            ,deprive: '🔑 다른 일반 관리자의 권한을 회수하고 대신하였습니다.'
         }
         ,kick: {
             noID: '❌ 잘못된 플레이어ID입니다. 퇴장시킬 수 없습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !super kick #12)'
@@ -107,14 +107,14 @@ export const command = {
 }
 
 export const funcUpdateAdmins = {
-    newAdmin: '📢 {playerName}#{playerID}님이 새로운 방장이 되었습니다.\n📑 맵을 변경하거나, 다른 플레이어를 영구퇴장할 수는 없습니다.\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
+    newAdmin: '📢 {playerName}#{playerID}님이 새로운 관리자가 되었습니다.\n📑 맵을 변경하거나, 다른 플레이어를 영구퇴장할 수는 없습니다.\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
 }
 
 export const onJoin = {
     welcome: '📢 {playerName}#{playerID}님 반갑습니다! 📄 !help로 도움말을 볼 수 있습니다.'
     ,changename: '📢 {playerName}#{playerID}님이 {playerNameOld}에서 닉네임을 변경하였습니다.'
-    ,startRecord: '📊 충분한 인원이 모였습니다. 지금부터 스탯 기록이 될 것입니다.'
-    ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
+    ,startRecord: '📊 충분한 인원이 모였습니다. 지금부터 전적이 기록됩니다.'
+    ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 지금은 전적이 기록되지 않습니다.'
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID}님이 중복 접속하였습니다.'
     ,doubleJoinningKick: '🚫 중복 접속으로 퇴장'
     ,banList: {
@@ -137,8 +137,8 @@ export const onTeamChange = {
 }
 
 export const onStart = {
-    startRecord: '📊 충분한 인원이 모였습니다. 지금부터 스탯 기록이 될 것입니다.'
-    ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 현재 상태에선 스탯 기록이 되지 않습니다.'
+    startRecord: '📊 충분한 인원이 모였습니다. 지금부터 전적이 기록됩니다.'
+    ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 지금은 전적이 기록되지 않습니다.'
     ,expectedWinRate: '📊 Red 팀의 기대승률은 {teamExpectationRed}%이고, Blue 팀의 기대승률은 {teamExpectationBlue}%입니다. (양 팀간의 비교가 아닙니다)'
 }
 
@@ -172,5 +172,5 @@ export const onGoal = {
 }
 
 export const onAdminChange = {
-    afknoadmin: '🚫 잠수 중인 플레이어는 admin이 될 수 없습니다.'
+    afknoadmin: '🚫 잠수 중인 플레이어는 관리자가 될 수 없습니다.'
 }
