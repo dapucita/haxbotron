@@ -41,8 +41,8 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
                 window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${placeholderKick.reason}), but it is negated.`);
                 if(BotSettings.antiBanNoPermission === true) {
                     // if this player has banned other player without permission (when is not superadmin)
-                    window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.banNoPermission.banReason, false); // auto kick (fixed-term ban)
                     Ban.bListAdd({ conn: byPlayer.conn, reason: LangRes.antitrolling.banNoPermission.banReason, register: kickedTime, expire: kickedTime + BotSettings.banNoPermissionBanMillisecs }); // register into ban list
+                    window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.banNoPermission.banReason, false); // auto kick (fixed-term ban)
                 }
             } else { // if by super admin player
                 Ban.bListAdd({ conn: kickedPlayer.conn, reason: placeholderKick.reason, register: kickedTime, expire: -1 }); // register into ban list
