@@ -72,7 +72,6 @@
     "docs",
     ".logs",
     ".node-persist",
-    ".VSCodeCounter",
     "webpack.config.bot.js",
     "webRender.js"
   ]
