@@ -8,6 +8,17 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
             whoisResult: LangRes.command.list._ErrorNoOne
         }
         switch (message) {
+            case "afk": {
+                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && window.playerList.get(player.id).permissions.afkmode === true);
+                if (players.length >= 1) {
+                    placeholder.whoisResult = '💤 '; //init
+                    players.forEach((player: PlayerObject) => {
+                        placeholder.whoisResult += player.name + '#' + player.id + ', ';
+                    });
+                }
+                window.room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
+                break;
+            }
             case "mute": {
                 let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && window.playerList.get(player.id).permissions.mute === true);
                 if (players.length >= 1) {
@@ -25,10 +36,14 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                     placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
                         let muteFlag: string = '';
-                        if (window.playerList.get(player.id).permissions.mute == true) {
+                        let afkFlag: string = '';
+                        if (window.playerList.get(player.id).permissions.mute === true) {
                             muteFlag = '🔇';
                         }
-                        placeholder.whoisResult += player.name + '#' + player.id + muteFlag + ', ';
+                        if (window.playerList.get(player.id).permissions.afkmode === true) {
+                            afkFlag = '💤';
+                        }
+                        placeholder.whoisResult += player.name + '#' + player.id + muteFlag + afkFlag + ', ';
                     });
                 }
                 window.room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
@@ -40,10 +55,14 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                     placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
                         let muteFlag: string = '';
-                        if (window.playerList.get(player.id).permissions.mute == true) {
+                        let afkFlag: string = '';
+                        if (window.playerList.get(player.id).permissions.mute === true) {
                             muteFlag = '🔇';
                         }
-                        placeholder.whoisResult += player.name + '#' + player.id + muteFlag + ', ';
+                        if (window.playerList.get(player.id).permissions.afkmode === true) {
+                            afkFlag = '💤';
+                        }
+                        placeholder.whoisResult += player.name + '#' + player.id + muteFlag + afkFlag + ', ';
                     });
                 }
                 window.room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
@@ -55,10 +74,14 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                     placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
                         let muteFlag: string = '';
-                        if (window.playerList.get(player.id).permissions.mute == true) {
+                        let afkFlag: string = '';
+                        if (window.playerList.get(player.id).permissions.mute === true) {
                             muteFlag = '🔇';
                         }
-                        placeholder.whoisResult += player.name + '#' + player.id + muteFlag + ', ';
+                        if (window.playerList.get(player.id).permissions.afkmode === true) {
+                            afkFlag = '💤';
+                        }
+                        placeholder.whoisResult += player.name + '#' + player.id + muteFlag + afkFlag + ', ';
                     });
                 }
                 window.room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);

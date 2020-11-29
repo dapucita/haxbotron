@@ -38,7 +38,7 @@ export const command = {
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
         ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
-        ,list: '📑 !list red/blue/spec/mute shows you all players list of that type.'
+        ,list: '📑 !list red/blue/spec/mute/afk shows you all players list of that type.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
         ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
         ,scout: '📑 !scout shows you expectation of each teams by customed Pythagorean Expectation.'
@@ -91,7 +91,7 @@ export const command = {
         }
     }
     ,list: {
-        _ErrorNoTeam: '❌ You can only request red,blue,spec,mute players list.'
+        _ErrorNoTeam: '❌ You can only request red,blue,spec,mute,afk players list.'
         ,_ErrorNoOne: '❌ There\'s no one.'
         ,whoisList: '📜 {whoisResult}'
     }
