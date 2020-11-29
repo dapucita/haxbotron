@@ -12,7 +12,7 @@ import { gameRule } from "./model/rules/rule";
 import { KickStack } from "./model/BallTrace";
 import * as LangRes from "./resources/strings";
 import * as Ban from "./controller/Ban";
-import { BanList } from "./model/BanList.js";
+import { BanList } from "./model/BanList";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
 
