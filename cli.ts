@@ -103,7 +103,7 @@ async function makeBot(hostConfig: any) {
             isOpenHeadless = answerConfig.inputHeadlessModeSelect;
         });
 
-    winstonLogger.info("The game host has started.");
+    winstonLogger.info("Haxbotron has started.");
     //await nodeStorage.init();
 
     /*
@@ -120,12 +120,46 @@ async function makeBot(hostConfig: any) {
         clearInterval(storageLoop);
         // browser.close();
         isBotLaunched = false;
-        winstonLogger.info("The game host is closed.");
+        winstonLogger.info("Haxbotron is closed.");
         return;
     });
 
     const loadedPages = await browser.pages(); // get all pages (acutally it will be only one page in the first loading of puppeteer)
     const page = await loadedPages[0]; // target on empty, blank page
+
+    // logging system --
+    // https://stackoverflow.com/questions/47539043/how-to-get-all-console-messages-with-puppeteer-including-errors-csp-violations
+    await page.on('console', (msg: any) => {
+        switch(msg.type()) {
+            case "log": {
+                winstonLogger.info(msg.text());
+                break;
+            }
+            case "info": {
+                winstonLogger.info(msg.text());
+                break;
+            }
+            case "error": {
+                winstonLogger.error(msg.text());
+                break;
+            }
+            case "warning": {
+                winstonLogger.warn(msg.text());
+                break;
+            }
+            default: {
+                winstonLogger.info(msg.text());
+                break;
+            }
+        }
+    });
+    await page.on('pageerror', (msg: any) => {
+        winstonLogger.error(msg);
+    });
+    await page.on('requestfailed', (msg: any) => {
+        winstonLogger.error(`${msg.failure().errorText} ${msg.url()}`);
+    });
+    // -- logging system
 
     await page.goto('https://www.haxball.com/headless', {
         waitUntil: 'networkidle2'
@@ -151,6 +185,8 @@ async function makeBot(hostConfig: any) {
 
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
     var storageLoop = setInterval(async function () {
+
+        /* ================= DEPRECATED (OLD LOGGING SYSTEM)
         // log system with winston module. winstonLoggerSystem
         var msgQueue: LogMessage[] = await page.evaluate(() => {
             var msgQueueCopy = window.logQueue;
@@ -180,6 +216,7 @@ async function makeBot(hostConfig: any) {
                 }
             }
         }
+        ================= */
 
         // data from bot
         var localStorageData: any[] = await page.evaluate(() => {

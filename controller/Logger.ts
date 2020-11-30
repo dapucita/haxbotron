@@ -14,6 +14,8 @@ export class Logger {
         return this.instance;
     }
 
+    //DEPRECATED
+    /*
     private push(messageObject: LogMessage): void {
         window.logQueue.push(messageObject)
         
@@ -21,24 +23,20 @@ export class Logger {
     private pop(): LogMessage | undefined {
         return window.logQueue.pop();
     }
+    */
 
     public i(msg: string): void { // for common info log
-        this.push({type: 2, context: msg});
+        //this.push({type: 2, context: msg});
+        console.info(msg);
     }
 
     public e(msg: string): void { // for error log
-        this.push({type: 0, context: msg});
+        //this.push({type: 0, context: msg});
+        console.error(msg);
     }
 
     public w(msg: string): void { // for warning log
-        this.push({type: 1, context: msg});
+        //this.push({type: 1, context: msg});
+        console.warn(msg);
     }
-    
 }
-
-/*
-USAGE EXAMPLE
-
-let something: Logger = new Logger(); // It makes an error: constructor of 'Singleton' is private.
-let instance: Logger = Logger.getInstance(); instace.blahbalh(); // now do something with the instance.
-*/

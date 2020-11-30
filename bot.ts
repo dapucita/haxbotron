@@ -20,11 +20,7 @@ window.logQueue = []; // init
 
 const botRoomConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
 
-console.log("====");
-console.log('\x1b[32m%s\x1b[0m', "H a x b o t r o n"); //green color
-console.log("Haxbotron Debugging System on headless browser");
-console.log(`The authentication token is conveyed via cookie(${botRoomConfig.token})`);
-console.log("====");
+console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed via cookie(${botRoomConfig.token})`);
 
 window.playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
 

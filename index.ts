@@ -30,6 +30,8 @@ const MenuItemSwitch = {
 
 var superKeyList: string;
 
+var botConsoleLineCount: number = 0;
+
 function createWindow() {
     // create the Electron browser window
     electronWindow = new BrowserWindow({
@@ -98,7 +100,7 @@ ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
         isBotLaunched = true;
     } else {
         dialog.showErrorBox("You can launch only one bot.", "The bot was launched already. You can't launch other bot on this process.");
-        console.log("The bot was launched already");
+        winstonLogger.error("The bot was launched already");
     }
 });
 // send chat message toward the game room
@@ -192,7 +194,7 @@ async function nodeStorageInit() {
 }
 
 async function bot(hostConfig: string) {
-    console.log('\x1b[32m%s\x1b[0m', "The game host has started.");
+    winstonLogger.info("Haxbotron has started.");
     
     //await nodeStorage.init();
 
@@ -218,12 +220,48 @@ async function bot(hostConfig: string) {
             document.getElementById('roomLinkIndicator').innerHTML = "link";
             document.getElementById('botConsole').value = "";
         `);
-        console.log('\x1b[31m%s\x1b[0m', "The game host is closed.");
+        winstonLogger.info("Haxbotron is closed.");
         return;
     });
 
     const loadedPages = await browser.pages(); // get all pages (acutally it will be only one page in the first loading of puppeteer)
     const page = await loadedPages[0]; // target on empty, blank page
+
+    // logging system --
+    // https://stackoverflow.com/questions/47539043/how-to-get-all-console-messages-with-puppeteer-including-errors-csp-violations
+    await page.on('console', (msg: any) => {
+        switch(msg.type()) {
+            case "log": {
+                winstonLogger.info(msg.text());
+                break;
+            }
+            case "info": {
+                winstonLogger.info(msg.text());
+                break;
+            }
+            case "error": {
+                winstonLogger.error(msg.text());
+                break;
+            }
+            case "warning": {
+                winstonLogger.warn(msg.text());
+                break;
+            }
+            default: {
+                winstonLogger.info(msg.text());
+                break;
+            }
+        }
+        botConsoleLineCount++;
+        electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '[" + botConsoleLineCount+ "] " + msg.text() + '\\r\\n' + "' + document.getElementById('botConsole').value;");
+    });
+    await page.on('pageerror', (msg: any) => {
+        winstonLogger.error(msg);
+    });
+    await page.on('requestfailed', (msg: any) => {
+        winstonLogger.error(`${msg.failure().errorText} ${msg.url()}`);
+    });
+    // -- logging system
 
     await page.goto('https://www.haxball.com/headless', {
         waitUntil: 'networkidle2'
@@ -262,6 +300,7 @@ async function bot(hostConfig: string) {
 
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
     var storageLoop = setInterval(async function () {
+        /* DEPRECATED (OLD LOGGING SYSTEM)
         // log system with winston module. winstonLoggerSystem
         // log message queue copy
         var msgQueue: LogMessage[] = await page.evaluate(() => {
@@ -291,13 +330,14 @@ async function bot(hostConfig: string) {
                     break;
                 }
             }
-        }
+        } 
 
         // now print it on electron's textarea
         if(await msgChunk != '') {
             await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgChunk + "' + document.getElementById('botConsole').value;");
         }
-        // FIXME: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame". Maybe it was caused by quotation marks..
+        // bug: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame". Maybe it was caused by quotation marks..
+        */
 
         // data from bot
         var localStorageData: any[] = await page.evaluate(() => {
