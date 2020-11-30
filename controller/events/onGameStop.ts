@@ -1,6 +1,6 @@
 import { PlayerObject } from "../../model/PlayerObject";
 import { gameRule } from "../../model/rules/rule";
-import { setDefaultStadiums } from "../RoomTools";
+import { setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
 
 
 export function onGameStopListener(byPlayer: PlayerObject): void {
@@ -31,7 +31,9 @@ export function onGameStopListener(byPlayer: PlayerObject): void {
         msg += `(by ${byPlayer.name}#${byPlayer.id})`;
     }
     window.logger.i(msg);
+    
     setDefaultStadiums(); // check number of players and auto-set stadium
+    setDefaultRoomLimitation(); // score, time, teamlock set
 
     window.ballStack.initTouchInfo(); // clear touch info
     window.ballStack.clear(); // clear the stack.

@@ -4,7 +4,7 @@
     "chatFiltering" : true,
 
     "antiJoinFlood" : true,
-    "joinFloodAllowLimitation" : 1,
+    "joinFloodAllowLimitation" : 2,
     "joinFloodIntervalMillisecs" : 30000,
     "joinFloodBanMillisecs" : 300000,
 
@@ -16,5 +16,9 @@
     "ogFloodBanMillisecs" : 300000,
 
     "antiBanNoPermission" : true,
-    "banNoPermissionBanMillisecs" : 30000
+    "banNoPermissionBanMillisecs" : 30000,
+
+    "antiInsufficientStartAbusing" : true,
+    "insufficientStartAllowLimitation" : 3,
+    "insufficientStartAbusingBanMillisecs" : 300000
 }

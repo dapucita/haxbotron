@@ -2,8 +2,7 @@ import { PlayerObject } from "../../model/PlayerObject";
 import { gameRule } from "../../model/rules/rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import { roomPlayersNumberCheck, updateAdmins } from "../RoomTools";
-import * as Ban from "../Ban";
+import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
 
@@ -37,13 +36,13 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     window.logger.i(`${player.name}#${player.id} has left.`);
 
     // check number of players joined and change game mode
-    if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
-        if (window.isStatRecord != true) {
+    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+        if (window.isStatRecord !== true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.startRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;
         }
     } else {
-        if (window.isStatRecord != false) {
+        if (window.isStatRecord !== false) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.stopRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = false;
         }

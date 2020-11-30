@@ -1,5 +1,7 @@
 import { PlayerObject } from "../../model/PlayerObject";
+import { gameRule } from "../../model/rules/rule";
 import * as LangRes from "../../resources/strings";
+import { roomActivePlayersNumberCheck } from "../RoomTools";
 import * as Tst from "../Translator";
 
 export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
@@ -7,6 +9,7 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
         targetName: byPlayer.name
         ,ticketTarget: byPlayer.id
         ,targetAfkReason: ''
+        ,gameRuleNeedMin: gameRule.requisite.minimumPlayers,
     }
     if (window.playerList.get(byPlayer.id).permissions.afkmode == true) {
         window.playerList.get(byPlayer.id).permissions.afkmode = false; // return to active mode
@@ -24,5 +27,17 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
             placeholder.targetAfkReason = message; // update placeholder
         }
         window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.setAfk, placeholder), null, 0x479947, "normal", 1);
+    }
+    // check number of players and change game mode
+    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+        if (window.isStatRecord !== true) {
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.startRecord, placeholder), null, 0x00FF00, "normal", 0);
+            window.isStatRecord = true;
+        }
+    } else {
+        if (window.isStatRecord !== false) {
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.stopRecord, placeholder), null, 0x00FF00, "normal", 0);
+            window.isStatRecord = false;
+        }
     }
 }

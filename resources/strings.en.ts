@@ -22,6 +22,14 @@ export const antitrolling = {
     ,banNoPermission: {
         banReason: '🚫 do not ban(30secs)'
     }
+    ,kickAbusing: {
+        banReason: '🚫 too much kicks(5mins)'
+        ,abusingWarning: '📢 You might be kicked if you kicked other players too much.'
+    }
+    ,insufficientStartAbusing: {
+        banReason: '🚫 start with insufficient players(5mins)'
+        ,abusingWarning: '📢 You might be kicked if you start game without sufficient players.'
+    }
 }
 
 export const command = {
@@ -54,6 +62,8 @@ export const command = {
     ,afk: {
         setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
+        ,startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
+        ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
     }
     ,mute: {
         _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'

@@ -9,7 +9,8 @@ export var gameRule: GameRule = {
     ruleDescripttion: "Haxbotron default game rule",
     requisite: {
         minimumPlayers: 8,
-        eachTeamLimit: 4,
+        maximumTeamLimit: 4,
+        minimumTeamLimit: 4,
         timeLimit: 3,
         scoreLimit: 3,
         teamLock: true

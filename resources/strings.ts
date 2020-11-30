@@ -22,6 +22,14 @@ export const antitrolling = {
     ,banNoPermission: {
         banReason: '🚫 영구퇴장 금지(30초)'
     }
+    ,kickAbusing: {
+        banReason: '🚫 잦은 플레이어 킥(5분)'
+        ,abusingWarning: '📢 너무 짧은 시간에 내보내면 퇴장될 수 있습니다.'
+    }
+    ,insufficientStartAbusing: {
+        banReason: '🚫 팀 인원 미충족(5분)'
+        ,abusingWarning: '📢 팀 인원을 채우지 않고 계속 진행하면 퇴장될 수 있습니다.'
+    }
 }
 
 export const command = {
@@ -54,6 +62,8 @@ export const command = {
     ,afk: {
         setAfk: '💤 {targetName}#{ticketTarget}님이 지금부터 잠수합니다... ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget}님이 잠수를 풀고 복귀합니다!'
+        ,startRecord: '📊 충분한 인원이 모였습니다. 지금부터 전적이 기록됩니다.'
+        ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 지금은 전적이 기록되지 않습니다.'
     }
     ,mute: {
         _ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'

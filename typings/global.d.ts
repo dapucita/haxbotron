@@ -22,6 +22,7 @@ declare global {
 
         antiTrollingOgFloodCount: number[] // flood counter for OG (player id: number)
         antiTrollingChatFloodCount: number[] // flood counter for chat. (player id: number)
+        antiInsufficientStartAbusingCount: number[] // ID record for start with insufficient players (player id: number)
 
         sendRoomChat(msg: string, playerID?: number): void // for send chat message to the game
 

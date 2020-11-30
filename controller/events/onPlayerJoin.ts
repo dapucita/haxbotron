@@ -3,7 +3,7 @@ import { gameRule } from "../../model/rules/rule";
 import { Player } from "../../model/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
-import { roomPlayersNumberCheck, updateAdmins } from "../RoomTools";
+import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import * as Tst from "../Translator";
@@ -168,13 +168,13 @@ export function onPlayerJoinListener(player: PlayerObject): void {
     window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
 
     // check number of players joined and change game mode
-    if (gameRule.statsRecord == true && roomPlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
-        if (window.isStatRecord != true) {
+    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+        if (window.isStatRecord !== true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.startRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;
         }
     } else {
-        if (window.isStatRecord != false) {
+        if (window.isStatRecord !== false) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.stopRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
             window.isStatRecord = false;
         }

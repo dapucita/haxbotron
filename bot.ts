@@ -56,6 +56,7 @@ window.isMuteAll = false;
 
 window.antiTrollingOgFloodCount = [];
 window.antiTrollingChatFloodCount = [];
+window.antiInsufficientStartAbusingCount = [];
 
 window.room = window.HBInit(botRoomConfig);
 initialiseRoom();
