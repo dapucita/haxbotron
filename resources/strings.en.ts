@@ -20,7 +20,7 @@ export const antitrolling = {
         banReason: '🚫 too much OGs(5mins)'
     }
     ,banNoPermission: {
-        banReason: '🚫 do not ban(1min)'
+        banReason: '🚫 do not ban(30secs)'
     }
 }
 

@@ -33,7 +33,7 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
         placeholderKick.kickerID = byPlayer.id;
         placeholderKick.kickerName = byPlayer.name;
         if (ban == true) { // ban
-            if (window.playerList.get(byPlayer.id).permissions.superadmin == false) { // FIXME: Error caught-TypeError: Cannot read property 'permissions' of undefined 
+            if (window.playerList.get(byPlayer.id).permissions.superadmin == false) { // FIXME: Error caught when banned myself-TypeError: Cannot read property 'permissions' of undefined 
                 // if the player who acted banning is not super admin
                 window.room.sendAnnouncement(Tst.maketext(LangRes.onKick.cannotBan, placeholderKick), byPlayer.id, 0xFF0000, "bold", 2);
                 window.room.sendAnnouncement(Tst.maketext(LangRes.onKick.notifyNotBan, placeholderKick), null, 0xFF0000, "bold", 1);
@@ -41,7 +41,8 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
                 window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id} (reason:${placeholderKick.reason}), but it is negated.`);
                 if(BotSettings.antiBanNoPermission === true) {
                     // if this player has banned other player without permission (when is not superadmin)
-                    Ban.bListAdd({ conn: byPlayer.conn, reason: LangRes.antitrolling.banNoPermission.banReason, register: kickedTime, expire: kickedTime + BotSettings.banNoPermissionBanMillisecs }); // register into ban list
+                    //byPlayer.conn doens't works so use windows.playerList
+                    Ban.bListAdd({ conn: window.playerList.get(byPlayer.id).conn, reason: LangRes.antitrolling.banNoPermission.banReason, register: kickedTime, expire: kickedTime + BotSettings.banNoPermissionBanMillisecs }); // register into ban list
                     window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.banNoPermission.banReason, false); // auto kick (fixed-term ban)
                 }
             } else { // if by super admin player

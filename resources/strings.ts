@@ -20,7 +20,7 @@ export const antitrolling = {
         banReason: '🚫 연속 자책골(5분)'
     }
     ,banNoPermission: {
-        banReason: '🚫 영구퇴장 금지(1분)'
+        banReason: '🚫 영구퇴장 금지(30초)'
     }
 }
 
