@@ -5,6 +5,7 @@ import * as LangRes from "../../resources/strings";
 import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import { getUnixTimestamp } from "../Statistics";
+import { AdminKickTrace } from "../../model/AdminKickTrace";
 
 export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: string, ban: boolean, byPlayer: PlayerObject): void {
     /* Event called when a player has been kicked from the room. This is always called after the onPlayerLeave event.
@@ -49,9 +50,29 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
                 Ban.bListAdd({ conn: kickedPlayer.conn, reason: placeholderKick.reason, register: kickedTime, expire: -1 }); // register into ban list
                 window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${placeholderKick.reason}).`);
             }
-        } else {
-            // kick
+        } else { // kick
             window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been kicked by ${byPlayer.name}#${byPlayer.id}. (reason:${placeholderKick.reason})`);
+
+            //check kick limitation
+            if(BotSettings.antiPlayerKickAbusing === true) {
+                // find exist record or create
+                let fieldIndex: number = window.antiPlayerKickAbusingCount.findIndex(field => field.id === byPlayer.id);
+                if(fieldIndex === -1) {
+                    window.antiPlayerKickAbusingCount.push({id: byPlayer.id, count: 0, register: kickedTime}); //create
+                } else {
+                    if(kickedTime - window.antiPlayerKickAbusingCount[fieldIndex].register < BotSettings.playerKickIntervalMillisecs) { //if abusing
+                        window.antiPlayerKickAbusingCount[fieldIndex].count++; //update
+                    }
+                    window.antiPlayerKickAbusingCount[fieldIndex].register = kickedTime;
+                }
+                //check limit
+                if(window.antiPlayerKickAbusingCount[fieldIndex].count > BotSettings.playerKickAllowLimitation) {
+                    Ban.bListAdd({ conn: window.playerList.get(byPlayer.id).conn, reason: LangRes.antitrolling.kickAbusing.banReason, register: kickedTime, expire: kickedTime + BotSettings.playerKickAbusingBanMillisecs }); // register into ban list
+                    window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.kickAbusing.banReason, false); // auto kick (fixed-term ban)
+                } else {
+                    window.room.sendAnnouncement(LangRes.antitrolling.kickAbusing.abusingWarning, byPlayer.id, 0xFF0000, "bold", 2); //warn
+                }
+            }
         }
     } else {
         if (ban == true) { // ban

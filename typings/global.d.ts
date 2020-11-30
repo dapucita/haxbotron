@@ -3,6 +3,7 @@ import { RoomConfig } from '../model/RoomConfig';
 import { LogMessage } from "../model/LogMessage";
 import { KickStack } from "../model/BallTrace";
 import { Logger } from "../controller/Logger";
+import { AdminKickTrace } from "../model/AdminKickTrace";
 
 declare global {
     interface Window {
@@ -23,6 +24,7 @@ declare global {
         antiTrollingOgFloodCount: number[] // flood counter for OG (player id: number)
         antiTrollingChatFloodCount: number[] // flood counter for chat. (player id: number)
         antiInsufficientStartAbusingCount: number[] // ID record for start with insufficient players (player id: number)
+        antiPlayerKickAbusingCount: AdminKickTrace[] // ID and Timestamp record for abusing kick other players (id:number, register date:number)
 
         sendRoomChat(msg: string, playerID?: number): void // for send chat message to the game
 
