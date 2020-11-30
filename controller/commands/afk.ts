@@ -1,5 +1,6 @@
 import { PlayerObject } from "../../model/PlayerObject";
 import { gameRule } from "../../model/rules/rule";
+import * as BotSettings from "../../resources/settings.json";
 import * as LangRes from "../../resources/strings";
 import { roomActivePlayersNumberCheck } from "../RoomTools";
 import * as Tst from "../Translator";
@@ -11,22 +12,35 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
         ,targetAfkReason: ''
         ,gameRuleNeedMin: gameRule.requisite.minimumPlayers,
     }
-    if (window.playerList.get(byPlayer.id).permissions.afkmode == true) {
+    if (window.playerList.get(byPlayer.id).permissions.afkmode === true) {
         window.playerList.get(byPlayer.id).permissions.afkmode = false; // return to active mode
         window.playerList.get(byPlayer.id).permissions.afkreason = ''; // init
         window.playerList.get(byPlayer.id).afktrace = { exemption: false, count: 0 }; // reset for afk trace
-        window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.unAfk, placeholder), null, 0x479947, "normal", 1);
+        
+        if(BotSettings.antiAFKFlood === true && window.playerList.get(byPlayer.id).permissions.mute === true) {
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.unAfk, placeholder), byPlayer.id, 0x479947, "normal", 1);
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.muteNotifyWarn, placeholder), byPlayer.id, 0xFF7777, "normal", 2);
+        } else {
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.unAfk, placeholder), null, 0x479947, "normal", 1);
+        }
     } else {
         window.room.setPlayerTeam(byPlayer.id, 0); // Moves this player to Spectators team.
         window.room.setPlayerAdmin(byPlayer.id, false); // disqulify admin permission
         window.playerList.get(byPlayer.id).admin = false;
         window.playerList.get(byPlayer.id).permissions.afkmode = true; // set afk mode
         window.playerList.get(byPlayer.id).afktrace = { exemption: false, count: 0}; // reset for afk trace
+
         if(message !== undefined) { // if the reason is not skipped
             window.playerList.get(byPlayer.id).permissions.afkreason = message; // set reason
             placeholder.targetAfkReason = message; // update placeholder
         }
-        window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.setAfk, placeholder), null, 0x479947, "normal", 1);
+        
+        if(BotSettings.antiAFKFlood === true && window.playerList.get(byPlayer.id).permissions.mute === true) {
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.setAfk, placeholder), byPlayer.id, 0x479947, "normal", 1);
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.muteNotifyWarn, placeholder), byPlayer.id, 0xFF7777, "normal", 2);
+        } else {
+            window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.setAfk, placeholder), null, 0x479947, "normal", 1);
+        }
     }
     // check number of players and change game mode
     if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {

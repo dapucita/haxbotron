@@ -62,6 +62,7 @@ export const command = {
     ,afk: {
         setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
+        ,muteNotifyWarn: '❌ Notification messages for AFK will not be shown to other players when you are muted.'
         ,startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
         ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
     }

@@ -62,6 +62,7 @@ export const command = {
     ,afk: {
         setAfk: '💤 {targetName}#{ticketTarget}님이 지금부터 잠수합니다... ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget}님이 잠수를 풀고 복귀합니다!'
+        ,muteNotifyWarn: '❌ 음소거된 상태에서는 다른 플레이어에게 잠수 알림이 표시되지 않습니다.'
         ,startRecord: '📊 충분한 인원이 모였습니다. 지금부터 전적이 기록됩니다.'
         ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 지금은 전적이 기록되지 않습니다.'
     }

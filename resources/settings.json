@@ -25,5 +25,7 @@
     "antiPlayerKickAbusing" : true,
     "playerKickAllowLimitation" : 2,
     "playerKickIntervalMillisecs" : 30000,
-    "playerKickAbusingBanMillisecs" : 300000
+    "playerKickAbusingBanMillisecs" : 300000,
+
+    "antiAFKFlood": true
 }
