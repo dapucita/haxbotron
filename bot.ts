@@ -16,7 +16,7 @@ import { BanList } from "./model/BanList";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
 
-window.logQueue = []; // init
+//window.logQueue = []; // init //no more use
 
 const botRoomConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
 

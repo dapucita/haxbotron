@@ -11,7 +11,7 @@ declare global {
         roomURIlink: string // for sharing URI link of the room
 
         logger: Logger; // logger for whole bot application
-        logQueue: LogMessage[] // for sharing log message
+        //logQueue: LogMessage[] // for sharing log message //no more use
 
         isStatRecord: boolean // TRUE means that recording stats now
         isGamingNow: boolean // is playing now?

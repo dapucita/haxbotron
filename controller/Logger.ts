@@ -14,7 +14,7 @@ export class Logger {
         return this.instance;
     }
 
-    //DEPRECATED
+    ////no more use
     /*
     private push(messageObject: LogMessage): void {
         window.logQueue.push(messageObject)
