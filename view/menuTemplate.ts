@@ -1,4 +1,5 @@
 // if you want to implement 'click' member using objects from index.ts, you should to do it in index.ts not here. (you can't use ipcrender)
+const { Menu } = require("electron");
 
 const template = [{
         label: 'Application',
@@ -73,7 +74,20 @@ const template = [{
                 label: 'About'
             }
         ]
-    }
+    },
+    {
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+            { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+            { type: "separator" },
+            { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+            { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+    ]}
 ];
+
+Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
 module.exports = template;
