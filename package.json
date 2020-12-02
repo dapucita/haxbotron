@@ -1,8 +1,8 @@
 {
   "name": "haxbotron",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Haxbotron is a host bot application for Haxball game.",
-  "main": "index.js",
+  "main": "out/index.js",
   "scripts": {
     "start": "electron out/index.js",
     "cli": "node out/cli.js",
