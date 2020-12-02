@@ -55,7 +55,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                             break; // abort loop
                         }
                     }
-                    if (chatFloodCritFlag === true) { // after complete loop, check flag
+                    if (chatFloodCritFlag === true && window.playerList.get(player.id).permissions['mute'] === false) { // after complete loop, check flag
                         const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
                         // judge as chat flood.
                         window.playerList.get(player.id).permissions['mute'] = true; // mute this player
