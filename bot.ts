@@ -15,6 +15,7 @@ import * as Ban from "./controller/Ban";
 import { BanList } from "./model/BanList";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
+import { getUnixTimestamp } from "./controller/Statistics";
 
 //window.logQueue = []; // init //no more use
 
@@ -59,6 +60,8 @@ window.room = window.HBInit(botRoomConfig);
 initialiseRoom();
 
 var scheduledTimer = setInterval(function(): void {
+    const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
+
     var placeholderScheduler = {
         targetID: 0,
         targetName: '',
@@ -68,10 +71,17 @@ var scheduledTimer = setInterval(function(): void {
         window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x777777, "normal", 0); // advertisement
     }
 
-    window.playerList.forEach((player: Player) => { // afk detection system
+    window.playerList.forEach((player: Player) => { // afk detection system & auto unmute system
         // init placeholder
         placeholderScheduler.targetID = player.id;
         placeholderScheduler.targetName = player.name;
+
+        //check muted player and unmute when it's time to unmute
+        if(player.permissions.mute === true && nowTimeStamp > player.permissions.muteExpire) {
+            player.permissions.mute = false; //unmute
+            window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.autoUnmute, placeholderScheduler), null, 0x479947, "normal", 0); //notify it
+        }
+        
         // check afk
         if(window.isGamingNow == true) { // if the game is in playing
             if(player.team != 0) { // if the player is not spectators(include afk mode)

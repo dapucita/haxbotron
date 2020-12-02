@@ -27,6 +27,7 @@ export function setPlayerData(player: Player): void {
         balltouch: player.stats.balltouch, // total count of touch(kick) ball
         passed: player.stats.passed, // total count of pass success
         mute: player.permissions.mute, // is this player muted? 
+        muteExpire: player.permissions.muteExpire, // expiration date of mute. -1 means Permanent mute.. (unix timestamp)
         //superadmin: player.permissions.superadmin // is this player super admin? // not save
         rejoinCount: player.entrytime.rejoinCount, // How many rejoins this player has made.
         joinDate: player.entrytime.joinDate, // player join time

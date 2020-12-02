@@ -14,7 +14,7 @@ export const antitrolling = {
         ,floodWarning: '📢 If you reconnect several times in a short period of time, you may be kicked.'
     }
     ,chatFlood: {
-        muteReason: '🔇 You are muted for too many chats. Admin player can release it.'
+        muteReason: '🔇 You are muted for too many chats.(30mins) Admin player can unmute it.'
     }
     ,ogFlood: {
         banReason: '🚫 too much OGs(5mins)'
@@ -69,8 +69,9 @@ export const command = {
     ,mute: {
         _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
         ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
-        ,successMute: '🔇 {targetName}#{ticketTarget} player is muted. You can command it againt for release.'
+        ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.(30mins) You can command it againt for release.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget} player is unmuted.'
+        ,muteAbusingWarn: '❌ You can\'t mute again this player in too short time. (3mins)'
     }
     ,super: {
         _ErrorWrongCommand: '❌ You did wrong command for super admin system.'

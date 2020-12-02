@@ -4,6 +4,7 @@ import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import { isCommandString, parseCommand } from "../Parser";
+import { getUnixTimestamp } from "../Statistics";
 
 export function onPlayerChatListener(player: PlayerObject, message: string): boolean {
     // Event called when a player sends a chat message.
@@ -55,8 +56,10 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                         }
                     }
                     if (chatFloodCritFlag === true) { // after complete loop, check flag
+                        const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
                         // judge as chat flood.
                         window.playerList.get(player.id).permissions['mute'] = true; // mute this player
+                        window.playerList.get(player.id).permissions.muteExpire = nowTimeStamp + BotSettings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
                         window.room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "bold", 1); // notify that fact
                         return false;
                     }

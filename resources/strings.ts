@@ -6,6 +6,7 @@ export const scheduler = {
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
     ,afkDetect: '📢 @{targetName} #{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
+    ,autoUnmute: '🔊 {targetName}#{targetID}님의 음소거가 자동으로 해제되었습니다.'
 }
 
 export const antitrolling = {
@@ -14,7 +15,7 @@ export const antitrolling = {
         ,floodWarning: '📢 너무 짧은 시간에 재접속하면 퇴장될 수 있습니다.'
     }
     ,chatFlood: {
-        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다. 관리자가 해제할 수 있습니다.'
+        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다.(30분) 관리자가 해제할 수 있습니다.'
     }
     ,ogFlood: {
         banReason: '🚫 연속 자책골(5분)'
@@ -69,8 +70,9 @@ export const command = {
     ,mute: {
         _ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
         ,_ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
-        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다. 해제하려면 mute 명령어를 다시 사용하세요.'
+        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.(30분) 해제하려면 mute 명령어를 다시 사용하세요.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
+        ,muteAbusingWarn: '❌ 해당 플레이어에 대해 곧바로 음소거할 수 없습니다.(3분)'
     }
     ,super: {
         _ErrorWrongCommand: '❌ 잘못된 슈퍼 관리자 명령어입니다.'

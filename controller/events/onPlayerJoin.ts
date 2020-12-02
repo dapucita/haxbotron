@@ -92,6 +92,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 passed: loadedData.passed
             }, {
                 mute: loadedData.mute,
+                muteExpire: loadedData.muteExpire,
                 afkmode: false,
                 afkreason: '',
                 superadmin: false
@@ -150,6 +151,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             passed: 0
         }, {
             mute: false,
+            muteExpire: 0,
             afkmode: false,
             afkreason: '',
             superadmin: false

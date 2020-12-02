@@ -46,6 +46,7 @@ export interface PlayerPosition {
 
 export interface PlayerPermissions {
     mute: boolean; // Is this player muted? If true, his/her messages will ignored.
+    muteExpire: number; // expiration date of mute. -1 means Permanent mute.. (unix timestamp)
     afkmode: boolean; // Is this player away from keyboards? If the player sets afk mode, the value is true. It is not a mean for auto dectecting and kicking afk players.
     afkreason: string; // the reason why this player is idle(afk) status.
     superadmin: boolean; // Is this player super admin? It doesn't matter whether he/she is an admin.
@@ -78,6 +79,7 @@ export interface PlayerStorage {
     balltouch: number; // total count of touch(kick) ball
     passed: number; // total count of pass success
     mute: boolean; // is this player muted?
+    muteExpire: number; // expiration date of mute. -1 means Permanent mute.. (unix timestamp)
     //superadmin: boolean; // is this player super admin? // not save
     rejoinCount: number; // How many rejoins this player has made.
     joinDate: number; // player join time
