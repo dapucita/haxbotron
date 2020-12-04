@@ -1,77 +1,23 @@
 // if you want to implement 'click' member using objects from index.ts, you should to do it in index.ts not here. (you can't use ipcrender)
 
-const template = [{
+const template = [
+    {
         label: 'Application',
         submenu: [{
-                id: 'startMenuItem',
-                label: 'Start'
-            },
-            {
-                id: 'stopMenuItem',
-                enabled: false,
-                label: 'Stop'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                role: 'quit'
-            }
-        ]
-    },
-    {
-        label: 'View',
-        submenu: [{
-                role: 'toggledevtools'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                role: 'togglefullscreen'
-            }
-        ]
-    },
-    {
-        label: 'Command',
-        submenu: [
+            id: 'startMenuItem',
+            label: 'Start'
+        },
         {
-            id: 'announceCommandMenuItem',
+            id: 'stopMenuItem',
             enabled: false,
-            label: 'Announce a message'
-        }, {
-            id: 'superAdminLoginKeyMenuItem',
-            label: 'Login keys for Super admin'
+            label: 'Stop'
+        },
+        {
+            type: 'separator'
+        },
+        {
+            role: 'quit'
         }
-    ]
-    },
-    {
-        label: 'Setting',
-        submenu: [{
-            id: 'headlessModeMenuItem',
-            type: 'checkbox',
-            checked: true,
-            label: 'headless mode'
-        }
-        ]
-    },
-    {
-        label: 'Help',
-        submenu: [{
-                label: 'Check for Updates'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                label: 'Website',
-                click() {
-                    require('electron').shell.openExternal('https://dapucita.github.io/haxbotron/')
-                }
-            },
-            {
-                label: 'About'
-            }
         ]
     },
     {
@@ -84,7 +30,64 @@ const template = [{
             { label: "Copy", accelerator: "CmdOrCtrl+C", role: "copy" },
             { label: "Paste", accelerator: "CmdOrCtrl+V", role: "paste" },
             { label: "Select All", accelerator: "CmdOrCtrl+A", role: "selectAll" }
-    ]}
+        ]
+    },
+    {
+        label: 'View',
+        submenu: [{
+            role: 'toggledevtools'
+        },
+        {
+            type: 'separator'
+        },
+        {
+            role: 'togglefullscreen'
+        }
+        ]
+    },
+    {
+        label: 'Command',
+        submenu: [
+            {
+                id: 'announceCommandMenuItem',
+                enabled: false,
+                label: 'Announce a message'
+            }, {
+                id: 'superAdminLoginKeyMenuItem',
+                label: 'Login keys for Super admin'
+            }
+        ]
+    },
+    {
+        label: 'Setting',
+        submenu: [{
+            id: 'headlessModeMenuItem',
+            type: 'checkbox',
+            checked: true,
+            label: 'headless mode'
+        }]
+    },
+    {
+        label: 'Help',
+        submenu:
+            [{
+                label: 'Check for Updates',
+                enabled: false
+            },
+            {
+                type: 'separator'
+            },
+            {
+                label: 'Website',
+                click() {
+                    require('electron').shell.openExternal('https://dapucita.github.io/haxbotron/')
+                }
+            },
+            {
+                label: 'About',
+                enabled: false,
+            }]
+    }
 ];
 
 module.exports = template;
