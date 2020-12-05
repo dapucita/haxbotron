@@ -16,6 +16,7 @@ import { BanList } from "./model/BanList";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
 import { getUnixTimestamp } from "./controller/Statistics";
+import { TeamID } from "./model/TeamID";
 
 //window.logQueue = []; // init //no more use
 
@@ -83,8 +84,8 @@ var scheduledTimer = setInterval(function(): void {
         }
         
         // check afk
-        if(window.isGamingNow == true) { // if the game is in playing
-            if(player.team != 0) { // if the player is not spectators(include afk mode)
+        if(window.isGamingNow === true) { // if the game is in playing
+            if(player.team !== TeamID.Spec) { // if the player is not spectators(include afk mode)
                 if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
                 window.room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
@@ -138,7 +139,7 @@ function initialiseRoom(): void {
     window.room.onTeamVictory = (scores: ScoresObject): void => eventListener.onTeamVictoryListener(scores);
     window.room.onPlayerChat = (player: PlayerObject, message: string): boolean => eventListener.onPlayerChatListener(player, message);
     window.room.onPlayerBallKick = (player: PlayerObject): void => eventListener.onPlayerBallKickListener(player);
-    window.room.onTeamGoal = (team: number): void => eventListener.onTeamGoalListener(team);
+    window.room.onTeamGoal = (team: TeamID): void => eventListener.onTeamGoalListener(team);
     window.room.onGameStart = (byPlayer: PlayerObject): void => eventListener.onGameStartListener(byPlayer);
     window.room.onGameStop = (byPlayer: PlayerObject): void => eventListener.onGameStopListener(byPlayer);
     window.room.onPlayerAdminChange = (changedPlayer: PlayerObject, byPlayer: PlayerObject): void => eventListener.onPlayerAdminChangeListener(changedPlayer, byPlayer);

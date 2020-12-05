@@ -1,5 +1,6 @@
 import { PlayerObject } from "../../model/PlayerObject";
 import { gameRule } from "../../model/rules/rule";
+import { TeamID } from "../../model/TeamID";
 import * as BotSettings from "../../resources/settings.json";
 import * as LangRes from "../../resources/strings";
 import { roomActivePlayersNumberCheck } from "../RoomTools";
@@ -24,7 +25,7 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.unAfk, placeholder), null, 0x479947, "normal", 1);
         }
     } else {
-        window.room.setPlayerTeam(byPlayer.id, 0); // Moves this player to Spectators team.
+        window.room.setPlayerTeam(byPlayer.id, TeamID.Spec); // Moves this player to Spectators team.
         window.room.setPlayerAdmin(byPlayer.id, false); // disqulify admin permission
         window.playerList.get(byPlayer.id).admin = false;
         window.playerList.get(byPlayer.id).permissions.afkmode = true; // set afk mode

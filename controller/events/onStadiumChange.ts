@@ -3,6 +3,7 @@ import { setDefaultStadiums } from "../RoomTools";
 import { gameRule } from "../../model/rules/rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import { TeamID } from "../../model/TeamID";
 
 export function onStadiumChangeListner(newStadiumName: string, byPlayer: PlayerObject): void {
     var placeholderStadium = { 
@@ -14,8 +15,8 @@ export function onStadiumChangeListner(newStadiumName: string, byPlayer: PlayerO
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
     };

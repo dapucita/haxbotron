@@ -2,6 +2,7 @@ import { PlayerObject } from "../model/PlayerObject";
 import { gameRule } from "../model/rules/rule";
 import * as Tst from "./Translator";
 import * as LangRes from "../resources/strings";
+import { TeamID } from "../model/TeamID";
 
 export function setDefaultStadiums(): void {
     // set stadium maps as default setting
@@ -28,7 +29,7 @@ export function roomActivePlayersNumberCheck(): number {
     return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id).permissions.afkmode !== true).length;
 }
 
-export function roomTeamPlayersNumberCheck(team: number): number {
+export function roomTeamPlayersNumberCheck(team: TeamID): number {
     // return number of players in each team
     return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === team).length;
 }
@@ -42,8 +43,8 @@ export function updateAdmins(): void {
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
     };

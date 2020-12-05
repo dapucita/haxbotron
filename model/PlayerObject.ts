@@ -1,3 +1,5 @@
+import { TeamID } from "./TeamID";
+
 export interface PlayerObject {
     // PlayerObject holds information about a player
 
@@ -23,7 +25,7 @@ export interface PlayerObject {
     /* Spectators: 0
     Red Team: 1
     Blue Team: 2 */
-    team: number;
+    team: TeamID;
     // The player's position in the field, if the player is not in the field the value will be null.
     position: PlayerPosition;
 }

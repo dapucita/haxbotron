@@ -6,6 +6,7 @@ import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import { getUnixTimestamp } from "../Statistics";
 import { AdminKickTrace } from "../../model/AdminKickTrace";
+import { TeamID } from "../../model/TeamID";
 
 export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: string, ban: boolean, byPlayer: PlayerObject): void {
     /* Event called when a player has been kicked from the room. This is always called after the onPlayerLeave event.
@@ -22,8 +23,8 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
     };

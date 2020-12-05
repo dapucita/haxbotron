@@ -5,6 +5,7 @@ import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import { isCommandString, parseCommand } from "../Parser";
 import { getUnixTimestamp } from "../Statistics";
+import { TeamID } from "../../model/TeamID";
 
 export function onPlayerChatListener(player: PlayerObject, message: string): boolean {
     // Event called when a player sends a chat message.
@@ -23,8 +24,8 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
     };

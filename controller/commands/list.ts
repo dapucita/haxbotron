@@ -1,4 +1,5 @@
 import { PlayerObject } from "../../model/PlayerObject";
+import { TeamID } from "../../model/TeamID";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 
@@ -31,7 +32,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                 break;
             }
             case "red": {
-                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 1);
+                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team === TeamID.Red);
                 if (players.length >= 1) {
                     placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
@@ -50,7 +51,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                 break;
             }
             case "blue": {
-                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 2);
+                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team === TeamID.Blue);
                 if (players.length >= 1) {
                     placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {
@@ -69,7 +70,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                 break;
             }
             case "spec": {
-                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team == 0);
+                let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team === TeamID.Spec);
                 if (players.length >= 1) {
                     placeholder.whoisResult = ''; //init
                     players.forEach((player: PlayerObject) => {

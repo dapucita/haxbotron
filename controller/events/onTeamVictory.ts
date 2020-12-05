@@ -5,12 +5,13 @@ import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import { setPlayerData } from "../Storage";
 import { setDefaultStadiums } from "../RoomTools";
+import { TeamID } from "../../model/TeamID";
 
 export function onTeamVictoryListener(scores: ScoresObject): void {
     // Event called when a team 'wins'. not just when game ended.
     // recors vicotry in stats. total games also counted in this event.
     var placeholderVictory = { 
-        teamID: 0,
+        teamID: TeamID.Spec,
         teamName: '',
         redScore: scores.red,
         blueScore: scores.blue,
@@ -19,8 +20,8 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
     };
@@ -28,12 +29,12 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
     window.isGamingNow = false; // turn off
 
     if (gameRule.statsRecord == true && window.isStatRecord == true) { // records when game mode is for stats recording.
-        var gamePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team != 0); // except Spectators players
-        var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 1); // except non Red players
-        var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team == 2); // except non Blue players
+        var gamePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team !== TeamID.Spec); // except Spectators players
+        var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team === TeamID.Red); // except non Red players
+        var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team === TeamID.Blue); // except non Blue players
         if (scores.red > scores.blue) {
             // if Red wins
-            placeholderVictory.teamID = 1;
+            placeholderVictory.teamID = TeamID.Red;
             placeholderVictory.teamName = 'Red';
             window.winningStreak.red++;
             window.winningStreak.blue = 0;
@@ -42,7 +43,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             });
         } else {
             // if Blue wins
-            placeholderVictory.teamID = 2;
+            placeholderVictory.teamID = TeamID.Blue;
             placeholderVictory.teamName = 'Blue';
             window.winningStreak.blue++;
             window.winningStreak.red = 0;

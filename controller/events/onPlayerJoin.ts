@@ -8,6 +8,7 @@ import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import { TeamID } from "../../model/TeamID";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();
@@ -31,8 +32,8 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount(),
         banListReason: ''

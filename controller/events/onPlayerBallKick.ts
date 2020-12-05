@@ -1,5 +1,6 @@
 import { gameRule } from "../../model/rules/rule";
 import { PlayerObject } from "../../model/PlayerObject";
+import { TeamID } from "../../model/TeamID";
 
 export function onPlayerBallKickListener(player: PlayerObject): void {
     // Event called when a player kicks the ball.
@@ -12,17 +13,17 @@ export function onPlayerBallKickListener(player: PlayerObject): void {
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
     };
 
-    if (gameRule.statsRecord == true && window.isStatRecord == true) { // record only when stat record mode
+    if (gameRule.statsRecord === true && window.isStatRecord === true) { // record only when stat record mode
 
         window.playerList.get(player.id).stats.balltouch++; // add count of ball touch
 
-        if (window.ballStack.passJudgment(player.team) == true && window.playerList.has(window.ballStack.getLastTouchPlayerID()) == true) {
+        if (window.ballStack.passJudgment(player.team) === true && window.playerList.has(window.ballStack.getLastTouchPlayerID()) === true) {
             window.playerList.get(window.ballStack.getLastTouchPlayerID()).stats.passed++;
         }
 

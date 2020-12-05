@@ -6,6 +6,7 @@ import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { roomTeamPlayersNumberCheck } from "../RoomTools";
+import { TeamID } from "../../model/TeamID";
 
 export function onGameStartListener(byPlayer: PlayerObject): void {
     /* Event called when a game starts.
@@ -18,8 +19,8 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount(),
         teamExpectationRed: 0,
@@ -44,7 +45,7 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
     if (gameRule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
         if (BotSettings.antiInsufficientStartAbusing === true) {
-            if (roomTeamPlayersNumberCheck(1) < gameRule.requisite.minimumTeamLimit || roomTeamPlayersNumberCheck(2) < gameRule.requisite.minimumTeamLimit) {
+            if (roomTeamPlayersNumberCheck(TeamID.Red) < gameRule.requisite.minimumTeamLimit || roomTeamPlayersNumberCheck(TeamID.Blue) < gameRule.requisite.minimumTeamLimit) {
                 let abusingID: number = byPlayer.id || 0;
                 let abusingTimestamp: number = getUnixTimestamp();
                 window.logger.i(`The game will be stopped because of insufficient players in each team.`);

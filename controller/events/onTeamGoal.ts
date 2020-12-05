@@ -6,8 +6,9 @@ import * as Ban from "../Ban";
 import { setPlayerData } from "../Storage";
 import { PlayerObject } from "../../model/PlayerObject";
 import { getUnixTimestamp } from "../Statistics";
+import { TeamID } from "../../model/TeamID";
 
-export function onTeamGoalListener(team: number): void {
+export function onTeamGoalListener(team: TeamID): void {
     // Event called when a team scores a goal.
     var placeholderGoal = { 
         teamID: team,
@@ -23,14 +24,14 @@ export function onTeamGoalListener(team: number): void {
         gameRuleLimitTime: gameRule.requisite.timeLimit,
         gameRuleLimitScore: gameRule.requisite.scoreLimit,
         gameRuleNeedMin: gameRule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(1),
-        possTeamBlue: window.ballStack.possCalculate(2),
+        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
 
     };
 
-    if (team == 1) {
+    if (team === TeamID.Red) {
         // if red team win
         placeholderGoal.teamName = 'Red';
     } else {
@@ -44,7 +45,7 @@ export function onTeamGoalListener(team: number): void {
     window.ballStack.initTouchInfo(); // clear touch info
     if (window.isStatRecord == true && touchPlayer !== undefined) { // records when game mode is for stats recording.
         // except spectators and filter who were lose a point
-        var losePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team != 0 && player.team != team);
+        var losePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team !== TeamID.Spec && player.team !== team);
         losePlayers.forEach(function (eachPlayer: PlayerObject) {
             // records a lost point
             window.playerList.get(eachPlayer.id).stats.losePoints++;
@@ -52,13 +53,13 @@ export function onTeamGoalListener(team: number): void {
         });
 
         // check whether or not it is an OG. and process it!
-        if (window.playerList.get(touchPlayer).team == team) { // if the goal is normal goal (not OG)
+        if (window.playerList.get(touchPlayer).team === team) { // if the goal is normal goal (not OG)
             placeholderGoal.scorerID = window.playerList.get(touchPlayer).id;
             placeholderGoal.scorerName = window.playerList.get(touchPlayer).name;
             window.playerList.get(touchPlayer).stats.goals++;
             setPlayerData(window.playerList.get(touchPlayer));
             var goalMsg: string = Tst.maketext(LangRes.onGoal.goal, placeholderGoal);
-            if (assistPlayer !== undefined && touchPlayer != assistPlayer && window.playerList.get(assistPlayer).team == team) {
+            if (assistPlayer !== undefined && touchPlayer != assistPlayer && window.playerList.get(assistPlayer).team === team) {
                 // records assist when the player who assists is not same as the player goaled, and is not other team.
                 placeholderGoal.assistID = window.playerList.get(assistPlayer).id;
                 placeholderGoal.assistName = window.playerList.get(assistPlayer).name;
