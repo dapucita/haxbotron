@@ -26,7 +26,7 @@ export function roomPlayersNumberCheck(): number {
 
 export function roomActivePlayersNumberCheck(): number {
     // return number of players actually atcivated(not afk)
-    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id).permissions.afkmode !== true).length;
+    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true).length;
 }
 
 export function roomTeamPlayersNumberCheck(team: TeamID): number {
@@ -50,15 +50,15 @@ export function updateAdmins(): void {
     };
 
     // Get all players except the host (id = 0 is always the host)
-    var players = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id).permissions.afkmode !== true); // only no afk mode players
+    var players = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true); // only no afk mode players
     if (players.length == 0) return; // If no players left, do nothing.
     if (players.find((player: PlayerObject) => player.admin) != null) return; // Do nothing if any admin player is still left.
     
     placeholderUpdateAdmins.playerID = players[0].id;
-    placeholderUpdateAdmins.playerName = window.playerList.get(players[0].id).name;
+    placeholderUpdateAdmins.playerName = window.playerList.get(players[0].id)!.name;
 
-    window.room.setPlayerAdmin(players[0].id, true); // Give admin to the first non admin player in the list
-    window.playerList.get(players[0].id).admin = true;
-    window.logger.i(`${window.playerList.get(players[0].id).name}#${players[0].id} has been admin(value:${window.playerList.get(players[0].id).admin},super:${window.playerList.get(players[0].id).permissions.superadmin}), because there was no admin players.`);
+    window.room.setPlayerAdmin(players[0]!.id, true); // Give admin to the first non admin player in the list
+    window.playerList.get(players[0].id)!.admin = true;
+    window.logger.i(`${window.playerList.get(players[0].id)!.name}#${players[0].id} has been admin(value:${window.playerList.get(players[0].id)!.admin},super:${window.playerList.get(players[0].id)!.permissions.superadmin}), because there was no admin players.`);
     window.room.sendAnnouncement(Tst.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
 }

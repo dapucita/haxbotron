@@ -2,7 +2,7 @@ import { PlayerObject } from "../../model/PlayerObject";
 import * as LangRes from "../../resources/strings";
 
 export function cmdFreeze(byPlayer: PlayerObject): void {
-    if(window.playerList.get(byPlayer.id).admin == true) {
+    if(window.playerList.get(byPlayer.id)!.admin == true) {
         if(window.isMuteAll == true) {
             window.isMuteAll = false; //off
             window.room.sendAnnouncement(LangRes.command.freeze.offFreeze, null, 0x479947, "normal", 1);

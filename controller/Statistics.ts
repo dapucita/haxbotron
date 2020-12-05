@@ -71,8 +71,8 @@ export function getTeamWinningExpectation(): number[] {
 
         window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0).forEach((player: PlayerObject) => {
             // count win and lose games
-            goalsCount[player.team] += window.playerList.get(player.id).stats.goals;
-            losesCount[player.team] += window.playerList.get(player.id).stats.losePoints;
+            goalsCount[player.team] += window.playerList.get(player.id)!.stats.goals;
+            losesCount[player.team] += window.playerList.get(player.id)!.stats.losePoints;
         });
 
         return [

@@ -13,12 +13,12 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
         ,targetAfkReason: ''
         ,gameRuleNeedMin: gameRule.requisite.minimumPlayers,
     }
-    if (window.playerList.get(byPlayer.id).permissions.afkmode === true) {
-        window.playerList.get(byPlayer.id).permissions.afkmode = false; // return to active mode
-        window.playerList.get(byPlayer.id).permissions.afkreason = ''; // init
-        window.playerList.get(byPlayer.id).afktrace = { exemption: false, count: 0 }; // reset for afk trace
+    if (window.playerList.get(byPlayer.id)!.permissions.afkmode === true) {
+        window.playerList.get(byPlayer.id)!.permissions.afkmode = false; // return to active mode
+        window.playerList.get(byPlayer.id)!.permissions.afkreason = ''; // init
+        window.playerList.get(byPlayer.id)!.afktrace = { exemption: false, count: 0 }; // reset for afk trace
         
-        if(BotSettings.antiAFKFlood === true && window.playerList.get(byPlayer.id).permissions.mute === true) {
+        if(BotSettings.antiAFKFlood === true && window.playerList.get(byPlayer.id)!.permissions.mute === true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.unAfk, placeholder), byPlayer.id, 0x479947, "normal", 1);
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.muteNotifyWarn, placeholder), byPlayer.id, 0xFF7777, "normal", 2);
         } else {
@@ -27,16 +27,16 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
     } else {
         window.room.setPlayerTeam(byPlayer.id, TeamID.Spec); // Moves this player to Spectators team.
         window.room.setPlayerAdmin(byPlayer.id, false); // disqulify admin permission
-        window.playerList.get(byPlayer.id).admin = false;
-        window.playerList.get(byPlayer.id).permissions.afkmode = true; // set afk mode
-        window.playerList.get(byPlayer.id).afktrace = { exemption: false, count: 0}; // reset for afk trace
+        window.playerList.get(byPlayer.id)!.admin = false;
+        window.playerList.get(byPlayer.id)!.permissions.afkmode = true; // set afk mode
+        window.playerList.get(byPlayer.id)!.afktrace = { exemption: false, count: 0}; // reset for afk trace
 
         if(message !== undefined) { // if the reason is not skipped
-            window.playerList.get(byPlayer.id).permissions.afkreason = message; // set reason
+            window.playerList.get(byPlayer.id)!.permissions.afkreason = message; // set reason
             placeholder.targetAfkReason = message; // update placeholder
         }
         
-        if(BotSettings.antiAFKFlood === true && window.playerList.get(byPlayer.id).permissions.mute === true) {
+        if(BotSettings.antiAFKFlood === true && window.playerList.get(byPlayer.id)!.permissions.mute === true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.setAfk, placeholder), byPlayer.id, 0x479947, "normal", 1);
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.muteNotifyWarn, placeholder), byPlayer.id, 0xFF7777, "normal", 2);
         } else {

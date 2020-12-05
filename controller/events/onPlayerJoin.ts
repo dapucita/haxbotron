@@ -130,11 +130,11 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                         return; // exit from this join event
                     } else { //just warn
                         window.room.sendAnnouncement(LangRes.antitrolling.joinFlood.floodWarning, player.id, 0xFF0000, "bold", 2);
-                        window.playerList.get(player.id).entrytime.rejoinCount++; // and add count
+                        window.playerList.get(player.id)!.entrytime.rejoinCount++; // and add count
                     }
                 } else {
                     // init rejoin count
-                    window.playerList.get(player.id).entrytime.rejoinCount = 0;
+                    window.playerList.get(player.id)!.entrytime.rejoinCount = 0;
                 }
             }
         }
@@ -163,7 +163,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         }));
     }
 
-    setPlayerData(window.playerList.get(player.id)); // register(or update) in localStorage
+    setPlayerData(window.playerList.get(player.id)!); // register(or update) in localStorage
 
     updateAdmins(); // check there are any admin players, if not make an admin player.
 

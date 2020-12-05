@@ -15,12 +15,12 @@ export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer
             window.room.setPlayerTeam(0, TeamID.Spec); // stay host player in Spectators team.
         } else {
             if(byPlayer !== null && byPlayer.id !== 0) {
-                if(window.playerList.get(changedPlayer.id).permissions.afkmode == true) {
-                    placeholderTeamChange.targetAfkReason = window.playerList.get(changedPlayer.id).permissions.afkreason;
+                if(window.playerList.get(changedPlayer.id)!.permissions.afkmode == true) {
+                    placeholderTeamChange.targetAfkReason = window.playerList.get(changedPlayer.id)!.permissions.afkreason;
                     window.room.setPlayerTeam(changedPlayer.id, TeamID.Spec); // stay the player in Spectators team.
                     window.room.sendAnnouncement(Tst.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), null, 0xFF0000, "normal", 0);
                 }
             }
-            window.playerList.get(changedPlayer.id).team = changedPlayer.team;
+            window.playerList.get(changedPlayer.id)!.team = changedPlayer.team;
         }
 }

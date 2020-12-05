@@ -17,12 +17,12 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     var placeholderLeft = { 
         playerID: player.id,
         playerName: player.name,
-        playerStatsTotal: window.playerList.get(player.id).stats.totals,
-        playerStatsWins: window.playerList.get(player.id).stats.wins,
-        playerStatsGoals: window.playerList.get(player.id).stats.goals,
-        playerStatsAssists: window.playerList.get(player.id).stats.assists,
-        playerStatsOgs: window.playerList.get(player.id).stats.ogs,
-        playerStatsLosepoints: window.playerList.get(player.id).stats.losePoints,
+        playerStatsTotal: window.playerList.get(player.id)!.stats.totals,
+        playerStatsWins: window.playerList.get(player.id)!.stats.wins,
+        playerStatsGoals: window.playerList.get(player.id)!.stats.goals,
+        playerStatsAssists: window.playerList.get(player.id)!.stats.assists,
+        playerStatsOgs: window.playerList.get(player.id)!.stats.ogs,
+        playerStatsLosepoints: window.playerList.get(player.id)!.stats.losePoints,
         gameRuleName: gameRule.ruleName,
         gameRuleDescription: gameRule.ruleDescripttion,
         gameRuleLimitTime: gameRule.requisite.timeLimit,
@@ -49,8 +49,8 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         }
     }
 
-    window.playerList.get(player.id).entrytime.leftDate = getUnixTimestamp(); // save left time
-    setPlayerData(window.playerList.get(player.id)); // save
+    window.playerList.get(player.id)!.entrytime.leftDate = getUnixTimestamp(); // save left time
+    setPlayerData(window.playerList.get(player.id)!); // save
     window.playerList.delete(player.id); // delete from player list
 
     updateAdmins(); // update admin

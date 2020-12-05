@@ -12,16 +12,16 @@ export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlaye
         playerName: changedPlayer.name
     }
     if (changedPlayer.admin == true) { // if this event means that the player has been admin
-        if (window.playerList.get(changedPlayer.id).permissions.afkmode == true) {
+        if (window.playerList.get(changedPlayer.id)!.permissions.afkmode == true) {
             // if changedPlayer is in afk mode, reject
             window.room.setPlayerAdmin(changedPlayer.id, false);
             window.room.sendAnnouncement(Tst.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), 0xFF0000, "normal", 2);
             return;
         } else {
             // make this player admin
-            window.playerList.get(changedPlayer.id).admin = true;
+            window.playerList.get(changedPlayer.id)!.admin = true;
             if (byPlayer !== null) {
-                window.logger.i(`${changedPlayer.name}#${changedPlayer.id} has been admin(super:${window.playerList.get(changedPlayer.id).permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
+                window.logger.i(`${changedPlayer.name}#${changedPlayer.id} has been admin(super:${window.playerList.get(changedPlayer.id)!.permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
             }
             return;
         }

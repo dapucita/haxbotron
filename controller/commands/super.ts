@@ -7,10 +7,10 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
     if (message !== undefined) {
         switch (message) {
             case "login": {
-                if (window.playerList.get(byPlayer.id).permissions.superadmin == false) { // only when not yet loginned
+                if (window.playerList.get(byPlayer.id)!.permissions.superadmin == false) { // only when not yet loginned
                     if (submessage !== undefined) { // key check and login
                         if (superAdminLogin(submessage) == true) { // if login key is matched
-                            window.playerList.get(byPlayer.id).permissions.superadmin = true; // set super admin
+                            window.playerList.get(byPlayer.id)!.permissions.superadmin = true; // set super admin
                             //setPlayerData(playerList.get(playerID)); // update
                             window.room.sendAnnouncement(LangRes.command.super.loginSuccess, byPlayer.id, 0x479947, "normal", 2);
                         } else {
@@ -27,8 +27,8 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
             }
 
             case "logout": {
-                if (window.playerList.get(byPlayer.id).permissions.superadmin == true) { // only when loginned
-                    window.playerList.get(byPlayer.id).permissions.superadmin = false; // disqualify super admin
+                if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
+                    window.playerList.get(byPlayer.id)!.permissions.superadmin = false; // disqualify super admin
                     //setPlayerData(playerList.get(playerID)); // update
                     window.room.sendAnnouncement(LangRes.command.super.logoutSuccess, byPlayer.id, 0x479947, "normal", 2);
                 } else {
@@ -39,9 +39,9 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
             }
 
             case "thor": {
-                if (window.playerList.get(byPlayer.id).permissions.superadmin == true) {
+                if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) {
                     window.room.setPlayerAdmin(byPlayer.id, true); // first, give admin
-                    window.playerList.get(byPlayer.id).admin = true;
+                    window.playerList.get(byPlayer.id)!.admin = true;
                     if (submessage !== undefined && submessage == 'deprive') { // get admin list except this super admin 
                         let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.id != byPlayer.id && player.admin == true);
                         if (players.length == 0) { // If no players left, do nothing.
@@ -51,7 +51,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                             window.room.sendAnnouncement(LangRes.command.super.thor.deprive, byPlayer.id, 0x479947, "normal", 2);
                             players.forEach((player: PlayerObject) => { // disqualify admin permission
                                 window.room.setPlayerAdmin(player.id, false);
-                                window.playerList.get(player.id).admin = false;
+                                window.playerList.get(player.id)!.admin = false;
                             });
                         }
                     } else {
@@ -65,7 +65,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
             }
 
             case "kick": {
-                if (window.playerList.get(byPlayer.id).permissions.superadmin == true) { // only when loginned
+                if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage.charAt(0) == "#") {
                         let target: number = parseInt(submessage.substr(1), 10);
                         if (isNaN(target) != true && window.playerList.has(target) == true) {
@@ -85,7 +85,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
             }
 
             case "ban": {
-                if (window.playerList.get(byPlayer.id).permissions.superadmin == true) { // only when loginned
+                if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage.charAt(0) == "#") {
                         let target: number = parseInt(submessage.substr(1), 10);
                         if (isNaN(target) != true && window.playerList.has(target) == true) {
@@ -105,7 +105,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
             }
 
             case "banclear": {
-                if (window.playerList.get(byPlayer.id).permissions.superadmin == true) { // only when loginned
+                if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage == "all") {
                         window.room.clearBans();
                         Ban.bListClear();

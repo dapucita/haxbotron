@@ -55,7 +55,7 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
 
                 if (abusingID !== 0 && window.antiInsufficientStartAbusingCount.filter(eachID => eachID === abusingID).length > BotSettings.insufficientStartAllowLimitation) {
                     //if limitation has over then fixed-term ban that admin player
-                    Ban.bListAdd({ conn: window.playerList.get(abusingID).conn, reason: LangRes.antitrolling.insufficientStartAbusing.banReason, register: abusingTimestamp, expire: abusingTimestamp + BotSettings.insufficientStartAbusingBanMillisecs });
+                    Ban.bListAdd({ conn: window.playerList.get(abusingID)!.conn, reason: LangRes.antitrolling.insufficientStartAbusing.banReason, register: abusingTimestamp, expire: abusingTimestamp + BotSettings.insufficientStartAbusingBanMillisecs });
                     window.room.kickPlayer(abusingID, LangRes.antitrolling.insufficientStartAbusing.banReason, false);     
                 }
                 

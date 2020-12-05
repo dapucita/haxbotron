@@ -39,7 +39,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
         if (player.admin === true) { // if this player is admin
             return true; // admin can chat regardless of mute
         } else {
-            if (window.isMuteAll === true || window.playerList.get(player.id).permissions['mute'] === true) { // if this player is muted or whole chat is frozen
+            if (window.isMuteAll === true || window.playerList.get(player.id)!.permissions['mute'] === true) { // if this player is muted or whole chat is frozen
                 window.room.sendAnnouncement(Tst.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
                 return false; // and hide this chat
             } else {
@@ -56,11 +56,11 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                             break; // abort loop
                         }
                     }
-                    if (chatFloodCritFlag === true && window.playerList.get(player.id).permissions['mute'] === false) { // after complete loop, check flag
+                    if (chatFloodCritFlag === true && window.playerList.get(player.id)!.permissions['mute'] === false) { // after complete loop, check flag
                         const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
                         // judge as chat flood.
-                        window.playerList.get(player.id).permissions['mute'] = true; // mute this player
-                        window.playerList.get(player.id).permissions.muteExpire = nowTimeStamp + BotSettings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
+                        window.playerList.get(player.id)!.permissions['mute'] = true; // mute this player
+                        window.playerList.get(player.id)!.permissions.muteExpire = nowTimeStamp + BotSettings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
                         window.room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "bold", 1); // notify that fact
                         return false;
                     }

@@ -4,6 +4,7 @@ import { LogMessage } from "../model/LogMessage";
 import { KickStack } from "../model/BallTrace";
 import { Logger } from "../controller/Logger";
 import { AdminKickTrace } from "../model/AdminKickTrace";
+import { Player } from "../model/Player";
 
 declare global {
     interface Window {
@@ -17,7 +18,7 @@ declare global {
         isGamingNow: boolean // is playing now?
         isMuteAll: boolean // is All players muted?
 
-        playerList: Map // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
+        playerList: Map<number, Player> // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
         ballStack: KickStack // stack for ball tracing
         winningStreak: any //  how many wins straight (streak)
 

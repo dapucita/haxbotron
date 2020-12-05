@@ -39,7 +39,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             window.winningStreak.red++;
             window.winningStreak.blue = 0;
             redPlayers.forEach(function (eachPlayer: PlayerObject) {
-                window.playerList.get(eachPlayer.id).stats.wins++; //records a win
+                window.playerList.get(eachPlayer.id)!.stats.wins++; //records a win
             });
         } else {
             // if Blue wins
@@ -48,13 +48,13 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             window.winningStreak.blue++;
             window.winningStreak.red = 0;
             bluePlayers.forEach(function (eachPlayer: PlayerObject) {
-                window.playerList.get(eachPlayer.id).stats.wins++; //records a win
+                window.playerList.get(eachPlayer.id)!.stats.wins++; //records a win
             });
         }
         gamePlayers.forEach(function (eachPlayer: PlayerObject) {
             // records a game count
-            window.playerList.get(eachPlayer.id).stats.totals++;
-            setPlayerData(window.playerList.get(eachPlayer.id)); // updates wins and totals count
+            window.playerList.get(eachPlayer.id)!.stats.totals++;
+            setPlayerData(window.playerList.get(eachPlayer.id)!); // updates wins and totals count
         });
         if (window.winningStreak.red >= 3 || window.winningStreak.blue >= 3) {
             placeholderVictory.streakTeamName = window.winningStreak.getName();
