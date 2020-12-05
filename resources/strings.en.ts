@@ -30,6 +30,9 @@ export const antitrolling = {
         banReason: '🚫 start with insufficient players(5mins)'
         ,abusingWarning: '📢 You might be kicked if you start game without sufficient players.'
     }
+    ,afkAbusing: {
+        cannotReason: '❌ You can\'t use afk command during a game.'
+    }
 }
 
 export const command = {

@@ -14,6 +14,12 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
         ,gameRuleNeedMin: gameRule.requisite.minimumPlayers,
     }
     if (window.playerList.get(byPlayer.id)!.permissions.afkmode === true) {
+        if(window.isGamingNow === true && BotSettings.antiAFKAbusing === true) {
+            // if inGame, prevent AFK abusing
+            window.room.sendAnnouncement(LangRes.antitrolling.afkAbusing.cannotReason, byPlayer.id, 0xFF7777, "normal", 2); //warn
+            return; //abort this event
+        }
+
         window.playerList.get(byPlayer.id)!.permissions.afkmode = false; // return to active mode
         window.playerList.get(byPlayer.id)!.permissions.afkreason = ''; // init
         window.playerList.get(byPlayer.id)!.afktrace = { exemption: false, count: 0 }; // reset for afk trace

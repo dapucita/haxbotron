@@ -28,6 +28,7 @@
     "playerKickAbusingBanMillisecs" : 300000,
 
     "antiAFKFlood" : true,
+    "antiAFKAbusing" : true,
 
     "antiMuteAbusing" : true,
     "muteAllowIntervalMillisecs" : 180000,

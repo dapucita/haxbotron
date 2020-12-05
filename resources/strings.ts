@@ -31,6 +31,9 @@ export const antitrolling = {
         banReason: '🚫 팀 인원 미충족(5분)'
         ,abusingWarning: '📢 팀 인원을 채우지 않고 계속 진행하면 퇴장될 수 있습니다.'
     }
+    ,afkAbusing: {
+        cannotReason: '❌ 게임 중에는 잠수할 수 없습니다.'
+    }
 }
 
 export const command = {
