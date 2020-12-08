@@ -1,5 +1,5 @@
 import * as LangRes from "../resources/strings";
-import { PlayerObject } from "../model/PlayerObject";
+import { PlayerObject } from "../model/GameObject/PlayerObject";
 
 import { cmdAbout } from "./commands/about";
 import { cmdHelp } from "./commands/help";

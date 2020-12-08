@@ -1,9 +1,9 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 import * as StatCalc from "../../controller/Statistics";
-import { gameRule } from "../../model/rules/rule";
-import { TeamID } from "../../model/TeamID";
+import { gameRule } from "../../model/GameRules/captain.rule";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function cmdPoss(byPlayer: PlayerObject): void {
     let placeholder = {

@@ -1,4 +1,4 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import { updateAdmins } from "../RoomTools";

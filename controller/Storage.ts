@@ -1,5 +1,5 @@
-import { Player } from "../model/Player";
-import { PlayerStorage } from "../model/PlayerObject";
+import { Player } from "../model/GameObject/Player";
+import { PlayerStorage } from "../model/GameObject/PlayerObject";
 
 export function getPlayerData(playerAuth: string): PlayerStorage | null {
     // load player's data from localStorage

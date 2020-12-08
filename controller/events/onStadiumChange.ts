@@ -1,9 +1,9 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setDefaultStadiums } from "../RoomTools";
-import { gameRule } from "../../model/rules/rule";
+import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onStadiumChangeListner(newStadiumName: string, byPlayer: PlayerObject): void {
     var placeholderStadium = { 

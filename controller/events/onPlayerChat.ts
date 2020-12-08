@@ -1,11 +1,11 @@
-import { PlayerObject } from "../../model/PlayerObject";
-import { gameRule } from "../../model/rules/rule";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import { isCommandString, parseCommand } from "../Parser";
 import { getUnixTimestamp } from "../Statistics";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerChatListener(player: PlayerObject, message: string): boolean {
     // Event called when a player sends a chat message.

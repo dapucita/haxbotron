@@ -1,8 +1,8 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 import * as StatCalc from "../../controller/Statistics";
-import { gameRule } from "../../model/rules/rule";
+import { gameRule } from "../../model/GameRules/captain.rule";
 
 export function cmdScout(byPlayer: PlayerObject): void {
     if (gameRule.statsRecord == true && window.isStatRecord == true) {

@@ -1,8 +1,8 @@
-import { PlayerObject } from "../model/PlayerObject";
-import { gameRule } from "../model/rules/rule";
+import { PlayerObject } from "../model/GameObject/PlayerObject";
+import { gameRule } from "../model/GameRules/captain.rule";
 import * as Tst from "./Translator";
 import * as LangRes from "../resources/strings";
-import { TeamID } from "../model/TeamID";
+import { TeamID } from "../model/GameObject/TeamID";
 
 export function setDefaultStadiums(): void {
     // set stadium maps as default setting
@@ -59,6 +59,11 @@ export function updateAdmins(): void {
 
     window.room.setPlayerAdmin(players[0]!.id, true); // Give admin to the first non admin player in the list
     window.playerList.get(players[0].id)!.admin = true;
-    window.logger.i(`${window.playerList.get(players[0].id)!.name}#${players[0].id} has been admin(value:${window.playerList.get(players[0].id)!.admin},super:${window.playerList.get(players[0].id)!.permissions.superadmin}), because there was no admin players.`);
+    window.logger.i(`${window.playerList.get(players[0].id)!.name}#${players[0].id} has been admin(value:${window.playerList.get(players[0].id)!.admin},super:${window.playerList.get(players[0].id)!.permissions.superadmin}), because there were no admin players.`);
     window.room.sendAnnouncement(Tst.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
+}
+
+export function getCookieFromHeadless(name: string): string {
+    var result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
+    return result ? result[1] : '';
 }

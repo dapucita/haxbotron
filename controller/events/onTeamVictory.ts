@@ -1,11 +1,11 @@
-import { ScoresObject } from "../../model/ScoresObject";
-import { PlayerObject } from "../../model/PlayerObject";
-import { gameRule } from "../../model/rules/rule";
+import { ScoresObject } from "../../model/GameObject/ScoresObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import { setPlayerData } from "../Storage";
 import { setDefaultStadiums } from "../RoomTools";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onTeamVictoryListener(scores: ScoresObject): void {
     // Event called when a team 'wins'. not just when game ended.

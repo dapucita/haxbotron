@@ -1,6 +1,6 @@
-import { PlayerObject, PlayerStorage } from "../../model/PlayerObject";
-import { gameRule } from "../../model/rules/rule";
-import { Player } from "../../model/Player";
+import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject";
+import { gameRule } from "../../model/GameRules/captain.rule";
+import { Player } from "../../model/GameObject/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
 import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
@@ -8,7 +8,7 @@ import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();

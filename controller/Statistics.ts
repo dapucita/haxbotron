@@ -1,4 +1,4 @@
-import { PlayerObject } from "../model/PlayerObject";
+import { PlayerObject } from "../model/GameObject/PlayerObject";
 
 // TODO: Elo https://ryanmadden.net/posts/Adapting-Elo
 

@@ -1,7 +1,7 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
     // Event called when a player team is changed.

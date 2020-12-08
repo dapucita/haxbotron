@@ -1,4 +1,4 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
 
 export function cmdHelp(byPlayer: PlayerObject, message?: string): void {

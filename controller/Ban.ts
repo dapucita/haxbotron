@@ -1,4 +1,4 @@
-import { BanList } from "../model/BanList";
+import { BanList } from "../model/PlayerBan/BanList";
 
 // header ------------------------------------------------------------------------
 function bListLoad(): BanList[] { // init and load

@@ -1,6 +1,6 @@
-import { gameRule } from "../../model/rules/rule";
-import { PlayerObject } from "../../model/PlayerObject";
-import { TeamID } from "../../model/TeamID";
+import { gameRule } from "../../model/GameRules/captain.rule";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerBallKickListener(player: PlayerObject): void {
     // Event called when a player kicks the ball.

@@ -1,5 +1,5 @@
-import { PlayerObject } from "../../model/PlayerObject";
-import { TeamID } from "../../model/TeamID";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { TeamID } from "../../model/GameObject/TeamID";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 

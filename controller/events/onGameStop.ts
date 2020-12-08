@@ -1,6 +1,6 @@
-import { PlayerObject } from "../../model/PlayerObject";
-import { gameRule } from "../../model/rules/rule";
-import { TeamID } from "../../model/TeamID";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { gameRule } from "../../model/GameRules/captain.rule";
+import { TeamID } from "../../model/GameObject/TeamID";
 import { setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
 
 

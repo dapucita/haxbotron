@@ -1,11 +1,11 @@
-import { PlayerObject } from "../../model/PlayerObject";
-import { gameRule } from "../../model/rules/rule";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerLeaveListener(player: PlayerObject): void {
     // Event called when a player leaves the room.

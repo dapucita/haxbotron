@@ -1,4 +1,4 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function onPlayerActivityListener(player : PlayerObject): void {
     // Event called when a player gives signs of activity, such as pressing a key.

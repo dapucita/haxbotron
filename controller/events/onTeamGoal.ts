@@ -1,12 +1,12 @@
-import { gameRule } from "../../model/rules/rule";
+import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
 import { setPlayerData } from "../Storage";
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { getUnixTimestamp } from "../Statistics";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onTeamGoalListener(team: TeamID): void {
     // Event called when a team scores a goal.

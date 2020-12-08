@@ -1,4 +1,4 @@
-import { GameRule } from "../GameRule";
+import { GameRule } from "./GameRule";
 import * as gbhothuge from "../../resources/stadium/gbhothuge.hbs";
 // import * as tiny from "../../stadium/tiny.hbs";
 

@@ -1,4 +1,4 @@
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function onKickRateLimitSetListener(min: number, rate: number, burst: number, byPlayer: PlayerObject): void {
     let byPlayerInfo: string = "bot";

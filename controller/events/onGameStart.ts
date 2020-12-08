@@ -1,12 +1,12 @@
-import { PlayerObject } from "../../model/PlayerObject";
-import { gameRule } from "../../model/rules/rule";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { roomTeamPlayersNumberCheck } from "../RoomTools";
-import { TeamID } from "../../model/TeamID";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onGameStartListener(byPlayer: PlayerObject): void {
     /* Event called when a game starts.
@@ -36,7 +36,7 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
         window.antiTrollingOgFloodCount = []; // clear and init again
     }
 
-    let msg = `[GAME] The game(stat record:${window.isStatRecord}) has been started.`;
+    let msg = `The game(stat record:${window.isStatRecord}) has been started.`;
     if (byPlayer !== null && byPlayer.id != 0) {
         placeholderStart.playerID = byPlayer.id;
         placeholderStart.playerName = byPlayer.name;

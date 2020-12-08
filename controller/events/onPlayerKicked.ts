@@ -1,12 +1,12 @@
-import { PlayerObject } from "../../model/PlayerObject";
-import { gameRule } from "../../model/rules/rule";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import { getUnixTimestamp } from "../Statistics";
-import { AdminKickTrace } from "../../model/AdminKickTrace";
-import { TeamID } from "../../model/TeamID";
+import { AdminKickTrace } from "../../model/PlayerBan/AdminKickTrace";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: string, ban: boolean, byPlayer: PlayerObject): void {
     /* Event called when a player has been kicked from the room. This is always called after the onPlayerLeave event.

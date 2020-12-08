@@ -1,5 +1,5 @@
 import { getUnixTimestamp } from "../Statistics";
-import { PlayerObject } from "../../model/PlayerObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 import * as BotSettings from "../../resources/settings.json";
