@@ -2,7 +2,6 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const menuTemplate = require('./view/menuTemplate');
 
-import { LogMessage } from "./model/LogMessage";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { tweaks_geoLocationOverride, tweaks_WebRTCAnoym } from "./tweaks";
 
@@ -300,45 +299,6 @@ async function bot(hostConfig: string) {
 
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
     var storageLoop = setInterval(async function () {
-        /* DEPRECATED (OLD LOGGING SYSTEM)
-        // log system with winston module. winstonLoggerSystem
-        // log message queue copy
-        var msgQueue: LogMessage[] = await page.evaluate(() => {
-            var msgQueueCopy = window.logQueue;
-            window.logQueue = [];
-            return msgQueueCopy;
-        });
-        // log it and make new text for electron
-        var msgChunk: string = '';
-        for (var loopCount = 0; loopCount < msgQueue.length; loopCount++) {
-            var msgQueueChunk: LogMessage | undefined = msgQueue.pop();
-            msgChunk = msgQueueChunk?.context + '\\r\\n' + msgChunk;
-            switch (msgQueueChunk?.type) {
-                case 0: {
-                    winstonLogger.error(msgQueueChunk.context);
-                    break;
-                }
-                case 1: {
-                    winstonLogger.warn(msgQueueChunk.context);
-                    break;
-                }
-                case 2: {
-                    winstonLogger.info(msgQueueChunk.context);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        } 
-
-        // now print it on electron's textarea
-        if(await msgChunk != '') {
-            await electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '" + msgChunk + "' + document.getElementById('botConsole').value;");
-        }
-        // bug: this logging system has a problem. "Uncaught SyntaxError: Unexpected identifier at WebFrame". Maybe it was caused by quotation marks..
-        */
-
         // data from bot
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};

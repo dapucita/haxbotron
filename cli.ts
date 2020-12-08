@@ -2,10 +2,9 @@
 // This is the load part of the bot
 
 //import modules
-import { LogMessage } from "./model/LogMessage";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { tweaks_geoLocationOverride, tweaks_WebRTCAnoym } from "./tweaks";
-import { RoomConfig } from "./model/RoomConfig";
+import { RoomConfig } from "./model/RoomObject/RoomConfig";
 
 // BOT Loader
 const inquirer = require("inquirer")
@@ -185,39 +184,6 @@ async function makeBot(hostConfig: any) {
 
     // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
     var storageLoop = setInterval(async function () {
-
-        /* ================= DEPRECATED (OLD LOGGING SYSTEM)
-        // log system with winston module. winstonLoggerSystem
-        var msgQueue: LogMessage[] = await page.evaluate(() => {
-            var msgQueueCopy = window.logQueue;
-            window.logQueue = [];
-            return msgQueueCopy;
-        }); // get and pop
-        for (var loopCount = 0; loopCount < msgQueue.length; loopCount++) { //and log it!
-            var msgQueueChunk: LogMessage | undefined = msgQueue.pop();
-            switch (msgQueueChunk?.type) {
-                case 0:
-                    { 
-                        winstonLogger.error(msgQueueChunk.context);
-                        break; 
-                    }
-                case 1:
-                    { 
-                        winstonLogger.warn(msgQueueChunk.context);
-                        break; 
-                    }
-                case 2:
-                    {
-                        winstonLogger.info(msgQueueChunk.context);
-                        break;
-                    }
-                default: {
-                    break;
-                }
-            }
-        }
-        ================= */
-
         // data from bot
         var localStorageData: any[] = await page.evaluate(() => {
             let jsonData: any = {};

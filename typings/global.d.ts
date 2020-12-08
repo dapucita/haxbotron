@@ -1,10 +1,9 @@
 import { Logger } from "./controller/Logger";
-import { RoomConfig } from '../model/RoomConfig';
-import { LogMessage } from "../model/LogMessage";
-import { KickStack } from "../model/BallTrace";
+import { RoomConfig } from '../model/RoomObject/RoomConfig';
+import { KickStack } from "../model/GameObject/BallTrace";
 import { Logger } from "../controller/Logger";
-import { AdminKickTrace } from "../model/AdminKickTrace";
-import { Player } from "../model/Player";
+import { AdminKickTrace } from "../model/PlayerBan/AdminKickTrace";
+import { Player } from "../model/GameObject/Player";
 
 declare global {
     interface Window {
@@ -12,7 +11,6 @@ declare global {
         roomURIlink: string // for sharing URI link of the room
 
         logger: Logger; // logger for whole bot application
-        //logQueue: LogMessage[] // for sharing log message //no more use
 
         isStatRecord: boolean // TRUE means that recording stats now
         isGamingNow: boolean // is playing now?
