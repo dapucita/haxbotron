@@ -1,0 +1,14 @@
+{
+    "about" : "about",
+    "afk" : "afk",
+    "freeze" : "freeze",
+    "help" : "help",
+    "list" : "list",
+    "mute" : "mute",
+    "poss" : "poss",
+    "scout" : "scout",
+    "stats" : "stats",
+    "statsreset" : "statsreset",
+    "streak" : "streak",
+    "super" : "super"
+}
