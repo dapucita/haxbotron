@@ -25,8 +25,8 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.unAfk, placeholder), null, 0x479947, "normal", 1);
         }
     } else { // if this player is not AFK (in active)
-        if(window.isGamingNow === true && BotSettings.antiAFKAbusing === true) {
-            // if inGame, prevent AFK abusing
+        if(window.isGamingNow === true && BotSettings.antiAFKAbusing === true && window.playerList.get(byPlayer.id)!.team !== TeamID.Spec) {
+            // if in game situation and this player is in team, prevent AFK abusing
             window.room.sendAnnouncement(LangRes.antitrolling.afkAbusing.cannotReason, byPlayer.id, 0xFF7777, "normal", 2); //warn
             return; //abort this event
         }
