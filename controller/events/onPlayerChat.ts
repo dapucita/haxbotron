@@ -61,7 +61,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                         // judge as chat flood.
                         window.playerList.get(player.id)!.permissions['mute'] = true; // mute this player
                         window.playerList.get(player.id)!.permissions.muteExpire = nowTimeStamp + BotSettings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
-                        window.room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "bold", 1); // notify that fact
+                        window.room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "normal", 1); // notify that fact
                         return false;
                     }
                 }
