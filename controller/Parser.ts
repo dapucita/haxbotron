@@ -1,6 +1,6 @@
 import * as LangRes from "../resources/strings";
+import * as CommandSet from "../resources/command.json";
 import { PlayerObject } from "../model/GameObject/PlayerObject";
-
 import { cmdAbout } from "./commands/about";
 import { cmdHelp } from "./commands/help";
 import { cmdStats } from "./commands/stats";
@@ -16,8 +16,8 @@ import { cmdSuper } from "./commands/super";
 
 // if given string is command chat, this function returns true, nor false.
 export function isCommandString(message: string): boolean {
-    if(message.charAt(0) == "!") {
-        // If message has '!' as first character in it's string, return true.
+    if(message.charAt(0) == CommandSet._commandPrefix) {
+        // If message has prefix signature (default: !) as first character in it's string, return true.
         return true;
     } else {
         return false;
@@ -33,7 +33,7 @@ export function getCommandChunk(message: string): string[] {
 export function parseCommand(byPlayer:PlayerObject, message: string): void {
     var msgChunk: string[] = getCommandChunk(message);
     switch(msgChunk[0]) {
-        case "!help": {
+        case CommandSet.help: {
             if(msgChunk[1] !== undefined) {
                 cmdHelp(byPlayer, msgChunk[1]);
             } else {
@@ -41,11 +41,11 @@ export function parseCommand(byPlayer:PlayerObject, message: string): void {
             }
             break;
         }
-        case "!about": {
+        case CommandSet.about: {
             cmdAbout(byPlayer);
             break;
         }
-        case "!stats": {
+        case CommandSet.stats: {
             if(msgChunk[1] !== undefined) {
                 cmdStats(byPlayer, msgChunk[1]);
             } else {
@@ -53,23 +53,23 @@ export function parseCommand(byPlayer:PlayerObject, message: string): void {
             }
             break;
         }
-        case "!statsreset": {
+        case CommandSet.statsreset: {
             cmdStatsReset(byPlayer);
             break;
         }
-        case "!streak": {
+        case CommandSet.streak: {
             cmdStreak(byPlayer);
             break;
         }
-        case "!scout": {
+        case CommandSet.scout: {
             cmdScout(byPlayer);
             break;
         }
-        case "!poss": {
+        case CommandSet.poss: {
             cmdPoss(byPlayer);
             break;
         }
-        case "!afk": {
+        case CommandSet.afk: {
             if(msgChunk[1] !== undefined) {
                 cmdAfk(byPlayer, msgChunk[1]);
             } else {
@@ -77,7 +77,7 @@ export function parseCommand(byPlayer:PlayerObject, message: string): void {
             }
             break;
         }
-        case "!list": {
+        case CommandSet.list: {
             if(msgChunk[1] !== undefined) {
                 cmdList(byPlayer, msgChunk[1]);
             } else {
@@ -85,11 +85,11 @@ export function parseCommand(byPlayer:PlayerObject, message: string): void {
             }
             break;
         }
-        case "!freeze": {
+        case CommandSet.freeze: {
             cmdFreeze(byPlayer);
             break;
         }
-        case "!mute": {
+        case CommandSet.mute: {
             if(msgChunk[1] !== undefined) {
                 cmdMute(byPlayer, msgChunk[1]);
             } else {
@@ -97,7 +97,7 @@ export function parseCommand(byPlayer:PlayerObject, message: string): void {
             }
             break;
         }
-        case "!super": {
+        case CommandSet.super: {
             if(msgChunk[1] !== undefined) {
                 if(msgChunk[2] !== undefined) {
                     cmdSuper(byPlayer, msgChunk[1], msgChunk[2]);

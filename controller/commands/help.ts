@@ -1,54 +1,55 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
+import * as CommandSet from "../../resources/command.json";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function cmdHelp(byPlayer: PlayerObject, message?: string): void {
     if(message !== undefined) {
         switch(message) {
-            case "about": {
+            case CommandSet._helpManabout: {
                 window.room.sendAnnouncement(LangRes.command.helpman.about, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "help": {
+            case CommandSet._helpManhelp: {
                 window.room.sendAnnouncement(LangRes.command.helpman.help, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "stats": {
+            case CommandSet._helpManstats: {
                 window.room.sendAnnouncement(LangRes.command.helpman.stats, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "statsreset": {
+            case CommandSet._helpManstatsreset: {
                 window.room.sendAnnouncement(LangRes.command.helpman.statsreset, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "streak": {
+            case CommandSet._helpManstreak: {
                 window.room.sendAnnouncement(LangRes.command.helpman.streak, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "scout": {
+            case CommandSet._helpManscout: {
                 window.room.sendAnnouncement(LangRes.command.helpman.scout, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "poss": {
+            case CommandSet._helpManposs: {
                 window.room.sendAnnouncement(LangRes.command.helpman.poss, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "afk": {
+            case CommandSet._helpManafk: {
                 window.room.sendAnnouncement(LangRes.command.helpman.afk, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "list": {
+            case CommandSet._helpManlist: {
                 window.room.sendAnnouncement(LangRes.command.helpman.list, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "freeze": {
+            case CommandSet._helpManfreeze: {
                 window.room.sendAnnouncement(LangRes.command.helpman.freeze, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "mute": {
+            case CommandSet._helpManmute: {
                 window.room.sendAnnouncement(LangRes.command.helpman.mute, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case "admin": {
+            case CommandSet._helpManadmin: {
                 window.room.sendAnnouncement(LangRes.command.helpadmin, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }

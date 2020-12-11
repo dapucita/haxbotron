@@ -1,12 +1,13 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import * as LangRes from "../../resources/strings";
 import { superAdminLogin } from "../SuperAdmin";
+import * as LangRes from "../../resources/strings";
+import * as CommandSet from "../../resources/command.json";
 import * as Ban from "../Ban";
 
 export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: string): void {
     if (message !== undefined) {
         switch (message) {
-            case "login": {
+            case CommandSet._superSublogin: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == false) { // only when not yet loginned
                     if (submessage !== undefined) { // key check and login
                         if (superAdminLogin(submessage) == true) { // if login key is matched
@@ -26,7 +27,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                 break;
             }
 
-            case "logout": {
+            case CommandSet._superSublogout: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     window.playerList.get(byPlayer.id)!.permissions.superadmin = false; // disqualify super admin
                     //setPlayerData(playerList.get(playerID)); // update
@@ -38,11 +39,11 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                 break;
             }
 
-            case "thor": {
+            case CommandSet._superSubthor: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) {
                     window.room.setPlayerAdmin(byPlayer.id, true); // first, give admin
                     window.playerList.get(byPlayer.id)!.admin = true;
-                    if (submessage !== undefined && submessage == 'deprive') { // get admin list except this super admin 
+                    if (submessage !== undefined && submessage == CommandSet._superSubthordeprive) { // get admin list except this super admin 
                         let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.id != byPlayer.id && player.admin == true);
                         if (players.length == 0) { // If no players left, do nothing.
                             window.room.sendAnnouncement(LangRes.command.super.thor.noAdmins, byPlayer.id, 0xFF7777, "normal", 2);
@@ -64,7 +65,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                 break;
             }
 
-            case "kick": {
+            case CommandSet._superSubkick: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage.charAt(0) == "#") {
                         let target: number = parseInt(submessage.substr(1), 10);
@@ -84,7 +85,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                 break;
             }
 
-            case "ban": {
+            case CommandSet._superSubban: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage.charAt(0) == "#") {
                         let target: number = parseInt(submessage.substr(1), 10);
@@ -104,9 +105,9 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                 break;
             }
 
-            case "banclear": {
+            case CommandSet._superSubbanclear: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
-                    if (submessage !== undefined && submessage == "all") {
+                    if (submessage !== undefined && submessage == CommandSet._superSubbanclearall) {
                         window.room.clearBans();
                         Ban.bListClear();
                         window.room.sendAnnouncement(LangRes.command.super.banclear.complete, byPlayer.id, 0x479947, "normal", 2);
