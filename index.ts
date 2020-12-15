@@ -252,7 +252,7 @@ async function bot(hostConfig: string) {
             }
         }
         botConsoleLineCount++;
-        electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '[" + botConsoleLineCount+ "] " + msg.text() + '\\r\\n' + "' + document.getElementById('botConsole').value;");
+        electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = \`[" + botConsoleLineCount+ "] " + msg.text() + '\\r\\n' + "\` + document.getElementById('botConsole').value;");
     });
     await page.on('pageerror', (msg: any) => {
         winstonLogger.error(msg);
