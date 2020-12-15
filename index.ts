@@ -168,7 +168,7 @@ Menu.getApplicationMenu().getMenuItemById('superAdminLoginKeyMenuItem').click = 
         MenuItemSwitch.superAdminKey = true; // switch and open
         // and load super admin keys onto textarea
         electronWindow.webContents.executeJavaScript(`document.getElementById('superAdminKeyDiv').style.display = "block";`);
-        electronWindow.webContents.executeJavaScript("document.getElementById('superKeyList').value = '" + superKeyList.replace(/\n|\r\n|\r/g,'\\n') + "';");
+        electronWindow.webContents.executeJavaScript("document.getElementById('superKeyList').value = '" + (superKeyList?.replace(/\n|\r\n|\r/g,'\\n') ?? '') + "';");
     } else { // if this menu is activated
         MenuItemSwitch.superAdminKey = false; // switch and close
         electronWindow.webContents.executeJavaScript(`document.getElementById('superAdminKeyDiv').style.display = "none";`);
