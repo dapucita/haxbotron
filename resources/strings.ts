@@ -105,6 +105,10 @@ export const command = {
             noTarget: '❌ 잘못된 밴 초기화 형식입니다. 현재는 📑 !super banclear all 만 가능합니다.'
             ,complete: '🔑 밴 목록을 초기화했습니다.'
         }
+        ,banlist: {
+            _ErrorNoOne: '❌ 해당 명단에 아무도 없습니다.'
+            ,whoisList: '📜 {whoisResult}'
+        }
     }
     ,list: {
         _ErrorNoTeam: '❌ red, blue, spec, mute, afk 중 명단 종류를 지정해야 합니다. (예: !list red)'

@@ -104,6 +104,10 @@ export const command = {
             noTarget: '❌ Error: You can\'t this. 📑 !super banclear all'
             ,complete: '🔑 Succeeded to clear ban list.'
         }
+        ,banlist: {
+            _ErrorNoOne: '❌ There\'s no one.'
+            ,whoisList: '📜 {whoisResult}'
+        }
     }
     ,list: {
         _ErrorNoTeam: '❌ You can only request red,blue,spec,mute,afk players list.'

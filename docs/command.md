@@ -51,3 +51,5 @@ If you(the super admin) type a command by chat...
 `!super ban ID` bans that player whose numeric ID is ID.
 
 `!super banclear all` clears the list of banned players.
+
+`!super banlist` shows list of banned players.

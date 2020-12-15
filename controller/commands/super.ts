@@ -1,8 +1,10 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { superAdminLogin } from "../SuperAdmin";
+import { BanList } from "../../model/PlayerBan/BanList";
 import * as LangRes from "../../resources/strings";
 import * as CommandSet from "../../resources/command.json";
 import * as Ban from "../Ban";
+import * as Tst from "../Translator";
 
 export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: string): void {
     if (message !== undefined) {
@@ -117,6 +119,26 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                 } else {
                     window.room.sendAnnouncement(LangRes.command.super._ErrorNoPermission, byPlayer.id, 0xFF7777, "normal", 2);
                 }
+                break;
+            }
+
+            case CommandSet._superSubbanlist: {
+                if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
+                    let placeholder = {
+                        whoisResult: LangRes.command.super.banlist._ErrorNoOne
+                    }
+                    let bannedPlayerList: BanList[] = Ban.bListGetArray();
+                    if (bannedPlayerList.length >= 1) {
+                        placeholder.whoisResult = '🚫 '; //init
+                        bannedPlayerList.forEach((bannedPlayer: BanList) => {
+                            placeholder.whoisResult += bannedPlayer.conn + '(' + bannedPlayer.reason + '), ';
+                        });
+                    }
+                    window.room.sendAnnouncement(Tst.maketext(LangRes.command.super.banlist.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 2);
+                } else {
+                    window.room.sendAnnouncement(LangRes.command.super._ErrorNoPermission, byPlayer.id, 0xFF7777, "normal", 2);
+                }
+
                 break;
             }
 

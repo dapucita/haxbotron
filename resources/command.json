@@ -29,7 +29,7 @@
     "_superSubban" : "ban",
     "_superSubbanclear" : "banclear",
     "_superSubbanclearall" : "all",
-    
+    "_superSubbanlist" : "banlist",
 
     "about" : "!about",
     "afk" : "!afk",
