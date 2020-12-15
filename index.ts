@@ -168,7 +168,7 @@ Menu.getApplicationMenu().getMenuItemById('superAdminLoginKeyMenuItem').click = 
         MenuItemSwitch.superAdminKey = true; // switch and open
         // and load super admin keys onto textarea
         electronWindow.webContents.executeJavaScript(`document.getElementById('superAdminKeyDiv').style.display = "block";`);
-        electronWindow.webContents.executeJavaScript("document.getElementById('superKeyList').value = '" + superKeyList.replace(/\n|\r\n|\r/g,'\\n') + "';");
+        electronWindow.webContents.executeJavaScript("document.getElementById('superKeyList').value = '" + (superKeyList?.replace(/\n|\r\n|\r/g,'\\n') ?? '') + "';");
     } else { // if this menu is activated
         MenuItemSwitch.superAdminKey = false; // switch and close
         electronWindow.webContents.executeJavaScript(`document.getElementById('superAdminKeyDiv').style.display = "none";`);
@@ -252,7 +252,7 @@ async function bot(hostConfig: string) {
             }
         }
         botConsoleLineCount++;
-        electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = '[" + botConsoleLineCount+ "] " + msg.text() + '\\r\\n' + "' + document.getElementById('botConsole').value;");
+        electronWindow.webContents.executeJavaScript("document.getElementById('botConsole').value = \`[" + botConsoleLineCount+ "] " + msg.text() + '\\r\\n' + "\` + document.getElementById('botConsole').value;");
     });
     await page.on('pageerror', (msg: any) => {
         winstonLogger.error(msg);
