@@ -42,5 +42,6 @@
     "stats" : "!stats",
     "statsreset" : "!statsreset",
     "streak" : "!streak",
-    "super" : "!super"
+    "super" : "!super",
+    "vote" : "!vote"
 }

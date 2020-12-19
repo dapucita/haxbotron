@@ -12,6 +12,7 @@ import { cmdAfk } from "./commands/afk";
 import { cmdList } from "./commands/list";
 import { cmdFreeze } from "./commands/freeze";
 import { cmdMute } from "./commands/mute";
+import { cmdVote } from "./commands/vote";
 import { cmdSuper } from "./commands/super";
 
 // if given string is command chat, this function returns true, nor false.
@@ -94,6 +95,14 @@ export function parseCommand(byPlayer:PlayerObject, message: string): void {
                 cmdMute(byPlayer, msgChunk[1]);
             } else {
                 cmdMute(byPlayer);
+            }
+            break;
+        }
+        case CommandSet.vote: {
+            if(msgChunk[1] !== undefined) {
+                cmdVote(byPlayer, msgChunk[1]);
+            } else {
+                cmdVote(byPlayer);
             }
             break;
         }
