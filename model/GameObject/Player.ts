@@ -39,6 +39,10 @@ export class Player implements PlayerObject {
     // time log for join and left
     entrytime: PlayerEntryTime;
 
+    // kick(ban) vote
+    voteTarget: number; //Who did this player vote for //this data will not be stored when left the room //default value is -1 (not 0, it means host)
+    voteGet: number; //How many votes did this player get //this data will not be stored when left the room //default value is 0
+
     // init
     constructor(player: PlayerObject, stats: PlayerStats, permissions: PlayerPermissions, entrytime: PlayerEntryTime) {
         this.id = player.id;
@@ -55,5 +59,7 @@ export class Player implements PlayerObject {
             count: 0
         }
         this.entrytime = entrytime;
+        this.voteTarget = -1; //default value is -1 (not 0, it means host)
+        this.voteGet = 0; //default value is 0
     }
 }

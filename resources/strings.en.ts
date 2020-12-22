@@ -37,8 +37,9 @@ export const antitrolling = {
 
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
-    ,_ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
-    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, scout\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
+    ,_ErrorNoPermission: '❌ You are not admin. You can\'t use this command.'
+    ,_ErrorDisabled: '❌ This command is disabled. You can\'t use this command.'
+    ,help: '📄 !about, stats, statsreset, afk, vote, poss, streak, scout, list\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND for detail.'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
@@ -53,6 +54,7 @@ export const command = {
         ,freeze: '📑 !freeze mutes or unmutes all players.'
         ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
         ,scout: '📑 !scout shows you expectation of each teams by customed Pythagorean Expectation.'
+        ,vote: '📑 !vote shows you progress of the vote.\n📑 !vote #ID : vote for kick that player. (eg: !vote #12)'
     } 
     ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,stats: {
@@ -122,6 +124,15 @@ export const command = {
     ,scout: {
         _ErrorNoMode : '❌ There are not enough players for calculating winning expectation.'
         ,scouting: '📊 Pythagorean Expectation : Red {teamExpectationRed}%, Blue {teamExpectationBlue}%, Spec {teamExpectationSpec}%.'
+    }
+    ,vote: {
+        _ErrorNoPlayer: '❌ ❌ Wrong player ID. You can only target numeric ID. (eg: !vote #12)'
+        ,_ErrorNoPermission: '❌ There are not enough players for voting.'
+        ,voteBanMessage: '🚫 ban vote(5mins)'
+        ,voteComplete: '🗳️ You did vote. You can cancel the vote by type this command again.'
+        ,voteCancel: '🗳️ You have cancelled the vote for that player.'
+        ,voteIntroduce : '🗳️ You can vote for or cancel a kick for a specific player. (eg: !vote #12)'
+        ,voteStatus : '🗳️ You have currently voted for kick {targetName}#{targetID}.'
     }
 }
 

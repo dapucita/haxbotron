@@ -39,7 +39,8 @@ export const antitrolling = {
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
     ,_ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
-    ,help: '📄 !about, stats, statsreset, afk, poss, streak, list, scout\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
+    ,_ErrorDisabled: '❌ 현재 방에서는 사용할 수 없는 명령어입니다.'
+    ,help: '📄 !about, stats, statsreset, afk, vote, poss, streak, scout, list\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
@@ -54,6 +55,7 @@ export const command = {
         ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
         ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,scout: '📑 !scout : 각 팀의 기대승률치를 보여줍니다. 팀 간의 비교는 아니며, 피타고리안 승률 공식의 변형을 사용합니다.'
+        ,vote: '📑 !vote : 현재 추방 투표 현황과 본인의 투표 상태를 보여줍니다.\n📑 !vote #ID : 해당 ID의 플레이어에 대해 추방 투표를 하거나 취소합니다. ID는 숫자이어야 합니다. (예: !vote #12)'
     } 
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
@@ -123,6 +125,15 @@ export const command = {
     ,scout: {
         _ErrorNoMode : '❌ 충분한 인원이 모이지 않아 기대승률을 확인할 수 없습니다.'
         ,scouting: '📊 피타고리안 기대승률 : Red 팀 {teamExpectationRed}%, Blue 팀 {teamExpectationBlue}%, 대기팀 {teamExpectationSpec}%.'
+    }
+    ,vote: {
+        _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !vote #12)'
+        ,_ErrorNoPermission: '❌ 인원이 부족하여 투표를 할 수 없습니다.'
+        ,voteBanMessage: '🚫 투표에 의한 추방 (5분)'
+        ,voteComplete: '🗳️ 해당 플레이어에 대해 추방 투표를 하였습니다. 명령어를 다시 사용하여 취소할 수 있습니다.'
+        ,voteCancel: '🗳️ 해당 플레이어에 대한 추방 투표를 취소하였습니다.'
+        ,voteIntroduce : '🗳️ 특정 플레이어에 대해 추방 투표를 하거나 취소할 수 있습니다. (예: !vote #12)'
+        ,voteStatus : '🗳️ 현재 {targetName}#{targetID} 님에 대해 추방 투표를 한 상태입니다.'
     }
 }
 
