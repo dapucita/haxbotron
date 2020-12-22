@@ -129,6 +129,7 @@ export const command = {
     ,vote: {
         _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !vote #12)'
         ,_ErrorNoPermission: '❌ 인원이 부족하여 투표를 할 수 없습니다.'
+        ,voteBanMessage: '🚫 투표에 의한 추방 (5분)'
         ,voteComplete: '🗳️ 해당 플레이어에 대해 추방 투표를 하였습니다. 명령어를 다시 사용하여 취소할 수 있습니다.'
         ,voteCancel: '🗳️ 해당 플레이어에 대한 추방 투표를 취소하였습니다.'
         ,voteIntroduce : '🗳️ 특정 플레이어에 대해 추방 투표를 하거나 취소할 수 있습니다. (예: !vote #12)'

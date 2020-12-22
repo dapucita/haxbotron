@@ -128,6 +128,7 @@ export const command = {
     ,vote: {
         _ErrorNoPlayer: '❌ ❌ Wrong player ID. You can only target numeric ID. (eg: !vote #12)'
         ,_ErrorNoPermission: '❌ There are not enough players for voting.'
+        ,voteBanMessage: '🚫 ban vote(5mins)'
         ,voteComplete: '🗳️ You did vote. You can cancel the vote by type this command again.'
         ,voteCancel: '🗳️ You have cancelled the vote for that player.'
         ,voteIntroduce : '🗳️ You can vote for or cancel a kick for a specific player. (eg: !vote #12)'
