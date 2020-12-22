@@ -39,6 +39,7 @@ export const antitrolling = {
 export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
     ,_ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
+    ,_ErrorDisabled: '❌ 현재 방에서는 사용할 수 없는 명령어입니다.'
     ,help: '📄 !about, stats, statsreset, afk, vote, poss, streak, scout, list\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command

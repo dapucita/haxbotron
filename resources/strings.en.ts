@@ -37,7 +37,8 @@ export const antitrolling = {
 
 export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
-    ,_ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
+    ,_ErrorNoPermission: '❌ You are not admin. You can\'t use this command.'
+    ,_ErrorDisabled: '❌ This command is disabled. You can\'t use this command.'
     ,help: '📄 !about, stats, statsreset, afk, vote, poss, streak, scout, list\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND for detail.'
     ,helpman: { // detailed description for a command
