@@ -26,6 +26,6 @@ export function cmdVote(byPlayer: PlayerObject, message?: string): void {
             statusMessage += LangRes.command.vote.voteStatus;
             placeholder.targetName = window.playerList.get(voteTargetID)!.name;
         }
-        window.room.sendAnnouncement(Tst.maketext(statusMessage, placeholder), byPlayer.id, 0xFF7777, "0x479947", 1);
+        window.room.sendAnnouncement(Tst.maketext(statusMessage, placeholder), byPlayer.id, 0x479947, "normal", 1);
     }
 }

@@ -53,6 +53,10 @@ export function cmdHelp(byPlayer: PlayerObject, message?: string): void {
                 window.room.sendAnnouncement(LangRes.command.helpadmin, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
+            case CommandSet._helpManvote: {
+                window.room.sendAnnouncement(LangRes.command.helpman.vote, byPlayer.id, 0x479947, "normal", 1);
+                break;
+            }
             default: {
                 window.room.sendAnnouncement(LangRes.command.helpman._ErrorWrongMan, byPlayer.id, 0xFF7777, "normal", 2);
                 break;
