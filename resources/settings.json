@@ -1,4 +1,9 @@
 {
+    "banVoteEnable" : true,
+    "banVoteBanMillisecs" : 300000,
+    "banVoteAllowMinimum" : 10,
+    "banVoteExecuteMinimum" : 7,
+
     "afkCountLimit" : 4,
 
     "chatFiltering" : true,
