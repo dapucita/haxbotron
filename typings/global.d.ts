@@ -26,6 +26,8 @@ declare global {
         antiPlayerKickAbusingCount: AdminKickTrace[] // ID and Timestamp record for abusing kick other players (id:number, register date:number)
 
         sendRoomChat(msg: string, playerID?: number): void // for send chat message to the game
+        uploadStorageData(key: string, stringfiedData: string): void // upload and save on node-persist
+        clearStorageData(key: string): void // clear data in node-persist
 
         // on dev-console tools for emergency
         onEmergency: {

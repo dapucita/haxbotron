@@ -194,16 +194,12 @@ async function nodeStorageInit() {
 
 async function bot(hostConfig: string) {
     winstonLogger.info("Haxbotron has started.");
-    
-    //await nodeStorage.init();
 
     const browser = await puppeteer.launch({
         headless: isOpenHeadless,
         args: puppeteerCustomArgs
     });
     await browser.on('disconnected', () => {
-        clearInterval(storageLoop);
-        // browser.close();
         isBotLaunched = false;
         Menu.getApplicationMenu().getMenuItemById('startMenuItem').enabled = true;
         Menu.getApplicationMenu().getMenuItemById('stopMenuItem').enabled = false;
@@ -270,21 +266,16 @@ async function bot(hostConfig: string) {
         value: hostConfig
     }); // convey room host configuration via cookie
 
-    /* 
-    https://stackoverflow.com/questions/51907677
-    The console event receives a ConsoleMessage object,
-    which tells you what type of call it was (log, error, etc.),
-    what the arguments were (args()), etc.
-    
-    await page.on('console', (msg: any) => {
-        for (let i = 0; i < msg.args().length; ++i){
-            console.log(`${i}: ${msg.args()[i]}`);
-        }
-    });
-    */
-
     await page.addScriptTag({
         path: './out/bot_bundle.js'
+    });
+
+    // inject functions for uploda data on node-persist storage into puppeteer 
+    await page.exposeFunction('uploadStorageData', (key: string, stringfiedData: string) => {
+        nodeStorage.setItem(key, stringfiedData);
+    });
+    await page.exposeFunction('uploadUserData', (key: string) => {
+        nodeStorage.removeItem(key);
     });
 
     // load stored data from node-persist storage to puppeteer html5 localstorage
@@ -296,26 +287,6 @@ async function bot(hostConfig: string) {
             }, datum.key, datum.value);
         }
     });
-
-    // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
-    var storageLoop = setInterval(async function () {
-        // data from bot
-        var localStorageData: any[] = await page.evaluate(() => {
-            let jsonData: any = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const key: string | null = localStorage.key(i);
-                if (typeof key === "string" && key != "_SuperAdminKeys") { // not load _SuperAdminKeys from localStorage on puppeteer
-                    jsonData[key] = localStorage.getItem(key);
-                }
-            }
-            return jsonData;
-        });
-        
-        // save data
-        Object.keys(localStorageData).forEach(function (elementKey: any) {
-            nodeStorage.setItem(elementKey, localStorageData[elementKey]);
-        });
-    }, 5000); // by each 5seconds
 
     await page.waitForFunction(() => window.roomURIlink !== undefined); // wait until window.roomURIlink is created. That object is made when room.onRoomLink event is called.
     var conveyedRoomLink: string = await page.evaluate(() => {
