@@ -274,7 +274,7 @@ async function bot(hostConfig: string) {
     await page.exposeFunction('uploadStorageData', (key: string, stringfiedData: string) => {
         nodeStorage.setItem(key, stringfiedData);
     });
-    await page.exposeFunction('uploadUserData', (key: string) => {
+    await page.exposeFunction('clearStorageData', (key: string) => {
         nodeStorage.removeItem(key);
     });
 
