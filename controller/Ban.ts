@@ -1,4 +1,5 @@
 import { BanList } from "../model/PlayerBan/BanList";
+import { clearStorageItem, saveStorageItem } from "./Storage";
 
 // header ------------------------------------------------------------------------
 function bListLoad(): BanList[] { // init and load
@@ -14,7 +15,7 @@ function bListLoad(): BanList[] { // init and load
 }
 
 function bListSave(list: BanList[]): void {
-    localStorage.setItem('_BanList', JSON.stringify(list)); // save(set) on localStorage
+    saveStorageItem('_BanList', JSON.stringify(list));
 }
 // ------------------------------------------------------------------------ header
 
@@ -61,7 +62,7 @@ function bListDelete(conn: string): boolean { // if the player is not banned yet
 
 // export
 function bListClear(): void {
-    localStorage.removeItem('_BanList'); // clear it
+    clearStorageItem('_BanList'); // clear it
 }
 
 // export

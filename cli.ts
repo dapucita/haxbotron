@@ -22,9 +22,8 @@ if (tweaks_WebRTCAnoym === false) { // tweaks_WebRTCAnoym : Local IP WebRTC Anon
     puppeteerCustomArgs.push('--disable-features=WebRtcHideLocalIpsWithMdns');
 }
 
-// 여기에 hostRoomConfig에 데이터를 적용하는 코드를 작성
 hostRoomConfig = { //default init
-    roomName: "🤖 𝑯 𝒂 𝒙 𝒃 𝒐 𝒕 𝒓 𝒐 𝒏",
+    roomName: "🤖𝑯𝒂𝒙𝒃𝒐𝒕𝒓𝒐𝒏",
     playerName: "🤖",
     password: "",
     maxPlayers: 12,
@@ -103,7 +102,6 @@ async function makeBot(hostConfig: any) {
         });
 
     winstonLogger.info("Haxbotron has started.");
-    //await nodeStorage.init();
 
     /*
     If you are hosting on a VPS using Chrome version 78 or greater it is required to disable the Local IP WebRTC Anonymization feature for the host to work.
@@ -116,8 +114,6 @@ async function makeBot(hostConfig: any) {
     });
 
     await browser.on('disconnected', () => {
-        clearInterval(storageLoop);
-        // browser.close();
         isBotLaunched = false;
         winstonLogger.info("Haxbotron is closed.");
         return;
@@ -172,6 +168,14 @@ async function makeBot(hostConfig: any) {
         path: './out/bot_bundle.js'
     });
 
+    // inject functions for uploda data on node-persist storage into puppeteer 
+    await page.exposeFunction('uploadStorageData', (key: string, stringfiedData: string) => {
+        nodeStorage.setItem(key, stringfiedData);
+    });
+    await page.exposeFunction('uploadUserData', (key: string) => {
+        nodeStorage.removeItem(key);
+    });
+
     // load stored data from node-persist storage to puppeteer html5 localstorage
     await nodeStorage.forEach(async function (datum: any) { // async forEach(callback): This function iterates over each key/value pair and executes an asynchronous callback as well
         // usage: datum.key, datum.value
@@ -181,35 +185,6 @@ async function makeBot(hostConfig: any) {
             }, datum.key, datum.value);
         }
     });
-
-    // get stored data from puppeteer html5 localstorage and copy them into node-persist storage
-    var storageLoop = setInterval(async function () {
-        // data from bot
-        var localStorageData: any[] = await page.evaluate(() => {
-            let jsonData: any = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const key: string | null = localStorage.key(i);
-                if (typeof key === "string" && key != "_SuperAdminKeys") { // not load _SuperAdminKeys from localStorage on puppeteer
-                    jsonData[key] = localStorage.getItem(key);
-                }
-            }
-            return jsonData;
-        });
-
-        // save data
-        Object.keys(localStorageData).forEach(function (elementKey: any) {
-            nodeStorage.setItem(elementKey, localStorageData[elementKey]);
-        });
-    }, 5000); // by each 5seconds
-
-    /*
-    await page.waitForFunction(() => window.roomURIlink !== undefined); // wait until window.roomURIlink is created. That object is made when room.onRoomLink event is called.
-    var conveyedRoomLink: string = await page.evaluate(() => {
-        return window.roomURIlink; // get the link
-    });
-
-    await console.log(`This room has a link now : ${conveyedRoomLink}`); // print the link
-    */
 
     return page;
 }

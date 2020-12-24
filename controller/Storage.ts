@@ -33,5 +33,14 @@ export function setPlayerData(player: Player): void {
         joinDate: player.entrytime.joinDate, // player join time
         leftDate: player.entrytime.leftDate, // player left time
     }
-    localStorage.setItem(player.auth, JSON.stringify(playerData)); // convert object to json for store in localStorage // for decode: JSON.parse
+    saveStorageItem(player.auth, JSON.stringify(playerData)); // save and upload data
+}
+
+export function saveStorageItem(key: string, value: string): void {
+    localStorage.setItem(key, value); // set data in browser localStorage
+    window.uploadStorageData(key, value); // upload on nodejs backend (outside of browser)
+}
+
+export function clearStorageItem(key: string): void {
+    window.clearStorageData(key);
 }
