@@ -12,6 +12,7 @@ export interface GameRule {
         scoreLimit: number; // limit score for end the game
         teamLock: boolean; // limit moving teams by self
     }
+    autoAdmin: boolean; // auto appoint admin
     autoOperating: boolean; // auto emcee mode
     captain: boolean; // captain mode. captain of each team can pick their team player.
     statsRecord: boolean; // record game results on statistics system.
