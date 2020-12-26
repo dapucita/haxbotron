@@ -1,6 +1,6 @@
 import { GameRule } from "./GameRule";
 import * as gbhothuge from "../../resources/stadium/gbhothuge.hbs";
-// import * as tiny from "../../stadium/tiny.hbs";
+import * as gbtraining from "../../resources/stadium/gbtraining.hbs";
 
 export var gameRule: GameRule = {
     ruleName: "captain",
@@ -15,9 +15,10 @@ export var gameRule: GameRule = {
         scoreLimit: 3,
         teamLock: true
     },
+    autoAdmin: false,
     autoOperating: false,
     captain: true,
     statsRecord: true,
     defaultMap: gbhothuge.stadiumText,
-    readyMap: gbhothuge.stadiumText
+    readyMap: gbtraining.stadiumText
 }
