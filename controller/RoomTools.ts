@@ -62,6 +62,45 @@ export function updateAdmins(): void {
     window.room.sendAnnouncement(Tst.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
 }
 
+export function putTeamNewPlayerConditional(playerID: number): TeamID {
+    let newTeamID: TeamID = 0;
+    let teamPlayersNumber = {
+        red: roomTeamPlayersNumberCheck(TeamID.Red),
+        blue: roomTeamPlayersNumberCheck(TeamID.Blue)
+    }
+    if(teamPlayersNumber.red <= teamPlayersNumber.blue) {
+        // if red team members are equal or less than blues, move this player to red team.
+        if(teamPlayersNumber.red < window.settings.game.rule.requisite.eachTeamPlayers) {
+            // move only when team limitation is not reached.
+            newTeamID = TeamID.Red;
+            window.room.setPlayerTeam(playerID, TeamID.Red);
+        }
+    } else {
+        // or move to blue team.
+        if(teamPlayersNumber.blue < window.settings.game.rule.requisite.eachTeamPlayers) {
+            // move only when team limitation is not reached.
+            newTeamID = TeamID.Blue;
+            window.room.setPlayerTeam(playerID, TeamID.Blue);
+        }
+    }
+    return newTeamID;
+}
+
+export function shuffleArray<T>(array: T[]): T[] { // Fisher-Yates Shuffle
+    var currentIndex = array.length, temporaryValue, randomIndex;
+    // while there remain elements to shuffle
+    while (0 !== currentIndex) {
+        // pick a remaining element
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // and swap it with the current element
+        temporaryValue = array;
+        array = array;
+        array = temporaryValue;
+    }
+    return array;
+}
+
 export function getCookieFromHeadless(name: string): string {
     let result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
     return result ? result[1] : '';
