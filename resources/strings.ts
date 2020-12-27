@@ -15,7 +15,7 @@ export const antitrolling = {
         ,floodWarning: '📢 너무 짧은 시간에 재접속하면 퇴장될 수 있습니다.'
     }
     ,chatFlood: {
-        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다.(30분) 관리자가 해제할 수 있습니다.'
+        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다.(3분) 관리자가 해제할 수 있습니다.'
     }
     ,ogFlood: {
         banReason: '🚫 연속 자책골(5분)'

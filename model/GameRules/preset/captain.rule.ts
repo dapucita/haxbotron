@@ -16,7 +16,7 @@ export var gameRule: GameRule = {
         teamLock: true
     },
     autoAdmin: false,
-    autoOperating: false,
+    autoOperating: true,
     captain: true,
     statsRecord: true,
     defaultMap: gbhothuge.stadiumText,

@@ -36,7 +36,7 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
     }
 
     let msg = `The game(stat record:${window.isStatRecord}) has been started.`;
-    if (byPlayer !== null && byPlayer.id != 0) {
+    if (byPlayer !== null && byPlayer.id !== 0) {
         placeholderStart.playerID = byPlayer.id;
         placeholderStart.playerName = byPlayer.name;
         msg += `(by ${byPlayer.name}#${byPlayer.id})`;
@@ -73,6 +73,9 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.startRecord, placeholderStart), null, 0x00FF00, "normal", 0);
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.expectedWinRate, placeholderStart), null, 0x00FF00, "normal", 0);
 
+        if(window.settings.game.rule.autoOperating === true) { // if game rule is set as auto operating mode
+            window.room.pauseGame(true); // pause (and will call onGamePause event)
+        }
     } else {
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.stopRecord, placeholderStart), null, 0x00FF00, "normal", 0);
     }
