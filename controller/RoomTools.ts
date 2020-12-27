@@ -34,7 +34,7 @@ export function roomTeamPlayersNumberCheck(team: TeamID): number {
 }
 
 export function updateAdmins(): void {
-    var placeholderUpdateAdmins = {
+    let placeholderUpdateAdmins = {
         playerID: 0,
         playerName: '',
         gameRuleName: window.settings.game.rule.ruleName,
@@ -49,9 +49,9 @@ export function updateAdmins(): void {
     };
 
     // Get all players except the host (id = 0 is always the host)
-    var players = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true); // only no afk mode players
-    if (players.length == 0) return; // If no players left, do nothing.
-    if (players.find((player: PlayerObject) => player.admin) != null) return; // Do nothing if any admin player is still left.
+    let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true); // only no afk mode players
+    if (players.length === 0) return; // If no players left, do nothing.
+    if (players.find((player: PlayerObject) => player.admin) !== null) return; // Do nothing if any admin player is still left.
     
     placeholderUpdateAdmins.playerID = players[0].id;
     placeholderUpdateAdmins.playerName = window.playerList.get(players[0].id)!.name;
@@ -63,6 +63,6 @@ export function updateAdmins(): void {
 }
 
 export function getCookieFromHeadless(name: string): string {
-    var result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
+    let result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
     return result ? result[1] : '';
 }
