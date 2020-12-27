@@ -10,7 +10,7 @@ import { Player } from "./model/GameObject/Player";
 import { Logger } from "./controller/Logger";
 import { PlayerObject } from "./model/GameObject/PlayerObject";
 import { ScoresObject } from "./model/GameObject/ScoresObject";
-import { gameRule } from "./model/GameRules/captain.rule";
+import { gameRule } from "./model/GameRules/preset/captain.rule";
 import { KickStack } from "./model/GameObject/BallTrace";
 import { getUnixTimestamp } from "./controller/Statistics";
 import { TeamID } from "./model/GameObject/TeamID";
@@ -134,7 +134,7 @@ function initialiseRoom(): void {
         }
     }
 
-    window.room.setCustomStadium(window.settings.game.rule.defaultMap);
+    window.room.setCustomStadium(window.settings.game.rule.readyMap);
     window.room.setScoreLimit(window.settings.game.rule.requisite.scoreLimit);
     window.room.setTimeLimit(window.settings.game.rule.requisite.timeLimit);
     window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
