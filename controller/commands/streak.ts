@@ -1,6 +1,6 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function cmdStreak(byPlayer: PlayerObject): void {
     var placeholder ={

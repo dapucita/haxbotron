@@ -4,10 +4,13 @@ import { KickStack } from "../model/GameObject/BallTrace";
 import { Logger } from "../controller/Logger";
 import { AdminKickTrace } from "../model/PlayerBan/AdminKickTrace";
 import { Player } from "../model/GameObject/Player";
+import { BotConfig } from "../model/BotConifg";
 
 declare global {
     interface Window {
         // bot
+        settings: BotConfig // bot settings collection
+
         roomURIlink: string // for sharing URI link of the room
 
         logger: Logger; // logger for whole bot application

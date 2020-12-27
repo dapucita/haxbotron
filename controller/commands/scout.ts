@@ -1,11 +1,10 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 import * as StatCalc from "../../controller/Statistics";
-import { gameRule } from "../../model/GameRules/captain.rule";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function cmdScout(byPlayer: PlayerObject): void {
-    if (gameRule.statsRecord == true && window.isStatRecord == true) {
+    if (window.settings.game.rule.statsRecord == true && window.isStatRecord == true) {
         let expectations: number[] = StatCalc.getTeamWinningExpectation();
         let placeholder = {
             teamExpectationSpec: expectations[0]

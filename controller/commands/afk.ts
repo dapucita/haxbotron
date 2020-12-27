@@ -1,17 +1,16 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
-import { TeamID } from "../../model/GameObject/TeamID";
+import * as Tst from "../Translator";
 import * as BotSettings from "../../resources/settings.json";
 import * as LangRes from "../../resources/strings";
 import { roomActivePlayersNumberCheck } from "../RoomTools";
-import * as Tst from "../Translator";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { TeamID } from "../../model/GameObject/TeamID";
 
 export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
     var placeholder = {
         targetName: byPlayer.name
         ,ticketTarget: byPlayer.id
         ,targetAfkReason: ''
-        ,gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        ,gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
     }
     if (window.playerList.get(byPlayer.id)!.permissions.afkmode === true) { // if this player is AFK
         window.playerList.get(byPlayer.id)!.permissions.afkmode = false; // return to active mode
@@ -49,7 +48,7 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
         }
     }
     // check number of players and change game mode
-    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+    if (window.settings.game.rule.statsRecord === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers) {
         if (window.isStatRecord !== true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.startRecord, placeholder), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;

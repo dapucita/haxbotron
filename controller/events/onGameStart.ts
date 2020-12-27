@@ -1,5 +1,3 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
@@ -7,6 +5,7 @@ import * as Ban from "../Ban";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { roomTeamPlayersNumberCheck } from "../RoomTools";
 import { TeamID } from "../../model/GameObject/TeamID";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function onGameStartListener(byPlayer: PlayerObject): void {
     /* Event called when a game starts.
@@ -14,11 +13,11 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
     var placeholderStart = {
         playerID: 0,
         playerName: '',
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
@@ -42,10 +41,10 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
         placeholderStart.playerName = byPlayer.name;
         msg += `(by ${byPlayer.name}#${byPlayer.id})`;
     }
-    if (gameRule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
+    if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
         if (BotSettings.antiInsufficientStartAbusing === true) {
-            if (roomTeamPlayersNumberCheck(TeamID.Red) < gameRule.requisite.minimumTeamLimit || roomTeamPlayersNumberCheck(TeamID.Blue) < gameRule.requisite.minimumTeamLimit) {
+            if (roomTeamPlayersNumberCheck(TeamID.Red) < window.settings.game.rule.requisite.minimumTeamLimit || roomTeamPlayersNumberCheck(TeamID.Blue) < window.settings.game.rule.requisite.minimumTeamLimit) {
                 let abusingID: number = byPlayer.id || 0;
                 let abusingTimestamp: number = getUnixTimestamp();
                 window.logger.i(`The game will be stopped because of insufficient players in each team.`);

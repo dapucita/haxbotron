@@ -1,7 +1,6 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
@@ -23,11 +22,11 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         playerStatsAssists: window.playerList.get(player.id)!.stats.assists,
         playerStatsOgs: window.playerList.get(player.id)!.stats.ogs,
         playerStatsLosepoints: window.playerList.get(player.id)!.stats.losePoints,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
@@ -37,7 +36,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     window.logger.i(`${player.name}#${player.id} has left.`);
 
     // check number of players joined and change game mode
-    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+    if (window.settings.game.rule.statsRecord === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers) {
         if (window.isStatRecord !== true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.startRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;

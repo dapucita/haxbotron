@@ -1,8 +1,8 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
+
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { isCommandString, parseCommand } from "../Parser";
 import { getUnixTimestamp } from "../Statistics";
 import { TeamID } from "../../model/GameObject/TeamID";
@@ -19,11 +19,11 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
     var placeholderChat = {
         playerID: player.id,
         playerName: player.name,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),

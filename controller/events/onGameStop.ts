@@ -1,5 +1,4 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
 import { TeamID } from "../../model/GameObject/TeamID";
 import { setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
 
@@ -10,11 +9,11 @@ export function onGameStopListener(byPlayer: PlayerObject): void {
     var placeholderStop = {
         playerID: 0,
         playerName: '',
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),

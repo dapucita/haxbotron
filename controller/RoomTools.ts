@@ -1,22 +1,21 @@
 import { PlayerObject } from "../model/GameObject/PlayerObject";
-import { gameRule } from "../model/GameRules/captain.rule";
+import { TeamID } from "../model/GameObject/TeamID";
 import * as Tst from "./Translator";
 import * as LangRes from "../resources/strings";
-import { TeamID } from "../model/GameObject/TeamID";
 
 export function setDefaultStadiums(): void {
     // set stadium maps as default setting
-    if(gameRule.statsRecord === true && window.isStatRecord === true) {
-        window.room.setCustomStadium(gameRule.defaultMap); // if game mode is 'stats'
+    if(window.settings.game.rule.statsRecord === true && window.isStatRecord === true) {
+        window.room.setCustomStadium(window.settings.game.rule.defaultMap); // if game mode is 'stats'
     } else {
-        window.room.setCustomStadium(gameRule.readyMap); // if game mode is 'ready'
+        window.room.setCustomStadium(window.settings.game.rule.readyMap); // if game mode is 'ready'
     }
 }
 
 export function setDefaultRoomLimitation(): void {
-    window.room.setScoreLimit(gameRule.requisite.scoreLimit);
-    window.room.setTimeLimit(gameRule.requisite.timeLimit);
-    window.room.setTeamsLock(gameRule.requisite.teamLock);
+    window.room.setScoreLimit(window.settings.game.rule.requisite.scoreLimit);
+    window.room.setTimeLimit(window.settings.game.rule.requisite.timeLimit);
+    window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
 }
 
 export function roomPlayersNumberCheck(): number {
@@ -38,11 +37,11 @@ export function updateAdmins(): void {
     var placeholderUpdateAdmins = {
         playerID: 0,
         playerName: '',
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),

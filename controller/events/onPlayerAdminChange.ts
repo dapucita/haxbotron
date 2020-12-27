@@ -1,7 +1,7 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import { updateAdmins } from "../RoomTools";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 
 export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {

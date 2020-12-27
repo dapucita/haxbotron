@@ -1,13 +1,12 @@
-import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
-import { Player } from "../../model/GameObject/Player";
-import { getPlayerData, setPlayerData } from "../Storage";
-import { getUnixTimestamp } from "../Statistics";
-import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject";
+import { Player } from "../../model/GameObject/Player";
+import { getPlayerData, setPlayerData } from "../Storage";
+import { getUnixTimestamp } from "../Statistics";
+import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
@@ -27,11 +26,11 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         playerStatsAssists: 0,
         playerStatsOgs: 0,
         playerStatsLosepoints: 0,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
@@ -171,7 +170,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
     window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
 
     // check number of players joined and change game mode
-    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
+    if (window.settings.game.rule.statsRecord === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers) {
         if (window.isStatRecord !== true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.startRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;

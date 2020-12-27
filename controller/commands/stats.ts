@@ -54,5 +54,4 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
         }
         window.room.sendAnnouncement(Tst.maketext(LangRes.command.stats.statsMsg, placeholder), byPlayer.id, 0x479947, "normal", 1);
     }
-
 }

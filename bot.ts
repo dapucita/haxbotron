@@ -6,7 +6,6 @@ import * as BotSettings from "./resources/settings.json";
 import * as LangRes from "./resources/strings";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
-import { RoomConfig } from "./model/RoomObject/RoomConfig";
 import { Player } from "./model/GameObject/Player";
 import { Logger } from "./controller/Logger";
 import { PlayerObject } from "./model/GameObject/PlayerObject";
@@ -18,9 +17,18 @@ import { TeamID } from "./model/GameObject/TeamID";
 import { getCookieFromHeadless } from "./controller/RoomTools";
 import { EmergencyTools } from "./model/DevConsole/EmergencyTools";
 
-const botRoomConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
+// load settings
+window.settings = {
+    room: {
+        config: JSON.parse(getCookieFromHeadless('botConfig'))
+    },
+    game: {
+        rule: gameRule
+    }
+}
 
-console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed via cookie(${botRoomConfig.token})`);
+// init global properties
+console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed via cookie(${window.settings.room.config.token})`);
 
 window.playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
 
@@ -55,7 +63,7 @@ window.antiTrollingChatFloodCount = [];
 window.antiInsufficientStartAbusingCount = [];
 window.antiPlayerKickAbusingCount = [];
 
-window.room = window.HBInit(botRoomConfig);
+window.room = window.HBInit(window.settings.room.config);
 initialiseRoom();
 
 var scheduledTimer = setInterval(function(): void {
@@ -126,10 +134,10 @@ function initialiseRoom(): void {
         }
     }
 
-    window.room.setCustomStadium(gameRule.defaultMap);
-    window.room.setScoreLimit(gameRule.requisite.scoreLimit);
-    window.room.setTimeLimit(gameRule.requisite.timeLimit);
-    window.room.setTeamsLock(gameRule.requisite.teamLock);
+    window.room.setCustomStadium(window.settings.game.rule.defaultMap);
+    window.room.setScoreLimit(window.settings.game.rule.requisite.scoreLimit);
+    window.room.setTimeLimit(window.settings.game.rule.requisite.timeLimit);
+    window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
 
     // Linking Event Listeners
     window.room.onPlayerJoin = (player: PlayerObject): void => eventListener.onPlayerJoinListener(player);

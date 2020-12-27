@@ -1,4 +1,3 @@
-import { gameRule } from "../../model/GameRules/captain.rule";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
 
@@ -8,18 +7,18 @@ export function onPlayerBallKickListener(player: PlayerObject): void {
     var placeholderBall = {
         playerID: player.id,
         playerName: player.name,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
         streakTeamCount: window.winningStreak.getCount()
     };
 
-    if (gameRule.statsRecord === true && window.isStatRecord === true) { // record only when stat record mode
+    if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // record only when stat record mode
 
         window.playerList.get(player.id)!.stats.balltouch++; // add count of ball touch
 

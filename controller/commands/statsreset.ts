@@ -1,5 +1,5 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as LangRes from "../../resources/strings";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setPlayerData } from "../Storage";
 
 export function cmdStatsReset(byPlayer: PlayerObject): void {

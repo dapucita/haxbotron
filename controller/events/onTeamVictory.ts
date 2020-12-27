@@ -1,8 +1,7 @@
-import { ScoresObject } from "../../model/GameObject/ScoresObject";
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import { ScoresObject } from "../../model/GameObject/ScoresObject";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setPlayerData } from "../Storage";
 import { setDefaultStadiums } from "../RoomTools";
 import { TeamID } from "../../model/GameObject/TeamID";
@@ -15,11 +14,11 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         teamName: '',
         redScore: scores.red,
         blueScore: scores.blue,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
         streakTeamName: window.winningStreak.getName(),
@@ -28,7 +27,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
 
     window.isGamingNow = false; // turn off
 
-    if (gameRule.statsRecord == true && window.isStatRecord == true) { // records when game mode is for stats recording.
+    if (window.settings.game.rule.statsRecord == true && window.isStatRecord == true) { // records when game mode is for stats recording.
         var gamePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team !== TeamID.Spec); // except Spectators players
         var redPlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team === TeamID.Red); // except non Red players
         var bluePlayers: PlayerObject[] = gamePlayers.filter((player: PlayerObject) => player.team === TeamID.Blue); // except non Blue players
