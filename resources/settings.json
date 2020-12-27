@@ -37,5 +37,5 @@
 
     "antiMuteAbusing" : true,
     "muteAllowIntervalMillisecs" : 180000,
-    "muteDefaultMillisecs" : 1800000
+    "muteDefaultMillisecs" : 180000
 }
