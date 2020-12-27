@@ -26,5 +26,7 @@ export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlaye
             return;
         }
     }
-    updateAdmins(); // check when the last admin player disqulified by self
+    if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
+        updateAdmins(); // check when the last admin player disqulified by self
+    }
 }

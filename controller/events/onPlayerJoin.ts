@@ -164,8 +164,10 @@ export function onPlayerJoinListener(player: PlayerObject): void {
 
     setPlayerData(window.playerList.get(player.id)!); // register(or update) in localStorage
 
-    updateAdmins(); // check there are any admin players, if not make an admin player.
-
+    if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
+        updateAdmins(); // check there are any admin players, if not make an admin player.
+    }
+    
     // send welcome message to new player. other players cannot read this message.
     window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
 

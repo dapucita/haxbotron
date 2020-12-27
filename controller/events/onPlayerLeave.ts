@@ -52,5 +52,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     setPlayerData(window.playerList.get(player.id)!); // save
     window.playerList.delete(player.id); // delete from player list
 
-    updateAdmins(); // update admin
+    if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
+        updateAdmins(); // update admin
+    }
 }
