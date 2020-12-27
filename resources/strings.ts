@@ -205,3 +205,7 @@ export const onGoal = {
 export const onAdminChange = {
     afknoadmin: '🚫 잠수 중인 플레이어는 관리자가 될 수 없습니다.'
 }
+
+export const onGamePause = {
+    readyForStart: '📢 곧 경기가 시작됩니다!'
+}

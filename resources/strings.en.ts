@@ -204,3 +204,7 @@ export const onGoal = {
 export const onAdminChange = {
     afknoadmin: '🚫 The player in afk mode can\'t be admin.'
 }
+
+export const onGamePause = {
+    readyForStart: '📢 The game will start soon!'
+}
