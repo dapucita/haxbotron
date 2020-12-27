@@ -1,12 +1,12 @@
-import { GameRule } from "./GameRule";
-import * as gbhothuge from "../../resources/stadium/gbhothuge.hbs";
-import * as gbtraining from "../../resources/stadium/gbtraining.hbs";
+import { GameRule } from "../GameRule";
+import * as gbhothuge from "../../../resources/stadium/gbhothuge.hbs";
+import * as gbtraining from "../../../resources/stadium/gbtraining.hbs";
 
 export var gameRule: GameRule = {
-    ruleName: "captain",
+    ruleName: "relay",
     ruleVersion: "0.0.1",
     ruleAuthor: "Haxbotron",
-    ruleDescripttion: "Haxbotron default game rule",
+    ruleDescripttion: "Haxbotron auto relay game rule",
     requisite: {
         minimumPlayers: 8,
         maximumTeamLimit: 4,
@@ -16,8 +16,8 @@ export var gameRule: GameRule = {
         teamLock: true
     },
     autoAdmin: false,
-    autoOperating: false,
-    captain: true,
+    autoOperating: true,
+    captain: false,
     statsRecord: true,
     defaultMap: gbhothuge.stadiumText,
     readyMap: gbtraining.stadiumText
