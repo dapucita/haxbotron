@@ -8,7 +8,8 @@ import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onTeamVictoryListener(scores: ScoresObject): void {
     // Event called when a team 'wins'. not just when game ended.
-    // recors vicotry in stats. total games also counted in this event.
+    // records vicotry in stats. total games also counted in this event.
+    // Haxball developer Basro said, The game will be stopped automatically after a team victory. (victory -> stop)
     var placeholderVictory = { 
         teamID: TeamID.Spec,
         teamName: '',
@@ -61,13 +62,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.burning, placeholderVictory), null, 0x00FF00, "bold", 1);
         }
     }
-
-    window.ballStack.initTouchInfo(); // clear touch info
-    window.ballStack.clear(); // clear the stack.
-    window.ballStack.possClear(); // clear possession count
-
+    
     window.logger.i(`The game has ended. Scores ${scores.red}:${scores.blue}.`);
     window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.victory, placeholderVictory), null, 0x00FF00, "bold", 1);
-
-    setDefaultStadiums(); // check number of players and auto-set stadium
 }
