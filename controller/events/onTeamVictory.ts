@@ -5,7 +5,7 @@ import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setPlayerData } from "../Storage";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
-import { roomActivePlayersNumberCheck, shuffleArray } from "../RoomTools";
+import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck, shuffleArray } from "../RoomTools";
 
 export function onTeamVictoryListener(scores: ScoresObject): void {
     // Event called when a team 'wins'. not just when game ended.
@@ -27,6 +27,8 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         streakTeamCount: window.winningStreak.count
     };
 
+    let winningMessage: string = '';
+
     let allActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode === false); // non afk players
     let teamPlayers: PlayerObject[] = allActivePlayers.filter((player: PlayerObject) => player.team !== TeamID.Spec); // except Spectators players
 
@@ -43,6 +45,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         placeholderVictory.teamName = 'Blue';
     }
     placeholderVictory.teamID = winnerTeamID;
+    winningMessage = Tst.maketext(LangRes.onVictory.victory, placeholderVictory);
 
     window.isGamingNow = false; // turn off
 
@@ -70,7 +73,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         window.logger.i(`${placeholderVictory.streakTeamName} team wins streak ${placeholderVictory.streakTeamCount} games.`); // log it
 
         if(window.winningStreak.count >= 3) {
-            window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.burning, placeholderVictory), null, 0x00FF00, "bold", 1);
+            winningMessage += '\n' + Tst.maketext(LangRes.onVictory.burning, placeholderVictory);
         }
     }
 
@@ -91,14 +94,14 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 // get new spec player list and shuffle randomly
                 window.room.reorderPlayers(shuffleArray(window.room.getPlayerList().map((eachPlayer: PlayerObject) => eachPlayer.id)), true); // shuffle and reordering to top
 
+                //FIXME: This logic is too stupid... must be improved :(
                 let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-                
-                for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers; i++) {
-                    window.room.setPlayerTeam(specActivePlayers[i].id, TeamID.Red); // move spec to Red team
-                    window.room.setPlayerTeam(specActivePlayers[i+window.settings.game.rule.requisite.eachTeamPlayers].id, TeamID.Blue); // move spec to Blue team
+                let specActivePlayersLength: number = specActivePlayers.length;
+                for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers * 2 && i < specActivePlayersLength ; i++) {
+                    putTeamNewPlayerConditional(specActivePlayers[i].id);
                 }
-                
-                window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.reroll, placeholderVictory), null, 0x00FF00, "bold", 1);
+
+                winningMessage += '\n' + Tst.maketext(LangRes.onVictory.reroll, placeholderVictory);
                 window.logger.i(`Whole players are shuffled.`);
             }
         } else {
@@ -116,5 +119,5 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
 
     // notify victory
     window.logger.i(`The game has ended. Scores ${scores.red}:${scores.blue}.`);
-    window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.victory, placeholderVictory), null, 0x00FF00, "bold", 1);
+    window.room.sendAnnouncement(winningMessage, null, 0x00FF00, "bold", 1);
 }
