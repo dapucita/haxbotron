@@ -4,6 +4,7 @@ import * as LangRes from "../../resources/strings";
 import { roomActivePlayersNumberCheck } from "../RoomTools";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
+import { getUnixTimestamp } from "../Statistics";
 
 export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
     var placeholder = {
@@ -33,6 +34,7 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
         window.room.setPlayerAdmin(byPlayer.id, false); // disqulify admin permission
         window.playerList.get(byPlayer.id)!.admin = false;
         window.playerList.get(byPlayer.id)!.permissions.afkmode = true; // set afk mode
+        window.playerList.get(byPlayer.id)!.permissions.afkdate = getUnixTimestamp(); // set afk beginning time stamp
         window.playerList.get(byPlayer.id)!.afktrace = { exemption: false, count: 0}; // reset for afk trace
 
         if(message !== undefined) { // if the reason is not skipped
@@ -45,6 +47,10 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.muteNotifyWarn, placeholder), byPlayer.id, 0xFF7777, "normal", 2);
         } else {
             window.room.sendAnnouncement(Tst.maketext(LangRes.command.afk.setAfk, placeholder), null, 0x479947, "normal", 1);
+        }
+
+        if(BotSettings.afkCommandAutoKick === true) {
+            window.room.sendAnnouncement(LangRes.command.afk._WarnAfkTooLong, byPlayer.id, 0x479947, "normal", 1);
         }
     }
     // check number of players and change game mode

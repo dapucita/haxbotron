@@ -95,6 +95,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 muteExpire: loadedData.muteExpire,
                 afkmode: false,
                 afkreason: '',
+                afkdate: 0,
                 superadmin: false
             }, {
                 rejoinCount: loadedData.rejoinCount,
@@ -154,6 +155,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             muteExpire: 0,
             afkmode: false,
             afkreason: '',
+            afkdate: 0,
             superadmin: false
         }, {
             rejoinCount: 0,

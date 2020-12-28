@@ -5,6 +5,7 @@ export const scheduler = {
     advertise: '📢 Haxbotron🤖 - Open Source Bot Project\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
     ,afkKick: '📢 kicked: AFK'
+    ,afkCommandTooLongKick: '📢 AFK over 2mins'
     ,afkDetect: '📢 @{targetName} #{targetID} has been away from keyboard. Press any key, or would be kicked.'
 }
 
@@ -49,7 +50,7 @@ export const command = {
         ,statsreset: '📑 !statsreset resets your statistical information. It cannot be recovered.'
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
-        ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
+        ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped. You might be kicked if sleep too long.'
         ,list: '📑 !list red/blue/spec/mute/afk shows you all players list of that type.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
         ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
@@ -65,7 +66,8 @@ export const command = {
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName} is now hitting a winning streak of {streakTeamCount} games!'
     ,afk: {
-        setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
+        _WarnAfkTooLong: '📢 You might be kicked if sleep too long. (afk for 2mins)'
+        ,setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
         ,muteNotifyWarn: '❌ Notification messages for AFK will not be shown to other players when you are muted.'
         ,startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'

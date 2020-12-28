@@ -5,6 +5,7 @@ export const scheduler = {
     advertise: '📢 Haxbotron🤖 - Open Source Bot Project\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
+    ,afkCommandTooLongKick: '📢 2분 이상 잠수로 퇴장'
     ,afkDetect: '📢 @{targetName} #{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
     ,autoUnmute: '🔊 {targetName}#{targetID}님의 음소거가 자동으로 해제되었습니다.'
 }
@@ -50,7 +51,7 @@ export const command = {
         ,statsreset: '📑 !statsreset : 스탯을 초기화합니다. 다시 복구할 수 없습니다.'
         ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
-        ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다.'
+        ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다. 너무 오래 잠수하면 퇴장될 수 있습니다.'
         ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.\n📑 !list mute : 음소거된 플레이어의 명단을 보여줍니다.\n📑 !list afk : 잠수중인 플레이어의 명단을 보여줍니다.'
         ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
         ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
@@ -66,7 +67,8 @@ export const command = {
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName}팀이 {streakTeamCount}판째 연승중입니다!'
     ,afk: {
-        setAfk: '💤 {targetName}#{ticketTarget}님이 지금부터 잠수합니다... ({targetAfkReason})'
+        _WarnAfkTooLong: '📢 너무 오래 잠수하면 퇴장될 수 있습니다. (2분간 잠수시)'
+        ,setAfk: '💤 {targetName}#{ticketTarget}님이 지금부터 잠수합니다... ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget}님이 잠수를 풀고 복귀합니다!'
         ,muteNotifyWarn: '❌ 음소거된 상태에서는 다른 플레이어에게 잠수 알림이 표시되지 않습니다.'
         ,startRecord: '📊 충분한 인원이 모였습니다. 지금부터 전적이 기록됩니다.'

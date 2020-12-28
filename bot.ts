@@ -83,10 +83,15 @@ var scheduledTimer = setInterval(function(): void {
         placeholderScheduler.targetID = player.id;
         placeholderScheduler.targetName = player.name;
 
-        //check muted player and unmute when it's time to unmute
+        // check muted player and unmute when it's time to unmute
         if(player.permissions.mute === true && nowTimeStamp > player.permissions.muteExpire) {
             player.permissions.mute = false; //unmute
             window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.autoUnmute, placeholderScheduler), null, 0x479947, "normal", 0); //notify it
+        }
+
+        // when afk too long kick option is enabled, then check sleeping with afk command and kick if afk too long
+        if(BotSettings.afkCommandAutoKick === true && player.permissions.afkmode === true && nowTimeStamp > player.permissions.afkdate + BotSettings.afkCommandAutoKickAllowMillisecs) {
+            window.room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkCommandTooLongKick, placeholderScheduler), false); // kick
         }
         
         // check afk

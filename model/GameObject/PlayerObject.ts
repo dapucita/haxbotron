@@ -51,6 +51,7 @@ export interface PlayerPermissions {
     muteExpire: number; // expiration date of mute. -1 means Permanent mute.. (unix timestamp)
     afkmode: boolean; // Is this player away from keyboards? If the player sets afk mode, the value is true. It is not a mean for auto dectecting and kicking afk players.
     afkreason: string; // the reason why this player is idle(afk) status.
+    afkdate: number; // afk begin time stamp. 0 means no data.
     superadmin: boolean; // Is this player super admin? It doesn't matter whether he/she is an admin.
     // admin permission is already decleared by admin: boolean.
 }
@@ -62,7 +63,7 @@ export interface PlayerAfkTrace {
 
 export interface PlayerEntryTime {
     rejoinCount: number, // How many rejoins this player has made.
-    joinDate: number, // player join time stamp 0 means no data.
+    joinDate: number, // player join time stamp. 0 means no data.
     leftDate: number // player left time stamp. 0 means no data.
 }
 
