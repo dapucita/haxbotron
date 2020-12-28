@@ -182,6 +182,7 @@ export const onStop = {
 export const onVictory = {
     victory: '🎉 경기 종료! 스코어 {redScore}:{blueScore} !! ⚽️'
     ,burning: '🔥 {streakTeamName} 팀이 {streakTeamCount}연승중입니다 !!'
+    ,reroll: '📢 {streakTeamCount}연승을 축하합니다. 팀을 자동으로 섞습니다.'
 }
 
 export const onKick = {

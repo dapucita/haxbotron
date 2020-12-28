@@ -5,7 +5,7 @@
     "banVoteExecuteMinimum" : 7,
 
     "afkCountLimit" : 4,
-    
+
     "afkCommandAutoKick" : true,
     "afkCommandAutoKickAllowMillisecs" : 120000,
 
@@ -42,6 +42,6 @@
     "muteAllowIntervalMillisecs" : 180000,
     "muteDefaultMillisecs" : 180000,
 
-    "rerollWinStreak" : false,
-    "rerollWinstreakCriterion" : 3
+    "rerollWinStreak" : true,
+    "rerollWinstreakCriterion" : 5
 }

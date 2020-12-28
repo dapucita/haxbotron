@@ -93,6 +93,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                     window.room.setPlayerTeam(shuffledIDList[i], TeamID.Red); // move spec to Red team
                     window.room.setPlayerTeam(shuffledIDList[i+window.settings.game.rule.requisite.eachTeamPlayers], TeamID.Blue); // move spec to Blue team
                 }
+                window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.reroll, placeholderVictory), null, 0x00FF00, "bold", 1);
             }
         } else {
             // or still under the limit, then change spec and loser team
