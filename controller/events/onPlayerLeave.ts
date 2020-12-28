@@ -1,14 +1,16 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import * as BotSettings from "../../resources/settings.json";
+import * as Ban from "../Ban";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
 import { TeamID } from "../../model/GameObject/TeamID";
-import { ScoresObject } from "../../model/GameObject/ScoresObject";
 
 export function onPlayerLeaveListener(player: PlayerObject): void {
     // Event called when a player leaves the room.
+    let leftTimeStamp: number = getUnixTimestamp();
 
     if (window.playerList.has(player.id) == false) { // if the player wasn't registered in playerList
         return; // exit this event
@@ -47,7 +49,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
             let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
             if(player.team !== TeamID.Spec && specActivePlayers.length >= 1) {
-                window.room.setPlayerTeam(specActivePlayers[0], player.team); // put new player into the team this player has left
+                window.room.setPlayerTeam(specActivePlayers[0].id, player.team); // put new player into the team this player has left
             }
         }
     } else {
@@ -59,7 +61,15 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         }
     }
 
-    window.playerList.get(player.id)!.entrytime.leftDate = getUnixTimestamp(); // save left time
+    // if anti abscond option is enabled
+    if(BotSettings.antiGameAbscond === true) {
+        // if this player is in match(team player), fixed-term ban this player
+        if(player.team !== TeamID.Spec) {
+            Ban.bListAdd({ conn: player.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
+        }
+    }
+
+    window.playerList.get(player.id)!.entrytime.leftDate = leftTimeStamp; // save left time
     setPlayerData(window.playerList.get(player.id)!); // save
     window.playerList.delete(player.id); // delete from player list
 

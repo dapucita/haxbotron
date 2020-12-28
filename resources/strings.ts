@@ -35,6 +35,9 @@ export const antitrolling = {
     ,afkAbusing: {
         cannotReason: '❌ 게임 중에는 잠수할 수 없습니다.'
     }
+    ,gameAbscond: {
+        banReason: '🚫 게임중 탈주(2분)'
+    }
 }
 
 export const command = {

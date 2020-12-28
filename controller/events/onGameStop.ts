@@ -1,6 +1,6 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
-import { roomActivePlayersNumberCheck, setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
+import { setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
 
 
 export function onGameStopListener(byPlayer: PlayerObject): void {

@@ -8,6 +8,6 @@ export function onGamePauseListener(byPlayer: PlayerObject | null): void {
         window.room.sendAnnouncement(LangRes.onGamePause.readyForStart, null, 0x00FF00, "normal", 2); // notify for order prepare game
         setTimeout(() => {
             window.room.pauseGame(false); // resume(unpause) (and will call onGameUnpause event)
-        }, 3000); // 3secs
+        }, 5000); // 5secs
     }
 }

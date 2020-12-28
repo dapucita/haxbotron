@@ -34,6 +34,9 @@ export const antitrolling = {
     ,afkAbusing: {
         cannotReason: '❌ You can\'t use afk command during a game.'
     }
+    ,gameAbscond: {
+        banReason: '🚫 Abscond from game(2mins)'
+    }
 }
 
 export const command = {

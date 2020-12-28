@@ -66,16 +66,16 @@ window.antiPlayerKickAbusingCount = [];
 window.room = window.HBInit(window.settings.room.config);
 initialiseRoom();
 
-var scheduledTimer = setInterval(function(): void {
+var advertisementTimer = setInterval(() => {
+    window.room.sendAnnouncement(LangRes.scheduler.advertise, null, 0x777777, "normal", 0); // advertisement
+}, 60000) // 1min
+
+var scheduledTimer = setInterval(() => {
     const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
 
-    var placeholderScheduler = {
+    let placeholderScheduler = {
         targetID: 0,
         targetName: '',
-    }
-
-    if(Math.random() < 0.25) {
-        window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x777777, "normal", 0); // advertisement
     }
 
     window.playerList.forEach((player: Player) => { // afk detection system & auto unmute system
@@ -119,7 +119,7 @@ var scheduledTimer = setInterval(function(): void {
             }
         }
     });
-}, 15000); // by 15seconds
+}, 5000); // by 5seconds
 
 function initialiseRoom(): void {
     // Write initialising processes here.
