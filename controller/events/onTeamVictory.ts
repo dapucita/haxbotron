@@ -82,17 +82,20 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 window.winningStreak.blue = 0;
 
                 // reroll randomly
+                // move all team players to spec
                 teamPlayers.forEach((eachPlayer: PlayerObject) => {
-                    window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move all team players to spec
+                    window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); 
                 });
-                // get new spec player list
+                // get new spec player list and shuffle randomly
+                window.room.reorderPlayers(shuffleArray(window.room.getPlayerList().map((eachPlayer: PlayerObject) => eachPlayer.id)), true); // shuffle and reordering to top
+
                 let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-                let shuffledIDList: number[] = shuffleArray(specActivePlayers.map((eachPlayer: PlayerObject) => eachPlayer.id));
-                window.room.reorderPlayers(shuffledIDList, true); // shuffle and reordering to top
+                
                 for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers; i++) {
-                    window.room.setPlayerTeam(shuffledIDList[i], TeamID.Red); // move spec to Red team
-                    window.room.setPlayerTeam(shuffledIDList[i+window.settings.game.rule.requisite.eachTeamPlayers], TeamID.Blue); // move spec to Blue team
+                    window.room.setPlayerTeam(specActivePlayers[i].id, TeamID.Red); // move spec to Red team
+                    window.room.setPlayerTeam(specActivePlayers[i+window.settings.game.rule.requisite.eachTeamPlayers].id, TeamID.Blue); // move spec to Blue team
                 }
+                
                 window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.reroll, placeholderVictory), null, 0x00FF00, "bold", 1);
             }
         } else {

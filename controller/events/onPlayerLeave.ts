@@ -66,7 +66,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         // if this player is in match(team player), fixed-term ban this player
         if(player.team !== TeamID.Spec) {
             window.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
-            Ban.bListAdd({ conn: player.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
+            Ban.bListAdd({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
         }
     }
 

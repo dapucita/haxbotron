@@ -7,7 +7,7 @@ import { roomTeamPlayersNumberCheck } from "../RoomTools";
 import { TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
-export function onGameStartListener(byPlayer: PlayerObject): void {
+export function onGameStartListener(byPlayer: PlayerObject | null): void {
     /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
     var placeholderStart = {
@@ -43,7 +43,7 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
     }
     if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
-        if (BotSettings.antiInsufficientStartAbusing === true) {
+        if (BotSettings.antiInsufficientStartAbusing === true && byPlayer !== null) {
             if (roomTeamPlayersNumberCheck(TeamID.Red) < window.settings.game.rule.requisite.eachTeamPlayers || roomTeamPlayersNumberCheck(TeamID.Blue) < window.settings.game.rule.requisite.eachTeamPlayers) {
                 let abusingID: number = byPlayer.id || 0;
                 let abusingTimestamp: number = getUnixTimestamp();
