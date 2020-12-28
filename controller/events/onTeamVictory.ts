@@ -96,8 +96,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
 
                 //FIXME: This logic is too stupid... must be improved :(
                 let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-                let specActivePlayersLength: number = specActivePlayers.length;
-                for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers * 2 && i < specActivePlayersLength ; i++) {
+                for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers * 2 && i < specActivePlayers.length ; i++) {
                     putTeamNewPlayerConditional(specActivePlayers[i].id);
                 }
 
@@ -111,7 +110,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             });
             // get new spec player list
             let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-            for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers; i++) {
+            for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers && i < specActivePlayers.length; i++) {
                 window.room.setPlayerTeam(specActivePlayers[i].id, loserTeamID); // move Specs to challenger team
             }
         }
