@@ -1,5 +1,5 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerBallKickListener(player: PlayerObject): void {
     // Event called when a player kicks the ball.
@@ -14,8 +14,8 @@ export function onPlayerBallKickListener(player: PlayerObject): void {
         gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
 
     if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // record only when stat record mode

@@ -1,5 +1,5 @@
 import { PlayerObject } from "../model/GameObject/PlayerObject";
-import { TeamID } from "../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../model/GameObject/TeamID";
 import * as Tst from "./Translator";
 import * as LangRes from "../resources/strings";
 
@@ -44,8 +44,8 @@ export function updateAdmins(): void {
         gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
 
     // Get all players except the host (id = 0 is always the host)

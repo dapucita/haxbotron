@@ -5,6 +5,7 @@ import { Logger } from "../controller/Logger";
 import { AdminKickTrace } from "../model/PlayerBan/AdminKickTrace";
 import { Player } from "../model/GameObject/Player";
 import { BotConfig } from "../model/BotConifg";
+import { TeamID } from "../model/GameObject/TeamID";
 
 declare global {
     interface Window {
@@ -21,7 +22,10 @@ declare global {
 
         playerList: Map<number, Player> // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
         ballStack: KickStack // stack for ball tracing
-        winningStreak: any //  how many wins straight (streak)
+        winningStreak: { // how many wins straight (streak)
+            count: number
+            teamID: TeamID
+        } 
 
         antiTrollingOgFloodCount: number[] // flood counter for OG (player id: number)
         antiTrollingChatFloodCount: number[] // flood counter for chat. (player id: number)

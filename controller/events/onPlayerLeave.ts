@@ -6,7 +6,7 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerLeaveListener(player: PlayerObject): void {
     // Event called when a player leaves the room.
@@ -32,8 +32,8 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
 
     window.logger.i(`${player.name}#${player.id} has left.`);

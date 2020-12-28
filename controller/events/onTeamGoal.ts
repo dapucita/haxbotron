@@ -5,7 +5,7 @@ import * as Ban from "../Ban";
 import { setPlayerData } from "../Storage";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { getUnixTimestamp } from "../Statistics";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 
 export function onTeamGoalListener(team: TeamID): void {
     // Event called when a team scores a goal.
@@ -25,8 +25,8 @@ export function onTeamGoalListener(team: TeamID): void {
         gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
 
     };
 

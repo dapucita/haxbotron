@@ -10,6 +10,12 @@ export const scheduler = {
     ,autoUnmute: '🔊 {targetName}#{targetID}님의 음소거가 자동으로 해제되었습니다.'
 }
 
+export const teamName = {
+    specTeam: 'Spec'
+    ,redTeam: 'Red'
+    ,blueTeam: 'Blue'
+}
+
 export const antitrolling = {
     joinFlood: {
         banReason: '🚫 잦은 재접속(5분)'

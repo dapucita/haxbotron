@@ -7,7 +7,7 @@ import { Player } from "../../model/GameObject/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
 import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck, setDefaultStadiums, updateAdmins } from "../RoomTools";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();
@@ -33,8 +33,8 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount(),
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count,
         banListReason: ''
     };
 

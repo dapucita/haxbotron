@@ -13,7 +13,7 @@ import { ScoresObject } from "./model/GameObject/ScoresObject";
 import { gameRule } from "./model/GameRules/preset/captain.rule";
 import { KickStack } from "./model/GameObject/BallTrace";
 import { getUnixTimestamp } from "./controller/Statistics";
-import { TeamID } from "./model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "./model/GameObject/TeamID";
 import { getCookieFromHeadless } from "./controller/RoomTools";
 import { EmergencyTools } from "./model/DevConsole/EmergencyTools";
 
@@ -33,21 +33,8 @@ console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed vi
 window.playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
 
 window.winningStreak = { // count of winning streak
-    red: 0, blue: 0,
-    getName: function(): string {
-        if(this.red >= this.blue) { // include when the value is red 0, blue 0
-            return "Red";
-        } else {
-            return "Blue";
-        }
-    },
-    getCount: function(): number {
-        if(this.red >= this.blue) { // include when the value is red 0, blue 0
-            return this.red;
-        } else {
-            return this.blue;
-        }
-    }
+    count: 0,
+    teamID: 0
 };
 
 window.ballStack = KickStack.getInstance();

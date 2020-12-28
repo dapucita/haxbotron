@@ -1,5 +1,5 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
 
 
@@ -19,8 +19,8 @@ export function onGameStopListener(byPlayer: PlayerObject): void {
         gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
     if(byPlayer !== null) {
         placeholderStop.playerID = byPlayer.id;

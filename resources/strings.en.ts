@@ -9,6 +9,12 @@ export const scheduler = {
     ,afkDetect: '📢 @{targetName} #{targetID} has been away from keyboard. Press any key, or would be kicked.'
 }
 
+export const teamName = {
+    specTeam: 'Spec'
+    ,redTeam: 'Red'
+    ,blueTeam: 'Blue'
+}
+
 export const antitrolling = {
     joinFlood: {
         banReason: '🚫 too much rejoin(5mins)'

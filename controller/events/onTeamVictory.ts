@@ -4,7 +4,7 @@ import * as BotSettings from "../../resources/settings.json";
 import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setPlayerData } from "../Storage";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { roomActivePlayersNumberCheck, shuffleArray } from "../RoomTools";
 
 export function onTeamVictoryListener(scores: ScoresObject): void {
@@ -23,8 +23,8 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
 
     let allActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode === false); // non afk players
@@ -32,6 +32,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
 
     let winnerTeamID: TeamID;
     let loserTeamID: TeamID;
+
     if (scores.red > scores.blue) {
         winnerTeamID = TeamID.Red;
         loserTeamID = TeamID.Blue;
@@ -54,34 +55,33 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             setPlayerData(window.playerList.get(eachPlayer.id)!); // updates stats
         });
 
-        if (scores.red > scores.blue) { // update streak count
-            window.winningStreak.red++;
-            window.winningStreak.blue = 0;
-            window.logger.i(`Red team wins streak ${window.winningStreak.red} games.`);
+        if(winnerTeamID !== window.winningStreak.teamID) {
+            // if winner team is changed
+            window.winningStreak.count = 1; // init count and set to won one game
         } else {
-            window.winningStreak.blue++;
-            window.winningStreak.red = 0;
-            window.logger.i(`Blue team wins streak ${window.winningStreak.blue} games.`);
+            window.winningStreak.count++; // increase count
         }
-        
-        if (window.winningStreak.red >= 3 || window.winningStreak.blue >= 3) {
-            placeholderVictory.streakTeamName = window.winningStreak.getName();
-            placeholderVictory.streakTeamCount = window.winningStreak.getCount();
+        window.winningStreak.teamID = winnerTeamID; // set winner team id
+
+        // update placeholder
+        placeholderVictory.streakTeamName = convertTeamID2Name(window.winningStreak.teamID);
+        placeholderVictory.streakTeamCount = window.winningStreak.count;
+
+        window.logger.i(`${placeholderVictory.streakTeamName} team wins streak ${placeholderVictory.streakTeamCount} games.`); // log it
+
+        if(window.winningStreak.count >= 3) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.burning, placeholderVictory), null, 0x00FF00, "bold", 1);
         }
     }
 
-    window.logger.i(`The game has ended. Scores ${scores.red}:${scores.blue}.`);
-    window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.victory, placeholderVictory), null, 0x00FF00, "bold", 1);
-
     // when auto emcee mode is enabled
     if(window.settings.game.rule.autoOperating === true) {
-        if(window.winningStreak.red >= BotSettings.rerollWinstreakCriterion || window.winningStreak.blue >= BotSettings.rerollWinstreakCriterion) {
+        if(window.winningStreak.count >= BotSettings.rerollWinstreakCriterion) {
             // if winning streak count has reached limit
             if(BotSettings.rerollWinStreak === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers ) {
                 // if rerolling option is enabled, then reroll randomly
-                window.winningStreak.red = 0; // init streak count
-                window.winningStreak.blue = 0;
+                
+                window.winningStreak.count = 0; // init count
 
                 // reroll randomly
                 // move all team players to spec
@@ -113,4 +113,8 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             }
         }
     }
+
+    // notify victory
+    window.logger.i(`The game has ended. Scores ${scores.red}:${scores.blue}.`);
+    window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.victory, placeholderVictory), null, 0x00FF00, "bold", 1);
 }
