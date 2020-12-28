@@ -31,9 +31,14 @@ export function getCommandChunk(message: string): string[] {
 }
 
 // parse command message and excute it (need to check if it's command)
-export function parseCommand(byPlayer:PlayerObject, message: string): void {
-    var msgChunk: string[] = getCommandChunk(message);
-    switch(msgChunk[0]) {
+export function parseCommand(byPlayer: PlayerObject, message: string): void {
+    let msgChunk: string[] = getCommandChunk(message);
+    let commandSign: string = msgChunk[0].substring(1); // remove prefix character(default: !)
+    if(CommandSet._disabledCommandList.includes(commandSign) === true) { // if this command is in disabled list
+        window.room.sendAnnouncement(LangRes.command._ErrorDisabled, byPlayer.id, 0xFF7777, "normal", 2); // notify
+        return; // exit this function
+    }
+    switch(commandSign) {
         case CommandSet.help: {
             if(msgChunk[1] !== undefined) {
                 cmdHelp(byPlayer, msgChunk[1]);
