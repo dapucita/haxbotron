@@ -57,9 +57,11 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         if (scores.red > scores.blue) { // update streak count
             window.winningStreak.red++;
             window.winningStreak.blue = 0;
+            window.logger.i(`Red team wins streak ${window.winningStreak.red} games.`);
         } else {
             window.winningStreak.blue++;
             window.winningStreak.red = 0;
+            window.logger.i(`Blue team wins streak ${window.winningStreak.blue} games.`);
         }
         
         if (window.winningStreak.red >= 3 || window.winningStreak.blue >= 3) {
@@ -97,6 +99,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 }
                 
                 window.room.sendAnnouncement(Tst.maketext(LangRes.onVictory.reroll, placeholderVictory), null, 0x00FF00, "bold", 1);
+                window.logger.i(`Whole players are shuffled.`);
             }
         } else {
             // or still under the limit, then change spec and loser team
