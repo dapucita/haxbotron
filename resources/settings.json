@@ -5,6 +5,9 @@
     "banVoteExecuteMinimum" : 7,
 
     "afkCountLimit" : 4,
+    
+    "afkCommandAutoKick" : true,
+    "afkCommandAutoKickAllowMillisecs" : 120000,
 
     "chatFiltering" : true,
 
