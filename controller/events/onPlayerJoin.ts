@@ -6,7 +6,7 @@ import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject
 import { Player } from "../../model/GameObject/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
-import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
+import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck, setDefaultStadiums, updateAdmins } from "../RoomTools";
 import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
@@ -172,17 +172,30 @@ export function onPlayerJoinListener(player: PlayerObject): void {
     window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
 
     // check number of players joined and change game mode
-    if (window.settings.game.rule.statsRecord === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers) {
-        if (window.isStatRecord !== true) {
+    let activePlayersNumber: number = roomActivePlayersNumberCheck();
+    if (window.settings.game.rule.statsRecord === true && activePlayersNumber >= window.settings.game.rule.requisite.minimumPlayers) {
+        if (window.isStatRecord === false) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.startRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;
+            if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
+                // if auto emcee mode is enabled and the match has been playing as ready mode
+                window.room.stopGame(); // stop game
+            }
         }
     } else {
-        if (window.isStatRecord !== false) {
+        if (window.isStatRecord === true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.stopRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
             window.isStatRecord = false;
         }
     }
 
-    //setDefaultStadiums(); // check number of players and auto-set stadium
+    // when auto emcee mode is enabled
+    if(window.settings.game.rule.autoOperating === true) {
+        putTeamNewPlayerConditional(player.id); // move team
+        if(window.isGamingNow === false) {
+            // if game is not started then start the game for active players
+            setDefaultStadiums(); // set stadium
+            window.room.startGame();
+        }
+    }
 }

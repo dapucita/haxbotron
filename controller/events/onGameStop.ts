@@ -1,11 +1,14 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
-import { setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
+import { roomActivePlayersNumberCheck, setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
 
 
 export function onGameStopListener(byPlayer: PlayerObject): void {
-    /* Event called when a game stops.
-    byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
+    /*
+    Event called when a game stops.
+    byPlayer is the player which caused the event (can be null if the event wasn't caused by a player).
+    Haxball developer Basro said, The game will be stopped automatically after a team victory. (victory -> stop)
+    */
     var placeholderStop = {
         playerID: 0,
         playerName: '',
@@ -38,4 +41,9 @@ export function onGameStopListener(byPlayer: PlayerObject): void {
     window.ballStack.initTouchInfo(); // clear touch info
     window.ballStack.clear(); // clear the stack.
     window.ballStack.possClear(); // clear possession count
+
+    // when auto emcee mode is enabled
+    if(window.settings.game.rule.autoOperating === true) {
+        window.room.startGame(); // start next new game
+    }
 }

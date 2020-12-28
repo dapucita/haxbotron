@@ -44,7 +44,7 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
     if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
         if (BotSettings.antiInsufficientStartAbusing === true) {
-            if (roomTeamPlayersNumberCheck(TeamID.Red) < window.settings.game.rule.requisite.minimumTeamLimit || roomTeamPlayersNumberCheck(TeamID.Blue) < window.settings.game.rule.requisite.minimumTeamLimit) {
+            if (roomTeamPlayersNumberCheck(TeamID.Red) < window.settings.game.rule.requisite.eachTeamPlayers || roomTeamPlayersNumberCheck(TeamID.Blue) < window.settings.game.rule.requisite.eachTeamPlayers) {
                 let abusingID: number = byPlayer.id || 0;
                 let abusingTimestamp: number = getUnixTimestamp();
                 window.logger.i(`The game will be stopped because of insufficient players in each team.`);

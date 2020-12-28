@@ -5,6 +5,7 @@ import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
 import { TeamID } from "../../model/GameObject/TeamID";
+import { ScoresObject } from "../../model/GameObject/ScoresObject";
 
 export function onPlayerLeaveListener(player: PlayerObject): void {
     // Event called when a player leaves the room.
@@ -36,15 +37,25 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     window.logger.i(`${player.name}#${player.id} has left.`);
 
     // check number of players joined and change game mode
-    if (window.settings.game.rule.statsRecord === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers) {
-        if (window.isStatRecord !== true) {
+    let activePlayersNumber: number = roomActivePlayersNumberCheck();
+    if (window.settings.game.rule.statsRecord === true && activePlayersNumber >= window.settings.game.rule.requisite.minimumPlayers) {
+        if (window.isStatRecord === false) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.startRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;
         }
+        // when auto emcee mode is enabled
+        if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
+            let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
+            if(player.team !== TeamID.Spec && specActivePlayers.length >= 1) {
+                window.room.setPlayerTeam(specActivePlayers[0], player.team); // put new player into the team this player has left
+            }
+        }
     } else {
-        if (window.isStatRecord !== false) {
+        if (window.isStatRecord === true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.stopRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = false;
+            // when auto emcee mode is enabled and lack of players
+            if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) window.room.stopGame(); // stop for start next new game
         }
     }
 
