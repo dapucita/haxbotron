@@ -87,15 +87,19 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 
                 window.winningStreak.count = 0; // init count
 
+                //TODO: Improve this stupid logic :(
                 // reroll randomly
                 // get new active players list and shuffle it randomly
                 let allPlayersList: PlayerObject[] = window.room.getPlayerList();
                 let shuffledIDList: number[] = shuffleArray(allPlayersList.map((eachPlayer: PlayerObject) => eachPlayer.id));
+
+                for(let i: number = 0; i < allPlayersList.length; i++) {
+                    window.room.setPlayerTeam(allPlayersList[i].id, TeamID.Spec); // all move to spec
+                }
+
                 for(let i: number = 0; i < shuffledIDList.length; i++) {
                     if(i < window.settings.game.rule.requisite.eachTeamPlayers * 2 && shuffledIDList[i] !== 0 && window.playerList.get(shuffledIDList[i])!.permissions.afkmode !== true) {
                         putTeamNewPlayerConditional(shuffledIDList[i]); // move to red and blue team until requisite is met
-                    } else {
-                        window.room.setPlayerTeam(shuffledIDList[i], TeamID.Spec); // or move to spec
                     }
                 }
 
