@@ -82,7 +82,7 @@ var scheduledTimer = setInterval(() => {
         }
         
         // check afk
-        if(window.isGamingNow === true) { // if the game is in playing
+        if(window.isGamingNow === true && window.isStatRecord === true) { // if the game is in playing
             if(player.team !== TeamID.Spec) { // if the player is not spectators(include afk mode)
                 if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
                 window.room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
