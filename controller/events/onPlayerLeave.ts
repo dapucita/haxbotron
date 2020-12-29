@@ -57,7 +57,13 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.stopRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = false;
             // when auto emcee mode is enabled and lack of players
-            if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) window.room.stopGame(); // stop for start next new game
+            if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
+                window.room.stopGame(); // stop for start readymode game
+                window.winningStreak = { // init
+                    count: 0,
+                    teamID: 0
+                };
+            } 
         }
     }
 
