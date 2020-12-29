@@ -65,7 +65,9 @@ var advertisementTimer = setInterval(() => {
             voteList: ''
         }
         for(let i: number = 0; i < window.banVoteCache.length; i++) {
-            placeholderVote.voteList += `${window.playerList.get(window.banVoteCache[i])!.name}#${window.banVoteCache[i]} `;
+            if(window.playerList.has(window.banVoteCache[i])) {
+                placeholderVote.voteList += `${window.playerList.get(window.banVoteCache[i])!.name}#${window.banVoteCache[i]} `;
+            }
         }
         window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.banVoteAutoNotify, placeholderVote), null, 0x00FF00, "normal", 0); //notify it
     }

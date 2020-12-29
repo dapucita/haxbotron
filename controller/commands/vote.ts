@@ -56,7 +56,9 @@ export function cmdVote(byPlayer: PlayerObject, message?: string): void {
 
         if(window.banVoteCache.length >= 1) { // if there are some votes (include top voted players only)
             for(let i: number = 0; i < window.banVoteCache.length; i++) {
-                placeholder.voteList += `${window.playerList.get(window.banVoteCache[i])!.name}#${window.banVoteCache[i]} `;
+                if(window.playerList.has(window.banVoteCache[i])) {
+                    placeholder.voteList += `${window.playerList.get(window.banVoteCache[i])!.name}#${window.banVoteCache[i]} `;
+                }
             }
             statusMessage += '\n' + LangRes.command.vote.voteAutoNotify;
         }

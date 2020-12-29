@@ -146,7 +146,7 @@ export const command = {
         ,voteCancel: '🗳️ 해당 플레이어에 대한 추방 투표를 취소하였습니다.'
         ,voteIntroduce : '🗳️ 특정 플레이어에 대해 추방 투표를 하거나 취소할 수 있습니다. (예: !vote #12)'
         ,voteStatus : '🗳️ 현재 {targetName}#{targetID} 님에 대해 추방 투표를 한 상태입니다.'
-        ,voteAutoNotify: '🗳️ 현재 추방 투표가 진행중입니다. : {voteList}'
+        ,voteAutoNotify: '🗳️ 현재 추방 투표가 진행중입니다 : {voteList}'
     }
 }
 
