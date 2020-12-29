@@ -87,17 +87,15 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 window.winningStreak.count = 0; // init count
 
                 // reroll randomly
-                // move all team players to spec
-                teamPlayers.forEach((eachPlayer: PlayerObject) => {
-                    window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); 
-                });
-                // get new spec player list and shuffle randomly
-                window.room.reorderPlayers(shuffleArray(window.room.getPlayerList().map((eachPlayer: PlayerObject) => eachPlayer.id)), true); // shuffle and reordering to top
-
-                //FIXME: This logic is too stupid... must be improved :(
-                let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-                for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers * 2 && i < specActivePlayers.length ; i++) {
-                    putTeamNewPlayerConditional(specActivePlayers[i].id);
+                // get new active players list and shuffle it randomly
+                let activePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode === false);
+                let shuffledIDList: number[] = shuffleArray(activePlayers.map((eachPlayer: PlayerObject) => eachPlayer.id));
+                for(let i: number = 0; i < shuffledIDList.length; i++) {
+                    if(i < window.settings.game.rule.requisite.eachTeamPlayers * 2) {
+                        putTeamNewPlayerConditional(shuffledIDList[i]); // move to red and blue team until requisite is met
+                    } else {
+                        window.room.setPlayerTeam(shuffledIDList[i], TeamID.Spec); // or move to spec
+                    }
                 }
 
                 winningMessage += '\n' + Tst.maketext(LangRes.onVictory.reroll, placeholderVictory);
