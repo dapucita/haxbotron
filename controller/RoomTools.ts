@@ -5,7 +5,7 @@ import * as LangRes from "../resources/strings";
 
 export function setDefaultStadiums(): void {
     // set stadium maps as default setting
-    if(window.settings.game.rule.statsRecord === true && window.isStatRecord === true) {
+    if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) {
         window.room.setCustomStadium(window.settings.game.rule.defaultMap); // if game mode is 'stats'
     } else {
         window.room.setCustomStadium(window.settings.game.rule.readyMap); // if game mode is 'ready'
@@ -37,7 +37,7 @@ export function updateAdmins(): void {
     let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true); // only no afk mode players
     if (players.length == 0) return; // If no players left, do nothing.
     if (players.find((player: PlayerObject) => player.admin) != null) return; // Do nothing if any admin player is still left.
-    
+
     placeholderUpdateAdmins.playerID = players[0].id;
     placeholderUpdateAdmins.playerName = window.playerList.get(players[0].id)!.name;
 
@@ -47,19 +47,20 @@ export function updateAdmins(): void {
     window.room.sendAnnouncement(Tst.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
 }
 
-export function shuffleArray<T>(array: T[]): T[] { // Fisher-Yates Shuffle
-    var currentIndex = array.length, temporaryValue, randomIndex;
-    // while there remain elements to shuffle
-    while (0 !== currentIndex) {
-        // pick a remaining element
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        // and swap it with the current element
-        temporaryValue = array;
-        array = array;
-        array = temporaryValue;
+export function shuffleArray<T>(array: T[]): T[] {
+    if (!Array.isArray(array)) {
+        throw new TypeError(`shuffleArray: Expected an Array, got ${typeof array} instead.`);
     }
-    return array;
+
+    const oldArray = [...array];
+    let newArray = new Array<T>();
+
+    while (oldArray.length) {
+        const i = Math.floor(Math.random() * oldArray.length);
+        newArray = newArray.concat(oldArray.splice(i, 1));
+    }
+
+    return newArray;
 }
 
 export function getCookieFromHeadless(name: string): string {
