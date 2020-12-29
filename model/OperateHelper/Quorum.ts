@@ -47,9 +47,9 @@ export function putTeamNewPlayerFullify(): void {
     let teamPlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team !== TeamID.Spec);
     let redPlayers: number = teamPlayers.filter((player: PlayerObject) => player.team === TeamID.Red).length;
     let bluePlayers: number = teamPlayers.filter((player: PlayerObject) => player.team === TeamID.Blue).length;
-    
     let lack: number = window.settings.game.rule.requisite.eachTeamPlayers * 2 - (redPlayers + bluePlayers)
-    for(let i: number = 0; i < lack; i++) {
+    
+    for(let i: number = 0; i < lack && i < specActivePlayers.length; i++) {
         putTeamNewPlayerConditional(specActivePlayers[i].id);
     }
 }
