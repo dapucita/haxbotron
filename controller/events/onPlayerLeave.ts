@@ -62,7 +62,7 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     }
 
     // if anti abscond option is enabled
-    if(BotSettings.antiGameAbscond === true) {
+    if(BotSettings.antiGameAbscond === true && window.isStatRecord === true) {
         // if this player is in match(team player), fixed-term ban this player
         if(window.playerList.get(player.id)!.team !== TeamID.Spec) {
             window.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);

@@ -44,7 +44,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                 return false; // and hide this chat
             } else {
                 //Anti Chat Flood Checking
-                if (BotSettings.antiChatFlood === true) { // if anti chat flood options is enabled
+                if (BotSettings.antiChatFlood === true && window.isStatRecord === true) { // if anti chat flood options is enabled
                     let chatFloodCritFlag: boolean = false;
                     window.antiTrollingChatFloodCount.push(player.id); // record who said this chat
                     for (let floodCritCount = 1; floodCritCount <= BotSettings.chatFloodCriterion; floodCritCount++) {
