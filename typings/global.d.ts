@@ -21,7 +21,11 @@ declare global {
         isMuteAll: boolean // is All players muted?
 
         playerList: Map<number, Player> // player list (key: player.id, value: Player), usage: playerList.get(player.id).name
+
         ballStack: KickStack // stack for ball tracing
+
+        banVoteCache: number[] // top voted players list, value: player.id
+
         winningStreak: { // how many wins straight (streak)
             count: number
             teamID: TeamID

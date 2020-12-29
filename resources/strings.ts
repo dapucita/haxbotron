@@ -8,6 +8,7 @@ export const scheduler = {
     ,afkCommandTooLongKick: '📢 2분 이상 잠수로 퇴장'
     ,afkDetect: '📢 @{targetName} #{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
     ,autoUnmute: '🔊 {targetName}#{targetID}님의 음소거가 자동으로 해제되었습니다.'
+    ,banVoteAutoNotify: '🗳️ 추방 투표가 진행중입니다. : {voteList}'
 }
 
 export const teamName = {
@@ -145,6 +146,7 @@ export const command = {
         ,voteCancel: '🗳️ 해당 플레이어에 대한 추방 투표를 취소하였습니다.'
         ,voteIntroduce : '🗳️ 특정 플레이어에 대해 추방 투표를 하거나 취소할 수 있습니다. (예: !vote #12)'
         ,voteStatus : '🗳️ 현재 {targetName}#{targetID} 님에 대해 추방 투표를 한 상태입니다.'
+        ,voteAutoNotify: '🗳️ 현재 추방 투표가 진행중입니다. : {voteList}'
     }
 }
 

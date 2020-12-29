@@ -13,9 +13,10 @@ import { ScoresObject } from "./model/GameObject/ScoresObject";
 import { gameRule } from "./model/GameRules/preset/captain.rule";
 import { KickStack } from "./model/GameObject/BallTrace";
 import { getUnixTimestamp } from "./controller/Statistics";
-import { convertTeamID2Name, TeamID } from "./model/GameObject/TeamID";
+import { TeamID } from "./model/GameObject/TeamID";
 import { getCookieFromHeadless } from "./controller/RoomTools";
 import { EmergencyTools } from "./model/DevConsole/EmergencyTools";
+import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 
 // load settings
 window.settings = {
@@ -45,6 +46,8 @@ window.isStatRecord = false;
 window.isGamingNow = false;
 window.isMuteAll = false;
 
+window.banVoteCache = [];
+
 window.antiTrollingOgFloodCount = [];
 window.antiTrollingChatFloodCount = [];
 window.antiInsufficientStartAbusingCount = [];
@@ -55,6 +58,17 @@ initialiseRoom();
 
 var advertisementTimer = setInterval(() => {
     window.room.sendAnnouncement(LangRes.scheduler.advertise, null, 0x777777, "normal", 0); // advertisement
+
+    refreshBanVoteCache(); // update banvote status cache
+    if(window.banVoteCache.length >= 1) { // if there are some votes (include top voted players only)
+        let placeholderVote = {
+            voteList: ''
+        }
+        for(let i: number = 0; i < window.banVoteCache.length; i++) {
+            placeholderVote.voteList += `${window.playerList.get(window.banVoteCache[i])!.name}#${window.banVoteCache[i]} `;
+        }
+        window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.banVoteAutoNotify, placeholderVote), null, 0x00FF00, "normal", 0); //notify it
+    }
 }, 60000) // 1min
 
 var scheduledTimer = setInterval(() => {

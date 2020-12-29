@@ -1,11 +1,11 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { Player } from "../../model/GameObject/Player";
 import { getUnixTimestamp } from "../Statistics";
+import { roomPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
-import { roomPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function cmdVote(byPlayer: PlayerObject, message?: string): void {
     if (!BotSettings.banVoteEnable) {
@@ -50,8 +50,17 @@ export function cmdVote(byPlayer: PlayerObject, message?: string): void {
         let voteTargetID: number = window.playerList.get(byPlayer.id)!.voteTarget || -1;
         let placeholder = {
             targetName: '',
-            targetID: voteTargetID
+            targetID: voteTargetID,
+            voteList: '',
         };
+
+        if(window.banVoteCache.length >= 1) { // if there are some votes (include top voted players only)
+            for(let i: number = 0; i < window.banVoteCache.length; i++) {
+                placeholder.voteList += `${window.playerList.get(window.banVoteCache[i])!.name}#${window.banVoteCache[i]} `;
+            }
+            statusMessage += '\n' + LangRes.command.vote.voteAutoNotify;
+        }
+
         if(voteTargetID !== -1 && window.playerList.has(voteTargetID)) {
             statusMessage += '\n' + LangRes.command.vote.voteStatus;
             placeholder.targetName = window.playerList.get(voteTargetID)!.name;

@@ -7,6 +7,8 @@ export const scheduler = {
     ,afkKick: '📢 kicked: AFK'
     ,afkCommandTooLongKick: '📢 AFK over 2mins'
     ,afkDetect: '📢 @{targetName} #{targetID} has been away from keyboard. Press any key, or would be kicked.'
+    ,autoUnmute: '🔊 Player {targetName}#{targetID} is unmuted by system.'
+    ,banVoteAutoNotify: '🗳️ Voting to ban is in progress: {voteList}'
 }
 
 export const teamName = {
@@ -86,7 +88,7 @@ export const command = {
         _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
         ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
         ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.(30mins) You can command it againt for release.'
-        ,successUnmute: '🔊 {targetName}#{ticketTarget} player is unmuted.'
+        ,successUnmute: '🔊 Player {targetName}#{ticketTarget} is unmuted.'
         ,muteAbusingWarn: '❌ You can\'t mute again this player in too short time. (3mins)'
     }
     ,super: {
@@ -144,6 +146,7 @@ export const command = {
         ,voteCancel: '🗳️ You have cancelled the vote for that player.'
         ,voteIntroduce : '🗳️ You can vote for or cancel a kick for a specific player. (eg: !vote #12)'
         ,voteStatus : '🗳️ You have currently voted for kick {targetName}#{targetID}.'
+        ,voteAutoNotify: '🗳️ Voting to ban is in progress: {voteList}'
     }
 }
 
