@@ -29,6 +29,7 @@ export function putTeamNewPlayerConditional(playerID: number, redPlayers?: numbe
             // move only when team limitation is not reached.
             newTeamID = TeamID.Red;
             window.room.setPlayerTeam(playerID, TeamID.Red);
+            window.logger.i(`The player #${playerID} is moved to Red Team by shuffling.`);
         }
     } else {
         // or move to blue team.
@@ -36,6 +37,7 @@ export function putTeamNewPlayerConditional(playerID: number, redPlayers?: numbe
             // move only when team limitation is not reached.
             newTeamID = TeamID.Blue;
             window.room.setPlayerTeam(playerID, TeamID.Blue);
+            window.logger.i(`The player #${playerID} is moved to Blue Team by shuffling.`);
         }
     }
     return newTeamID;
