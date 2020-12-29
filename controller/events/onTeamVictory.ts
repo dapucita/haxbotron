@@ -100,7 +100,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 }
 
                 winningMessage += '\n' + Tst.maketext(LangRes.onVictory.reroll, placeholderVictory);
-                window.logger.i(`Whole players are shuffled.`);
+                window.logger.i(`Whole players are shuffled. (${allPlayersList.toString()} to ${shuffleArray.toString()})`);
             }
         } else {
             // or still under the limit, then change spec and loser team
