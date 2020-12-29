@@ -1,11 +1,11 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { Player } from "../../model/GameObject/Player";
-import { roomPlayersNumberCheck } from "../RoomTools";
 import { getUnixTimestamp } from "../Statistics";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
+import { roomPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function cmdVote(byPlayer: PlayerObject, message?: string): void {
     if (!BotSettings.banVoteEnable) {

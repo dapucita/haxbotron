@@ -20,7 +20,7 @@ declare global {
         isGamingNow: boolean // is playing now?
         isMuteAll: boolean // is All players muted?
 
-        playerList: Map<number, Player> // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
+        playerList: Map<number, Player> // player list (key: player.id, value: Player), usage: playerList.get(player.id).name
         ballStack: KickStack // stack for ball tracing
         winningStreak: { // how many wins straight (streak)
             count: number

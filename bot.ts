@@ -30,7 +30,7 @@ window.settings = {
 // init global properties
 console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed via cookie(${window.settings.room.config.token})`);
 
-window.playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
+window.playerList = new Map(); // player list (key: player.id, value: Player), usage: playerList.get(player.id).name
 
 window.winningStreak = { // count of winning streak
     count: 0,
