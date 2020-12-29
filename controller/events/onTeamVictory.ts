@@ -87,22 +87,21 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 
                 window.winningStreak.count = 0; // init count
 
-                //TODO: Improve this stupid logic :(
                 // reroll randomly
                 // get new active players list and shuffle it randomly
                 let allPlayersList: PlayerObject[] = window.room.getPlayerList();
                 let shuffledIDList: number[] = shuffleArray(allPlayersList
                     .filter((eachPlayer: PlayerObject) => eachPlayer.id !== 0 && window.playerList.get(eachPlayer.id)!.permissions.afkmode === false)
-                    .map((eachPlayer: PlayerObject) => eachPlayer.id));
+                    .map((eachPlayer: PlayerObject) => eachPlayer.id)
+                );
 
-                for(let i: number = 0; i < allPlayersList.length; i++) {
-                    window.room.setPlayerTeam(allPlayersList[i].id, TeamID.Spec); // all move to spec
-                }
+                allPlayersList.forEach((eachPlayer: PlayerObject) => {
+                    window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move all to spec
+                });
 
                 for(let i: number = 0; i < shuffledIDList.length; i++) {
-                    if(i < window.settings.game.rule.requisite.eachTeamPlayers * 2) {
-                        putTeamNewPlayerConditional(shuffledIDList[i]); // move to red and blue team until requisite is met
-                    }
+                    if(i < window.settings.game.rule.requisite.eachTeamPlayers) window.room.setPlayerTeam(shuffledIDList[i], TeamID.Red);
+                    if(i >= window.settings.game.rule.requisite.eachTeamPlayers && i < window.settings.game.rule.requisite.eachTeamPlayers*2) window.room.setPlayerTeam(shuffledIDList[i], TeamID.Blue);
                 }
 
                 winningMessage += '\n' + Tst.maketext(LangRes.onVictory.reroll, placeholderVictory);
