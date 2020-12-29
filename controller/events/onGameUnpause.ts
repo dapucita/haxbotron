@@ -1,5 +1,4 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { TeamID } from "../../model/GameObject/TeamID";
 import { putTeamNewPlayerFullify } from "../../model/OperateHelper/Quorum";
 
 export function onGameUnpauseListener(byPlayer: PlayerObject | null): void {
