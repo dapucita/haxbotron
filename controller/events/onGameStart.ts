@@ -3,9 +3,9 @@ import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
-import { roomTeamPlayersNumberCheck } from "../RoomTools";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function onGameStartListener(byPlayer: PlayerObject | null): void {
     /* Event called when a game starts.

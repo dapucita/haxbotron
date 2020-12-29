@@ -1,10 +1,10 @@
 import * as Tst from "../Translator";
 import * as BotSettings from "../../resources/settings.json";
 import * as LangRes from "../../resources/strings";
-import { roomActivePlayersNumberCheck } from "../RoomTools";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
 import { getUnixTimestamp } from "../Statistics";
+import { roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
     var placeholder = {
