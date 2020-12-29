@@ -5,7 +5,8 @@ import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setPlayerData } from "../Storage";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
-import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck, shuffleArray } from "../RoomTools";
+import { shuffleArray } from "../RoomTools";
+import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function onTeamVictoryListener(scores: ScoresObject): void {
     // Event called when a team 'wins'. not just when game ended.

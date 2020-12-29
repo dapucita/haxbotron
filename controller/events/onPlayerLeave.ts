@@ -3,10 +3,11 @@ import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
+import { updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { putTeamNewPlayerFullify, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function onPlayerLeaveListener(player: PlayerObject): void {
     // Event called when a player leaves the room.
@@ -47,9 +48,8 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         }
         // when auto emcee mode is enabled
         if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
-            let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-            if(player.team !== TeamID.Spec && specActivePlayers.length >= 1) {
-                window.room.setPlayerTeam(specActivePlayers[0].id, player.team); // put new player into the team this player has left
+            if(player.team !== TeamID.Spec) {
+                putTeamNewPlayerFullify(); // put new players into the team this player has left
             }
         }
     } else {

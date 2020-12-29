@@ -6,8 +6,9 @@ import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject
 import { Player } from "../../model/GameObject/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
-import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck, setDefaultStadiums, updateAdmins } from "../RoomTools";
+import { setDefaultStadiums, updateAdmins } from "../RoomTools";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();
