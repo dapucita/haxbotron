@@ -18,21 +18,6 @@ export function setDefaultRoomLimitation(): void {
     window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
 }
 
-export function roomPlayersNumberCheck(): number {
-    // return number of all players of this room (except bot host)
-    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0).length;
-}
-
-export function roomActivePlayersNumberCheck(): number {
-    // return number of players actually atcivated(not afk)
-    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true).length;
-}
-
-export function roomTeamPlayersNumberCheck(team: TeamID): number {
-    // return number of players in each team
-    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === team).length;
-}
-
 export function updateAdmins(): void {
     let placeholderUpdateAdmins = {
         playerID: 0,
@@ -60,30 +45,6 @@ export function updateAdmins(): void {
     window.playerList.get(players[0].id)!.admin = true;
     window.logger.i(`${window.playerList.get(players[0].id)!.name}#${players[0].id} has been admin(value:${window.playerList.get(players[0].id)!.admin},super:${window.playerList.get(players[0].id)!.permissions.superadmin}), because there were no admin players.`);
     window.room.sendAnnouncement(Tst.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
-}
-
-export function putTeamNewPlayerConditional(playerID: number): TeamID {
-    let newTeamID: TeamID = 0;
-    let teamPlayersNumber = {
-        red: roomTeamPlayersNumberCheck(TeamID.Red),
-        blue: roomTeamPlayersNumberCheck(TeamID.Blue)
-    }
-    if(teamPlayersNumber.red <= teamPlayersNumber.blue) {
-        // if red team members are equal or less than blues, move this player to red team.
-        if(teamPlayersNumber.red < window.settings.game.rule.requisite.eachTeamPlayers) {
-            // move only when team limitation is not reached.
-            newTeamID = TeamID.Red;
-            window.room.setPlayerTeam(playerID, TeamID.Red);
-        }
-    } else {
-        // or move to blue team.
-        if(teamPlayersNumber.blue < window.settings.game.rule.requisite.eachTeamPlayers) {
-            // move only when team limitation is not reached.
-            newTeamID = TeamID.Blue;
-            window.room.setPlayerTeam(playerID, TeamID.Blue);
-        }
-    }
-    return newTeamID;
 }
 
 export function shuffleArray<T>(array: T[]): T[] { // Fisher-Yates Shuffle
