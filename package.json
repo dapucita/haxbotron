@@ -1,6 +1,6 @@
 {
   "name": "haxbotron",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Haxbotron is a host bot application for Haxball game.",
   "main": "out/index.js",
   "scripts": {
