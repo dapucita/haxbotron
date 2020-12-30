@@ -17,15 +17,19 @@ export function cmdVote(byPlayer: PlayerObject, message?: string): void {
         if (message.charAt(0) == "#") {
             let targetVoteID: number = parseInt(message.substr(1), 10);
             if (isNaN(targetVoteID) !== true && window.playerList.has(targetVoteID) === true) {
+                let placeholderVote = {
+                    targetName: window.playerList.get(targetVoteID)!.name
+                    ,targetID: targetVoteID
+                }
                 if (window.playerList.get(byPlayer.id)!.voteTarget === targetVoteID) { // if already voted, then cancel
                     window.playerList.get(byPlayer.id)!.voteTarget = -1; // reset vote
                     window.playerList.get(targetVoteID)!.voteGet--; // reduce voted count
-                    window.room.sendAnnouncement(LangRes.command.vote.voteCancel, byPlayer.id, 0x479947, "normal", 1);
+                    window.room.sendAnnouncement(Tst.maketext(LangRes.command.vote.voteCancel, placeholderVote), byPlayer.id, 0x479947, "normal", 1);
                 } else { // or vote
                     if (roomPlayersNumberCheck() >= BotSettings.banVoteAllowMinimum) { // check current players and vote
                         window.playerList.get(byPlayer.id)!.voteTarget = targetVoteID; // vote and set
                         window.playerList.get(targetVoteID)!.voteGet++; // increase voted count
-                        window.room.sendAnnouncement(LangRes.command.vote.voteComplete, byPlayer.id, 0x479947, "normal", 1);
+                        window.room.sendAnnouncement(Tst.maketext(LangRes.command.vote.voteComplete, placeholderVote), byPlayer.id, 0x479947, "normal", 1);
 
                         const banTimeStamp: number = getUnixTimestamp(); // get current timestamp
                         window.playerList.forEach((player: Player) => {

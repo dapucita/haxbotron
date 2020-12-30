@@ -8,7 +8,7 @@ export const scheduler = {
     ,afkCommandTooLongKick: '📢 AFK over 2mins'
     ,afkDetect: '📢 @{targetName} #{targetID} has been away from keyboard. Press any key, or would be kicked.'
     ,autoUnmute: '🔊 Player {targetName}#{targetID} is unmuted by system.'
-    ,banVoteAutoNotify: '🗳️ Voting to ban is in progress: {voteList}'
+    ,banVoteAutoNotify: '🗳️ Voting to ban is in progress (!vote #ID) : {voteList}'
 }
 
 export const teamName = {
@@ -142,8 +142,8 @@ export const command = {
         _ErrorNoPlayer: '❌ ❌ Wrong player ID. You can only target numeric ID. (eg: !vote #12)'
         ,_ErrorNoPermission: '❌ There are not enough players for voting.'
         ,voteBanMessage: '🚫 ban vote(5mins)'
-        ,voteComplete: '🗳️ You did vote. You can cancel the vote by type this command again.'
-        ,voteCancel: '🗳️ You have cancelled the vote for that player.'
+        ,voteComplete: '🗳️ You did vote to {targetName}#{targetID}. You can cancel the vote by type this command again.'
+        ,voteCancel: '🗳️ You have cancelled the vote for that player {targetName}#{targetID}.'
         ,voteIntroduce : '🗳️ You can vote for or cancel a kick for a specific player. (eg: !vote #12)'
         ,voteStatus : '🗳️ You have currently voted for kick {targetName}#{targetID}.'
         ,voteAutoNotify: '🗳️ Voting to ban is in progress: {voteList}'
