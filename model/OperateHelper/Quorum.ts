@@ -29,7 +29,7 @@ export function putTeamNewPlayerConditional(playerID: number, redPlayers?: numbe
             // move only when team limitation is not reached.
             newTeamID = TeamID.Red;
             window.room.setPlayerTeam(playerID, TeamID.Red);
-            window.logger.i(`The player #${playerID} is moved to Red Team by shuffling.`);
+            window.logger.i(`The player #${playerID} is moved to Red Team by system.`);
         }
     } else {
         // or move to blue team.
@@ -37,21 +37,22 @@ export function putTeamNewPlayerConditional(playerID: number, redPlayers?: numbe
             // move only when team limitation is not reached.
             newTeamID = TeamID.Blue;
             window.room.setPlayerTeam(playerID, TeamID.Blue);
-            window.logger.i(`The player #${playerID} is moved to Blue Team by shuffling.`);
+            window.logger.i(`The player #${playerID} is moved to Blue Team by system.`);
         }
     }
     return newTeamID;
 }
 
 export function putTeamNewPlayerFullify(): void {
-    // check quorum of each team, and if there are any lacks then supplement automatically until quorum is met
-    let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode !== true);
-    let teamPlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team !== TeamID.Spec);
-    let redPlayers: number = teamPlayers.filter((player: PlayerObject) => player.team === TeamID.Red).length;
-    let bluePlayers: number = teamPlayers.filter((player: PlayerObject) => player.team === TeamID.Blue).length;
-    let lack: number = window.settings.game.rule.requisite.eachTeamPlayers * 2 - (redPlayers + bluePlayers)
-    
-    for(let i: number = 0; i < lack && i < specActivePlayers.length; i++) {
-        putTeamNewPlayerConditional(specActivePlayers[i].id);
+    // check quorum of each team, and if there are any lacks then supplement automatically
+    let allActivePlayers: PlayerObject[] =  window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode === false);
+    let specActivePlayers: PlayerObject[] = allActivePlayers.filter((player: PlayerObject) => player.team === TeamID.Spec);
+
+    let redPlayersLack: number = window.settings.game.rule.requisite.eachTeamPlayers - allActivePlayers.filter((player: PlayerObject) => player.team === TeamID.Red).length;
+    let bluePlayersLack: number = window.settings.game.rule.requisite.eachTeamPlayers - allActivePlayers.filter((player: PlayerObject) => player.team === TeamID.Blue).length;
+
+    for(let i: number = 0; i < specActivePlayers.length; i++) {
+        if(i < redPlayersLack) window.room.setPlayerTeam(specActivePlayers[i].id, TeamID.Red);
+        if(i >= redPlayersLack && i < redPlayersLack + bluePlayersLack) window.room.setPlayerTeam(specActivePlayers[i].id, TeamID.Blue);
     }
 }
