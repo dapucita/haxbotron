@@ -6,9 +6,13 @@ import { setPlayerData } from "../Storage";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { ScoresObject } from "../../model/GameObject/ScoresObject";
 
 export function onTeamGoalListener(team: TeamID): void {
     // Event called when a team scores a goal.
+    let scores: ScoresObject | null = window.room.getScores(); //get scores object (it includes time data about seconds elapsed)
+    window.logger.i(`Goal time logger (secs):${Math.round(scores?.time || 0)}`);
+
     var placeholderGoal = { 
         teamID: team,
         teamName: '',
