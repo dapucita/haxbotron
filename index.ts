@@ -109,7 +109,7 @@ ipcMain.on('msg-send-action', (event: any, arg: any) => { // webRender.js
     if(isBotLaunched == true) { // only when the bot is running
         puppeteerContainer.then((page: any) => {
             page.evaluate((msgString: any) => {
-                window.sendRoomChat(msgString); // send chat toward game
+                window.sendRoomChat(msgString, null); // send chat toward game
             }, arg);
         });
     }

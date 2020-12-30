@@ -15,7 +15,7 @@ export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlaye
         if (window.playerList.get(changedPlayer.id)!.permissions.afkmode == true) {
             // if changedPlayer is in afk mode, reject
             window.room.setPlayerAdmin(changedPlayer.id, false);
-            window.room.sendAnnouncement(Tst.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), 0xFF0000, "normal", 2);
+            window.room.sendAnnouncement(Tst.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), null, 0xFF0000, "normal", 2);
             return;
         } else {
             // make this player admin

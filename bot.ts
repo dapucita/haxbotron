@@ -134,7 +134,7 @@ function initialiseRoom(): void {
     window.logger.i(`The game mode is '${window.isGamingNow}' now(by default).`);
 
     // declare function in window object
-    window.sendRoomChat = function(msg: string, playerID?: number): void {
+    window.sendRoomChat = function(msg: string, playerID: number | null): void {
         if(playerID !== null) {
             window.room.sendAnnouncement(msg, playerID, 0xFFFF84, "bold", 2);
         } else {

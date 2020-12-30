@@ -6,6 +6,7 @@ import { AdminKickTrace } from "../model/PlayerBan/AdminKickTrace";
 import { Player } from "../model/GameObject/Player";
 import { BotConfig } from "../model/BotConifg";
 import { TeamID } from "../model/GameObject/TeamID";
+import { Room } from "../model/RoomObject/RoomObject";
 
 declare global {
     interface Window {
@@ -36,7 +37,7 @@ declare global {
         antiInsufficientStartAbusingCount: number[] // ID record for start with insufficient players (player id: number)
         antiPlayerKickAbusingCount: AdminKickTrace[] // ID and Timestamp record for abusing kick other players (id:number, register date:number)
 
-        sendRoomChat(msg: string, playerID?: number): void // for send chat message to the game
+        sendRoomChat(msg: string, playerID: number | null): void // for send chat message to the game
         uploadStorageData(key: string, stringfiedData: string): void // upload and save on node-persist
         clearStorageData(key: string): void // clear data in node-persist
 
@@ -52,8 +53,8 @@ declare global {
         }
 
         // haxball
-        room: any // room container
-        HBInit(config: RoomConfig): any
+        room: Room // room container
+        HBInit(config: RoomConfig): Room
         onHBLoaded(): void
     }
 }
