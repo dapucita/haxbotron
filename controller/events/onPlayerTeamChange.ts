@@ -1,6 +1,6 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
 
 export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {

@@ -5,8 +5,16 @@ export const scheduler = {
     advertise: '📢 Haxbotron🤖 - Open Source Bot Project\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
+    ,afkCommandTooLongKick: '📢 2분 이상 잠수로 퇴장'
     ,afkDetect: '📢 @{targetName} #{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
     ,autoUnmute: '🔊 {targetName}#{targetID}님의 음소거가 자동으로 해제되었습니다.'
+    ,banVoteAutoNotify: '🗳️ 추방 투표가 진행중입니다 (!vote #ID) : {voteList}'
+}
+
+export const teamName = {
+    specTeam: 'Spec'
+    ,redTeam: 'Red'
+    ,blueTeam: 'Blue'
 }
 
 export const antitrolling = {
@@ -15,7 +23,7 @@ export const antitrolling = {
         ,floodWarning: '📢 너무 짧은 시간에 재접속하면 퇴장될 수 있습니다.'
     }
     ,chatFlood: {
-        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다.(30분) 관리자가 해제할 수 있습니다.'
+        muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다.(3분) 관리자가 해제할 수 있습니다.'
     }
     ,ogFlood: {
         banReason: '🚫 연속 자책골(5분)'
@@ -34,6 +42,9 @@ export const antitrolling = {
     ,afkAbusing: {
         cannotReason: '❌ 게임 중에는 잠수할 수 없습니다.'
     }
+    ,gameAbscond: {
+        banReason: '🚫 게임중 탈주(2분)'
+    }
 }
 
 export const command = {
@@ -50,7 +61,7 @@ export const command = {
         ,statsreset: '📑 !statsreset : 스탯을 초기화합니다. 다시 복구할 수 없습니다.'
         ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
-        ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다.'
+        ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다. 너무 오래 잠수하면 퇴장될 수 있습니다.'
         ,list: '📑 !list red/blue/spec : 해당 팀의 명단을 보여줍니다. 간략한 정보가 담겨있습니다.\n📑 !list mute : 음소거된 플레이어의 명단을 보여줍니다.\n📑 !list afk : 잠수중인 플레이어의 명단을 보여줍니다.'
         ,freeze: '📑 !freeze : 방 전체 채팅을 얼리거나 녹입니다. admin만 할 수 있습니다.'
         ,mute: '📑 !mute #ID : 해당 ID의 플레이어를 음소거하거나 해제합니다. ID는 숫자이어야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
@@ -66,7 +77,8 @@ export const command = {
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName}팀이 {streakTeamCount}판째 연승중입니다!'
     ,afk: {
-        setAfk: '💤 {targetName}#{ticketTarget}님이 지금부터 잠수합니다... ({targetAfkReason})'
+        _WarnAfkTooLong: '📢 너무 오래 잠수하면 퇴장될 수 있습니다. (2분간 잠수시)'
+        ,setAfk: '💤 {targetName}#{ticketTarget}님이 지금부터 잠수합니다... ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget}님이 잠수를 풀고 복귀합니다!'
         ,muteNotifyWarn: '❌ 음소거된 상태에서는 다른 플레이어에게 잠수 알림이 표시되지 않습니다.'
         ,startRecord: '📊 충분한 인원이 모였습니다. 지금부터 전적이 기록됩니다.'
@@ -130,10 +142,11 @@ export const command = {
         _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !vote #12)'
         ,_ErrorNoPermission: '❌ 인원이 부족하여 투표를 할 수 없습니다.'
         ,voteBanMessage: '🚫 투표에 의한 추방 (5분)'
-        ,voteComplete: '🗳️ 해당 플레이어에 대해 추방 투표를 하였습니다. 명령어를 다시 사용하여 취소할 수 있습니다.'
-        ,voteCancel: '🗳️ 해당 플레이어에 대한 추방 투표를 취소하였습니다.'
+        ,voteComplete: '🗳️ {targetName}#{targetID} 님에게 추방 투표를 하였습니다. 명령어를 다시 사용하여 취소할 수 있습니다.'
+        ,voteCancel: '🗳️ {targetName}#{targetID} 님에 대한 추방 투표를 취소하였습니다.'
         ,voteIntroduce : '🗳️ 특정 플레이어에 대해 추방 투표를 하거나 취소할 수 있습니다. (예: !vote #12)'
-        ,voteStatus : '🗳️ 현재 {targetName}#{targetID} 님에 대해 추방 투표를 한 상태입니다.'
+        ,voteStatus : '🗳️ 현재 {targetName}#{targetID} 님에게 추방 투표를 한 상태입니다.'
+        ,voteAutoNotify: '🗳️ 현재 추방 투표가 진행중입니다 : {voteList}'
     }
 }
 
@@ -180,6 +193,7 @@ export const onStop = {
 export const onVictory = {
     victory: '🎉 경기 종료! 스코어 {redScore}:{blueScore} !! ⚽️'
     ,burning: '🔥 {streakTeamName} 팀이 {streakTeamCount}연승중입니다 !!'
+    ,reroll: '📢 {streakTeamCount}연승을 축하합니다. 팀을 자동으로 섞습니다.'
 }
 
 export const onKick = {
@@ -204,4 +218,8 @@ export const onGoal = {
 
 export const onAdminChange = {
     afknoadmin: '🚫 잠수 중인 플레이어는 관리자가 될 수 없습니다.'
+}
+
+export const onGamePause = {
+    readyForStart: '📢 곧 경기가 시작됩니다!'
 }

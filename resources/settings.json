@@ -4,7 +4,10 @@
     "banVoteAllowMinimum" : 10,
     "banVoteExecuteMinimum" : 7,
 
-    "afkCountLimit" : 4,
+    "afkCountLimit" : 3,
+
+    "afkCommandAutoKick" : true,
+    "afkCommandAutoKickAllowMillisecs" : 120000,
 
     "chatFiltering" : true,
 
@@ -37,5 +40,11 @@
 
     "antiMuteAbusing" : true,
     "muteAllowIntervalMillisecs" : 180000,
-    "muteDefaultMillisecs" : 1800000
+    "muteDefaultMillisecs" : 180000,
+
+    "antiGameAbscond" : true,
+    "gameAbscondBanMillisecs" : 120000,
+
+    "rerollWinStreak" : true,
+    "rerollWinstreakCriterion" : 5
 }

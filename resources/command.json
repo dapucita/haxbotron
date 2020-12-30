@@ -32,17 +32,22 @@
     "_superSubbanclearall" : "all",
     "_superSubbanlist" : "banlist",
 
-    "about" : "!about",
-    "afk" : "!afk",
-    "freeze" : "!freeze",
-    "help" : "!help",
-    "list" : "!list",
-    "mute" : "!mute",
-    "poss" : "!poss",
-    "scout" : "!scout",
-    "stats" : "!stats",
-    "statsreset" : "!statsreset",
-    "streak" : "!streak",
-    "super" : "!super",
-    "vote" : "!vote"
+    "_disabledCommandList": [
+        "sampledisabledcommandname1"
+        ,"sampledisabledcommandname2"
+    ],
+
+    "about" : "about",
+    "afk" : "afk",
+    "freeze" : "freeze",
+    "help" : "help",
+    "list" : "list",
+    "mute" : "mute",
+    "poss" : "poss",
+    "scout" : "scout",
+    "stats" : "stats",
+    "statsreset" : "statsreset",
+    "streak" : "streak",
+    "super" : "super",
+    "vote" : "vote"
 }

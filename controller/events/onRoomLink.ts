@@ -9,7 +9,7 @@ export function onRoomLinkListener(url: string): void {
         var roomLinkValue: any = roomLinkElement[0].getElementsByTagName('a');
         console.log(roomLinkValue[0].href); // room link (url)
         */
-       
+
     window.roomURIlink = url;
     window.logger.i(`This room has a link now: ${url}`);
 }

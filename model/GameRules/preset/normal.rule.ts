@@ -1,23 +1,23 @@
-import { GameRule } from "./GameRule";
-import * as gbhothuge from "../../resources/stadium/gbhothuge.hbs";
-// import * as tiny from "../../stadium/tiny.hbs";
+import { GameRule } from "../GameRule";
+import * as gbhothuge from "../../../resources/stadium/gbhothuge.hbs";
+import * as gbtraining from "../../../resources/stadium/gbtraining.hbs";
 
 export var gameRule: GameRule = {
-    ruleName: "captain",
+    ruleName: "normal",
     ruleVersion: "0.0.1",
     ruleAuthor: "Haxbotron",
     ruleDescripttion: "Haxbotron default game rule",
     requisite: {
         minimumPlayers: 8,
-        maximumTeamLimit: 4,
-        minimumTeamLimit: 4,
+        eachTeamPlayers: 4,
         timeLimit: 3,
         scoreLimit: 3,
         teamLock: true
     },
+    autoAdmin: true,
     autoOperating: false,
-    captain: true,
+    captain: false,
     statsRecord: true,
     defaultMap: gbhothuge.stadiumText,
-    readyMap: gbhothuge.stadiumText
+    readyMap: gbtraining.stadiumText
 }

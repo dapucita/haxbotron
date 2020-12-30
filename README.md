@@ -33,6 +33,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 - [Player Hierarchy](https://github.com/dapucita/haxbotron/wiki/Player-Hierarchy)
 - [Placeholders for interpolation](https://github.com/dapucita/haxbotron/wiki/Placeholders-for-interpolation)
 - [Anti-Trolling options](https://github.com/dapucita/haxbotron/wiki/AntiTrolling-Options)
+- [How to disable some game commands](https://github.com/dapucita/haxbotron/wiki/How-to-disable-some-game-commands)
 - [Colorset for Game Messages](https://github.com/dapucita/haxbotron/wiki/Colorset-for-Game-Messages)
 - [Other Utilities](https://github.com/dapucita/haxbotron/wiki/Utilities-for-this-bot)
 

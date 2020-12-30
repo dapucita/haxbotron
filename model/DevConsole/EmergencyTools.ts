@@ -53,7 +53,7 @@ export const EmergencyTools = {
             window.room.setPassword(password);
             console.log(`[EMERGENCY.PASSWORD] password is changed. key:${password}`);
         } else { // can be null
-            window.room.setPassword();
+            window.room.setPassword(null);
             console.log(`[EMERGENCY.PASSWORD] password is cleared.`);
         }
     }

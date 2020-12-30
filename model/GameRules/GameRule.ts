@@ -5,13 +5,12 @@ export interface GameRule {
     ruleDescripttion?: string; // simple description of this rule
     requisite: {
         minimumPlayers: number; // minimum number of players needs for apply this rule
-        // maximumPlayers?: number; // maximum number of players limits for apply this rule // deprecated
-        maximumTeamLimit: number; // how many players can be in each team?
-        minimumTeamLimit: number; // how many players are need at least in each team?
+        eachTeamPlayers: number; // how many players are need in each team?
         timeLimit: number; // limit time for end the game
         scoreLimit: number; // limit score for end the game
         teamLock: boolean; // limit moving teams by self
     }
+    autoAdmin: boolean; // auto appoint admin
     autoOperating: boolean; // auto emcee mode
     captain: boolean; // captain mode. captain of each team can pick their team player.
     statsRecord: boolean; // record game results on statistics system.

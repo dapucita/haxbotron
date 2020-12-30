@@ -5,7 +5,16 @@ export const scheduler = {
     advertise: '📢 Haxbotron🤖 - Open Source Bot Project\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,shutdown: '📢 This room will be shutdown soon. Thanks for joinning our game!'
     ,afkKick: '📢 kicked: AFK'
+    ,afkCommandTooLongKick: '📢 AFK over 2mins'
     ,afkDetect: '📢 @{targetName} #{targetID} has been away from keyboard. Press any key, or would be kicked.'
+    ,autoUnmute: '🔊 Player {targetName}#{targetID} is unmuted by system.'
+    ,banVoteAutoNotify: '🗳️ Voting to ban is in progress (!vote #ID) : {voteList}'
+}
+
+export const teamName = {
+    specTeam: 'Spec'
+    ,redTeam: 'Red'
+    ,blueTeam: 'Blue'
 }
 
 export const antitrolling = {
@@ -14,7 +23,7 @@ export const antitrolling = {
         ,floodWarning: '📢 If you reconnect several times in a short period of time, you may be kicked.'
     }
     ,chatFlood: {
-        muteReason: '🔇 You are muted for too many chats.(30mins) Admin player can unmute it.'
+        muteReason: '🔇 You are muted for too many chats.(3mins) Admin player can unmute it.'
     }
     ,ogFlood: {
         banReason: '🚫 too much OGs(5mins)'
@@ -33,6 +42,9 @@ export const antitrolling = {
     ,afkAbusing: {
         cannotReason: '❌ You can\'t use afk command during a game.'
     }
+    ,gameAbscond: {
+        banReason: '🚫 Abscond from game(2mins)'
+    }
 }
 
 export const command = {
@@ -49,7 +61,7 @@ export const command = {
         ,statsreset: '📑 !statsreset resets your statistical information. It cannot be recovered.'
         ,poss: '📑 !poss shows you possessions rate of both Read and Blue team.'
         ,streak: '📑 !streak shows you which team is being on a winning streak.'
-        ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped.'
+        ,afk: '📑 !afk MSG switches to idle status. MSG is the reason, and it can be skipped. You might be kicked if sleep too long.'
         ,list: '📑 !list red/blue/spec/mute/afk shows you all players list of that type.'
         ,freeze: '📑 !freeze mutes or unmutes all players.'
         ,mute: '📑 !mute #ID : prohibits the player whose id is ID to chat. Or unmute if the player is already muted. (eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
@@ -65,7 +77,8 @@ export const command = {
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
     ,streak: '📊 {streakTeamName} is now hitting a winning streak of {streakTeamCount} games!'
     ,afk: {
-        setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
+        _WarnAfkTooLong: '📢 You might be kicked if sleep too long. (afk for 2mins)'
+        ,setAfk: '💤 {targetName}#{ticketTarget} is now away from keyboard. ({targetAfkReason})'
         ,unAfk: '📢 {targetName}#{ticketTarget} has came back from afk mode!'
         ,muteNotifyWarn: '❌ Notification messages for AFK will not be shown to other players when you are muted.'
         ,startRecord: '📊 Enough players has joined, so the game\'s result will be recorded from now.'
@@ -75,7 +88,7 @@ export const command = {
         _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
         ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
         ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.(30mins) You can command it againt for release.'
-        ,successUnmute: '🔊 {targetName}#{ticketTarget} player is unmuted.'
+        ,successUnmute: '🔊 Player {targetName}#{ticketTarget} is unmuted.'
         ,muteAbusingWarn: '❌ You can\'t mute again this player in too short time. (3mins)'
     }
     ,super: {
@@ -129,10 +142,11 @@ export const command = {
         _ErrorNoPlayer: '❌ ❌ Wrong player ID. You can only target numeric ID. (eg: !vote #12)'
         ,_ErrorNoPermission: '❌ There are not enough players for voting.'
         ,voteBanMessage: '🚫 ban vote(5mins)'
-        ,voteComplete: '🗳️ You did vote. You can cancel the vote by type this command again.'
-        ,voteCancel: '🗳️ You have cancelled the vote for that player.'
+        ,voteComplete: '🗳️ You did vote to {targetName}#{targetID}. You can cancel the vote by type this command again.'
+        ,voteCancel: '🗳️ You have cancelled the vote for that player {targetName}#{targetID}.'
         ,voteIntroduce : '🗳️ You can vote for or cancel a kick for a specific player. (eg: !vote #12)'
         ,voteStatus : '🗳️ You have currently voted for kick {targetName}#{targetID}.'
+        ,voteAutoNotify: '🗳️ Voting to ban is in progress: {voteList}'
     }
 }
 
@@ -178,7 +192,8 @@ export const onStop = {
 
 export const onVictory = {
     victory: '🎉 The game has ended. Scores {redScore}:{blueScore}!'
-    ,burning: '🔥 {streakTeamName} team is now hitting a winning streak of {streakTeamCount}games !!!'
+    ,burning: '🔥 {streakTeamName} team is now hitting a winning streak of {streakTeamCount} games !!!'
+    ,reroll: '📢 Congratulations on winning {streakTeamCount} games! Now the team will automatically shuffle.'
 }
 
 export const onKick = {
@@ -203,4 +218,8 @@ export const onGoal = {
 
 export const onAdminChange = {
     afknoadmin: '🚫 The player in afk mode can\'t be admin.'
+}
+
+export const onGamePause = {
+    readyForStart: '📢 The game will start soon!'
 }

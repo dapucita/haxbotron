@@ -6,40 +6,36 @@ import * as BotSettings from "./resources/settings.json";
 import * as LangRes from "./resources/strings";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
-import { RoomConfig } from "./model/RoomObject/RoomConfig";
 import { Player } from "./model/GameObject/Player";
 import { Logger } from "./controller/Logger";
 import { PlayerObject } from "./model/GameObject/PlayerObject";
 import { ScoresObject } from "./model/GameObject/ScoresObject";
-import { gameRule } from "./model/GameRules/captain.rule";
+import { gameRule } from "./model/GameRules/preset/captain.rule";
 import { KickStack } from "./model/GameObject/BallTrace";
 import { getUnixTimestamp } from "./controller/Statistics";
 import { TeamID } from "./model/GameObject/TeamID";
 import { getCookieFromHeadless } from "./controller/RoomTools";
 import { EmergencyTools } from "./model/DevConsole/EmergencyTools";
+import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 
-const botRoomConfig: RoomConfig = JSON.parse(getCookieFromHeadless('botConfig'));
+// load settings
+window.settings = {
+    room: {
+        config: JSON.parse(getCookieFromHeadless('botConfig'))
+    },
+    game: {
+        rule: gameRule
+    }
+}
 
-console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed via cookie(${botRoomConfig.token})`);
+// init global properties
+console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed via cookie(${window.settings.room.config.token})`);
 
-window.playerList = new Map(); // playerList:Player[] is an Map object. // playerList.get(player.id).name; : usage for playerList
+window.playerList = new Map(); // player list (key: player.id, value: Player), usage: playerList.get(player.id).name
 
 window.winningStreak = { // count of winning streak
-    red: 0, blue: 0,
-    getName: function(): string {
-        if(this.red >= this.blue) { // include when the value is red 0, blue 0
-            return "Red";
-        } else {
-            return "Blue";
-        }
-    },
-    getCount: function(): number {
-        if(this.red >= this.blue) { // include when the value is red 0, blue 0
-            return this.red;
-        } else {
-            return this.blue;
-        }
-    }
+    count: 0,
+    teamID: 0
 };
 
 window.ballStack = KickStack.getInstance();
@@ -50,24 +46,39 @@ window.isStatRecord = false;
 window.isGamingNow = false;
 window.isMuteAll = false;
 
+window.banVoteCache = [];
+
 window.antiTrollingOgFloodCount = [];
 window.antiTrollingChatFloodCount = [];
 window.antiInsufficientStartAbusingCount = [];
 window.antiPlayerKickAbusingCount = [];
 
-window.room = window.HBInit(botRoomConfig);
+window.room = window.HBInit(window.settings.room.config);
 initialiseRoom();
 
-var scheduledTimer = setInterval(function(): void {
+var advertisementTimer = setInterval(() => {
+    window.room.sendAnnouncement(LangRes.scheduler.advertise, null, 0x777777, "normal", 0); // advertisement
+
+    refreshBanVoteCache(); // update banvote status cache
+    if(window.banVoteCache.length >= 1) { // if there are some votes (include top voted players only)
+        let placeholderVote = {
+            voteList: ''
+        }
+        for(let i: number = 0; i < window.banVoteCache.length; i++) {
+            if(window.playerList.has(window.banVoteCache[i])) {
+                placeholderVote.voteList += `${window.playerList.get(window.banVoteCache[i])!.name}#${window.banVoteCache[i]} `;
+            }
+        }
+        window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.banVoteAutoNotify, placeholderVote), null, 0x00FF00, "normal", 0); //notify it
+    }
+}, 60000) // 1min
+
+var scheduledTimer = setInterval(() => {
     const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
 
-    var placeholderScheduler = {
+    let placeholderScheduler = {
         targetID: 0,
         targetName: '',
-    }
-
-    if(Math.random() < 0.25) {
-        window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.advertise, placeholderScheduler), null, 0x777777, "normal", 0); // advertisement
     }
 
     window.playerList.forEach((player: Player) => { // afk detection system & auto unmute system
@@ -75,14 +86,19 @@ var scheduledTimer = setInterval(function(): void {
         placeholderScheduler.targetID = player.id;
         placeholderScheduler.targetName = player.name;
 
-        //check muted player and unmute when it's time to unmute
+        // check muted player and unmute when it's time to unmute
         if(player.permissions.mute === true && nowTimeStamp > player.permissions.muteExpire) {
             player.permissions.mute = false; //unmute
             window.room.sendAnnouncement(Tst.maketext(LangRes.scheduler.autoUnmute, placeholderScheduler), null, 0x479947, "normal", 0); //notify it
         }
+
+        // when afk too long kick option is enabled, then check sleeping with afk command and kick if afk too long
+        if(BotSettings.afkCommandAutoKick === true && player.permissions.afkmode === true && nowTimeStamp > player.permissions.afkdate + BotSettings.afkCommandAutoKickAllowMillisecs) {
+            window.room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkCommandTooLongKick, placeholderScheduler), false); // kick
+        }
         
         // check afk
-        if(window.isGamingNow === true) { // if the game is in playing
+        if(window.isGamingNow === true && window.isStatRecord === true) { // if the game is in playing
             if(player.team !== TeamID.Spec) { // if the player is not spectators(include afk mode)
                 if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
                 window.room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
@@ -106,7 +122,7 @@ var scheduledTimer = setInterval(function(): void {
             }
         }
     });
-}, 15000); // by 15seconds
+}, 5000); // by 5seconds
 
 function initialiseRoom(): void {
     // Write initialising processes here.
@@ -118,7 +134,7 @@ function initialiseRoom(): void {
     window.logger.i(`The game mode is '${window.isGamingNow}' now(by default).`);
 
     // declare function in window object
-    window.sendRoomChat = function(msg: string, playerID?: number): void {
+    window.sendRoomChat = function(msg: string, playerID: number | null): void {
         if(playerID !== null) {
             window.room.sendAnnouncement(msg, playerID, 0xFFFF84, "bold", 2);
         } else {
@@ -126,10 +142,10 @@ function initialiseRoom(): void {
         }
     }
 
-    window.room.setCustomStadium(gameRule.defaultMap);
-    window.room.setScoreLimit(gameRule.requisite.scoreLimit);
-    window.room.setTimeLimit(gameRule.requisite.timeLimit);
-    window.room.setTeamsLock(gameRule.requisite.teamLock);
+    window.room.setCustomStadium(window.settings.game.rule.readyMap);
+    window.room.setScoreLimit(window.settings.game.rule.requisite.scoreLimit);
+    window.room.setTimeLimit(window.settings.game.rule.requisite.timeLimit);
+    window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
 
     // Linking Event Listeners
     window.room.onPlayerJoin = (player: PlayerObject): void => eventListener.onPlayerJoinListener(player);

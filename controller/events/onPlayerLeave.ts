@@ -1,14 +1,17 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
+import * as BotSettings from "../../resources/settings.json";
+import * as Ban from "../Ban";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { updateAdmins } from "../RoomTools";
 import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { putTeamNewPlayerFullify, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function onPlayerLeaveListener(player: PlayerObject): void {
     // Event called when a player leaves the room.
+    let leftTimeStamp: number = getUnixTimestamp();
 
     if (window.playerList.has(player.id) == false) { // if the player wasn't registered in playerList
         return; // exit this event
@@ -23,35 +26,61 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
         playerStatsAssists: window.playerList.get(player.id)!.stats.assists,
         playerStatsOgs: window.playerList.get(player.id)!.stats.ogs,
         playerStatsLosepoints: window.playerList.get(player.id)!.stats.losePoints,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
 
     window.logger.i(`${player.name}#${player.id} has left.`);
 
     // check number of players joined and change game mode
-    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
-        if (window.isStatRecord !== true) {
+    let activePlayersNumber: number = roomActivePlayersNumberCheck();
+    if (window.settings.game.rule.statsRecord === true && activePlayersNumber >= window.settings.game.rule.requisite.minimumPlayers) {
+        if (window.isStatRecord === false) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.startRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;
         }
+        // when auto emcee mode is enabled
+        if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
+            if(player.team !== TeamID.Spec) {
+                putTeamNewPlayerFullify(); // put new players into the team this player has left
+            }
+        }
     } else {
-        if (window.isStatRecord !== false) {
+        if (window.isStatRecord === true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onLeft.stopRecord, placeholderLeft), null, 0x00FF00, "normal", 0);
             window.isStatRecord = false;
+            // when auto emcee mode is enabled and lack of players
+            if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
+                window.room.stopGame(); // stop for start readymode game
+                window.winningStreak = { // init
+                    count: 0,
+                    teamID: 0
+                };
+            } 
         }
     }
 
-    window.playerList.get(player.id)!.entrytime.leftDate = getUnixTimestamp(); // save left time
+    // if anti abscond option is enabled
+    if(BotSettings.antiGameAbscond === true && window.isStatRecord === true) {
+        // if this player is in match(team player), fixed-term ban this player
+        if(window.playerList.get(player.id)!.team !== TeamID.Spec) {
+            window.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
+            Ban.bListAdd({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
+        }
+    }
+
+    window.playerList.get(player.id)!.entrytime.leftDate = leftTimeStamp; // save left time
     setPlayerData(window.playerList.get(player.id)!); // save
     window.playerList.delete(player.id); // delete from player list
 
-    updateAdmins(); // update admin
+    if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
+        updateAdmins(); // update admin
+    }
 }

@@ -1,14 +1,14 @@
-import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
-import { Player } from "../../model/GameObject/Player";
-import { getPlayerData, setPlayerData } from "../Storage";
-import { getUnixTimestamp } from "../Statistics";
-import { roomActivePlayersNumberCheck, updateAdmins } from "../RoomTools";
 import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject";
+import { Player } from "../../model/GameObject/Player";
+import { getPlayerData, setPlayerData } from "../Storage";
+import { getUnixTimestamp } from "../Statistics";
+import { setDefaultStadiums, updateAdmins } from "../RoomTools";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();
@@ -27,15 +27,15 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         playerStatsAssists: 0,
         playerStatsOgs: 0,
         playerStatsLosepoints: 0,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount(),
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count,
         banListReason: ''
     };
 
@@ -96,6 +96,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 muteExpire: loadedData.muteExpire,
                 afkmode: false,
                 afkreason: '',
+                afkdate: 0,
                 superadmin: false
             }, {
                 rejoinCount: loadedData.rejoinCount,
@@ -155,6 +156,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             muteExpire: 0,
             afkmode: false,
             afkreason: '',
+            afkdate: 0,
             superadmin: false
         }, {
             rejoinCount: 0,
@@ -165,23 +167,38 @@ export function onPlayerJoinListener(player: PlayerObject): void {
 
     setPlayerData(window.playerList.get(player.id)!); // register(or update) in localStorage
 
-    updateAdmins(); // check there are any admin players, if not make an admin player.
-
+    if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
+        updateAdmins(); // check there are any admin players, if not make an admin player.
+    }
+    
     // send welcome message to new player. other players cannot read this message.
     window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
 
     // check number of players joined and change game mode
-    if (gameRule.statsRecord === true && roomActivePlayersNumberCheck() >= gameRule.requisite.minimumPlayers) {
-        if (window.isStatRecord !== true) {
+    let activePlayersNumber: number = roomActivePlayersNumberCheck();
+    if (window.settings.game.rule.statsRecord === true && activePlayersNumber >= window.settings.game.rule.requisite.minimumPlayers) {
+        if (window.isStatRecord === false) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.startRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
             window.isStatRecord = true;
+            if(window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
+                // if auto emcee mode is enabled and the match has been playing as ready mode
+                window.room.stopGame(); // stop game
+            }
         }
     } else {
-        if (window.isStatRecord !== false) {
+        if (window.isStatRecord === true) {
             window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.stopRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
             window.isStatRecord = false;
         }
     }
 
-    //setDefaultStadiums(); // check number of players and auto-set stadium
+    // when auto emcee mode is enabled
+    if(window.settings.game.rule.autoOperating === true) {
+        putTeamNewPlayerConditional(player.id); // move team
+        if(window.isGamingNow === false) {
+            // if game is not started then start the game for active players
+            setDefaultStadiums(); // set stadium
+            window.room.startGame();
+        }
+    }
 }

@@ -1,28 +1,27 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import * as Ban from "../Ban";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
-import { roomTeamPlayersNumberCheck } from "../RoomTools";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 
-export function onGameStartListener(byPlayer: PlayerObject): void {
+export function onGameStartListener(byPlayer: PlayerObject | null): void {
     /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
     var placeholderStart = {
         playerID: 0,
         playerName: '',
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount(),
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count,
         teamExpectationRed: 0,
         teamExpectationBlue: 0
     };
@@ -37,15 +36,15 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
     }
 
     let msg = `The game(stat record:${window.isStatRecord}) has been started.`;
-    if (byPlayer !== null && byPlayer.id != 0) {
+    if (byPlayer !== null && byPlayer.id !== 0) {
         placeholderStart.playerID = byPlayer.id;
         placeholderStart.playerName = byPlayer.name;
         msg += `(by ${byPlayer.name}#${byPlayer.id})`;
     }
-    if (gameRule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
+    if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
-        if (BotSettings.antiInsufficientStartAbusing === true) {
-            if (roomTeamPlayersNumberCheck(TeamID.Red) < gameRule.requisite.minimumTeamLimit || roomTeamPlayersNumberCheck(TeamID.Blue) < gameRule.requisite.minimumTeamLimit) {
+        if (BotSettings.antiInsufficientStartAbusing === true && byPlayer !== null) {
+            if (roomTeamPlayersNumberCheck(TeamID.Red) < window.settings.game.rule.requisite.eachTeamPlayers || roomTeamPlayersNumberCheck(TeamID.Blue) < window.settings.game.rule.requisite.eachTeamPlayers) {
                 let abusingID: number = byPlayer.id || 0;
                 let abusingTimestamp: number = getUnixTimestamp();
                 window.logger.i(`The game will be stopped because of insufficient players in each team.`);
@@ -74,6 +73,9 @@ export function onGameStartListener(byPlayer: PlayerObject): void {
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.startRecord, placeholderStart), null, 0x00FF00, "normal", 0);
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.expectedWinRate, placeholderStart), null, 0x00FF00, "normal", 0);
 
+        if(window.settings.game.rule.autoOperating === true) { // if game rule is set as auto operating mode
+            window.room.pauseGame(true); // pause (and will call onGamePause event)
+        }
     } else {
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.stopRecord, placeholderStart), null, 0x00FF00, "normal", 0);
     }

@@ -1,59 +1,43 @@
 import { PlayerObject } from "../model/GameObject/PlayerObject";
-import { gameRule } from "../model/GameRules/captain.rule";
+import { convertTeamID2Name, TeamID } from "../model/GameObject/TeamID";
 import * as Tst from "./Translator";
 import * as LangRes from "../resources/strings";
-import { TeamID } from "../model/GameObject/TeamID";
 
 export function setDefaultStadiums(): void {
     // set stadium maps as default setting
-    if(gameRule.statsRecord === true && window.isStatRecord === true) {
-        window.room.setCustomStadium(gameRule.defaultMap); // if game mode is 'stats'
+    if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) {
+        window.room.setCustomStadium(window.settings.game.rule.defaultMap); // if game mode is 'stats'
     } else {
-        window.room.setCustomStadium(gameRule.readyMap); // if game mode is 'ready'
+        window.room.setCustomStadium(window.settings.game.rule.readyMap); // if game mode is 'ready'
     }
 }
 
 export function setDefaultRoomLimitation(): void {
-    window.room.setScoreLimit(gameRule.requisite.scoreLimit);
-    window.room.setTimeLimit(gameRule.requisite.timeLimit);
-    window.room.setTeamsLock(gameRule.requisite.teamLock);
-}
-
-export function roomPlayersNumberCheck(): number {
-    // return number of all players of this room (except bot host)
-    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0).length;
-}
-
-export function roomActivePlayersNumberCheck(): number {
-    // return number of players actually atcivated(not afk)
-    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true).length;
-}
-
-export function roomTeamPlayersNumberCheck(team: TeamID): number {
-    // return number of players in each team
-    return window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === team).length;
+    window.room.setScoreLimit(window.settings.game.rule.requisite.scoreLimit);
+    window.room.setTimeLimit(window.settings.game.rule.requisite.timeLimit);
+    window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
 }
 
 export function updateAdmins(): void {
-    var placeholderUpdateAdmins = {
+    let placeholderUpdateAdmins = {
         playerID: 0,
         playerName: '',
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
 
     // Get all players except the host (id = 0 is always the host)
-    var players = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true); // only no afk mode players
+    let players = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode !== true); // only no afk mode players
     if (players.length == 0) return; // If no players left, do nothing.
     if (players.find((player: PlayerObject) => player.admin) != null) return; // Do nothing if any admin player is still left.
-    
+
     placeholderUpdateAdmins.playerID = players[0].id;
     placeholderUpdateAdmins.playerName = window.playerList.get(players[0].id)!.name;
 
@@ -63,7 +47,23 @@ export function updateAdmins(): void {
     window.room.sendAnnouncement(Tst.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
 }
 
+export function shuffleArray<T>(array: T[]): T[] {
+    if (!Array.isArray(array)) {
+        throw new TypeError(`shuffleArray: Expected an Array, got ${typeof array} instead.`);
+    }
+
+    const oldArray = [...array];
+    let newArray = new Array<T>();
+
+    while (oldArray.length) {
+        const i = Math.floor(Math.random() * oldArray.length);
+        newArray = newArray.concat(oldArray.splice(i, 1));
+    }
+
+    return newArray;
+}
+
 export function getCookieFromHeadless(name: string): string {
-    var result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
+    let result = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)').exec(document.cookie);
     return result ? result[1] : '';
 }

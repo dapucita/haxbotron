@@ -1,24 +1,23 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { setDefaultStadiums } from "../RoomTools";
-import { gameRule } from "../../model/GameRules/captain.rule";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import { TeamID } from "../../model/GameObject/TeamID";
+import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { setDefaultStadiums } from "../RoomTools";
 
 export function onStadiumChangeListner(newStadiumName: string, byPlayer: PlayerObject): void {
     var placeholderStadium = { 
         playerID: 0,
         playerName: '',
         stadiumName: newStadiumName,
-        gameRuleName: gameRule.ruleName,
-        gameRuleDescription: gameRule.ruleDescripttion,
-        gameRuleLimitTime: gameRule.requisite.timeLimit,
-        gameRuleLimitScore: gameRule.requisite.scoreLimit,
-        gameRuleNeedMin: gameRule.requisite.minimumPlayers,
+        gameRuleName: window.settings.game.rule.ruleName,
+        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
+        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
+        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
+        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
         possTeamRed: window.ballStack.possCalculate(TeamID.Red),
         possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: window.winningStreak.getName(),
-        streakTeamCount: window.winningStreak.getCount()
+        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
+        streakTeamCount: window.winningStreak.count
     };
 
     // Event called when the stadium is changed.
