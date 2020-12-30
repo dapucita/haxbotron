@@ -32,7 +32,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 - [Emergency tools in game](https://github.com/dapucita/haxbotron/wiki/Emergency-tools-on-GUI-Launcher)
 - [Player Hierarchy](https://github.com/dapucita/haxbotron/wiki/Player-Hierarchy)
 - [Placeholders for interpolation](https://github.com/dapucita/haxbotron/wiki/Placeholders-for-interpolation)
-- [Anti-Trolling options](https://github.com/dapucita/haxbotron/wiki/AntiTrolling-Options)
+- [Anti-Trolling options](https://github.com/dapucita/haxbotron/wiki/AntiTrolling-Options) / [트롤링 방지 옵션(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%ED%8A%B8%EB%A1%A4%EB%A7%81-%EB%B0%A9%EC%A7%80-%EC%98%B5%EC%85%98)
 - [How to disable some game commands](https://github.com/dapucita/haxbotron/wiki/How-to-disable-some-game-commands)
 - [Colorset for Game Messages](https://github.com/dapucita/haxbotron/wiki/Colorset-for-Game-Messages)
 - [Other Utilities](https://github.com/dapucita/haxbotron/wiki/Utilities-for-this-bot)
