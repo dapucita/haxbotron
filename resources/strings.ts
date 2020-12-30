@@ -45,6 +45,9 @@ export const antitrolling = {
     ,gameAbscond: {
         banReason: '🚫 게임중 탈주(2분)'
     }
+    ,malAct: {
+        banReason: '🚫 악의적인 행위 감지'
+    }
 }
 
 export const command = {

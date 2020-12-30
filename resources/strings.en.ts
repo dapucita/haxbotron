@@ -45,6 +45,9 @@ export const antitrolling = {
     ,gameAbscond: {
         banReason: '🚫 Abscond from game(2mins)'
     }
+    ,malAct: {
+        banReason: '🚫 Malicious behaviour is detected'
+    }
 }
 
 export const command = {

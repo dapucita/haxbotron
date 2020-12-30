@@ -1,4 +1,6 @@
 {
+    "maliciousBehaviourBanCriterion" : 20,
+
     "banVoteEnable" : true,
     "banVoteBanMillisecs" : 300000,
     "banVoteAllowMinimum" : 10,

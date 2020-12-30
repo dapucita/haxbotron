@@ -32,6 +32,7 @@ export function setPlayerData(player: Player): void {
         rejoinCount: player.entrytime.rejoinCount, // How many rejoins this player has made.
         joinDate: player.entrytime.joinDate, // player join time
         leftDate: player.entrytime.leftDate, // player left time
+        malActCount: player.permissions.malActCount // count for malicious behaviour like Brute force attack
     }
     saveStorageItem(player.auth, JSON.stringify(playerData)); // save and upload data
 }

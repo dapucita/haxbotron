@@ -52,6 +52,7 @@ export interface PlayerPermissions {
     afkmode: boolean; // Is this player away from keyboards? If the player sets afk mode, the value is true. It is not a mean for auto dectecting and kicking afk players.
     afkreason: string; // the reason why this player is idle(afk) status.
     afkdate: number; // afk begin time stamp. 0 means no data.
+    malActCount: number; // count for malicious behaviour like Brute force attack
     superadmin: boolean; // Is this player super admin? It doesn't matter whether he/she is an admin.
     // admin permission is already decleared by admin: boolean.
 }
@@ -87,4 +88,5 @@ export interface PlayerStorage {
     rejoinCount: number; // How many rejoins this player has made.
     joinDate: number; // player join time
     leftDate: number; // player left time
+    malActCount: number; // count for malicious behaviour like Brute force attack
 }

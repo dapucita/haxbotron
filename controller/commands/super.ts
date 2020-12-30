@@ -1,10 +1,11 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { superAdminLogin } from "../SuperAdmin";
-import { BanList } from "../../model/PlayerBan/BanList";
+import * as BotSettings from "../../resources/settings.json";
 import * as LangRes from "../../resources/strings";
 import * as CommandSet from "../../resources/command.json";
 import * as Ban from "../Ban";
 import * as Tst from "../Translator";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { superAdminLogin } from "../SuperAdmin";
+import { BanList } from "../../model/PlayerBan/BanList";
 
 export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: string): void {
     if (message !== undefined) {
@@ -16,8 +17,16 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                             window.playerList.get(byPlayer.id)!.permissions.superadmin = true; // set super admin
                             //setPlayerData(playerList.get(playerID)); // update
                             window.room.sendAnnouncement(LangRes.command.super.loginSuccess, byPlayer.id, 0x479947, "normal", 2);
+                            window.logger.i(`${byPlayer.name}#${byPlayer.id} did successfully login to super admin with the key. (KEY ${submessage})`);
                         } else {
+                            window.playerList.get(byPlayer.id)!.permissions.malActCount++; // add malicious behaviour count
                             window.room.sendAnnouncement(LangRes.command.super.loginFail, byPlayer.id, 0xFF7777, "normal", 2);
+                            window.logger.i(`${byPlayer.name}#${byPlayer.id} has failed login to super admin and logged as malicious behaviour. (KEY ${submessage})`);
+                        
+                            if(window.playerList.get(byPlayer.id)!.permissions.malActCount >= BotSettings.maliciousBehaviourBanCriterion) {
+                                // This player will be permanently banned if it fails to exceed limit.
+                                window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.malAct.banReason, true); // ban
+                            }
                         }
                     } else {
                         window.room.sendAnnouncement(LangRes.command.super.loginFailNoKey, byPlayer.id, 0xFF7777, "normal", 2);
@@ -34,6 +43,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                     window.playerList.get(byPlayer.id)!.permissions.superadmin = false; // disqualify super admin
                     //setPlayerData(playerList.get(playerID)); // update
                     window.room.sendAnnouncement(LangRes.command.super.logoutSuccess, byPlayer.id, 0x479947, "normal", 2);
+                    window.logger.i(`${byPlayer.name}#${byPlayer.id} did logout from super admin.`);
                 } else {
                     window.room.sendAnnouncement(LangRes.command.super._ErrorNoPermission, byPlayer.id, 0xFF7777, "normal", 2);
                 }

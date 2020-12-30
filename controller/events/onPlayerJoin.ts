@@ -97,6 +97,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 afkmode: false,
                 afkreason: '',
                 afkdate: 0,
+                malActCount: loadedData.malActCount,
                 superadmin: false
             }, {
                 rejoinCount: loadedData.rejoinCount,
@@ -157,6 +158,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             afkmode: false,
             afkreason: '',
             afkdate: 0,
+            malActCount: 0,
             superadmin: false
         }, {
             rejoinCount: 0,
