@@ -1,0 +1,16 @@
+{
+    "name": "haxbotron",
+    "version": "0.3.0",
+    "description": "Haxbotron is a host bot application for Haxball game.",
+    "main": "out/index.js",
+    "author": "dapucita",
+    "license": "MIT",
+    "homepage": "https://github.com/dapucita/haxbotron",
+    "bugs": {
+        "url": "https://github.com/dapucita/haxbotron/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dapucita/haxbotron.git"
+    }
+}
