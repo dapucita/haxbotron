@@ -3,4 +3,3 @@
 node_modules/
 out/
 !webpack.config.js
-techmemo.md
