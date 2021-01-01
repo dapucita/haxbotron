@@ -31,6 +31,7 @@ export interface PlayerObject {
 }
 
 export interface PlayerStats {
+    rating: number; // HElo Rating points
     totals: number; // total games include wins
     wins: number; // the game wins
     goals: number; // not contains OGs.
@@ -75,6 +76,7 @@ export interface PlayerStorage {
     auth: string; // same meaning as in PlayerObject. It can used for identify each of players.
     conn: string; // same meaning as in PlayerObject.
     name: string; // player's name used in previous game.
+    rating: number; // HElo Rating points
     totals: number; // total games include wins
     wins: number; // the game wins
     goals: number; // not contains OGs.

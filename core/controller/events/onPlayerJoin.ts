@@ -83,6 +83,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
                 loadedData.passed = 0;
             }
             window.playerList.set(player.id, new Player(player, {
+                rating: loadedData.rating,
                 totals: loadedData.totals,
                 wins: loadedData.wins,
                 goals: loadedData.goals,
@@ -145,6 +146,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         // if new player
         // create a Player Object
         window.playerList.set(player.id, new Player(player, {
+            rating: 1000,
             totals: 0,
             wins: 0,
             goals: 0,

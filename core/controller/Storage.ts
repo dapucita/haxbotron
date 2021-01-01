@@ -19,6 +19,7 @@ export function setPlayerData(player: Player): void {
         conn: player.conn, // same meaning as in PlayerObject.
         name: player.name, // save for compare player's current name and previous name.
         totals: player.stats.totals, // total games include wins
+        rating: player.stats.rating, // HElo Rating points
         wins: player.stats.wins, // the game wins
         goals: player.stats.goals, // not contains OGs.
         assists: player.stats.assists, // count for assist goal
