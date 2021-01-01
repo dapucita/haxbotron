@@ -74,6 +74,13 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.expectedWinRate, placeholderStart), null, 0x00FF00, "normal", 0);
 
         if(window.settings.game.rule.autoOperating === true) { // if game rule is set as auto operating mode
+            // init each player's entry match time
+            window.room.getPlayerList()
+                .filter((eachPlayer: PlayerObject) => eachPlayer.team !== TeamID.Spec)
+                .forEach((eachPlayer: PlayerObject) => {
+                    window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime = 0;
+                });
+
             window.room.pauseGame(true); // pause (and will call onGamePause event)
         }
     } else {

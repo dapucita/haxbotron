@@ -108,7 +108,7 @@ export interface Room {
     /*
     If a game is in progress it returns the current score information. Otherwise it returns null
     */
-    getScores(): ScoresObject;
+    getScores(): ScoresObject | null;
 
     /*
     Returns the ball's position in the field or null if no game is in progress.

@@ -48,5 +48,8 @@
     "gameAbscondBanMillisecs" : 120000,
 
     "rerollWinStreak" : true,
-    "rerollWinstreakCriterion" : 5
+    "rerollWinstreakCriterion" : 5,
+
+    "guaranteePlayingTime" : true,
+    "guaranteedPlayingTimeSeconds" : 20
 }

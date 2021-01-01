@@ -107,14 +107,30 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 winningMessage += '\n' + Tst.maketext(LangRes.onVictory.reroll, placeholderVictory);
                 window.logger.i(`Whole players are shuffled. (${shuffledIDList.toString()})`);
             }
-        } else {
-            // or still under the limit, then change spec and loser team
-            teamPlayers.filter((player: PlayerObject) => player.team === loserTeamID).forEach((eachPlayer: PlayerObject) => {
-                window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move losers to Spec team
-            });
+        } else { // or still under the limit, then change spec and loser team
+            // this count is for determine how many players will be alive in loser team
+            let outPlayersCount: number = window.settings.game.rule.requisite.eachTeamPlayers; // init as full count.
+
+            teamPlayers
+                .filter((player: PlayerObject) => player.team === loserTeamID)
+                .forEach((eachPlayer: PlayerObject) => {
+                    if(BotSettings.guaranteePlayingTime === true) {
+                        // if guarantee playing time option is enabled
+                        if((scores.time - window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime) > BotSettings.guaranteedPlayingTimeSeconds) {
+                            window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move losers played enough time to Spec team
+                        } else {
+                            outPlayersCount--; // decrease count as this player will be alive in loser team
+                        }
+                    } else {
+                        // if guarantee playing time option is disabled
+                        window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // just move all losers to Spec team
+                    }
+                });
+
             // get new spec player list
             let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-            for(let i: number = 0; i < window.settings.game.rule.requisite.eachTeamPlayers && i < specActivePlayers.length; i++) {
+            
+            for(let i: number = 0; i < outPlayersCount && i < specActivePlayers.length; i++) {
                 window.room.setPlayerTeam(specActivePlayers[i].id, loserTeamID); // move Specs to challenger team
             }
         }

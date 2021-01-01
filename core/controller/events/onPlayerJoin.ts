@@ -102,7 +102,8 @@ export function onPlayerJoinListener(player: PlayerObject): void {
             }, {
                 rejoinCount: loadedData.rejoinCount,
                 joinDate: joinTimeStamp,
-                leftDate: loadedData.leftDate
+                leftDate: loadedData.leftDate,
+                matchEntryTime: 0
             }));
 
             // update player information in placeholder
@@ -163,7 +164,8 @@ export function onPlayerJoinListener(player: PlayerObject): void {
         }, {
             rejoinCount: 0,
             joinDate: joinTimeStamp,
-            leftDate: 0
+            leftDate: 0,
+            matchEntryTime: 0
         }));
     }
 

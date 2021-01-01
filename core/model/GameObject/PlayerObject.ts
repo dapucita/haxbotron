@@ -65,7 +65,8 @@ export interface PlayerAfkTrace {
 export interface PlayerEntryTime {
     rejoinCount: number, // How many rejoins this player has made.
     joinDate: number, // player join time stamp. 0 means no data.
-    leftDate: number // player left time stamp. 0 means no data.
+    leftDate: number, // player left time stamp. 0 means no data.
+    matchEntryTime: number // the entry time by seconds of the recent game match (0 means entry as starting member or just no match)
 }
 
 export interface PlayerStorage {
