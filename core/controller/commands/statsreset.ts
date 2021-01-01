@@ -3,6 +3,7 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setPlayerData } from "../Storage";
 
 export function cmdStatsReset(byPlayer: PlayerObject): void {
+    window.playerList.get(byPlayer.id)!.stats.rating = 1000;
     window.playerList.get(byPlayer.id)!.stats.totals = 0;
     window.playerList.get(byPlayer.id)!.stats.wins = 0;
     window.playerList.get(byPlayer.id)!.stats.goals = 0;

@@ -13,6 +13,7 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
                     ticketTarget: targetStatsID
                     ,targetName: window.playerList.get(targetStatsID)!.name
                     ,targetAfkReason: window.playerList.get(targetStatsID)!.permissions.afkreason
+                    ,targetStatsRating: window.playerList.get(targetStatsID)!.stats.rating
                     ,targetStatsTotal: window.playerList.get(targetStatsID)!.stats.totals
                     ,targetStatsWins: window.playerList.get(targetStatsID)!.stats.wins
                     ,targetStatsGoals: window.playerList.get(targetStatsID)!.stats.goals
@@ -39,6 +40,7 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
             ticketTarget: byPlayer.id
             ,targetName: window.playerList.get(byPlayer.id)!.name
             ,targetAfkReason: window.playerList.get(byPlayer.id)!.permissions.afkreason
+            ,targetStatsRating: window.playerList.get(byPlayer.id)!.stats.rating
             ,targetStatsTotal: window.playerList.get(byPlayer.id)!.stats.totals
             ,targetStatsWins: window.playerList.get(byPlayer.id)!.stats.wins
             ,targetStatsGoals: window.playerList.get(byPlayer.id)!.stats.goals
