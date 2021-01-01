@@ -43,5 +43,6 @@ export function saveStorageItem(key: string, value: string): void {
 }
 
 export function clearStorageItem(key: string): void {
+    localStorage.removeItem(key);
     window.clearStorageData(key);
 }
