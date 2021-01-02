@@ -83,6 +83,25 @@ function bListCheck(conn: string): string|boolean { // if banned, returns the re
     }
 }
 
+// export
+function bListHas(conn: string): boolean { // if banned returns true, or false
+    // init
+    let list: BanList[] = [];
+    let itemIndex: number;
+    // load
+    list = bListLoad(); // load
+    itemIndex = list.findIndex((element: BanList) => { // if the player is, return index. Or return -1
+        return element.conn === conn;
+    });    
+    // return
+    if(itemIndex == -1) {
+        return false; // if not banned, returns false
+    } else {
+        return true; // or true
+    }
+}
+
+// export
 function bListCheckRegisterTime(conn: string): number {
     // init
     let list: BanList[] = [];
@@ -99,6 +118,8 @@ function bListCheckRegisterTime(conn: string): number {
         return list[itemIndex].register;
     }
 }
+
+// export
 function bListCheckExpireTime(conn: string): number {
     // init
     let list: BanList[] = [];
@@ -128,4 +149,4 @@ function bListGetArray(): BanList[] { // get all banned players and returns by a
 // ------------------------------------------------------------------------ exports
 
 
-export { bListAdd, bListDelete, bListClear, bListCheck, bListGetArray, bListCheckRegisterTime, bListCheckExpireTime };
+export { bListAdd, bListDelete, bListClear, bListCheck, bListGetArray, bListHas, bListCheckRegisterTime, bListCheckExpireTime };

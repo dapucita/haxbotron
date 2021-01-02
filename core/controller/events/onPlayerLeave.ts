@@ -70,7 +70,8 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     // if anti abscond option is enabled
     if(BotSettings.antiGameAbscond === true && window.isStatRecord === true) {
         // if this player is in match(team player), fixed-term ban this player
-        if(window.playerList.get(player.id)!.team !== TeamID.Spec) {
+        if(window.playerList.get(player.id)!.team !== TeamID.Spec && Ban.bListHas(window.playerList.get(player.id)!.conn) === false ) {
+            // check this player already registered in ban list to prevent overwriting other ban reason.
             window.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
             Ban.bListAdd({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
         }
