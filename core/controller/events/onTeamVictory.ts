@@ -64,7 +64,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         let redStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Red?MatchResult.Win:MatchResult.Lose, redTeamPlayers);
         let blueStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Blue?MatchResult.Win:MatchResult.Lose, blueTeamPlayers);
         
-        window.logger.i(`ELO DEBUG stat record: ${redStatsRecords} | ${blueStatsRecords}`);
+        window.logger.i(`ELO DEBUG stat record: ${JSON.stringify(redStatsRecords)} | ${JSON.stringify(blueStatsRecords)}`);
 
         // calc average of team ratings
         let winTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(winnerTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers); 
