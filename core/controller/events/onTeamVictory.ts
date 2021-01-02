@@ -84,10 +84,10 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         blueStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
             let diffArray: number[] = []; 
             for(let i: number = 0; i < redStatsRecords.length; i++) {
-                diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, blueStatsRecords[i].matchKFactor));
+                diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, redStatsRecords[i].matchKFactor));
             }
             window.logger.i(`ELO DEBUG blue each diff: ${diffArray}`);
-            window.playerList.get(redTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
+            window.playerList.get(blueTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
         });
 
 
