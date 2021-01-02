@@ -64,9 +64,13 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         let redStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Red?MatchResult.Win:MatchResult.Lose, redTeamPlayers);
         let blueStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Blue?MatchResult.Win:MatchResult.Lose, blueTeamPlayers);
         
+        window.logger.i(`ELO DEBUG stat record: ${redStatsRecords.toString()} | ${blueStatsRecords.toString()}`);
+
         // calc average of team ratings
         let winTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(winnerTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers); 
         let loseTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(loserTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers);
+
+        window.logger.i(`ELO DEBUG rating mean: ${winTeamRatingsMean} | ${loseTeamRatingsMean}`);
         
         // get diff and update rating
         redStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
@@ -74,6 +78,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             for(let i: number = 0; i < blueStatsRecords.length; i++) {
                 diffArray.push(ratingHelper.calcBothDiff(eachItem, blueStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, blueStatsRecords[i].matchKFactor));
             }
+            window.logger.i(`ELO DEBUG red each diff: ${diffArray}`);
             window.playerList.get(redTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
         });
         blueStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
@@ -81,6 +86,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             for(let i: number = 0; i < redStatsRecords.length; i++) {
                 diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, blueStatsRecords[i].matchKFactor));
             }
+            window.logger.i(`ELO DEBUG blue each diff: ${diffArray}`);
             window.playerList.get(redTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
         });
 
