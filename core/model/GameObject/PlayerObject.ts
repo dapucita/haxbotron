@@ -1,3 +1,4 @@
+import { MatchKFactor } from "../Statistics/HElo";
 import { TeamID } from "./TeamID";
 
 export interface PlayerObject {
@@ -28,6 +29,16 @@ export interface PlayerObject {
     team: TeamID;
     // The player's position in the field, if the player is not in the field the value will be null.
     position: PlayerPosition;
+}
+
+export interface PlayerMatchRecord { // Temporary stat record for current match
+    goals: number; // not contains OGs.
+    assists: number; // count for assist goal
+    ogs: number; // it means 'own goal' (in Korean, '자책골')
+    losePoints: number; // it means the points this player lost (in Korean, '실점')
+    balltouch: number; // total count of touch(kick) ball
+    passed: number; // total count of pass success
+    factorK: MatchKFactor; // K Factor for HElo rating
 }
 
 export interface PlayerStats {

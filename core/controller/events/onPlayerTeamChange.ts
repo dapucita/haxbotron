@@ -3,6 +3,7 @@ import * as LangRes from "../../resources/strings";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { ScoresObject } from "../../model/GameObject/ScoresObject";
+import { MatchKFactor } from "../../model/Statistics/HElo";
 
 export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
     // Event called when a player team is changed.
@@ -31,6 +32,12 @@ export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer
                 return; // exit this event
             }
         }
+        if (window.settings.game.rule.statsRecord == true && window.isStatRecord == true) {
+            if(window.isGamingNow === true && changedPlayer.team !== TeamID.Spec) { // In the case of a substitute for previous player who abscond
+                window.playerList.get(changedPlayer.id)!.matchRecord.factorK = MatchKFactor.Replace; // set K Factor as a Replacement match
+            }
+        }
+
         window.playerList.get(changedPlayer.id)!.team = changedPlayer.team;
         window.logger.i(`${changedPlayer.name}#${changedPlayer.id} is moved team to ${convertTeamID2Name(changedPlayer.team)}.`);
     }

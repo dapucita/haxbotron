@@ -6,6 +6,7 @@ import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { MatchKFactor } from "../../model/Statistics/HElo";
 
 export function onGameStartListener(byPlayer: PlayerObject | null): void {
     /* Event called when a game starts.
@@ -79,6 +80,9 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
                 .filter((eachPlayer: PlayerObject) => eachPlayer.team !== TeamID.Spec)
                 .forEach((eachPlayer: PlayerObject) => {
                     window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime = 0;
+                    if(window.playerList.get(eachPlayer.id)!.stats.totals < 10) {
+                        window.playerList.get(eachPlayer.id)!.matchRecord.factorK = MatchKFactor.Placement; // set K Factor as a Placement match
+                    } // or default value is Normal match
                 });
 
             window.room.pauseGame(true); // pause (and will call onGamePause event)

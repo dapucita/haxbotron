@@ -6,13 +6,14 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setPlayerData } from "../Storage";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { shuffleArray } from "../RoomTools";
-import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { HElo, MatchKFactor, MatchResult, StatsRecord } from "../../model/Statistics/HElo";
 
 export function onTeamVictoryListener(scores: ScoresObject): void {
     // Event called when a team 'wins'. not just when game ended.
     // records vicotry in stats. total games also counted in this event.
     // Haxball developer Basro said, The game will be stopped automatically after a team victory. (victory -> stop)
-    var placeholderVictory = { 
+    let placeholderVictory = {
         teamID: TeamID.Spec,
         teamName: '',
         redScore: scores.red,
@@ -28,10 +29,14 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         streakTeamCount: window.winningStreak.count
     };
 
+    let ratingHelper: HElo = HElo.getInstance(); // get HElo instance for calc rating
+
     let winningMessage: string = '';
 
     let allActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.playerList.get(player.id)!.permissions.afkmode === false); // non afk players
-    let teamPlayers: PlayerObject[] = allActivePlayers.filter((player: PlayerObject) => player.team !== TeamID.Spec); // except Spectators players
+    let teamPlayers: PlayerObject[] = allActivePlayers.filter((eachPlayer: PlayerObject) => eachPlayer.team !== TeamID.Spec); // except Spectators players
+    let redTeamPlayers: PlayerObject[] = teamPlayers.filter((eachPlayer: PlayerObject) => eachPlayer.team === TeamID.Red);
+    let blueTeamPlayers: PlayerObject[] = teamPlayers.filter((eachPlayer: PlayerObject) => eachPlayer.team === TeamID.Blue);
 
     let winnerTeamID: TeamID;
     let loserTeamID: TeamID;
@@ -51,15 +56,63 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
     window.isGamingNow = false; // turn off
 
     if (window.settings.game.rule.statsRecord == true && window.isStatRecord == true) { // records when game mode is for stats recording.
+        // HElo rating part ================
+        // make diffs array (key: index by teamPlayers order, value: number[])
+        
+
+        // make stat records
+        let redStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Red?MatchResult.Win:MatchResult.Lose, redTeamPlayers);
+        let blueStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Blue?MatchResult.Win:MatchResult.Lose, blueTeamPlayers);
+        
+        // calc average of team ratings
+        let winTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(winnerTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers); 
+        let loseTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(loserTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers);
+        
+        // get diff and update rating
+        redStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
+            let diffArray: number[] = []; 
+            for(let i: number = 0; i < blueStatsRecords.length; i++) {
+                diffArray.push(ratingHelper.calcBothDiff(eachItem, blueStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, blueStatsRecords[i].matchKFactor));
+            }
+            window.playerList.get(redTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
+        });
+        blueStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
+            let diffArray: number[] = []; 
+            for(let i: number = 0; i < redStatsRecords.length; i++) {
+                diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, blueStatsRecords[i].matchKFactor));
+            }
+            window.playerList.get(redTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
+        });
+
+
+        // record stats part ================
         teamPlayers.forEach((eachPlayer: PlayerObject) => {
-            if(eachPlayer.team === winnerTeamID) { // if this player is winner
+            if (eachPlayer.team === winnerTeamID) { // if this player is winner
                 window.playerList.get(eachPlayer.id)!.stats.wins++; //records a win
             }
-            window.playerList.get(eachPlayer.id)!.stats.totals++; // records a game count
+            window.playerList.get(eachPlayer.id)!.stats.totals++; // records game count and other stats
+            window.playerList.get(eachPlayer.id)!.stats.goals += window.playerList.get(eachPlayer.id)!.matchRecord.goals;
+            window.playerList.get(eachPlayer.id)!.stats.assists += window.playerList.get(eachPlayer.id)!.matchRecord.assists;
+            window.playerList.get(eachPlayer.id)!.stats.ogs += window.playerList.get(eachPlayer.id)!.matchRecord.ogs;
+            window.playerList.get(eachPlayer.id)!.stats.losePoints += window.playerList.get(eachPlayer.id)!.matchRecord.losePoints;
+            window.playerList.get(eachPlayer.id)!.stats.balltouch += window.playerList.get(eachPlayer.id)!.matchRecord.balltouch;
+            window.playerList.get(eachPlayer.id)!.stats.passed += window.playerList.get(eachPlayer.id)!.matchRecord.passed;
+
+            window.playerList.get(eachPlayer.id)!.matchRecord = { // init match record
+                goals: 0,
+                assists: 0,
+                ogs: 0,
+                losePoints: 0,
+                balltouch: 0,
+                passed: 0,
+                factorK: MatchKFactor.Normal
+            }
+
             setPlayerData(window.playerList.get(eachPlayer.id)!); // updates stats
         });
 
-        if(winnerTeamID !== window.winningStreak.teamID) {
+        // win streak part ================
+        if (winnerTeamID !== window.winningStreak.teamID) {
             // if winner team is changed
             window.winningStreak.count = 1; // init count and set to won one game
         } else {
@@ -73,18 +126,18 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
 
         window.logger.i(`${placeholderVictory.streakTeamName} team wins streak ${placeholderVictory.streakTeamCount} games.`); // log it
 
-        if(window.winningStreak.count >= 3) {
+        if (window.winningStreak.count >= 3) {
             winningMessage += '\n' + Tst.maketext(LangRes.onVictory.burning, placeholderVictory);
         }
     }
 
     // when auto emcee mode is enabled
-    if(window.settings.game.rule.autoOperating === true) {
-        if(window.winningStreak.count >= BotSettings.rerollWinstreakCriterion) {
+    if (window.settings.game.rule.autoOperating === true) {
+        if (window.winningStreak.count >= BotSettings.rerollWinstreakCriterion) {
             // if winning streak count has reached limit
-            if(BotSettings.rerollWinStreak === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers ) {
+            if (BotSettings.rerollWinStreak === true && roomActivePlayersNumberCheck() >= window.settings.game.rule.requisite.minimumPlayers) {
                 // if rerolling option is enabled, then reroll randomly
-                
+
                 window.winningStreak.count = 0; // init count
 
                 // reroll randomly
@@ -99,9 +152,9 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                     window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move all to spec
                 });
 
-                for(let i: number = 0; i < shuffledIDList.length; i++) {
-                    if(i < window.settings.game.rule.requisite.eachTeamPlayers) window.room.setPlayerTeam(shuffledIDList[i], TeamID.Red);
-                    if(i >= window.settings.game.rule.requisite.eachTeamPlayers && i < window.settings.game.rule.requisite.eachTeamPlayers*2) window.room.setPlayerTeam(shuffledIDList[i], TeamID.Blue);
+                for (let i: number = 0; i < shuffledIDList.length; i++) {
+                    if (i < window.settings.game.rule.requisite.eachTeamPlayers) window.room.setPlayerTeam(shuffledIDList[i], TeamID.Red);
+                    if (i >= window.settings.game.rule.requisite.eachTeamPlayers && i < window.settings.game.rule.requisite.eachTeamPlayers * 2) window.room.setPlayerTeam(shuffledIDList[i], TeamID.Blue);
                 }
 
                 winningMessage += '\n' + Tst.maketext(LangRes.onVictory.reroll, placeholderVictory);
@@ -114,9 +167,9 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
             teamPlayers
                 .filter((player: PlayerObject) => player.team === loserTeamID)
                 .forEach((eachPlayer: PlayerObject) => {
-                    if(BotSettings.guaranteePlayingTime === true) {
+                    if (BotSettings.guaranteePlayingTime === true) {
                         // if guarantee playing time option is enabled
-                        if((scores.time - window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime) > BotSettings.guaranteedPlayingTimeSeconds) {
+                        if ((scores.time - window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime) > BotSettings.guaranteedPlayingTimeSeconds) {
                             window.room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move losers played enough time to Spec team
                         } else {
                             outPlayersCount--; // decrease count as this player will be alive in loser team
@@ -129,8 +182,8 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
 
             // get new spec player list
             let specActivePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.playerList.get(player.id)!.permissions.afkmode === false);
-            
-            for(let i: number = 0; i < outPlayersCount && i < specActivePlayers.length; i++) {
+
+            for (let i: number = 0; i < outPlayersCount && i < specActivePlayers.length; i++) {
                 window.room.setPlayerTeam(specActivePlayers[i].id, loserTeamID); // move Specs to challenger team
             }
         }

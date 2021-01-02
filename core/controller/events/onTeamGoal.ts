@@ -50,24 +50,24 @@ export function onTeamGoalListener(team: TeamID): void {
         // except spectators and filter who were lose a point
         var losePlayers: PlayerObject[] = window.room.getPlayerList().filter((player: PlayerObject) => player.team !== TeamID.Spec && player.team !== team);
         losePlayers.forEach(function (eachPlayer: PlayerObject) {
-            // records a lost point
-            window.playerList.get(eachPlayer.id)!.stats.losePoints++;
-            setPlayerData(window.playerList.get(eachPlayer.id)!); // updates lost points count
+            // records a lost point in match record
+            window.playerList.get(eachPlayer.id)!.matchRecord.losePoints++;
+            //setPlayerData(window.playerList.get(eachPlayer.id)!); // updates lost points count
         });
 
         // check whether or not it is an OG. and process it!
         if (window.playerList.get(touchPlayer)!.team === team) { // if the goal is normal goal (not OG)
             placeholderGoal.scorerID = window.playerList.get(touchPlayer)!.id;
             placeholderGoal.scorerName = window.playerList.get(touchPlayer)!.name;
-            window.playerList.get(touchPlayer)!.stats.goals++;
-            setPlayerData(window.playerList.get(touchPlayer)!);
+            window.playerList.get(touchPlayer)!.matchRecord.goals++; // record goal in match record
+            //setPlayerData(window.playerList.get(touchPlayer)!);
             var goalMsg: string = Tst.maketext(LangRes.onGoal.goal, placeholderGoal);
             if (assistPlayer !== undefined && touchPlayer != assistPlayer && window.playerList.get(assistPlayer)!.team === team) {
                 // records assist when the player who assists is not same as the player goaled, and is not other team.
                 placeholderGoal.assistID = window.playerList.get(assistPlayer)!.id;
                 placeholderGoal.assistName = window.playerList.get(assistPlayer)!.name;
-                window.playerList.get(assistPlayer)!.stats.assists++;
-                setPlayerData(window.playerList.get(assistPlayer)!);
+                window.playerList.get(assistPlayer)!.matchRecord.assists++; // record assist in match record
+                //setPlayerData(window.playerList.get(assistPlayer)!);
                 goalMsg = Tst.maketext(LangRes.onGoal.goalWithAssist, placeholderGoal);
             }
             window.room.sendAnnouncement(goalMsg, null, 0x00FF00, "normal", 0);
@@ -75,8 +75,8 @@ export function onTeamGoalListener(team: TeamID): void {
         } else { // if the goal is OG
             placeholderGoal.ogID = touchPlayer;
             placeholderGoal.ogName = window.playerList.get(touchPlayer)!.name;
-            window.playerList.get(touchPlayer)!.stats.ogs++;
-            setPlayerData(window.playerList.get(touchPlayer)!);
+            window.playerList.get(touchPlayer)!.matchRecord.ogs++; // record OG in match record
+            //setPlayerData(window.playerList.get(touchPlayer)!);
             window.room.sendAnnouncement(Tst.maketext(LangRes.onGoal.og, placeholderGoal), null, 0x00FF00, "normal", 0);
             window.logger.i(`${window.playerList.get(touchPlayer)!.name}#${touchPlayer} made an OG.`);
 

@@ -20,10 +20,10 @@ export function onPlayerBallKickListener(player: PlayerObject): void {
 
     if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // record only when stat record mode
 
-        window.playerList.get(player.id)!.stats.balltouch++; // add count of ball touch
+        window.playerList.get(player.id)!.matchRecord.balltouch++; // add count of ball touch in match record
 
         if (window.ballStack.passJudgment(player.team) === true && window.playerList.has(window.ballStack.getLastTouchPlayerID()) === true) {
-            window.playerList.get(window.ballStack.getLastTouchPlayerID())!.stats.passed++;
+            window.playerList.get(window.ballStack.getLastTouchPlayerID())!.matchRecord.passed++; // add count of pass success in match record
         }
 
         window.ballStack.touchTeamSubmit(player.team);

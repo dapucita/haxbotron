@@ -1,4 +1,5 @@
-import { PlayerObject, PlayerPosition, PlayerStats, PlayerPermissions, PlayerAfkTrace, PlayerEntryTime } from "./PlayerObject";
+import { MatchKFactor } from "../Statistics/HElo";
+import { PlayerObject, PlayerPosition, PlayerStats, PlayerPermissions, PlayerAfkTrace, PlayerEntryTime, PlayerMatchRecord } from "./PlayerObject";
 import { TeamID } from "./TeamID";
 export class Player implements PlayerObject {
     // PlayerObject holds information about a player
@@ -18,7 +19,7 @@ export class Player implements PlayerObject {
     A string that uniquely identifies the player's connection, if two players join using the same network this string will be equal.
     This property is only set in the RoomObject.onPlayerJoin event.
     */
-    conn: string; 
+    conn: string;
     // Whether the player has admin rights.
     admin: boolean;
     // The team of the player.
@@ -26,6 +27,9 @@ export class Player implements PlayerObject {
     team: TeamID;
     // The player's position in the field, if the player is not in the field the value will be null.
     position: PlayerPosition; //github doc: position : {"x": float, "y": float}
+
+    // Temporary stat record for current match
+    matchRecord: PlayerMatchRecord;
 
     // statistics of the player.
     stats: PlayerStats;
@@ -52,6 +56,15 @@ export class Player implements PlayerObject {
         this.admin = player.admin;
         this.team = player.team;
         this.position = player.position;
+        this.matchRecord = { // Temporary stat record for current match
+            goals: 0, // not contains OGs.
+            assists: 0, // count for assist goal
+            ogs: 0, // it means 'own goal' (in Korean, '자책골')
+            losePoints: 0, // it means the points this player lost (in Korean, '실점')
+            balltouch: 0,  // total count of touch(kick) ball
+            passed: 0, // total count of pass success
+            factorK: MatchKFactor.Normal // K Factor for HElo rating
+        }
         this.stats = stats;
         this.permissions = permissions;
         this.afktrace = {
