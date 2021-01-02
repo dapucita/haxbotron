@@ -20,57 +20,74 @@ export class HElo {
 
     // E(A)
     private calcExpectedResult(targetRating: number, counterpartRating: number): number {
-        return parseFloat((1 / 1 + Math.pow(10, (targetRating - counterpartRating) / 400)).toFixed(2));
+        let res: number = parseFloat((1 / 1 + Math.pow(10, (targetRating - counterpartRating) / 400)).toFixed(2));
+        window.logger.i(`ELO FUNC calcExpectedResult: ${res}`);
+        return res;
     }
 
     // Q
     private calcQMultiplier(ratingWinnersMean: number, ratingLosersMean: number): number {
-        return parseFloat((2.2 / ((ratingWinnersMean - ratingLosersMean) * 0.001 + 2.2)).toFixed(2));
+        let res: number = parseFloat((2.2 / ((ratingWinnersMean - ratingLosersMean) * 0.001 + 2.2)).toFixed(2));
+        window.logger.i(`ELO FUNC calcQMultiplier: ${res}`);
+        return res;
     }
 
     // PD
     private calcPD(targetRecord: StatsRecord, counterpartRecord: StatsRecord): number {
         let targetAdjustPassSuccRate: number = (targetRecord.realResult===MatchResult.Win)?targetRecord.matchPassSuccRate:(1-targetRecord.matchPassSuccRate);
         let counterpartAdjustPassSuccRate: number = (counterpartRecord.realResult===MatchResult.Win)?counterpartRecord.matchPassSuccRate:(1-counterpartRecord.matchPassSuccRate);
-        return parseFloat(
+        
+        let res: number = parseFloat(
             (((targetRecord.matchGoal - targetRecord.matchOG) * targetAdjustPassSuccRate) - ((counterpartRecord.matchGoal - counterpartRecord.matchOG) * counterpartAdjustPassSuccRate))
             .toFixed(2)
         );
+        window.logger.i(`ELO FUNC calcPD: ${res}`);
+        return res;
     }
 
     // MoVM
     private calcMoVMultiplier(difference: number, multiplierQ: number): number {
-        return parseFloat((Math.log(Math.abs(difference) + 1) * multiplierQ).toFixed(2));
+        let res: number = parseFloat((Math.log(Math.abs(difference) + 1) * multiplierQ).toFixed(2));
+        window.logger.i(`ELO FUNC calcMoVMultiplier: ${res}`);
+        return res;
     }
 
     // S(A)-E(A)
     private calcResultDifference(realResult: MatchResult, targetRating: number, counterpartRating: number): number {
-        return parseFloat((realResult - this.calcExpectedResult(targetRating, counterpartRating)).toFixed(2));
+        let res: number = parseFloat((realResult - this.calcExpectedResult(targetRating, counterpartRating)).toFixed(2));
+        window.logger.i(`ELO FUNC calcResultDifference: ${res}`);
+        return res;
     }
 
     // K*MoVM*(S-E)
     public calcBothDiff(targetRecord: StatsRecord, counterpartRecord: StatsRecord, ratingWinnersMean: number, ratingLosersMean: number, factorK: MatchKFactor): number {
-        return parseFloat(
+        let res: number = parseFloat(
             (factorK 
             * this.calcMoVMultiplier(this.calcPD(targetRecord, counterpartRecord), this.calcQMultiplier(ratingWinnersMean, ratingLosersMean))
             * (this.calcResultDifference(targetRecord.realResult, targetRecord.rating, counterpartRecord.rating))
             ).toFixed(2)
         );
+        window.logger.i(`ELO FUNC calcBothDiff: ${res}`);
+        return res;
     }
 
     // R' = R + sum of all diffs
     public calcNewRating(originalRating: number, diffs: number[]): number {
-        return originalRating
+        let res: number = originalRating
             + diffs.reduce((acc, curr) => {
                 return acc + curr
             }, 0);
+        window.logger.i(`ELO FUNC calcNewRating: ${res}`);
+        return res;
     }
 
     public calcTeamRatingsMean(eachTeamPlayers: PlayerObject[]): number {
-        return ( eachTeamPlayers
+        let res: number =  ( eachTeamPlayers
             .map((eachPlayer: PlayerObject) => window.playerList.get(eachPlayer.id)!.stats.rating)
             .reduce((arr: number, curr: number) => { return arr+curr }, 0)
-        ) / eachTeamPlayers.length
+        ) / eachTeamPlayers.length;
+        window.logger.i(`ELO FUNC calcTeamRatingsMean: ${res}`);
+        return res;
     }
 
     public makeStasRecord(matchResult: MatchResult, teamPlayers: PlayerObject[]): StatsRecord[] {
@@ -85,6 +102,7 @@ export class HElo {
                 matchPassSuccRate: (window.playerList.get(eachPlayer.id)!.matchRecord.passed / window.playerList.get(eachPlayer.id)!.matchRecord.balltouch)
             });
         });
+        window.logger.i(`ELO FUNC makeStasRecord: ${JSON.stringify(statsRecords)}`);
         return statsRecords;
     }
 }
