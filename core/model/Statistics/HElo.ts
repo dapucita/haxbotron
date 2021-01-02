@@ -30,8 +30,10 @@ export class HElo {
 
     // PD
     private calcPD(targetRecord: StatsRecord, counterpartRecord: StatsRecord): number {
+        let targetAdjustPassSuccRate: number = (targetRecord.realResult===MatchResult.Win)?targetRecord.matchPassSuccRate:(1-targetRecord.matchPassSuccRate);
+        let counterpartAdjustPassSuccRate: number = (counterpartRecord.realResult===MatchResult.Win)?counterpartRecord.matchPassSuccRate:(1-counterpartRecord.matchPassSuccRate);
         return parseFloat(
-            (((targetRecord.matchGoal - targetRecord.matchOG) * targetRecord.matchPassSuccRate) - ((counterpartRecord.matchGoal - counterpartRecord.matchOG) * counterpartRecord.matchPassSuccRate))
+            (((targetRecord.matchGoal - targetRecord.matchOG) * targetAdjustPassSuccRate) - ((counterpartRecord.matchGoal - counterpartRecord.matchOG) * counterpartAdjustPassSuccRate))
             .toFixed(2)
         );
     }

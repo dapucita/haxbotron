@@ -7,11 +7,12 @@ import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { MatchKFactor } from "../../model/Statistics/HElo";
+import { decideTier, getAvatarByTier } from "../../model/Statistics/Tier";
 
 export function onGameStartListener(byPlayer: PlayerObject | null): void {
     /* Event called when a game starts.
         byPlayer is the player which caused the event (can be null if the event wasn't caused by a player). */
-    var placeholderStart = {
+    let placeholderStart = {
         playerID: 0,
         playerName: '',
         gameRuleName: window.settings.game.rule.ruleName,
@@ -27,6 +28,8 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
         teamExpectationBlue: 0
     };
 
+    let allPlayersList: PlayerObject[] = window.room.getPlayerList(); // all list
+
     window.isGamingNow = true; // turn on
 
     if (BotSettings.antiChatFlood === true) { // if anti-chat flood option is enabled
@@ -41,6 +44,13 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
         placeholderStart.playerID = byPlayer.id;
         placeholderStart.playerName = byPlayer.name;
         msg += `(by ${byPlayer.name}#${byPlayer.id})`;
+    }
+
+    if(BotSettings.avatarOverridingByTier === true) {
+        // if avatar overrding option is enabled
+        allPlayersList.forEach((eachPlayer: PlayerObject) => {   
+            window.room.setPlayerAvatar(eachPlayer.id, getAvatarByTier(decideTier(window.playerList.get(eachPlayer.id)!.stats.rating))); // set avatar
+        });
     }
     if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
@@ -76,7 +86,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
 
         if(window.settings.game.rule.autoOperating === true) { // if game rule is set as auto operating mode
             // init each player's entry match time
-            window.room.getPlayerList()
+            allPlayersList
                 .filter((eachPlayer: PlayerObject) => eachPlayer.team !== TeamID.Spec)
                 .forEach((eachPlayer: PlayerObject) => {
                     window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime = 0;

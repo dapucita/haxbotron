@@ -51,5 +51,7 @@
     "rerollWinstreakCriterion" : 5,
 
     "guaranteePlayingTime" : true,
-    "guaranteedPlayingTimeSeconds" : 20
+    "guaranteedPlayingTimeSeconds" : 20,
+
+    "avatarOverridingByTier" : true
 }

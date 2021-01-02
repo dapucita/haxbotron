@@ -9,6 +9,7 @@ import { getUnixTimestamp } from "../Statistics";
 import { setDefaultStadiums, updateAdmins } from "../RoomTools";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { decideTier, getAvatarByTier } from "../../model/Statistics/Tier";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();
@@ -175,6 +176,11 @@ export function onPlayerJoinListener(player: PlayerObject): void {
 
     if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
         updateAdmins(); // check there are any admin players, if not make an admin player.
+    }
+
+    if(BotSettings.avatarOverridingByTier === true) {
+        // if avatar overrding option is enabled
+        window.room.setPlayerAvatar(player.id, getAvatarByTier(decideTier(window.playerList.get(player.id)!.stats.rating))); // set avatar
     }
     
     // send welcome message to new player. other players cannot read this message.
