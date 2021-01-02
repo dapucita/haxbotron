@@ -7,7 +7,7 @@ import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { MatchKFactor } from "../../model/Statistics/HElo";
-import { decideTier, getAvatarByTier } from "../../model/Statistics/Tier";
+import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
 
 export function onGameStartListener(byPlayer: PlayerObject | null): void {
     /* Event called when a game starts.
@@ -48,8 +48,12 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
 
     if(BotSettings.avatarOverridingByTier === true) {
         // if avatar overrding option is enabled
-        allPlayersList.forEach((eachPlayer: PlayerObject) => {   
-            window.room.setPlayerAvatar(eachPlayer.id, getAvatarByTier(decideTier(window.playerList.get(eachPlayer.id)!.stats.rating))); // set avatar
+        allPlayersList.forEach((eachPlayer: PlayerObject) => {
+            window.room.setPlayerAvatar(eachPlayer.id, getAvatarByTier( // set avatar
+                (window.playerList.get(eachPlayer.id)!.stats.totals < 10)
+                ? Tier.TierNew
+                : decideTier(window.playerList.get(eachPlayer.id)!.stats.rating)
+            )); 
         });
     }
     if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.

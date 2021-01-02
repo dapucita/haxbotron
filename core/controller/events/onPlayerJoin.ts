@@ -9,7 +9,7 @@ import { getUnixTimestamp } from "../Statistics";
 import { setDefaultStadiums, updateAdmins } from "../RoomTools";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
-import { decideTier, getAvatarByTier } from "../../model/Statistics/Tier";
+import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
 
 export function onPlayerJoinListener(player: PlayerObject): void {
     const joinTimeStamp: number = getUnixTimestamp();
@@ -180,7 +180,11 @@ export function onPlayerJoinListener(player: PlayerObject): void {
 
     if(BotSettings.avatarOverridingByTier === true) {
         // if avatar overrding option is enabled
-        window.room.setPlayerAvatar(player.id, getAvatarByTier(decideTier(window.playerList.get(player.id)!.stats.rating))); // set avatar
+        window.room.setPlayerAvatar(player.id, getAvatarByTier( // set avatar
+            (window.playerList.get(player.id)!.stats.totals < 10)
+            ? Tier.TierNew
+            : decideTier(window.playerList.get(player.id)!.stats.rating)
+        )); 
     }
     
     // send welcome message to new player. other players cannot read this message.
