@@ -72,13 +72,11 @@ export class HElo {
 
     // R' = R + sum of all diffs
     public calcNewRating(originalRating: number, diffs: number[]): number {
-        let res: number = Math.round(originalRating
-            + diffs.reduce((acc, curr) => {
-                return acc + curr
-            }, 0));
+        let sumDiffs: number = diffs.reduce((acc, curr) => { return acc + curr}, 0);
+        let res: number = Math.round(originalRating + sumDiffs);
         if(res < 0) res = 0; // minimum rating is 0.
 
-        window.logger.i(`ELO FUNC calcNewRating: ${res}`);
+        window.logger.i(`ELO FUNC calcNewRating: sumDiffs ${sumDiffs} | res ${res}`);
         return res;
     }
 
