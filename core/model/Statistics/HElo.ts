@@ -20,7 +20,7 @@ export class HElo {
 
     // E(A)
     private calcExpectedResult(targetRating: number, counterpartRating: number): number {
-        let res: number = parseFloat((1 / 1 + Math.pow(10, (counterpartRating - targetRating) / 400)).toFixed(2));
+        let res: number = parseFloat((1 / (1 + Math.pow(10, (counterpartRating - targetRating) / 400))).toFixed(2));
         window.logger.i(`ELO FUNC calcExpectedResult: ${res}`);
         return res;
     }
