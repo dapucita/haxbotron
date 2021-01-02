@@ -1,14 +1,12 @@
 import { PlayerObject } from "../model/GameObject/PlayerObject";
 
-// TODO: Elo https://ryanmadden.net/posts/Adapting-Elo
-
 export function getUnixTimestamp(): number {
     return Math.floor(Date.now()); // return Unix timestamp (milliseconds)
 }
 
 export function calcWinsRate(totalGames: number, winGames: number): number {
     // calculate the given Player's winning games rate
-    if(totalGames == 0) {
+    if(totalGames === 0) {
         return 0;
     }
     return Math.round((winGames / totalGames) * 100);
@@ -16,7 +14,7 @@ export function calcWinsRate(totalGames: number, winGames: number): number {
 
 export function calcGoalsPerGame(totalGames: number, totalGoals: number): number {
     // calculate the given Player's goal rate per game
-    if(totalGames == 0) {
+    if(totalGames === 0) {
         return 0;
     }
     return parseFloat((totalGoals / totalGames).toFixed(1));
@@ -24,7 +22,7 @@ export function calcGoalsPerGame(totalGames: number, totalGoals: number): number
 
 export function calcOGsPerGame(totalGames: number, totalOGs: number): number {
     // calculate the given Player's goal rate per game
-    if(totalGames == 0) {
+    if(totalGames === 0) {
         return 0;
     }
     return parseFloat((totalOGs / totalGames).toFixed(1));
@@ -32,7 +30,7 @@ export function calcOGsPerGame(totalGames: number, totalOGs: number): number {
 
 export function calcLoseGoalsPerGame(totalGames: number, totalLosePoints: number): number {
     // calculate the given Player's lost goals rate per game
-    if(totalGames == 0) {
+    if(totalGames === 0) {
         return 0;
     }
     return parseFloat((totalLosePoints / totalGames).toFixed(1));
@@ -40,14 +38,14 @@ export function calcLoseGoalsPerGame(totalGames: number, totalLosePoints: number
 
 export function calcAssistsPerGame(totalGames: number, totalAssists: number): number {
     // calculate the given Player's goal rate per game
-    if(totalGames == 0) {
+    if(totalGames === 0) {
         return 0;
     }
     return parseFloat((totalAssists / totalGames).toFixed(1));
 }
 
 export function calcPassSuccessRate(totalPasses: number, totalSuccess: number): number {
-    if(totalPasses == 0) {
+    if(totalPasses === 0) {
         return 0;
     }
     return Math.round((totalSuccess / totalPasses) * 100);

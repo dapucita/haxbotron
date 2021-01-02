@@ -40,7 +40,7 @@ export class HElo {
         let res: number = 
             (((targetRecord.matchGoal - targetRecord.matchOG) * targetAdjustPassSuccRate) - ((counterpartRecord.matchGoal - counterpartRecord.matchOG) * counterpartAdjustPassSuccRate))
         ;
-        window.logger.i(`ELO FUNC calcPD: tgPassRate ${targetAdjustPassSuccRate} cpPassRate ${counterpartAdjustPassSuccRate} res ${res}`);
+        window.logger.i(`ELO FUNC calcPD: realResult ${targetRecord.realResult} tgPassRate1 ${targetRecord.matchPassSuccRate} cpPassRate1 ${counterpartRecord.matchPassSuccRate} tgPassRate ${targetAdjustPassSuccRate} cpPassRate ${counterpartAdjustPassSuccRate} res ${res}`);
         return res;
     }
 
@@ -71,7 +71,7 @@ export class HElo {
 
     // R' = R + sum of all diffs
     public calcNewRating(originalRating: number, diffs: number[]): number {
-        let res: number = (originalRating
+        let res: number = Math.round(originalRating
             + diffs.reduce((acc, curr) => {
                 return acc + curr
             }, 0));
@@ -97,7 +97,11 @@ export class HElo {
                 matchKFactor: window.playerList.get(eachPlayer.id)!.matchRecord.factorK,
                 matchGoal: window.playerList.get(eachPlayer.id)!.matchRecord.goals,
                 matchOG: window.playerList.get(eachPlayer.id)!.matchRecord.ogs,
-                matchPassSuccRate: (window.playerList.get(eachPlayer.id)!.matchRecord.passed / window.playerList.get(eachPlayer.id)!.matchRecord.balltouch)
+                matchPassSuccRate: (
+                    window.playerList.get(eachPlayer.id)!.matchRecord.balltouch === 0
+                    ? 0
+                    : window.playerList.get(eachPlayer.id)!.matchRecord.passed / window.playerList.get(eachPlayer.id)!.matchRecord.balltouch
+                )
             });
         });
         window.logger.i(`ELO FUNC makeStasRecord: ${JSON.stringify(statsRecords)}`);
