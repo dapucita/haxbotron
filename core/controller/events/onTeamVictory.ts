@@ -76,8 +76,8 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         redStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
             let diffArray: number[] = []; 
             for(let i: number = 0; i < blueStatsRecords.length; i++) {
-                window.logger.i(`ELO DEBUG counterpart record blue: ${blueStatsRecords[i]}`);
-                diffArray.push(ratingHelper.calcBothDiff(eachItem, blueStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, blueStatsRecords[i].matchKFactor));
+                window.logger.i(`ELO DEBUG record red: ${JSON.stringify(eachItem)} | counterpart blue: ${JSON.stringify(blueStatsRecords[i])}`);
+                diffArray.push(ratingHelper.calcBothDiff(eachItem, blueStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, eachItem.matchKFactor));
             }
             
             window.logger.i(`ELO DEBUG red each diff: ${diffArray}`);
@@ -86,13 +86,12 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         blueStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
             let diffArray: number[] = []; 
             for(let i: number = 0; i < redStatsRecords.length; i++) {
-                window.logger.i(`ELO DEBUG counterpart record red: ${redStatsRecords[i]}`);
-                diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, redStatsRecords[i].matchKFactor));
+                window.logger.i(`ELO DEBUG record blue: ${JSON.stringify(eachItem)} | counterpart red: ${JSON.stringify(redStatsRecords[i])}`);
+                diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, eachItem.matchKFactor));
             }
             window.logger.i(`ELO DEBUG blue each diff: ${diffArray}`);
             window.playerList.get(blueTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
         });
-
 
         // record stats part ================
         teamPlayers.forEach((eachPlayer: PlayerObject) => {

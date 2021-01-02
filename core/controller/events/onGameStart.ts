@@ -56,6 +56,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
             )); 
         });
     }
+
     if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
         if (BotSettings.antiInsufficientStartAbusing === true && byPlayer !== null) {
@@ -79,6 +80,15 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
             }
         }
 
+        allPlayersList
+                .filter((eachPlayer: PlayerObject) => eachPlayer.team !== TeamID.Spec)
+                .forEach((eachPlayer: PlayerObject) => { 
+                    window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime = 0; // init each player's entry match time
+                    if(window.playerList.get(eachPlayer.id)!.stats.totals < 10) {
+                        window.playerList.get(eachPlayer.id)!.matchRecord.factorK = MatchKFactor.Placement; // set K Factor as a Placement match
+                    } // or default value is Normal match
+                });
+
         // start game
         let expectations: number[] = getTeamWinningExpectation();
 
@@ -89,16 +99,6 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
         window.room.sendAnnouncement(Tst.maketext(LangRes.onStart.expectedWinRate, placeholderStart), null, 0x00FF00, "normal", 0);
 
         if(window.settings.game.rule.autoOperating === true) { // if game rule is set as auto operating mode
-            // init each player's entry match time
-            allPlayersList
-                .filter((eachPlayer: PlayerObject) => eachPlayer.team !== TeamID.Spec)
-                .forEach((eachPlayer: PlayerObject) => {
-                    window.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime = 0;
-                    if(window.playerList.get(eachPlayer.id)!.stats.totals < 10) {
-                        window.playerList.get(eachPlayer.id)!.matchRecord.factorK = MatchKFactor.Placement; // set K Factor as a Placement match
-                    } // or default value is Normal match
-                });
-
             window.room.pauseGame(true); // pause (and will call onGamePause event)
         }
     } else {
