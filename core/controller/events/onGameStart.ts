@@ -1,7 +1,8 @@
 import * as Tst from "../Translator";
+import * as Ban from "../Ban";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
-import * as Ban from "../Ban";
+import * as RatingSystemSettings from "../../resources/HElo/rating.json";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
@@ -50,7 +51,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
         // if avatar overrding option is enabled
         allPlayersList.forEach((eachPlayer: PlayerObject) => {
             window.room.setPlayerAvatar(eachPlayer.id, getAvatarByTier( // set avatar
-                (window.playerList.get(eachPlayer.id)!.stats.totals < 10)
+                (window.playerList.get(eachPlayer.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
                 ? Tier.TierNew
                 : decideTier(window.playerList.get(eachPlayer.id)!.stats.rating)
             )); 

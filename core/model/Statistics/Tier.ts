@@ -1,16 +1,16 @@
-import * as TierClass from "../../resources/tiers.json";
-import * as AvatarSet from "../../resources/avatars.json";
+import * as TierClass from "../../resources/HElo/tiers.json";
+import * as AvatarSet from "../../resources/HElo/avatars.json";
 
 export function decideTier(rating: number): Tier {
-    if(rating < TierClass.tier_2) return Tier.Tier1;
-    if(rating < TierClass.tier_3 && rating >= TierClass.tier_2) return Tier.Tier2;
-    if(rating < TierClass.tier_4 && rating >= TierClass.tier_3) return Tier.Tier3;
-    if(rating < TierClass.tier_5 && rating >= TierClass.tier_4) return Tier.Tier4;
-    if(rating < TierClass.tier_6 && rating >= TierClass.tier_5) return Tier.Tier5;
-    if(rating < TierClass.tier_7 && rating >= TierClass.tier_6) return Tier.Tier6;
-    if(rating < TierClass.tier_8 && rating >= TierClass.tier_7) return Tier.Tier7;
-    if(rating < TierClass.tier_9 && rating >= TierClass.tier_8) return Tier.Tier8;
-    if(rating >= TierClass.tier_9) return Tier.Tier9;
+    if(rating < TierClass.class_tier_2) return Tier.Tier1;
+    if(rating < TierClass.class_tier_3 && rating >= TierClass.class_tier_2) return Tier.Tier2;
+    if(rating < TierClass.class_tier_4 && rating >= TierClass.class_tier_3) return Tier.Tier3;
+    if(rating < TierClass.class_tier_5 && rating >= TierClass.class_tier_4) return Tier.Tier4;
+    if(rating < TierClass.class_tier_6 && rating >= TierClass.class_tier_5) return Tier.Tier5;
+    if(rating < TierClass.class_tier_7 && rating >= TierClass.class_tier_6) return Tier.Tier6;
+    if(rating < TierClass.class_tier_8 && rating >= TierClass.class_tier_7) return Tier.Tier7;
+    if(rating < TierClass.class_tier_9 && rating >= TierClass.class_tier_8) return Tier.Tier8;
+    if(rating >= TierClass.class_tier_9) return Tier.Tier9;
     return Tier.TierNew;
 }
 

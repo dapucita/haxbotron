@@ -1,7 +1,8 @@
 import * as Ban from "../Ban";
-import * as BotSettings from "../../resources/settings.json";
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
+import * as BotSettings from "../../resources/settings.json";
+import * as RatingSystemSettings from "../../resources/HElo/rating.json";
 import { PlayerObject, PlayerStorage } from "../../model/GameObject/PlayerObject";
 import { Player } from "../../model/GameObject/Player";
 import { getPlayerData, setPlayerData } from "../Storage";
@@ -181,7 +182,7 @@ export function onPlayerJoinListener(player: PlayerObject): void {
     if(BotSettings.avatarOverridingByTier === true) {
         // if avatar overrding option is enabled
         window.room.setPlayerAvatar(player.id, getAvatarByTier( // set avatar
-            (window.playerList.get(player.id)!.stats.totals < 10)
+            (window.playerList.get(player.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
             ? Tier.TierNew
             : decideTier(window.playerList.get(player.id)!.stats.rating)
         )); 

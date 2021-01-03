@@ -1,3 +1,4 @@
+import * as RatingSystemSettings from "../../resources/HElo/rating.json";
 import { PlayerObject } from "../GameObject/PlayerObject";
 
 export class HElo {
@@ -124,7 +125,7 @@ export enum MatchResult {
 }
 
 export enum MatchKFactor {
-    Normal = 30, // normal match
-    Placement = 50, // placement match
-    Replace = 10 // the match for replace other player who abscond from the match
+    Normal = RatingSystemSettings.factor_k_normal, // normal match
+    Placement = RatingSystemSettings.factor_k_placement, // placement match
+    Replace = RatingSystemSettings.facotr_k_replace // the match for replace other player who abscond from the match
 }

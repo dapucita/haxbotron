@@ -60,8 +60,8 @@ export const command = {
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
         ,help: '📑 !help COMMAND : 해당 COMMAND 명령어에 대한 자세한 설명을 보여줍니다.'
         ,about: '📑 !about : 봇의 정보를 보여줍니다.'
-        ,stats: '📑 !stats : 전적을 보여줍니다. 📑 !statsreset로 리셋합니다.\n📑 !stats #ID : 해당 ID의 플레이어 전적을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
-        ,statsreset: '📑 !statsreset : 스탯을 초기화합니다. 다시 복구할 수 없습니다.'
+        ,stats: '📑 !stats : 전적과 레이팅을 보여줍니다. 📑 !statsreset로 초기화합니다.\n📑 !stats #ID : 해당 ID의 플레이어 전적과 레이팅을 봅니다. ID는 숫자이어야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
+        ,statsreset: '📑 !statsreset : 전적과 레이팅을 초기화합니다. 다시 복구할 수 없습니다.'
         ,poss: '📑 !poss : 양 팀의 공 점유율을 보여줍니다.'
         ,streak: '📑 !streak : 현재 연승팀과 연승 횟수를 보여줍니다.'
         ,afk: '📑 !afk MSG : 잠수 모드를 설정하거나 해제합니다. MSG에 이유를 쓸 수도 있습니다. 너무 오래 잠수하면 퇴장될 수 있습니다.'
@@ -74,7 +74,7 @@ export const command = {
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
-        ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 (레이팅 {targetStatsRating}) 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
+        ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 (레이팅 {targetStatsRatingAvatar}{targetStatsRating}) 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
     }
     ,statsreset: '📊 전적을 초기화했습니다. 다시 복구할 수 없습니다.'
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'

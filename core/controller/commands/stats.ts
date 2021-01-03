@@ -1,7 +1,9 @@
-import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
+import * as LangRes from "../../resources/strings";
 import * as StatCalc from "../../controller/Statistics";
+import * as RatingSystemSettings from "../../resources/HElo/rating.json";
+import { PlayerObject } from "../../model/GameObject/PlayerObject";
+import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
 
 export function cmdStats(byPlayer: PlayerObject, message?: string): void {
     if (message !== undefined) {
@@ -13,6 +15,10 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
                     ticketTarget: targetStatsID
                     ,targetName: window.playerList.get(targetStatsID)!.name
                     ,targetAfkReason: window.playerList.get(targetStatsID)!.permissions.afkreason
+                    ,targetStatsRatingAvatar: getAvatarByTier( // set avatar
+                        (window.playerList.get(byPlayer.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
+                        ? Tier.TierNew
+                        : decideTier(window.playerList.get(byPlayer.id)!.stats.rating))
                     ,targetStatsRating: window.playerList.get(targetStatsID)!.stats.rating
                     ,targetStatsTotal: window.playerList.get(targetStatsID)!.stats.totals
                     ,targetStatsWins: window.playerList.get(targetStatsID)!.stats.wins
@@ -40,6 +46,10 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
             ticketTarget: byPlayer.id
             ,targetName: window.playerList.get(byPlayer.id)!.name
             ,targetAfkReason: window.playerList.get(byPlayer.id)!.permissions.afkreason
+            ,targetStatsRatingAvatar: getAvatarByTier( // set avatar
+                (window.playerList.get(byPlayer.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
+                ? Tier.TierNew
+                : decideTier(window.playerList.get(byPlayer.id)!.stats.rating))
             ,targetStatsRating: window.playerList.get(byPlayer.id)!.stats.rating
             ,targetStatsTotal: window.playerList.get(byPlayer.id)!.stats.totals
             ,targetStatsWins: window.playerList.get(byPlayer.id)!.stats.wins

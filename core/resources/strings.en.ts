@@ -74,7 +74,7 @@ export const command = {
     ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !stats #12)\n📑 You can check IDs by command !list red,blue,spec'
-        ,statsMsg: '📊 {targetName}#{ticketTarget} (Rating {targetStatsRating}) Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.\n📊 and Per Game : {targetStatsGoalsPerGame}goals, {targetStatsAssistsPerGame}assists, {targetStatsOgsPerGame}ogs, {targetStatsLostGoalsPerGame}lose goals.'
+        ,statsMsg: '📊 {targetName}#{ticketTarget} (Rating {targetStatsRatingAvatar}{targetStatsRating}) Total {targetStatsTotal}games(winrate {targetStatsWinRate}%), Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%.\n📊 and Per Game : {targetStatsGoalsPerGame}goals, {targetStatsAssistsPerGame}assists, {targetStatsOgsPerGame}ogs, {targetStatsLostGoalsPerGame}lose goals.'
     }
     ,statsreset: '📊 Reset for statistical information completed. You can\'t cancel it.'
     ,poss: '📊 Ball possession : Red {possTeamRed}%, Blue {possTeamBlue}%.'
