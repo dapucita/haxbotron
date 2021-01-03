@@ -1,5 +1,4 @@
 import { PlayerObject } from "../GameObject/PlayerObject";
-import { TeamID } from "../GameObject/TeamID";
 
 export class HElo {
     // https://ryanmadden.net/posts/Adapting-Elo
@@ -21,14 +20,14 @@ export class HElo {
     // E(A)
     private calcExpectedResult(targetRating: number, counterpartRating: number): number {
         let res: number = parseFloat((1 / (1 + Math.pow(10, (counterpartRating - targetRating) / 400))).toFixed(2));
-        window.logger.i(`ELO FUNC calcExpectedResult: ${res}`);
+
         return res;
     }
 
     // Q
     private calcQMultiplier(ratingWinnersMean: number, ratingLosersMean: number): number {
         let res: number = parseFloat((2.2 / ((ratingWinnersMean - ratingLosersMean) * 0.001 + 2.2)).toFixed(2));
-        window.logger.i(`ELO FUNC calcQMultiplier: ${res}`);
+
         return res;
     }
 
@@ -41,21 +40,21 @@ export class HElo {
             ((targetRecord.matchGoal - targetRecord.matchOG) * targetAdjustPassSuccRate)
             - ((counterpartRecord.matchGoal - counterpartRecord.matchOG) * counterpartAdjustPassSuccRate)
             ).toFixed(2));
-        window.logger.i(`ELO FUNC calcPD: realResult ${targetRecord.realResult} tgPassRate1 ${targetRecord.matchPassSuccRate} cpPassRate1 ${counterpartRecord.matchPassSuccRate} tgPassRate ${targetAdjustPassSuccRate} cpPassRate ${counterpartAdjustPassSuccRate} res ${res}`);
+
         return res;
     }
 
     // MoVM
     private calcMoVMultiplier(difference: number, multiplierQ: number): number {
         let res: number = parseFloat((Math.log(Math.abs(difference) + 1) * multiplierQ).toFixed(2));
-        window.logger.i(`ELO FUNC calcMoVMultiplier: ${res}`);
+
         return res;
     }
 
     // S(A)-E(A)
     private calcResultDifference(realResult: MatchResult, targetRating: number, counterpartRating: number): number {
         let res: number = parseFloat((realResult - this.calcExpectedResult(targetRating, counterpartRating)).toFixed(2));
-        window.logger.i(`ELO FUNC calcResultDifference: ${res}`);
+
         return res;
     }
 
@@ -66,7 +65,7 @@ export class HElo {
             * this.calcMoVMultiplier(this.calcPD(targetRecord, counterpartRecord), this.calcQMultiplier(ratingWinnersMean, ratingLosersMean))
             * (this.calcResultDifference(targetRecord.realResult, targetRecord.rating, counterpartRecord.rating))
             ).toFixed(2));
-        window.logger.i(`ELO FUNC calcBothDiff: ${res}`);
+
         return res;
     }
 
@@ -76,7 +75,6 @@ export class HElo {
         let res: number = Math.round(originalRating + sumDiffs);
         if(res < 0) res = 0; // minimum rating is 0.
 
-        window.logger.i(`ELO FUNC calcNewRating: sumDiffs ${sumDiffs} | res ${res}`);
         return res;
     }
 
@@ -85,7 +83,7 @@ export class HElo {
             .map((eachPlayer: PlayerObject) => window.playerList.get(eachPlayer.id)!.stats.rating)
             .reduce((arr: number, curr: number) => { return arr+curr }, 0)
         ) / eachTeamPlayers.length).toFixed(2));
-        window.logger.i(`ELO FUNC calcTeamRatingsMean: ${res}`);
+
         return res;
     }
 
@@ -105,7 +103,7 @@ export class HElo {
                 )
             });
         });
-        window.logger.i(`ELO FUNC makeStasRecord: ${JSON.stringify(statsRecords)}`);
+
         return statsRecords;
     }
 }
@@ -126,7 +124,7 @@ export enum MatchResult {
 }
 
 export enum MatchKFactor {
-    Normal = 20, // normal match
-    Placement = 30, // placement match
+    Normal = 30, // normal match
+    Placement = 50, // placement match
     Replace = 10 // the match for replace other player who abscond from the match
 }

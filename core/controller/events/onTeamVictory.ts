@@ -64,33 +64,30 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         let redStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Red?MatchResult.Win:MatchResult.Lose, redTeamPlayers);
         let blueStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Blue?MatchResult.Win:MatchResult.Lose, blueTeamPlayers);
         
-        window.logger.i(`ELO DEBUG stat record: ${JSON.stringify(redStatsRecords)} | ${JSON.stringify(blueStatsRecords)}`);
-
         // calc average of team ratings
         let winTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(winnerTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers); 
         let loseTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(loserTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers);
-
-        window.logger.i(`ELO DEBUG rating mean: ${winTeamRatingsMean} | ${loseTeamRatingsMean}`);
         
         // get diff and update rating
         redStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
             let diffArray: number[] = []; 
+            let oldRating: number = window.playerList.get(redTeamPlayers[idx].id)!.stats.rating;
             for(let i: number = 0; i < blueStatsRecords.length; i++) {
-                window.logger.i(`ELO DEBUG record red: ${JSON.stringify(eachItem)} | counterpart blue: ${JSON.stringify(blueStatsRecords[i])}`);
                 diffArray.push(ratingHelper.calcBothDiff(eachItem, blueStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, eachItem.matchKFactor));
             }
-            
-            window.logger.i(`ELO DEBUG red each diff: ${diffArray}`);
-            window.playerList.get(redTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
+            let newRating: number = ratingHelper.calcNewRating(eachItem.rating, diffArray);
+            window.playerList.get(redTeamPlayers[idx].id)!.stats.rating = newRating;
+            window.logger.i(`Red Player ${redTeamPlayers[idx].name}#${redTeamPlayers[idx].id}'s rating has become ${newRating} from ${oldRating}.`);
         });
         blueStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
             let diffArray: number[] = []; 
+            let oldRating: number = window.playerList.get(blueTeamPlayers[idx].id)!.stats.rating;
             for(let i: number = 0; i < redStatsRecords.length; i++) {
-                window.logger.i(`ELO DEBUG record blue: ${JSON.stringify(eachItem)} | counterpart red: ${JSON.stringify(redStatsRecords[i])}`);
                 diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, eachItem.matchKFactor));
             }
-            window.logger.i(`ELO DEBUG blue each diff: ${diffArray}`);
-            window.playerList.get(blueTeamPlayers[idx].id)!.stats.rating = ratingHelper.calcNewRating(eachItem.rating, diffArray);
+            let newRating: number = ratingHelper.calcNewRating(eachItem.rating, diffArray);
+            window.playerList.get(blueTeamPlayers[idx].id)!.stats.rating = newRating;
+            window.logger.i(`Blue Player ${blueTeamPlayers[idx].name}#${blueTeamPlayers[idx].id}'s rating has become ${newRating} from ${oldRating}.`);
         });
 
         // record stats part ================
