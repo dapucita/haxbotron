@@ -1,0 +1,7 @@
+{
+    "placement_match_chances" : 10,
+
+    "factor_k_placement" : 50,
+    "factor_k_normal" : 30,
+    "facotr_k_replace" : 10
+}
