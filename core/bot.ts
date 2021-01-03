@@ -21,7 +21,8 @@ import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 // load settings
 window.settings = {
     room: {
-        config: JSON.parse(getCookieFromHeadless('botConfig'))
+        _LaunchDate: new Date(), // set date the bot launched
+        config: JSON.parse(getCookieFromHeadless('botConfig')) // parse and set roomconfig data from cookie
     },
     game: {
         rule: gameRule
@@ -126,10 +127,8 @@ var scheduledTimer = setInterval(() => {
 
 function initialiseRoom(): void {
     // Write initialising processes here.
-    const nowDate: Date = new Date();
-    localStorage.setItem('_LaunchTime', nowDate.toString()); // save time the bot launched in localStorage
 
-    window.logger.i(`The game room is opened at ${nowDate.toString()}.`);
+    window.logger.i(`The game room is opened at ${window.settings.room._LaunchDate.toLocaleString()}.`);
 
     window.logger.i(`The game mode is '${window.isGamingNow}' now(by default).`);
 
