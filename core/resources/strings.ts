@@ -26,7 +26,7 @@ export const antitrolling = {
         muteReason: '🔇 {playerName}#{playerID}님이 채팅 도배로 음소거됐습니다.(3분) 관리자가 해제할 수 있습니다.'
     }
     ,ogFlood: {
-        banReason: '🚫 연속 자책골(5분)'
+        banReason: '🚫 연속 자책골(10분)'
     }
     ,banNoPermission: {
         banReason: '🚫 영구퇴장 금지(30초)'
@@ -43,7 +43,7 @@ export const antitrolling = {
         cannotReason: '❌ 게임 중에는 잠수할 수 없습니다.'
     }
     ,gameAbscond: {
-        banReason: '🚫 게임중 탈주(2분)'
+        banReason: '🚫 게임중 탈주(5분)'
     }
     ,malAct: {
         banReason: '🚫 악의적인 행위 감지'
@@ -144,7 +144,7 @@ export const command = {
     ,vote: {
         _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !vote #12)'
         ,_ErrorNoPermission: '❌ 인원이 부족하여 투표를 할 수 없습니다.'
-        ,voteBanMessage: '🚫 투표에 의한 추방 (5분)'
+        ,voteBanMessage: '🚫 투표에 의한 추방 (30분)'
         ,voteComplete: '🗳️ {targetName}#{targetID} 님에게 추방 투표를 하였습니다. 명령어를 다시 사용하여 취소할 수 있습니다.'
         ,voteCancel: '🗳️ {targetName}#{targetID} 님에 대한 추방 투표를 취소하였습니다.'
         ,voteIntroduce : '🗳️ 특정 플레이어에 대해 추방 투표를 하거나 취소할 수 있습니다. (예: !vote #12)'

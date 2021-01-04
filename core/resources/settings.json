@@ -2,7 +2,7 @@
     "maliciousBehaviourBanCriterion" : 20,
 
     "banVoteEnable" : true,
-    "banVoteBanMillisecs" : 300000,
+    "banVoteBanMillisecs" : 1800000,
     "banVoteAllowMinimum" : 10,
     "banVoteExecuteMinimum" : 7,
 
@@ -45,7 +45,7 @@
     "muteDefaultMillisecs" : 180000,
 
     "antiGameAbscond" : true,
-    "gameAbscondBanMillisecs" : 120000,
+    "gameAbscondBanMillisecs" : 300000,
 
     "rerollWinStreak" : true,
     "rerollWinstreakCriterion" : 5,
