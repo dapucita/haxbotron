@@ -26,7 +26,7 @@ export const antitrolling = {
         muteReason: '🔇 You are muted for too many chats.(3mins) Admin player can unmute it.'
     }
     ,ogFlood: {
-        banReason: '🚫 too much OGs(5mins)'
+        banReason: '🚫 too much OGs(10mins)'
     }
     ,banNoPermission: {
         banReason: '🚫 do not ban(30secs)'
@@ -43,7 +43,7 @@ export const antitrolling = {
         cannotReason: '❌ You can\'t use afk command during a game.'
     }
     ,gameAbscond: {
-        banReason: '🚫 Abscond from game(2mins)'
+        banReason: '🚫 Abscond from game(5mins)'
     }
     ,malAct: {
         banReason: '🚫 Malicious behaviour is detected'
@@ -144,7 +144,7 @@ export const command = {
     ,vote: {
         _ErrorNoPlayer: '❌ ❌ Wrong player ID. You can only target numeric ID. (eg: !vote #12)'
         ,_ErrorNoPermission: '❌ There are not enough players for voting.'
-        ,voteBanMessage: '🚫 ban vote(5mins)'
+        ,voteBanMessage: '🚫 ban vote(30mins)'
         ,voteComplete: '🗳️ You did vote to {targetName}#{targetID}. You can cancel the vote by type this command again.'
         ,voteCancel: '🗳️ You have cancelled the vote for that player {targetName}#{targetID}.'
         ,voteIntroduce : '🗳️ You can vote for or cancel a kick for a specific player. (eg: !vote #12)'
