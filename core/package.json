@@ -19,6 +19,7 @@
     "url": "https://github.com/dapucita/haxbotron.git"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "inquirer": "^7.3.3",
     "node-persist": "^3.1.0",
     "puppeteer": "^5.4.1",
@@ -26,6 +27,7 @@
     "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/node-persist": "3.1.0",
     "@types/puppeteer": "^5.4.0",
     "electron": "^10.1.5",
