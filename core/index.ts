@@ -1,9 +1,9 @@
 //Electron Loader
+import "dotenv/config";
+import { winstonLogger } from "./winstonLoggerSystem";
+
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const menuTemplate = require('./view/menuTemplate');
-
-import { winstonLogger } from "./winstonLoggerSystem";
-import { tweaks_geoLocationOverride, tweaks_WebRTCAnoym } from "./tweaks";
 
 //BOT Loader
 const puppeteer = require('puppeteer');
@@ -18,7 +18,7 @@ var isBotLaunched: boolean = false; // flag for check whether the bot is running
 var puppeteerContainer: any; // puppeteer page object
 
 var puppeteerCustomArgs: string[] = ['--no-sandbox', '--disable-setuid-sandbox'];
-if (tweaks_WebRTCAnoym === false) { // tweaks_WebRTCAnoym : Local IP WebRTC Anonymization for the bot. MORE INFO : tweaks.ts
+if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.toLowerCase()) === false) { // tweak by .env
     puppeteerCustomArgs.push('--disable-features=WebRtcHideLocalIpsWithMdns');
 }
 
@@ -66,11 +66,11 @@ ipcMain.on('room-make-action', (event: any, arg: any) => { // webRender.js
         arg.password = null;
     }
     hostRoomConfig = arg;
-    if (tweaks_geoLocationOverride.patch === true) { // tweaks_geoLocationOverride : GeoLocation overriding for the room. MORE INFO : tweaks.ts
+    if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.toLowerCase()) === true) { // tweak by .env
         hostRoomConfig.geo = {
-            code: tweaks_geoLocationOverride.code
-            , lat: tweaks_geoLocationOverride.lat
-            , lon: tweaks_geoLocationOverride.lon
+            code: process.env.TWEAKS_GEOLOCATIONOVERRIDE_CODE || "KR"
+            , lat: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LAT || "37.5665")
+            , lon: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LON || "126.978")
         }
     }
     hostRoomConfig.maxPlayers = parseInt(arg.maxPlayers, 10); // do type casting because conveyed maxPlayers value is string type

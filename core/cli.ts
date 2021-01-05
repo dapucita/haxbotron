@@ -2,8 +2,8 @@
 // This is the load part of the bot
 
 //import modules
+import "dotenv/config";
 import { winstonLogger } from "./winstonLoggerSystem";
-import { tweaks_geoLocationOverride, tweaks_WebRTCAnoym } from "./tweaks";
 import { RoomConfig } from "./model/RoomObject/RoomConfig";
 
 // BOT Loader
@@ -16,9 +16,9 @@ var hostRoomConfig: RoomConfig; //room settings and information
 var isOpenHeadless: boolean = true; // option for open chromium in headless mode
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
 var puppeteerContainer: any; // puppeteer page object
-
 var puppeteerCustomArgs: string[] = ['--no-sandbox', '--disable-setuid-sandbox'];
-if (tweaks_WebRTCAnoym === false) { // tweaks_WebRTCAnoym : Local IP WebRTC Anonymization for the bot. MORE INFO : tweaks.ts
+
+if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.toLowerCase()) === false) { // tweak by .env
     puppeteerCustomArgs.push('--disable-features=WebRtcHideLocalIpsWithMdns');
 }
 
@@ -32,11 +32,11 @@ hostRoomConfig = { //default init
     noPlayer: true
 }
 
-if (tweaks_geoLocationOverride.patch === true) { // tweaks_geoLocationOverride : GeoLocation overriding for the room. MORE INFO : tweaks.ts
+if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.toLowerCase()) === true) { // tweak by .env
     hostRoomConfig.geo = {
-        code: tweaks_geoLocationOverride.code
-        , lat: tweaks_geoLocationOverride.lat
-        , lon: tweaks_geoLocationOverride.lon
+        code: process.env.TWEAKS_GEOLOCATIONOVERRIDE_CODE || "KR"
+        , lat: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LAT || "37.5665")
+        , lon: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LON || "126.978")
     }
 }
 
