@@ -9,7 +9,7 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 
 import { createConnection } from "typeorm"
-import { winstonLogger } from "./winstonLoggerSystem";
+import { winstonLogger } from "./utility/winstonLoggerSystem";
 import { ResponseError } from "./model/interface/ResponseError";
 import { Player } from "./entity/player.entity";
 import { playerRouter } from "./router/v1.player.router";
