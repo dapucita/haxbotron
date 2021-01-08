@@ -70,6 +70,6 @@ And you can also check the log in `.logs` directory. These log data will be kept
 `G.Buffon` made great custom maps that are especially popular in Korea.
 
 ## Copyrights
-MIT License.
+By `dapucita`, MIT License.
 
 Some maps by `G.Buffon`.
