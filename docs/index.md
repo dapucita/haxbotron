@@ -1,4 +1,6 @@
 # Haxbotron 🤖
+![haxbotron-image](haxbotron-img.png)
+
 Haxbotron is a host bot application for Haxball game.
 
 This project is maintained by `dapucita`.
