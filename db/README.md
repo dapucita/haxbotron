@@ -1,4 +1,4 @@
-# Haxbotron DB🤖
+# Haxbotron DB 🤖
 ## What is this
 `haxbotron-db` is a DB Server for `Haxbotron`.
 
