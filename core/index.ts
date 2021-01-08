@@ -1,5 +1,6 @@
 //Electron Loader
 import "dotenv/config";
+import * as dbUtilityInject from "./injection/function/db.utility";
 import { winstonLogger } from "./winstonLoggerSystem";
 
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
@@ -7,7 +8,7 @@ const menuTemplate = require('./view/menuTemplate');
 
 //BOT Loader
 const puppeteer = require('puppeteer');
-const nodeStorage = require('node-persist');
+const nodeStorage = require('node-persist'); // for save and load superadmin login keys on local (auth logic is with DB server)
 
 let electronWindow: any; // window object for Electron
 
@@ -120,14 +121,14 @@ ipcMain.on('super-key-action', (event: any, arg: any) => { // webRender.js
     //event.sender.send('asynchronous-reply', 'async pong');
     if(arg != null) {
         superKeyList = arg;
+        let newKeyListArray: string[] = superKeyList.split(/\n|\r\n|\r/) || [];
+        newKeyListArray.forEach(async (eachKey: string) => { 
+            // upload onto DB server.
+            await dbUtilityInject.createSuperadminDB(eachKey, `Created by Haxbotron GUI at ${Date.now().toLocaleString()}`);
+            
+        });
+        // TODO: remove key menu
         nodeStorage.setItem('_SuperAdminKeys', superKeyList); // save into node-persist storage
-        if(isBotLaunched == true) { // and if the bot is running
-            puppeteerContainer.then((page: any) => {
-                page.evaluate((keys: any) => { // also save into localStorage on puppeteer
-                    localStorage.setItem('_SuperAdminKeys', keys);
-                }, superKeyList);
-            });
-        }
     }
 });
 
@@ -270,23 +271,22 @@ async function bot(hostConfig: string) {
         path: './out/bot_bundle.js'
     });
 
-    // inject functions for uploda data on node-persist storage into puppeteer 
-    await page.exposeFunction('uploadStorageData', (key: string, stringfiedData: string) => {
-        nodeStorage.setItem(key, stringfiedData);
-    });
-    await page.exposeFunction('clearStorageData', (key: string) => {
-        nodeStorage.removeItem(key);
-    });
+    // inject functions for do CRUD with DB Server ====================================
+    await page.exposeFunction('createSuperadminDB', dbUtilityInject.createSuperadminDB);
+    await page.exposeFunction('readSuperadminDB', dbUtilityInject.readSuperadminDB);
+    //await page.exposeFunction('updateSuperadminDB', dbUtilityInject.updateSuperadminDB); //this function is not implemented.
+    await page.exposeFunction('deleteSuperadminDB', dbUtilityInject.deleteSuperadminDB);
 
-    // load stored data from node-persist storage to puppeteer html5 localstorage
-    await nodeStorage.forEach(async function (datum: any) { // async forEach(callback): This function iterates over each key/value pair and executes an asynchronous callback as well
-        // usage: datum.key, datum.value
-        if(datum.key != "_LaunchTime") { // except _LaunchTime
-            await page.evaluate((tempKey: string, tempStr: string) => {
-                localStorage.setItem(tempKey, tempStr);
-            }, datum.key, datum.value);
-        }
-    });
+    await page.exposeFunction('createPlayerDB', dbUtilityInject.createPlayerDB);
+    await page.exposeFunction('readPlayerDB', dbUtilityInject.readPlayerDB);
+    await page.exposeFunction('updatePlayerDB', dbUtilityInject.updatePlayerDB);
+    await page.exposeFunction('deletePlayerDB', dbUtilityInject.deletePlayerDB);
+    
+    await page.exposeFunction('createBanlistDB', dbUtilityInject.createBanlistDB);
+    await page.exposeFunction('readBanlistDB', dbUtilityInject.readBanlistDB);
+    await page.exposeFunction('updateBanlistDB', dbUtilityInject.updateBanlistDB);
+    await page.exposeFunction('deleteBanlistDB', dbUtilityInject.deleteBanlistDB);
+    // ================================================================================    
 
     await page.waitForFunction(() => window.roomURIlink !== undefined); // wait until window.roomURIlink is created. That object is made when room.onRoomLink event is called.
     var conveyedRoomLink: string = await page.evaluate(() => {

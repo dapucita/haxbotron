@@ -39,7 +39,7 @@ export class BanListController {
         return this._repository
             .updateSingle(request.params.conn, banlistModel)
             .then(() => response.status(204).send())
-            .catch((error) => response.status(400).send({ error: error.message }));
+            .catch((error) => response.status(404).send({ error: error.message }));
     }
 
     public async deleteBannedPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {

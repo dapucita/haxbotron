@@ -28,9 +28,6 @@
     "_superSubthordeprive" : "deprive",
     "_superSubkick" : "kick",
     "_superSubban" : "ban",
-    "_superSubbanclear" : "banclear",
-    "_superSubbanclearall" : "all",
-    "_superSubbanlist" : "banlist",
 
     "_disabledCommandList": [
         "sampledisabledcommandname1"

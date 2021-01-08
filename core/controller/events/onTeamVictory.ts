@@ -3,13 +3,13 @@ import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { setPlayerData } from "../Storage";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { shuffleArray } from "../RoomTools";
 import { roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { HElo, MatchKFactor, MatchResult, StatsRecord } from "../../model/Statistics/HElo";
+import { convertToPlayerStorage, setPlayerDataToDB } from "../Storage";
 
-export function onTeamVictoryListener(scores: ScoresObject): void {
+export async function onTeamVictoryListener(scores: ScoresObject): Promise<void> {
     // Event called when a team 'wins'. not just when game ended.
     // records vicotry in stats. total games also counted in this event.
     // Haxball developer Basro said, The game will be stopped automatically after a team victory. (victory -> stop)
@@ -91,7 +91,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
         });
 
         // record stats part ================
-        teamPlayers.forEach((eachPlayer: PlayerObject) => {
+        teamPlayers.forEach(async (eachPlayer: PlayerObject) => {
             if (eachPlayer.team === winnerTeamID) { // if this player is winner
                 window.playerList.get(eachPlayer.id)!.stats.wins++; //records a win
             }
@@ -113,7 +113,7 @@ export function onTeamVictoryListener(scores: ScoresObject): void {
                 factorK: MatchKFactor.Normal
             }
 
-            setPlayerData(window.playerList.get(eachPlayer.id)!); // updates stats
+            await setPlayerDataToDB(convertToPlayerStorage(window.playerList.get(eachPlayer.id)!)); // updates stats
         });
 
         // win streak part ================

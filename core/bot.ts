@@ -147,12 +147,12 @@ function initialiseRoom(): void {
     window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
 
     // Linking Event Listeners
-    window.room.onPlayerJoin = (player: PlayerObject): void => eventListener.onPlayerJoinListener(player);
-    window.room.onPlayerLeave = (player: PlayerObject): void => eventListener.onPlayerLeaveListener(player);
-    window.room.onTeamVictory = (scores: ScoresObject): void => eventListener.onTeamVictoryListener(scores);
+    window.room.onPlayerJoin = async (player: PlayerObject): Promise<void> => await eventListener.onPlayerJoinListener(player);
+    window.room.onPlayerLeave = async (player: PlayerObject): Promise<void> => await eventListener.onPlayerLeaveListener(player);
+    window.room.onTeamVictory = async (scores: ScoresObject): Promise<void> => await eventListener.onTeamVictoryListener(scores);
     window.room.onPlayerChat = (player: PlayerObject, message: string): boolean => eventListener.onPlayerChatListener(player, message);
     window.room.onPlayerBallKick = (player: PlayerObject): void => eventListener.onPlayerBallKickListener(player);
-    window.room.onTeamGoal = (team: TeamID): void => eventListener.onTeamGoalListener(team);
+    window.room.onTeamGoal = async (team: TeamID): Promise<void> => await eventListener.onTeamGoalListener(team);
     window.room.onGameStart = (byPlayer: PlayerObject): void => eventListener.onGameStartListener(byPlayer);
     window.room.onGameStop = (byPlayer: PlayerObject): void => eventListener.onGameStopListener(byPlayer);
     window.room.onPlayerAdminChange = (changedPlayer: PlayerObject, byPlayer: PlayerObject): void => eventListener.onPlayerAdminChangeListener(changedPlayer, byPlayer);

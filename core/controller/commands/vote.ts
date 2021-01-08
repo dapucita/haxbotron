@@ -5,7 +5,7 @@ import { roomPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
 import * as BotSettings from "../../resources/settings.json";
-import * as Ban from "../Ban";
+import { setBanlistDataToDB } from "../Storage";
 
 export function cmdVote(byPlayer: PlayerObject, message?: string): void {
     if (!BotSettings.banVoteEnable) {
@@ -32,10 +32,10 @@ export function cmdVote(byPlayer: PlayerObject, message?: string): void {
                         window.room.sendAnnouncement(Tst.maketext(LangRes.command.vote.voteComplete, placeholderVote), byPlayer.id, 0x479947, "normal", 1);
 
                         const banTimeStamp: number = getUnixTimestamp(); // get current timestamp
-                        window.playerList.forEach((player: Player) => {
+                        window.playerList.forEach(async (player: Player) => {
                             if(player.voteGet >= BotSettings.banVoteExecuteMinimum) { // if the player got votes over minimum requirements, then kick (fixed-term ban)
                                 //add into ban list (not permanent ban, but fixed-term ban)
-                                Ban.bListAdd({ conn: player.conn, reason: LangRes.command.vote.voteBanMessage, register: banTimeStamp, expire: banTimeStamp+BotSettings.banVoteBanMillisecs });
+                                await setBanlistDataToDB({ conn: player.conn, reason: LangRes.command.vote.voteBanMessage, register: banTimeStamp, expire: banTimeStamp+BotSettings.banVoteBanMillisecs });
                                 window.room.kickPlayer(player.id, LangRes.command.vote.voteBanMessage, false); // and kick
                             }
                         });

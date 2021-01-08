@@ -1,10 +1,10 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import * as Ban from "../Ban";
 import * as BotSettings from "../../resources/settings.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { setBanlistDataToDB } from "../Storage";
 
 export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: string, ban: boolean, byPlayer: PlayerObject): void {
     /* Event called when a player has been kicked from the room. This is always called after the onPlayerLeave event.
@@ -42,11 +42,11 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
                 if (BotSettings.antiBanNoPermission === true) {
                     // if this player has banned other player without permission (when is not superadmin)
                     //byPlayer.conn doens't works so use windows.playerList
-                    Ban.bListAdd({ conn: window.playerList.get(byPlayer.id)!.conn, reason: LangRes.antitrolling.banNoPermission.banReason, register: kickedTime, expire: kickedTime + BotSettings.banNoPermissionBanMillisecs }); // register into ban list
+                    setBanlistDataToDB({ conn: window.playerList.get(byPlayer.id)!.conn, reason: LangRes.antitrolling.banNoPermission.banReason, register: kickedTime, expire: kickedTime + BotSettings.banNoPermissionBanMillisecs }); // register into ban list
                     window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.banNoPermission.banReason, false); // auto kick (fixed-term ban)
                 }
             } else { // if by super admin player
-                Ban.bListAdd({ conn: kickedPlayer.conn, reason: placeholderKick.reason, register: kickedTime, expire: -1 }); // register into ban list
+                setBanlistDataToDB({ conn: kickedPlayer.conn, reason: placeholderKick.reason, register: kickedTime, expire: -1 }); // register into ban list
                 window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been banned by ${byPlayer.name}#${byPlayer.id}. (reason:${placeholderKick.reason}).`);
             }
         } else { // kick
@@ -67,7 +67,7 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
                     window.antiPlayerKickAbusingCount[fieldIndex].register = kickedTime;
                     //check limit
                     if (window.antiPlayerKickAbusingCount[fieldIndex].count > BotSettings.playerKickAllowLimitation) {
-                        Ban.bListAdd({ conn: window.playerList.get(byPlayer.id)!.conn, reason: LangRes.antitrolling.kickAbusing.banReason, register: kickedTime, expire: kickedTime + BotSettings.playerKickAbusingBanMillisecs }); // register into ban list
+                        setBanlistDataToDB({ conn: window.playerList.get(byPlayer.id)!.conn, reason: LangRes.antitrolling.kickAbusing.banReason, register: kickedTime, expire: kickedTime + BotSettings.playerKickAbusingBanMillisecs }); // register into ban list
                         window.room.kickPlayer(byPlayer.id, LangRes.antitrolling.kickAbusing.banReason, false); // auto kick (fixed-term ban)
                     } else {
                         window.room.sendAnnouncement(LangRes.antitrolling.kickAbusing.abusingWarning, byPlayer.id, 0xFF0000, "bold", 2); //warn
@@ -77,7 +77,7 @@ export function onPlayerKickedListener(kickedPlayer: PlayerObject, reason: strin
         }
     } else {
         if (ban == true) { // ban
-            Ban.bListAdd({ conn: kickedPlayer.conn, reason: placeholderKick.reason, register: kickedTime, expire: -1 }); // register into ban list
+            setBanlistDataToDB({ conn: kickedPlayer.conn, reason: placeholderKick.reason, register: kickedTime, expire: -1 }); // register into ban list
         }
         window.logger.i(`${kickedPlayer.name}#${kickedPlayer.id} has been kicked. (ban:${ban},reason:${placeholderKick.reason})`);
     }

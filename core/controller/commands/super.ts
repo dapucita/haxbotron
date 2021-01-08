@@ -1,19 +1,18 @@
 import * as BotSettings from "../../resources/settings.json";
 import * as LangRes from "../../resources/strings";
 import * as CommandSet from "../../resources/command.json";
-import * as Ban from "../Ban";
 import * as Tst from "../Translator";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { superAdminLogin } from "../SuperAdmin";
 import { BanList } from "../../model/PlayerBan/BanList";
 
-export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: string): void {
+export async function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: string): Promise<void> {
     if (message !== undefined) {
         switch (message) {
             case CommandSet._superSublogin: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == false) { // only when not yet loginned
                     if (submessage !== undefined) { // key check and login
-                        if (superAdminLogin(submessage) == true) { // if login key is matched
+                        if (await superAdminLogin(submessage) === true) { // if login key is matched
                             window.playerList.get(byPlayer.id)!.permissions.superadmin = true; // set super admin
                             //setPlayerData(playerList.get(playerID)); // update
                             window.room.sendAnnouncement(LangRes.command.super.loginSuccess, byPlayer.id, 0x479947, "normal", 2);
@@ -116,7 +115,7 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
 
                 break;
             }
-
+            /*
             case CommandSet._superSubbanclear: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage == CommandSet._superSubbanclearall) {
@@ -148,9 +147,9 @@ export function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: 
                 } else {
                     window.room.sendAnnouncement(LangRes.command.super._ErrorNoPermission, byPlayer.id, 0xFF7777, "normal", 2);
                 }
-
                 break;
             }
+            */
 
             default: {
                 window.room.sendAnnouncement(LangRes.command.super._ErrorWrongCommand, byPlayer.id, 0xFF7777, "normal", 2);

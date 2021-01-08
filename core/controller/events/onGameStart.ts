@@ -1,5 +1,4 @@
 import * as Tst from "../Translator";
-import * as Ban from "../Ban";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
 import * as RatingSystemSettings from "../../resources/HElo/rating.json";
@@ -9,6 +8,7 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { MatchKFactor } from "../../model/Statistics/HElo";
 import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
+import { setBanlistDataToDB } from "../Storage";
 
 export function onGameStartListener(byPlayer: PlayerObject | null): void {
     /* Event called when a game starts.
@@ -71,7 +71,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
 
                 if (abusingID !== 0 && window.antiInsufficientStartAbusingCount.filter(eachID => eachID === abusingID).length > BotSettings.insufficientStartAllowLimitation) {
                     //if limitation has over then fixed-term ban that admin player
-                    Ban.bListAdd({ conn: window.playerList.get(abusingID)!.conn, reason: LangRes.antitrolling.insufficientStartAbusing.banReason, register: abusingTimestamp, expire: abusingTimestamp + BotSettings.insufficientStartAbusingBanMillisecs });
+                    setBanlistDataToDB({ conn: window.playerList.get(abusingID)!.conn, reason: LangRes.antitrolling.insufficientStartAbusing.banReason, register: abusingTimestamp, expire: abusingTimestamp + BotSettings.insufficientStartAbusingBanMillisecs });
                     window.room.kickPlayer(abusingID, LangRes.antitrolling.insufficientStartAbusing.banReason, false);     
                 }
                 

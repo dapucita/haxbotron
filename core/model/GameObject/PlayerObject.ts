@@ -82,8 +82,6 @@ export interface PlayerEntryTime {
 }
 
 export interface PlayerStorage {
-    // object literal that will be stored in LocalStorage as JSON.
-    // however, JSON stringify should be done in LocalStorage not Node.js Map() object.
     auth: string; // same meaning as in PlayerObject. It can used for identify each of players.
     conn: string; // same meaning as in PlayerObject.
     name: string; // player's name used in previous game.

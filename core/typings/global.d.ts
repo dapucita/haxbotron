@@ -7,6 +7,8 @@ import { Player } from "../model/GameObject/Player";
 import { BotConfig } from "../model/BotConifg";
 import { TeamID } from "../model/GameObject/TeamID";
 import { Room } from "../model/RoomObject/RoomObject";
+import { BanList } from "../model/PlayerBan/BanList";
+import { PlayerStorage } from "../model/GameObject/PlayerObject";
 
 declare global {
     interface Window {
@@ -38,8 +40,22 @@ declare global {
         antiPlayerKickAbusingCount: AdminKickTrace[] // ID and Timestamp record for abusing kick other players (id:number, register date:number)
 
         sendRoomChat(msg: string, playerID: number | null): void // for send chat message to the game
-        uploadStorageData(key: string, stringfiedData: string): void // upload and save on node-persist
-        clearStorageData(key: string): void // clear data in node-persist
+
+        // CRUD with DB Server via REST API
+        async createPlayerDB(player: PlayerStorage): Promise<void>
+        async readPlayerDB(playerAuth: string): Promise<PlayerStorage|undefined>
+        async updatePlayerDB(player: PlayerStorage): Promise<void>
+        async deletePlayerDB(playerAuth: string):Promise<void>
+
+        async createBanlistDB(banList: BanList): Promise<void>
+        async readBanlistDB(playerConn: string): Promise<BanList|undefined>
+        async updateBanlistDB(banList: BanList): Promise<void>
+        async deleteBanlistDB(playerConn: string): Promise<void>
+
+        async createSuperadminDB(key: string, description: string): Promise<void>
+        async readSuperadminDB(key: string): Promise<string | undefined>
+        //async updateSuperadminDB is not implemented.
+        async deleteSuperadminDB(key: string): Promise<void>
 
         // on dev-console tools for emergency
         onEmergency: {
@@ -47,8 +63,8 @@ declare global {
             chat(msg: string, playerID?: number): void
             kick(playerID: number, msg?: string): void
             ban(playerID: number, msg?: string): void
-            banclearall(): void
-            banlist(): void
+            //banclearall(): void
+            //banlist(): void
             password(password?: string): void
         }
 

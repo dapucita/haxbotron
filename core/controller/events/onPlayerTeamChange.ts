@@ -2,7 +2,6 @@ import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
-import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { MatchKFactor } from "../../model/Statistics/HElo";
 
 export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {

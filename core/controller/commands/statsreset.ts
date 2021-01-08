@@ -1,8 +1,8 @@
 import * as LangRes from "../../resources/strings";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import { setPlayerData } from "../Storage";
+import { convertToPlayerStorage, setPlayerDataToDB } from "../Storage";
 
-export function cmdStatsReset(byPlayer: PlayerObject): void {
+export async function cmdStatsReset(byPlayer: PlayerObject): Promise<void> {
     window.playerList.get(byPlayer.id)!.stats.rating = 1000;
     window.playerList.get(byPlayer.id)!.stats.totals = 0;
     window.playerList.get(byPlayer.id)!.stats.wins = 0;
@@ -12,7 +12,7 @@ export function cmdStatsReset(byPlayer: PlayerObject): void {
     window.playerList.get(byPlayer.id)!.stats.losePoints = 0;
     window.playerList.get(byPlayer.id)!.stats.balltouch = 0;
     window.playerList.get(byPlayer.id)!.stats.passed = 0;
-    setPlayerData(window.playerList.get(byPlayer.id)!);
+    await setPlayerDataToDB(convertToPlayerStorage(window.playerList.get(byPlayer.id)!));
 
     window.room.sendAnnouncement(LangRes.command.statsreset, byPlayer.id, 0x479947, "normal", 1);
 }
