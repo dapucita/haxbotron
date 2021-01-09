@@ -42,22 +42,22 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
 
     // check ban list
     let playerBanChecking = await getBanlistDataFromDB(player.conn);
-    if(playerBanChecking !== undefined) {// if banned (bListCheck would had returned string or boolean)
+    if (playerBanChecking !== undefined) {// if banned (bListCheck would had returned string or boolean)
         placeholderJoin.banListReason = playerBanChecking.reason;
 
         if (playerBanChecking.expire == -1) { // Permanent ban
-            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking})`);
+            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
             window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), true); // auto ban
             return;
         }
         if (playerBanChecking.expire > joinTimeStamp) { // Fixed-term ban (time limited ban)
-            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking})`);
+            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
             window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.fixedTermBan, placeholderJoin), false); // auto kick
             return;
         }
         if (playerBanChecking.expire != -1 && playerBanChecking.expire <= joinTimeStamp) { // time-over from expiration date
             // ban clear for this player
-            window.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking})`);
+            window.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking.reason})`);
             await removeBanlistDataFromDB(player.conn);
             // window.room.clearBan(player.id); //useless cuz banned player in haxball couldn't make join-event.
         }
