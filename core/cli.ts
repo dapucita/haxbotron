@@ -25,7 +25,7 @@ if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.
 }
 
 hostRoomConfig = { //default init
-    roomName: "🤖𝑯𝒂𝒙𝒃𝒐𝒕𝒓𝒐𝒏",
+    roomName: "Haxball Play 𝘸𝘪𝘵𝘩 𝙃𝙖𝙭𝙗𝙤𝙩𝙧𝙤𝙣🤖",
     playerName: "🤖",
     password: "",
     maxPlayers: 12,
