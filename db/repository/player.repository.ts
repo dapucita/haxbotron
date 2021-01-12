@@ -28,6 +28,7 @@ export class PlayerRepository implements IRepository<Player> {
             newPlayer.name = player.name;
             newPlayer.rating = player.rating;
             newPlayer.totals = player.totals;
+            newPlayer.disconns = player.disconns;
             newPlayer.wins = player.wins;
             newPlayer.goals = player.goals;
             newPlayer.assists = player.assists;
@@ -56,6 +57,7 @@ export class PlayerRepository implements IRepository<Player> {
             newPlayer.name = player.name;
             newPlayer.rating = player.rating;
             newPlayer.totals = player.totals;
+            newPlayer.disconns = player.disconns;
             newPlayer.wins = player.wins;
             newPlayer.goals = player.goals;
             newPlayer.assists = player.assists;

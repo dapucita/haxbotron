@@ -4,6 +4,7 @@ import { convertToPlayerStorage, setPlayerDataToDB } from "../Storage";
 
 export async function cmdStatsReset(byPlayer: PlayerObject): Promise<void> {
     window.playerList.get(byPlayer.id)!.stats.rating = 1000;
+    window.playerList.get(byPlayer.id)!.stats.disconns = 0;
     window.playerList.get(byPlayer.id)!.stats.totals = 0;
     window.playerList.get(byPlayer.id)!.stats.wins = 0;
     window.playerList.get(byPlayer.id)!.stats.goals = 0;

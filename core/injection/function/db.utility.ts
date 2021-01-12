@@ -12,7 +12,7 @@ const dbConnAddr: string = (
     + ':'
     + ((process.env.SERVER_CONN_DB_PORT) ? (process.env.SERVER_CONN_DB_PORT) : ('13001'))
     + '/'
-    + ((process.env.SERVER_CONN_DB_APIVER) ? (process.env.SERVER_CONN_DB_APIVER) : ('v1'))
+    + ((process.env.SERVER_CONN_DB_APIVER) ? (process.env.SERVER_CONN_DB_APIVER) : ('api/v1'))
     + '/'
 );
 
@@ -156,6 +156,7 @@ export async function readPlayerDB(playerAuth: string): Promise<PlayerStorage | 
                 name: result.data.name,
                 rating: result.data.rating,
                 totals: result.data.totals,
+                disconns: result.data.disconns,
                 wins: result.data.wins,
                 goals: result.data.goals,
                 assists: result.data.assists,

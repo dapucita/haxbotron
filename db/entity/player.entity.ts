@@ -21,6 +21,9 @@ export class Player {
     totals!: number; 
 
     @Column()
+    disconns!: number; 
+
+    @Column()
     wins!: number; 
 
     @Column()

@@ -8,8 +8,9 @@ export function convertToPlayerStorage(player: Player): PlayerStorage {
         auth: player.auth, // same meaning as in PlayerObject. It can used for identify each of players.
         conn: player.conn, // same meaning as in PlayerObject.
         name: player.name, // save for compare player's current name and previous name.
-        totals: player.stats.totals, // total games include wins
         rating: player.stats.rating, // HElo Rating points
+        totals: player.stats.totals, // total games include wins and disconns
+        disconns: player.stats.disconns, // disconnected games
         wins: player.stats.wins, // the game wins
         goals: player.stats.goals, // not contains OGs.
         assists: player.stats.assists, // count for assist goal

@@ -44,9 +44,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 // Routers
-app.use("/v1/player", playerRouter);
-app.use("/v1/banlist", banlistRouter);
-app.use("/v1/superadmin", superadminRouter);
+app.use("/api/v1/player", playerRouter);
+app.use("/api/v1/banlist", banlistRouter);
+app.use("/api/v1/superadmin", superadminRouter);
 
 // Error Handler
 app.use((req: Request, res: Response, next: NextFunction) => {

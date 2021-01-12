@@ -22,6 +22,8 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         playerID: player.id,
         playerName: player.name,
         playerNameOld: player.name,
+        playerStatsRating: 1000,
+        playerStatsDisconns: 0,
         playerStatsTotal: 0,
         playerStatsWins: 0,
         playerStatsGoals: 0,
@@ -80,6 +82,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         window.playerList.set(player.id, new Player(player, {
             rating: existPlayerData.rating,
             totals: existPlayerData.totals,
+            disconns: existPlayerData.disconns,
             wins: existPlayerData.wins,
             goals: existPlayerData.goals,
             assists: existPlayerData.assists,
@@ -109,6 +112,8 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         placeholderJoin.playerStatsOgs = existPlayerData.ogs;
         placeholderJoin.playerStatsTotal = existPlayerData.totals;
         placeholderJoin.playerStatsWins = existPlayerData.wins;
+        placeholderJoin.playerStatsRating = existPlayerData.rating;
+        placeholderJoin.playerStatsDisconns = existPlayerData.disconns;
 
         if (player.name != existPlayerData.name) {
             // if this player changed his/her name
@@ -143,6 +148,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         window.playerList.set(player.id, new Player(player, {
             rating: 1000,
             totals: 0,
+            disconns: 0,
             wins: 0,
             goals: 0,
             assists: 0,

@@ -19,7 +19,9 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
     var placeholderLeft = { 
         playerID: player.id,
         playerName: player.name,
+        playerStatsRating: window.playerList.get(player.id)!.stats.rating,
         playerStatsTotal: window.playerList.get(player.id)!.stats.totals,
+        playerStatsDisconns: window.playerList.get(player.id)!.stats.disconns,
         playerStatsWins: window.playerList.get(player.id)!.stats.wins,
         playerStatsGoals: window.playerList.get(player.id)!.stats.goals,
         playerStatsAssists: window.playerList.get(player.id)!.stats.assists,
@@ -75,6 +77,13 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
             await setBanlistDataToDB({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
         }
     }
+
+    if(window.isGamingNow === true && window.isStatRecord === true && window.playerList.get(player.id)!.team !== TeamID.Spec) {
+        // if this player is disconnected (include abscond)
+        window.playerList.get(player.id)!.stats.disconns++;
+        placeholderLeft.playerStatsDisconns = window.playerList.get(player.id)!.stats.disconns;
+    }
+
 
     window.playerList.get(player.id)!.entrytime.leftDate = leftTimeStamp; // save left time
     await setPlayerDataToDB(convertToPlayerStorage(window.playerList.get(player.id)!)); // save
