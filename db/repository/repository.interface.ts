@@ -1,5 +1,3 @@
-import { PlayerModel } from "../model/PlayerModel";
-
 export interface IRepository<T> {
     findAll(): Promise<T[]>;
     findSingle(target: string): Promise<T | undefined>;

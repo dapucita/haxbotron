@@ -19,6 +19,8 @@ import { superadminRouter } from "./router/v1.superadmin.router";
 import { SuperAdmin } from "./entity/superadmin.entity";
 
 // START
+winstonLogger.info(`haxbotron-db server is launched at ${new Date().toLocaleString()}`);
+
 const app: express.Application = express();
 
 // DB CONNECTION
@@ -29,7 +31,7 @@ createConnection({
     logging: true,
     synchronize: true
 }).then(conn => {
-    console.log(`haxbotron-db server is connected with database.`);
+    winstonLogger.info(`haxbotron-db server is connected with database.`);
 }).catch(err => console.log(err));
 
 // Set
@@ -66,7 +68,7 @@ app.use((err: ResponseError, req: Request, res: Response) => {
 
 // LISTENING
 app.listen(app.get('port'), () => {
-    console.log(`haxbotron-db server is opened at ${app.get('port')} port.`);
+    winstonLogger.info(`haxbotron-db server is opened at ${app.get('port')} port.`);
 });
 
 export default app;
