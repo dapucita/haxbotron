@@ -1,13 +1,10 @@
-export function superAdminLogin(loginKey: string): boolean { // return true if login succeed.
-    let keydata: string | null = localStorage.getItem('_SuperAdminKeys');
-    if(keydata !== null) {
-        let keys: string[] = keydata.split(/\n|\r\n|\r/);
-        if(keys.find((key) => key == loginKey) !== undefined) {
-            return true; // if matched
-        } else {
-            return false;
-        }
+export async function superAdminLogin(loginKey: string): Promise<boolean> { 
+    // superadmin key validation function
+    const loginResult: string | undefined =  await window.readSuperadminDB(window.settings.room._RUID, loginKey);
+    if(loginResult !== undefined) {
+        // if login is succeed, then 'description' string value will be returned.
+        return true; // return true if login is succeed.
     } else {
-        return false;
+        return false; // or return false.
     }
 }

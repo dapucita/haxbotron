@@ -1,25 +1,16 @@
 import { Player } from "../model/GameObject/Player";
 import { PlayerStorage } from "../model/GameObject/PlayerObject";
+import { BanList } from "../model/PlayerBan/BanList";
 
-export function getPlayerData(playerAuth: string): PlayerStorage | null {
-    // load player's data from localStorage
-    var jsonData: string | null = localStorage.getItem(playerAuth);
-    if (jsonData !== null) {
-        var convertedData: PlayerStorage = JSON.parse(jsonData);
-        return convertedData;
-    } else {
-        return null;
-    }
-}
-
-export function setPlayerData(player: Player): void {
-    // store player's data in localStorage
-    var playerData: PlayerStorage = {
+// Utilities
+export function convertToPlayerStorage(player: Player): PlayerStorage {
+    return {
         auth: player.auth, // same meaning as in PlayerObject. It can used for identify each of players.
         conn: player.conn, // same meaning as in PlayerObject.
         name: player.name, // save for compare player's current name and previous name.
-        totals: player.stats.totals, // total games include wins
         rating: player.stats.rating, // HElo Rating points
+        totals: player.stats.totals, // total games include wins and disconns
+        disconns: player.stats.disconns, // disconnected games
         wins: player.stats.wins, // the game wins
         goals: player.stats.goals, // not contains OGs.
         assists: player.stats.assists, // count for assist goal
@@ -29,21 +20,51 @@ export function setPlayerData(player: Player): void {
         passed: player.stats.passed, // total count of pass success
         mute: player.permissions.mute, // is this player muted? 
         muteExpire: player.permissions.muteExpire, // expiration date of mute. -1 means Permanent mute.. (unix timestamp)
-        //superadmin: player.permissions.superadmin // is this player super admin? // not save
         rejoinCount: player.entrytime.rejoinCount, // How many rejoins this player has made.
         joinDate: player.entrytime.joinDate, // player join time
         leftDate: player.entrytime.leftDate, // player left time
         malActCount: player.permissions.malActCount // count for malicious behaviour like Brute force attack
     }
-    saveStorageItem(player.auth, JSON.stringify(playerData)); // save and upload data
 }
 
-export function saveStorageItem(key: string, value: string): void {
-    localStorage.setItem(key, value); // set data in browser localStorage
-    window.uploadStorageData(key, value); // upload on nodejs backend (outside of browser)
+// CRUDs with DB Server by injected functions from Node Main Application
+// register new player or update it
+export async function setPlayerDataToDB(playerStorage: PlayerStorage): Promise<void> {
+    const player: PlayerStorage | undefined = await window.readPlayerDB(window.settings.room._RUID, playerStorage.auth);
+    if(player !== undefined) {
+        //if already exist then update it
+        await window.updatePlayerDB(window.settings.room._RUID, playerStorage);
+    } else {
+        // or create new one
+        await window.createPlayerDB(window.settings.room._RUID, playerStorage);
+    }
 }
 
-export function clearStorageItem(key: string): void {
-    localStorage.removeItem(key);
-    window.clearStorageData(key);
+// get player data
+export async function getPlayerDataFromDB(playerAuth: string): Promise<PlayerStorage | undefined> {
+    const player: PlayerStorage | undefined = await window.readPlayerDB(window.settings.room._RUID, playerAuth);
+    return player;
+}
+
+// register new ban or update it
+export async function setBanlistDataToDB(banList: BanList): Promise<void> {
+    const banplayer: BanList | undefined = await window.readBanlistDB(window.settings.room._RUID, banList.conn);
+    if(banplayer !== undefined) {
+        //if already exist then update it
+        await window.updateBanlistDB(window.settings.room._RUID, banList);
+    } else {
+        // or create new one
+        await window.createBanlistDB(window.settings.room._RUID, banList);
+    }
+}
+
+// get exist ban
+export async function getBanlistDataFromDB(playerConn: string): Promise<BanList | undefined> {
+    const banplayer: BanList | undefined = await window.readBanlistDB(window.settings.room._RUID, playerConn);
+    return banplayer;
+}
+
+// remove exist ban
+export async function removeBanlistDataFromDB(playerConn: string): Promise<void> {
+    await window.deleteBanlistDB(window.settings.room._RUID, playerConn);
 }

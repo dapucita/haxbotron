@@ -21,7 +21,8 @@ import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 // load settings
 window.settings = {
     room: {
-        _LaunchDate: new Date(), // set date the bot launched
+        _LaunchDate: new Date(), // set date the room created
+        _RUID: getCookieFromHeadless('botRoomRUID'), // room unique identifier for game room
         config: JSON.parse(getCookieFromHeadless('botConfig')) // parse and set roomconfig data from cookie
     },
     game: {
@@ -30,7 +31,7 @@ window.settings = {
 }
 
 // init global properties
-console.log(`Haxbotron Bot Entry Point : The authentication token is conveyed via cookie(${window.settings.room.config.token})`);
+console.log(`Haxbotron Bot Entry Point : The Room UID and authentication token are conveyed via cookie(UID ${window.settings.room._RUID}, TOKEN ${window.settings.room.config.token})`);
 
 window.playerList = new Map(); // player list (key: player.id, value: Player), usage: playerList.get(player.id).name
 
@@ -147,12 +148,12 @@ function initialiseRoom(): void {
     window.room.setTeamsLock(window.settings.game.rule.requisite.teamLock);
 
     // Linking Event Listeners
-    window.room.onPlayerJoin = (player: PlayerObject): void => eventListener.onPlayerJoinListener(player);
-    window.room.onPlayerLeave = (player: PlayerObject): void => eventListener.onPlayerLeaveListener(player);
-    window.room.onTeamVictory = (scores: ScoresObject): void => eventListener.onTeamVictoryListener(scores);
+    window.room.onPlayerJoin = async (player: PlayerObject): Promise<void> => await eventListener.onPlayerJoinListener(player);
+    window.room.onPlayerLeave = async (player: PlayerObject): Promise<void> => await eventListener.onPlayerLeaveListener(player);
+    window.room.onTeamVictory = async (scores: ScoresObject): Promise<void> => await eventListener.onTeamVictoryListener(scores);
     window.room.onPlayerChat = (player: PlayerObject, message: string): boolean => eventListener.onPlayerChatListener(player, message);
     window.room.onPlayerBallKick = (player: PlayerObject): void => eventListener.onPlayerBallKickListener(player);
-    window.room.onTeamGoal = (team: TeamID): void => eventListener.onTeamGoalListener(team);
+    window.room.onTeamGoal = async (team: TeamID): Promise<void> => await eventListener.onTeamGoalListener(team);
     window.room.onGameStart = (byPlayer: PlayerObject): void => eventListener.onGameStartListener(byPlayer);
     window.room.onGameStop = (byPlayer: PlayerObject): void => eventListener.onGameStopListener(byPlayer);
     window.room.onPlayerAdminChange = (changedPlayer: PlayerObject, byPlayer: PlayerObject): void => eventListener.onPlayerAdminChangeListener(changedPlayer, byPlayer);

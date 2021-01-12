@@ -4,6 +4,7 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/dapucita/haxbotron?style=flat-square)
 ![Our Discrod Online Members](https://img.shields.io/discord/602402864647634954?style=flat-square)
 ![MIT Licence](https://img.shields.io/github/license/dapucita/haxbotron?style=flat-square)
+![haxbotron-image](haxbotron-img.png)
 
 ## What is this
 Haxbotron is a host bot application for Haxball game.
@@ -70,6 +71,6 @@ And you can also check the log in `.logs` directory. These log data will be kept
 `G.Buffon` made great custom maps that are especially popular in Korea.
 
 ## Copyrights
-MIT License.
+By `dapucita`, MIT License.
 
 Some maps by `G.Buffon`.

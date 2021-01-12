@@ -1,14 +1,13 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
-import * as Ban from "../Ban";
-import { setPlayerData } from "../Storage";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { ScoresObject } from "../../model/GameObject/ScoresObject";
+import { setBanlistDataToDB } from "../Storage";
 
-export function onTeamGoalListener(team: TeamID): void {
+export async function onTeamGoalListener(team: TeamID): Promise<void> {
     // Event called when a team scores a goal.
     let scores: ScoresObject | null = window.room.getScores(); //get scores object (it includes time data about seconds elapsed)
     window.logger.i(`Goal time logger (secs):${Math.round(scores?.time || 0)}`);
@@ -96,7 +95,7 @@ export function onTeamGoalListener(team: TeamID): void {
                     window.logger.i(`${window.playerList.get(touchPlayer)!.name}#${touchPlayer} was kicked for anti-OGs flood. He made ${ogCountByPlayer} OGs. (conn:${window.playerList.get(touchPlayer)!.conn})`);
                     window.room.kickPlayer(touchPlayer, LangRes.antitrolling.ogFlood.banReason, false); // kick
                     //and add into ban list (not permanent ban, but fixed-term ban)
-                    Ban.bListAdd({ conn: window.playerList.get(touchPlayer)!.conn, reason: LangRes.antitrolling.ogFlood.banReason, register: banTimeStamp, expire: banTimeStamp+BotSettings.ogFloodBanMillisecs });
+                    await setBanlistDataToDB({ conn: window.playerList.get(touchPlayer)!.conn, reason: LangRes.antitrolling.ogFlood.banReason, register: banTimeStamp, expire: banTimeStamp+BotSettings.ogFloodBanMillisecs });
                 }
             }
             

@@ -1,4 +1,3 @@
-import * as Ban from "../../controller/Ban";
 import { BanList } from "../PlayerBan/BanList";
 import { PlayerObject } from "../GameObject/PlayerObject";
 
@@ -37,6 +36,7 @@ export const EmergencyTools = {
             console.log(`[EMERGENCY.BAN] #${playerID} is banned.`);
         }
     },
+    /*
     banclearall: function(): void { // clear all of ban list
         window.room.clearBans();
         Ban.bListClear();
@@ -48,6 +48,7 @@ export const EmergencyTools = {
             console.log(`[EMERGENCY.BANLIST] (${item.conn})is banned connection. (reason: ${item.reason})`);
         });
     },
+    */
     password: function(password?: string): void { // set or clear the password key of the room
         if(password) {
             window.room.setPassword(password);

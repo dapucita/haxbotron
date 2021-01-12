@@ -74,7 +74,7 @@ export const command = {
     ,about: '📄 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. 봇 시작 {_LaunchTime}.\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
-        ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 (레이팅 {targetStatsRatingAvatar}{targetStatsRating}) 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%.\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
+        ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 (레이팅 {targetStatsRatingAvatar}{targetStatsRating}) 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 연결끊김 {targetStatsDisconns}회 \n📊 (이어서) 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
     }
     ,statsreset: '📊 전적을 초기화했습니다. 다시 복구할 수 없습니다.'
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'

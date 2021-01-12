@@ -1,15 +1,14 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
 import * as BotSettings from "../../resources/settings.json";
-import * as Ban from "../Ban";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { updateAdmins } from "../RoomTools";
-import { setPlayerData } from "../Storage";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { putTeamNewPlayerFullify, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { convertToPlayerStorage, getBanlistDataFromDB, setBanlistDataToDB, setPlayerDataToDB } from "../Storage";
 
-export function onPlayerLeaveListener(player: PlayerObject): void {
+export async function onPlayerLeaveListener(player: PlayerObject): Promise<void> {
     // Event called when a player leaves the room.
     let leftTimeStamp: number = getUnixTimestamp();
 
@@ -20,7 +19,9 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     var placeholderLeft = { 
         playerID: player.id,
         playerName: player.name,
+        playerStatsRating: window.playerList.get(player.id)!.stats.rating,
         playerStatsTotal: window.playerList.get(player.id)!.stats.totals,
+        playerStatsDisconns: window.playerList.get(player.id)!.stats.disconns,
         playerStatsWins: window.playerList.get(player.id)!.stats.wins,
         playerStatsGoals: window.playerList.get(player.id)!.stats.goals,
         playerStatsAssists: window.playerList.get(player.id)!.stats.assists,
@@ -70,15 +71,22 @@ export function onPlayerLeaveListener(player: PlayerObject): void {
     // if anti abscond option is enabled
     if(BotSettings.antiGameAbscond === true && window.isStatRecord === true) {
         // if this player is in match(team player), fixed-term ban this player
-        if(window.playerList.get(player.id)!.team !== TeamID.Spec && Ban.bListHas(window.playerList.get(player.id)!.conn) === false ) {
+        if(window.playerList.get(player.id)!.team !== TeamID.Spec && await getBanlistDataFromDB(window.playerList.get(player.id)!.conn) === undefined ) {
             // check this player already registered in ban list to prevent overwriting other ban reason.
             window.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
-            Ban.bListAdd({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
+            await setBanlistDataToDB({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
         }
     }
 
+    if(window.isGamingNow === true && window.isStatRecord === true && window.playerList.get(player.id)!.team !== TeamID.Spec) {
+        // if this player is disconnected (include abscond)
+        window.playerList.get(player.id)!.stats.disconns++;
+        placeholderLeft.playerStatsDisconns = window.playerList.get(player.id)!.stats.disconns;
+    }
+
+
     window.playerList.get(player.id)!.entrytime.leftDate = leftTimeStamp; // save left time
-    setPlayerData(window.playerList.get(player.id)!); // save
+    await setPlayerDataToDB(convertToPlayerStorage(window.playerList.get(player.id)!)); // save
     window.playerList.delete(player.id); // delete from player list
 
     if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled

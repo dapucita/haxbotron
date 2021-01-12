@@ -21,6 +21,7 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
                         : decideTier(window.playerList.get(targetStatsID)!.stats.rating))
                     ,targetStatsRating: window.playerList.get(targetStatsID)!.stats.rating
                     ,targetStatsTotal: window.playerList.get(targetStatsID)!.stats.totals
+                    ,targetStatsDisconns: window.playerList.get(targetStatsID)!.stats.disconns
                     ,targetStatsWins: window.playerList.get(targetStatsID)!.stats.wins
                     ,targetStatsGoals: window.playerList.get(targetStatsID)!.stats.goals
                     ,targetStatsAssists: window.playerList.get(targetStatsID)!.stats.assists
@@ -52,6 +53,7 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
                 : decideTier(window.playerList.get(byPlayer.id)!.stats.rating))
             ,targetStatsRating: window.playerList.get(byPlayer.id)!.stats.rating
             ,targetStatsTotal: window.playerList.get(byPlayer.id)!.stats.totals
+            ,targetStatsDisconns: window.playerList.get(byPlayer.id)!.stats.disconns
             ,targetStatsWins: window.playerList.get(byPlayer.id)!.stats.wins
             ,targetStatsGoals: window.playerList.get(byPlayer.id)!.stats.goals
             ,targetStatsAssists: window.playerList.get(byPlayer.id)!.stats.assists

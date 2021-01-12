@@ -1,3 +1,7 @@
 .logs/
+.node-persist/
 node_modules/
 out/
+!webpack.config.js
+.env
+*.db

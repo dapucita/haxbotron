@@ -43,7 +43,8 @@ export interface PlayerMatchRecord { // Temporary stat record for current match
 
 export interface PlayerStats {
     rating: number; // HElo Rating points
-    totals: number; // total games include wins
+    totals: number; // total games include wins and disconns
+    disconns: number; // disconnected games
     wins: number; // the game wins
     goals: number; // not contains OGs.
     assists: number; // count for assist goal
@@ -82,13 +83,12 @@ export interface PlayerEntryTime {
 }
 
 export interface PlayerStorage {
-    // object literal that will be stored in LocalStorage as JSON.
-    // however, JSON stringify should be done in LocalStorage not Node.js Map() object.
     auth: string; // same meaning as in PlayerObject. It can used for identify each of players.
     conn: string; // same meaning as in PlayerObject.
     name: string; // player's name used in previous game.
     rating: number; // HElo Rating points
-    totals: number; // total games include wins
+    totals: number; // total games include wins and disconns
+    disconns: number; // disconnected games
     wins: number; // the game wins
     goals: number; // not contains OGs.
     assists: number; // count for assist goal

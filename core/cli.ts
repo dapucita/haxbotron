@@ -3,15 +3,17 @@
 
 //import modules
 import "dotenv/config";
+import * as dbUtilityInject from "./injection/function/db.utility";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { RoomConfig } from "./model/RoomObject/RoomConfig";
+
 
 // BOT Loader
 const inquirer = require("inquirer")
 const puppeteer = require('puppeteer');
-const nodeStorage = require('node-persist');
 
-var hostRoomConfig: RoomConfig; //room settings and information
+var hostRoomConfig: RoomConfig; // room settings and information
+var roomRUID: string = "haxbotron-room-default"; // room unique identifier for game room
 
 var isOpenHeadless: boolean = true; // option for open chromium in headless mode
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
@@ -23,7 +25,7 @@ if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.
 }
 
 hostRoomConfig = { //default init
-    roomName: "🤖𝑯𝒂𝒙𝒃𝒐𝒕𝒓𝒐𝒏",
+    roomName: "Haxball Play 𝘸𝘪𝘵𝘩 𝙃𝙖𝙭𝙗𝙤𝙩𝙧𝙤𝙣🤖",
     playerName: "🤖",
     password: "",
     maxPlayers: 12,
@@ -41,16 +43,12 @@ if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.
 }
 
 //bot open
-nodeStorageInit(); // init nodeStorage
 
 puppeteerContainer = makeBot(hostRoomConfig);
 isBotLaunched = true;
 
 // In this file you can include the rest of your app's specific main process code.
 // You can also put them in separate files and require them here.
-async function nodeStorageInit() {
-    await nodeStorage.init();
-}
 
 async function makeBot(hostConfig: any) {
     winstonLogger.info("Haxbotron CLI starts now !!!");
@@ -86,6 +84,11 @@ async function makeBot(hostConfig: any) {
                 name: "inputHeadlessModeSelect",
                 type: "confirm",
                 message: "Do you want Headless Mode?",
+            },
+            {
+                name: "inputRoomRUID",
+                type: "input",
+                message: "Set your RUID of new room",
             }
         ])
         .then((answerConfig: any) => {
@@ -94,6 +97,11 @@ async function makeBot(hostConfig: any) {
                 hostConfig.password = null;
             } else {
                 hostConfig.password = answerConfig.inputRoomPassword;
+            }
+            if (answerConfig.inputRoomRUID == "") {
+                roomRUID = "haxbotron-room-default";
+            } else {
+                roomRUID = answerConfig.inputRoomRUID;
             }
             hostConfig.maxPlayers = answerConfig.inputRoomMaxPlayers;
             hostConfig.public = answerConfig.inputRoomPublic;
@@ -125,7 +133,7 @@ async function makeBot(hostConfig: any) {
     // logging system --
     // https://stackoverflow.com/questions/47539043/how-to-get-all-console-messages-with-puppeteer-including-errors-csp-violations
     await page.on('console', (msg: any) => {
-        switch(msg.type()) {
+        switch (msg.type()) {
             case "log": {
                 winstonLogger.info(msg.text());
                 break;
@@ -159,32 +167,36 @@ async function makeBot(hostConfig: any) {
     await page.goto('https://www.haxball.com/headless', {
         waitUntil: 'networkidle2'
     });
-    await page.setCookie({
-        name: 'botConfig',
-        value: JSON.stringify(hostConfig)
-    }); // convey room host configuration via cookie
+    await page.setCookie(
+        {
+            name: 'botConfig',
+            value: JSON.stringify(hostConfig)
+        },
+        {
+            name: 'botRoomRUID',
+            value: roomRUID // default value (//TODO: it will be able to change in the future.....)
+        }
+    ); // convey room host configuration via cookie
 
     await page.addScriptTag({
         path: './out/bot_bundle.js'
     });
 
-    // inject functions for uploda data on node-persist storage into puppeteer 
-    await page.exposeFunction('uploadStorageData', (key: string, stringfiedData: string) => {
-        nodeStorage.setItem(key, stringfiedData);
-    });
-    await page.exposeFunction('clearStorageData', (key: string) => {
-        nodeStorage.removeItem(key);
-    });
+    // inject functions for do CRUD with DB Server ====================================
+    await page.exposeFunction('createSuperadminDB', dbUtilityInject.createSuperadminDB);
+    await page.exposeFunction('readSuperadminDB', dbUtilityInject.readSuperadminDB);
+    //await page.exposeFunction('updateSuperadminDB', dbUtilityInject.updateSuperadminDB); //this function is not implemented.
+    await page.exposeFunction('deleteSuperadminDB', dbUtilityInject.deleteSuperadminDB);
 
-    // load stored data from node-persist storage to puppeteer html5 localstorage
-    await nodeStorage.forEach(async function (datum: any) { // async forEach(callback): This function iterates over each key/value pair and executes an asynchronous callback as well
-        // usage: datum.key, datum.value
-        if (datum.key != "_LaunchTime") { // except _LaunchTime
-            await page.evaluate((tempKey: string, tempStr: string) => {
-                localStorage.setItem(tempKey, tempStr);
-            }, datum.key, datum.value);
-        }
-    });
-
+    await page.exposeFunction('createPlayerDB', dbUtilityInject.createPlayerDB);
+    await page.exposeFunction('readPlayerDB', dbUtilityInject.readPlayerDB);
+    await page.exposeFunction('updatePlayerDB', dbUtilityInject.updatePlayerDB);
+    await page.exposeFunction('deletePlayerDB', dbUtilityInject.deletePlayerDB);
+    
+    await page.exposeFunction('createBanlistDB', dbUtilityInject.createBanlistDB);
+    await page.exposeFunction('readBanlistDB', dbUtilityInject.readBanlistDB);
+    await page.exposeFunction('updateBanlistDB', dbUtilityInject.updateBanlistDB);
+    await page.exposeFunction('deleteBanlistDB', dbUtilityInject.deleteBanlistDB);
+    // ================================================================================
     return page;
 }
