@@ -4,7 +4,7 @@ import { RoomConfig } from "./RoomObject/RoomConfig";
 export interface BotConfig {
     room: {
         _LaunchDate: Date; // date of this room created
-        _UID: string; // unique identifier for this game room
+        _RUID: string; // room unique identifier for this game room
         config: RoomConfig; // room config data for set this new room
     }
     game: {

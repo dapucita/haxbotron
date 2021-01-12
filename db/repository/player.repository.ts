@@ -4,25 +4,26 @@ import { Player } from '../entity/player.entity';
 import { PlayerModel } from '../model/PlayerModel';
 
 export class PlayerRepository implements IRepository<Player> {
-    public async findAll(): Promise<Player[]> {
+    public async findAll(ruid: string): Promise<Player[]> {
         const repository: Repository<Player> = getRepository(Player);
-        let players: Player[] = await repository.find();
+        let players: Player[] = await repository.find({ ruid: ruid });
         if (players.length === 0) throw new Error('There are no players.');
         return players;
     }
 
-    public async findSingle(auth: string): Promise<Player | undefined> {
+    public async findSingle(ruid: string, auth: string): Promise<Player | undefined> {
         const repository: Repository<Player> = getRepository(Player);
-        let player: Player | undefined = await repository.findOne({ auth: auth });
+        let player: Player | undefined = await repository.findOne({ ruid: ruid, auth: auth });
         if (player === undefined) throw new Error('Such player is not found.');
         return player;
     }
 
-    public async addSingle(player: PlayerModel): Promise<Player> {
+    public async addSingle(ruid: string, player: PlayerModel): Promise<Player> {
         const repository: Repository<Player> = getRepository(Player);
-        let newPlayer: Player | undefined = await repository.findOne({ auth: player.auth });
+        let newPlayer: Player | undefined = await repository.findOne({ ruid: ruid, auth: player.auth });
         if (newPlayer === undefined) {
             newPlayer = new Player();
+            newPlayer.ruid = ruid;
             newPlayer.auth = player.auth;
             newPlayer.conn = player.conn;
             newPlayer.name = player.name;
@@ -48,10 +49,11 @@ export class PlayerRepository implements IRepository<Player> {
         return await repository.save(newPlayer);
     }
 
-    public async updateSingle(auth: string, player: PlayerModel): Promise<Player> {
+    public async updateSingle(ruid: string, auth: string, player: PlayerModel): Promise<Player> {
         const repository: Repository<Player> = getRepository(Player);
-        let newPlayer: Player | undefined = await repository.findOne({ auth: auth });
+        let newPlayer: Player | undefined = await repository.findOne({ ruid: ruid, auth: auth });
         if (newPlayer !== undefined) {
+            newPlayer.ruid = ruid;
             newPlayer.auth = player.auth;
             newPlayer.conn = player.conn;
             newPlayer.name = player.name;
@@ -77,9 +79,9 @@ export class PlayerRepository implements IRepository<Player> {
         return await repository.save(newPlayer);
     }
 
-    public async deleteSingle(auth: string): Promise<void> {
+    public async deleteSingle(ruid: string, auth: string): Promise<void> {
         const repository: Repository<Player> = getRepository(Player);
-        let player: Player | undefined = await repository.findOne({ auth: auth });
+        let player: Player | undefined = await repository.findOne({ ruid: ruid, auth: auth });
         if (player === undefined) {
             throw new Error('Such player is not found.');
         } else {

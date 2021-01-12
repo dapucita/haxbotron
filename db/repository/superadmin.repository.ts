@@ -4,25 +4,26 @@ import { SuperAdminModel } from '../model/SuperAdminModel';
 import { IRepository } from './repository.interface';
 
 export class SuperAdminRepository implements IRepository<SuperAdmin> {
-    public async findAll(): Promise<SuperAdmin[]> {
+    public async findAll(ruid: string): Promise<SuperAdmin[]> {
         const repository: Repository<SuperAdmin> = getRepository(SuperAdmin);
-        let superlist: SuperAdmin[] = await repository.find();
+        let superlist: SuperAdmin[] = await repository.find({ ruid: ruid });
         if (superlist.length === 0) throw new Error('There are no registered superadmin keys.');
         return superlist;
     }
 
-    public async findSingle(key: string): Promise<SuperAdmin | undefined> {
+    public async findSingle(ruid: string, key: string): Promise<SuperAdmin | undefined> {
         const repository: Repository<SuperAdmin> = getRepository(SuperAdmin);
-        let superadmin: SuperAdmin | undefined = await repository.findOne({ key: key });
+        let superadmin: SuperAdmin | undefined = await repository.findOne({ ruid: ruid, key: key });
         if (superadmin === undefined) throw new Error('Such superadmin is not registered.');
         return superadmin;
     }
 
-    public async addSingle(superadmin: SuperAdminModel): Promise<SuperAdmin> {
+    public async addSingle(ruid: string, superadmin: SuperAdminModel): Promise<SuperAdmin> {
         const repository: Repository<SuperAdmin> = getRepository(SuperAdmin);
-        let newSuperadmin: SuperAdmin | undefined = await repository.findOne({ key: superadmin.key });
+        let newSuperadmin: SuperAdmin | undefined = await repository.findOne({ ruid: ruid, key: superadmin.key });
         if (newSuperadmin === undefined) {
             newSuperadmin = new SuperAdmin();
+            newSuperadmin.ruid = ruid;
             newSuperadmin.key = superadmin.key;
             newSuperadmin.description = superadmin.description;
         } else {
@@ -31,10 +32,11 @@ export class SuperAdminRepository implements IRepository<SuperAdmin> {
         return await repository.save(newSuperadmin);
     }
 
-    public async updateSingle(key: string, superadmin: SuperAdminModel): Promise<SuperAdmin> {
+    public async updateSingle(ruid: string, key: string, superadmin: SuperAdminModel): Promise<SuperAdmin> {
         const repository: Repository<SuperAdmin> = getRepository(SuperAdmin);
-        let newSuperadmin: SuperAdmin | undefined = await repository.findOne({ key: key });
+        let newSuperadmin: SuperAdmin | undefined = await repository.findOne({ ruid: ruid, key: key });
         if (newSuperadmin !== undefined) {
+            newSuperadmin.ruid = ruid;
             newSuperadmin.key = superadmin.key;
             newSuperadmin.description = superadmin.description;
         } else {
@@ -43,9 +45,9 @@ export class SuperAdminRepository implements IRepository<SuperAdmin> {
         return await repository.save(newSuperadmin);
     }
 
-    public async deleteSingle(key: string): Promise<void> {
+    public async deleteSingle(ruid: string, key: string): Promise<void> {
         const repository: Repository<SuperAdmin> = getRepository(SuperAdmin);
-        let superadmin: SuperAdmin | undefined = await repository.findOne({ key: key });
+        let superadmin: SuperAdmin | undefined = await repository.findOne({ ruid: ruid, key: key });
         if (superadmin === undefined) {
             throw new Error('Such player is not registered yet.');
         } else {

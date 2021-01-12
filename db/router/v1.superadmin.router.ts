@@ -5,7 +5,7 @@ import { checkValidationRules, validateSuperAdminModelRules  } from "../model/Va
 import { IRepository } from "../repository/repository.interface";
 import { SuperAdminRepository } from "../repository/superadmin.repository";
 
-export const superadminRouter: Router = express.Router();
+export const superadminRouter: Router = express.Router({ mergeParams: true });
 const superadminRepository: IRepository<SuperAdmin> = new SuperAdminRepository();
 const controller: SuperAdminController = new SuperAdminController(superadminRepository);
 

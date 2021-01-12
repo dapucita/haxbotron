@@ -5,7 +5,10 @@ export class BanList {
     @PrimaryGeneratedColumn()
     uid!: number;
 
-    @Column({unique: true})
+    @Column()
+    ruid!: string;
+
+    @Column()
     conn!: string; 
 
     @Column()

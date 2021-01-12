@@ -5,7 +5,10 @@ export class Player {
     @PrimaryGeneratedColumn()
     uid!: number;
 
-    @Column({unique: true})
+    @Column()
+    ruid!: string;
+
+    @Column()
     auth!: string; 
 
     @Column()

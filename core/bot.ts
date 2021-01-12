@@ -22,7 +22,7 @@ import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 window.settings = {
     room: {
         _LaunchDate: new Date(), // set date the room created
-        _UID: getCookieFromHeadless('botRoomUID'), // unique identifier for game room
+        _RUID: getCookieFromHeadless('botRoomRUID'), // room unique identifier for game room
         config: JSON.parse(getCookieFromHeadless('botConfig')) // parse and set roomconfig data from cookie
     },
     game: {
@@ -31,7 +31,7 @@ window.settings = {
 }
 
 // init global properties
-console.log(`Haxbotron Bot Entry Point : The Room UID and authentication token are conveyed via cookie(UID ${window.settings.room._UID}, TOKEN ${window.settings.room.config.token})`);
+console.log(`Haxbotron Bot Entry Point : The Room UID and authentication token are conveyed via cookie(UID ${window.settings.room._RUID}, TOKEN ${window.settings.room.config.token})`);
 
 window.playerList = new Map(); // player list (key: player.id, value: Player), usage: playerList.get(player.id).name
 

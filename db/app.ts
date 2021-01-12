@@ -12,11 +12,10 @@ import { createConnection } from "typeorm"
 import { winstonLogger } from "./utility/winstonLoggerSystem";
 import { ResponseError } from "./model/interface/ResponseError";
 import { Player } from "./entity/player.entity";
-import { playerRouter } from "./router/v1.player.router";
-import { banlistRouter } from "./router/v1.banlist.router";
 import { BanList } from "./entity/banlist.entity";
-import { superadminRouter } from "./router/v1.superadmin.router";
 import { SuperAdmin } from "./entity/superadmin.entity";
+import { apiRouterV1 } from "./router/v1.api.router";
+
 
 // START
 winstonLogger.info(`haxbotron-db server is launched at ${new Date().toLocaleString()}`);
@@ -46,9 +45,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 // Routers
-app.use("/api/v1/player", playerRouter);
-app.use("/api/v1/banlist", banlistRouter);
-app.use("/api/v1/superadmin", superadminRouter);
+app.use("/api/v1", apiRouterV1);
 
 // Error Handler
 app.use((req: Request, res: Response, next: NextFunction) => {

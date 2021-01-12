@@ -13,7 +13,7 @@ const nodeStorage = require('node-persist'); // for save and load superadmin log
 let electronWindow: any; // window object for Electron
 
 var hostRoomConfig: HostRoomConfig; // Configuration data for Room Host
-var roomUID: string = "haxbotron-room-default-1"; // unique identifier for game room
+var roomRUID: string = "haxbotron-room-default"; // room unique identifier for game room
 var isOpenHeadless: boolean = false; // option for open chromium in headless mode
 
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
@@ -125,7 +125,7 @@ ipcMain.on('super-key-action', (event: any, arg: any) => { // webRender.js
         let newKeyListArray: string[] = superKeyList.split(/\n|\r\n|\r/) || [];
         newKeyListArray.forEach(async (eachKey: string) => { 
             // upload onto DB server.
-            await dbUtilityInject.createSuperadminDB(eachKey, `Created by Haxbotron GUI at ${Date.now().toLocaleString()}`);
+            await dbUtilityInject.createSuperadminDB(roomRUID, eachKey, `Created by Haxbotron GUI at ${Date.now().toLocaleString()}`);
             
         });
         // TODO: remove key menu
@@ -269,8 +269,8 @@ async function bot(hostConfig: string) {
             value: JSON.stringify(hostConfig)
         },
         {
-            name: 'botRoomUID',
-            value: roomUID // default value (//TODO: it will be able to change in the future.....)
+            name: 'botRoomRUID',
+            value: roomRUID // default value (//TODO: it will be able to change in the future.....)
         }
     ); // convey room host configuration via cookie
 

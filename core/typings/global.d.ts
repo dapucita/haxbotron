@@ -42,20 +42,20 @@ declare global {
         sendRoomChat(msg: string, playerID: number | null): void // for send chat message to the game
 
         // CRUD with DB Server via REST API
-        async createPlayerDB(player: PlayerStorage): Promise<void>
-        async readPlayerDB(playerAuth: string): Promise<PlayerStorage|undefined>
-        async updatePlayerDB(player: PlayerStorage): Promise<void>
-        async deletePlayerDB(playerAuth: string):Promise<void>
+        async createPlayerDB(ruid: string, player: PlayerStorage): Promise<void>
+        async readPlayerDB(ruid: string, playerAuth: string): Promise<PlayerStorage|undefined>
+        async updatePlayerDB(ruid: string, player: PlayerStorage): Promise<void>
+        async deletePlayerDB(ruid: string, playerAuth: string):Promise<void>
 
-        async createBanlistDB(banList: BanList): Promise<void>
-        async readBanlistDB(playerConn: string): Promise<BanList|undefined>
-        async updateBanlistDB(banList: BanList): Promise<void>
-        async deleteBanlistDB(playerConn: string): Promise<void>
+        async createBanlistDB(ruid: string, banList: BanList): Promise<void>
+        async readBanlistDB(ruid: string, playerConn: string): Promise<BanList|undefined>
+        async updateBanlistDB(ruid: string, banList: BanList): Promise<void>
+        async deleteBanlistDB(ruid: string, playerConn: string): Promise<void>
 
-        async createSuperadminDB(key: string, description: string): Promise<void>
-        async readSuperadminDB(key: string): Promise<string | undefined>
+        async createSuperadminDB(ruid: string, key: string, description: string): Promise<void>
+        async readSuperadminDB(ruid: string, key: string): Promise<string | undefined>
         //async updateSuperadminDB is not implemented.
-        async deleteSuperadminDB(key: string): Promise<void>
+        async deleteSuperadminDB(ruid: string, key: string): Promise<void>
 
         // on dev-console tools for emergency
         onEmergency: {

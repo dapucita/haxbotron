@@ -1,7 +1,7 @@
 export interface IRepository<T> {
-    findAll(): Promise<T[]>;
-    findSingle(target: string): Promise<T | undefined>;
-    addSingle(targetModel: any): Promise<T>;
-    updateSingle(target: string, targetModel: any): Promise<T>;
-    deleteSingle(target: string): Promise<void>;
+    findAll(ruid: string): Promise<T[]>;
+    findSingle(ruid: string, target: string): Promise<T | undefined>;
+    addSingle(ruid: string, targetModel: any): Promise<T>;
+    updateSingle(ruid: string, target: string, targetModel: any): Promise<T>;
+    deleteSingle(ruid: string, target: string): Promise<void>;
 }

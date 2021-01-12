@@ -5,7 +5,7 @@ import { checkValidationRules, validateBanListModelRules } from "../model/Valida
 import { BanListRepository } from "../repository/banlist.repository";
 import { IRepository } from "../repository/repository.interface";
 
-export const banlistRouter: Router = express.Router();
+export const banlistRouter: Router = express.Router({ mergeParams: true });
 const banlistRepository: IRepository<BanList> = new BanListRepository();
 const controller: BanListController = new BanListController(banlistRepository);
 

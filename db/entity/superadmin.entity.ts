@@ -5,7 +5,10 @@ export class SuperAdmin {
     @PrimaryGeneratedColumn()
     uid!: number;
 
-    @Column({unique: true})
+    @Column()
+    ruid!: string;
+
+    @Column()
     key!: string; 
 
     @Column()

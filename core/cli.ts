@@ -13,7 +13,7 @@ const inquirer = require("inquirer")
 const puppeteer = require('puppeteer');
 
 var hostRoomConfig: RoomConfig; // room settings and information
-var roomUID: string = "haxbotron-room-default-1"; // unique identifier for game room
+var roomRUID: string = "haxbotron-room-default"; // room unique identifier for game room
 
 var isOpenHeadless: boolean = true; // option for open chromium in headless mode
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
@@ -86,9 +86,9 @@ async function makeBot(hostConfig: any) {
                 message: "Do you want Headless Mode?",
             },
             {
-                name: "inputRoomUID",
+                name: "inputRoomRUID",
                 type: "input",
-                message: "Set your UID of new room",
+                message: "Set your RUID of new room",
             }
         ])
         .then((answerConfig: any) => {
@@ -98,10 +98,10 @@ async function makeBot(hostConfig: any) {
             } else {
                 hostConfig.password = answerConfig.inputRoomPassword;
             }
-            if (answerConfig.inputRoomUID == "") {
-                roomUID = "haxbotron-room-default-1";
+            if (answerConfig.inputRoomRUID == "") {
+                roomRUID = "haxbotron-room-default";
             } else {
-                roomUID = answerConfig.inputRoomUID;
+                roomRUID = answerConfig.inputRoomRUID;
             }
             hostConfig.maxPlayers = answerConfig.inputRoomMaxPlayers;
             hostConfig.public = answerConfig.inputRoomPublic;
@@ -173,8 +173,8 @@ async function makeBot(hostConfig: any) {
             value: JSON.stringify(hostConfig)
         },
         {
-            name: 'botRoomUID',
-            value: roomUID // default value (//TODO: it will be able to change in the future.....)
+            name: 'botRoomRUID',
+            value: roomRUID // default value (//TODO: it will be able to change in the future.....)
         }
     ); // convey room host configuration via cookie
 

@@ -5,7 +5,7 @@ import { PlayerRepository } from '../repository/player.repository';
 import { Player } from '../entity/player.entity';
 import { checkValidationRules, validatePlayerModelRules } from "../model/Validator";
 
-export const playerRouter: Router = express.Router();
+export const playerRouter: Router = express.Router({ mergeParams: true });
 const playersRepository: IRepository<Player> = new PlayerRepository();
 const controller: PlayerController = new PlayerController(playersRepository);
 

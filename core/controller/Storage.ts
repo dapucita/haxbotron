@@ -30,41 +30,41 @@ export function convertToPlayerStorage(player: Player): PlayerStorage {
 // CRUDs with DB Server by injected functions from Node Main Application
 // register new player or update it
 export async function setPlayerDataToDB(playerStorage: PlayerStorage): Promise<void> {
-    const player: PlayerStorage | undefined =  await window.readPlayerDB(playerStorage.auth);
+    const player: PlayerStorage | undefined = await window.readPlayerDB(window.settings.room._RUID, playerStorage.auth);
     if(player !== undefined) {
         //if already exist then update it
-        await window.updatePlayerDB(playerStorage);
+        await window.updatePlayerDB(window.settings.room._RUID, playerStorage);
     } else {
         // or create new one
-        await window.createPlayerDB(playerStorage);
+        await window.createPlayerDB(window.settings.room._RUID, playerStorage);
     }
 }
 
 // get player data
 export async function getPlayerDataFromDB(playerAuth: string): Promise<PlayerStorage | undefined> {
-    const player: PlayerStorage | undefined =  await window.readPlayerDB(playerAuth);
+    const player: PlayerStorage | undefined = await window.readPlayerDB(window.settings.room._RUID, playerAuth);
     return player;
 }
 
 // register new ban or update it
 export async function setBanlistDataToDB(banList: BanList): Promise<void> {
-    const banplayer: BanList | undefined =  await window.readBanlistDB(banList.conn);
+    const banplayer: BanList | undefined = await window.readBanlistDB(window.settings.room._RUID, banList.conn);
     if(banplayer !== undefined) {
         //if already exist then update it
-        await window.updateBanlistDB(banList);
+        await window.updateBanlistDB(window.settings.room._RUID, banList);
     } else {
         // or create new one
-        await window.createBanlistDB(banList);
+        await window.createBanlistDB(window.settings.room._RUID, banList);
     }
 }
 
 // get exist ban
 export async function getBanlistDataFromDB(playerConn: string): Promise<BanList | undefined> {
-    const banplayer: BanList | undefined =  await window.readBanlistDB(playerConn);
+    const banplayer: BanList | undefined = await window.readBanlistDB(window.settings.room._RUID, playerConn);
     return banplayer;
 }
 
 // remove exist ban
 export async function removeBanlistDataFromDB(playerConn: string): Promise<void> {
-    await window.deleteBanlistDB(playerConn);
+    await window.deleteBanlistDB(window.settings.room._RUID, playerConn);
 }

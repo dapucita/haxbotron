@@ -12,14 +12,14 @@ export class PlayerController {
 
     public async getAllPlayers(request: Request, response: Response, next: NextFunction): Promise<any> {
         return this._repository
-            .findAll()
+            .findAll(request.params.ruid)
             .then((players) => response.status(200).send(players))
             .catch((error) => response.status(404).send({ error: error.message }));
     }
 
     public async getPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
         return this._repository
-            .findSingle(request.params.auth)
+            .findSingle(request.params.ruid, request.params.auth)
             .then((player) => response.status(200).send(player))
             .catch((error) => response.status(404).send({ error: error.message }));
     }
@@ -28,7 +28,7 @@ export class PlayerController {
         let playerModel: PlayerModel = request.body;
 
         return this._repository
-            .addSingle(playerModel)
+            .addSingle(request.params.ruid, playerModel)
             .then(() => response.status(204).send())
             .catch((error) => response.status(400).send({ error: error.message }));
     }
@@ -37,14 +37,14 @@ export class PlayerController {
         let playerModel: PlayerModel = request.body;
 
         return this._repository
-            .updateSingle(request.params.auth, playerModel)
+            .updateSingle(request.params.ruid, request.params.auth, playerModel)
             .then(() => response.status(204).send())
             .catch((error) => response.status(404).send({ error: error.message }));
     }
 
     public async deletePlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
         return this._repository
-            .deleteSingle(request.params.auth)
+            .deleteSingle(request.params.ruid, request.params.auth)
             .then(() => response.status(204).send())
             .catch((error) => response.status(404).send({ error: error.message }));
     }
