@@ -12,7 +12,8 @@ import { RoomConfig } from "./model/RoomObject/RoomConfig";
 const inquirer = require("inquirer")
 const puppeteer = require('puppeteer');
 
-var hostRoomConfig: RoomConfig; //room settings and information
+var hostRoomConfig: RoomConfig; // room settings and information
+var roomUID: string = "haxbotron-room-default-1"; // unique identifier for game room
 
 var isOpenHeadless: boolean = true; // option for open chromium in headless mode
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
@@ -83,6 +84,11 @@ async function makeBot(hostConfig: any) {
                 name: "inputHeadlessModeSelect",
                 type: "confirm",
                 message: "Do you want Headless Mode?",
+            },
+            {
+                name: "inputRoomUID",
+                type: "input",
+                message: "Set your UID of new room",
             }
         ])
         .then((answerConfig: any) => {
@@ -91,6 +97,11 @@ async function makeBot(hostConfig: any) {
                 hostConfig.password = null;
             } else {
                 hostConfig.password = answerConfig.inputRoomPassword;
+            }
+            if (answerConfig.inputRoomUID == "") {
+                roomUID = "haxbotron-room-default-1";
+            } else {
+                roomUID = answerConfig.inputRoomUID;
             }
             hostConfig.maxPlayers = answerConfig.inputRoomMaxPlayers;
             hostConfig.public = answerConfig.inputRoomPublic;
@@ -156,10 +167,16 @@ async function makeBot(hostConfig: any) {
     await page.goto('https://www.haxball.com/headless', {
         waitUntil: 'networkidle2'
     });
-    await page.setCookie({
-        name: 'botConfig',
-        value: JSON.stringify(hostConfig)
-    }); // convey room host configuration via cookie
+    await page.setCookie(
+        {
+            name: 'botConfig',
+            value: JSON.stringify(hostConfig)
+        },
+        {
+            name: 'botRoomUID',
+            value: roomUID // default value (//TODO: it will be able to change in the future.....)
+        }
+    ); // convey room host configuration via cookie
 
     await page.addScriptTag({
         path: './out/bot_bundle.js'

@@ -13,6 +13,7 @@ const nodeStorage = require('node-persist'); // for save and load superadmin log
 let electronWindow: any; // window object for Electron
 
 var hostRoomConfig: HostRoomConfig; // Configuration data for Room Host
+var roomUID: string = "haxbotron-room-default-1"; // unique identifier for game room
 var isOpenHeadless: boolean = false; // option for open chromium in headless mode
 
 var isBotLaunched: boolean = false; // flag for check whether the bot is running
@@ -262,10 +263,16 @@ async function bot(hostConfig: string) {
     await page.goto('https://www.haxball.com/headless', {
         waitUntil: 'networkidle2'
     });
-    await page.setCookie({
-        name: 'botConfig',
-        value: hostConfig
-    }); // convey room host configuration via cookie
+    await page.setCookie(
+        {
+            name: 'botConfig',
+            value: JSON.stringify(hostConfig)
+        },
+        {
+            name: 'botRoomUID',
+            value: roomUID // default value (//TODO: it will be able to change in the future.....)
+        }
+    ); // convey room host configuration via cookie
 
     await page.addScriptTag({
         path: './out/bot_bundle.js'
