@@ -34,7 +34,7 @@ export async function createSuperadminDB(ruid: string, key: string, description:
 
 export async function readSuperadminDB(ruid: string, key: string): Promise<string | undefined> {
     try {
-        const result = await axios.get(dbConnAddr + ruid + '/' + 'superadmin' + key);
+        const result = await axios.get(dbConnAddr + ruid + '/' + 'superadmin' + '/' + key);
         if (result.status === 200 && result.data) {
             winstonLogger.info(`200 Succeed on readSuperadminDB: Read. key(${key})`);
             return result.data.description;
@@ -52,7 +52,7 @@ export async function readSuperadminDB(ruid: string, key: string): Promise<strin
 
 export async function deleteSuperadminDB(ruid: string, key: string): Promise<void> {
     try {
-        const result = await axios.delete(dbConnAddr + ruid + '/' + 'superadmin' + key);
+        const result = await axios.delete(dbConnAddr + ruid + '/' + 'superadmin' + '/' + key);
         if (result.status === 204) {
             winstonLogger.info(`${result.status} Succeed on deleteSuperadminDB: Deleted. key(${key})`);
         }
