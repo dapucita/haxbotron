@@ -266,7 +266,7 @@ async function bot(hostConfig: string) {
     await page.setCookie(
         {
             name: 'botConfig',
-            value: JSON.stringify(hostConfig)
+            value: hostConfig
         },
         {
             name: 'botRoomRUID',
