@@ -68,22 +68,19 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
         }
     }
 
-    // if anti abscond option is enabled
-    if(BotSettings.antiGameAbscond === true && window.isStatRecord === true) {
-        // if this player is in match(team player), fixed-term ban this player
-        if(window.playerList.get(player.id)!.team !== TeamID.Spec && await getBanlistDataFromDB(window.playerList.get(player.id)!.conn) === undefined ) {
-            // check this player already registered in ban list to prevent overwriting other ban reason.
-            window.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
-            await setBanlistDataToDB({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
-        }
-    }
-
     if(window.isGamingNow === true && window.isStatRecord === true && window.playerList.get(player.id)!.team !== TeamID.Spec) {
         // if this player is disconnected (include abscond)
         window.playerList.get(player.id)!.stats.disconns++;
         placeholderLeft.playerStatsDisconns = window.playerList.get(player.id)!.stats.disconns;
+        if(BotSettings.antiGameAbscond === true) { // if anti abscond option is enabled
+            window.playerList.get(player.id)!.stats.rating -= BotSettings.gameAbscondRatingPenalty; // rating penalty
+            if(await getBanlistDataFromDB(window.playerList.get(player.id)!.conn) === undefined ) { // if this player is in match(team player), fixed-term ban this player
+                // check this player already registered in ban list to prevent overwriting other ban reason.
+                window.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
+                await setBanlistDataToDB({ conn: window.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
+            }
+        }
     }
-
 
     window.playerList.get(player.id)!.entrytime.leftDate = leftTimeStamp; // save left time
     await setPlayerDataToDB(convertToPlayerStorage(window.playerList.get(player.id)!)); // save

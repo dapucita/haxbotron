@@ -14,6 +14,7 @@ import { cmdFreeze } from "./commands/freeze";
 import { cmdMute } from "./commands/mute";
 import { cmdVote } from "./commands/vote";
 import { cmdSuper } from "./commands/super";
+import { cmdTier } from "./commands/tier";
 
 // if given string is command chat, this function returns true, nor false.
 export function isCommandString(message: string): boolean {
@@ -109,6 +110,10 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             } else {
                 cmdVote(byPlayer);
             }
+            break;
+        }
+        case CommandSet.tier: {
+            cmdTier(byPlayer);
             break;
         }
         case CommandSet.super: {

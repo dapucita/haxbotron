@@ -46,6 +46,7 @@
 
     "antiGameAbscond" : true,
     "gameAbscondBanMillisecs" : 300000,
+    "gameAbscondRatingPenalty" : 10,
 
     "rerollWinStreak" : true,
     "rerollWinstreakCriterion" : 5,

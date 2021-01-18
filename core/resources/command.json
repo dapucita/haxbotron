@@ -13,6 +13,7 @@
     "_helpManstatsreset" : "statsreset",
     "_helpManstreak" : "streak",
     "_helpManvote" : "vote",
+    "_helpMantier" : "tier",
     "_helpMansuper" : "super",
     "_helpManadmin" : "admin",
 
@@ -46,5 +47,6 @@
     "statsreset" : "statsreset",
     "streak" : "streak",
     "super" : "super",
-    "vote" : "vote"
+    "vote" : "vote",
+    "tier" : "tier"
 }
