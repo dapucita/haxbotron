@@ -7,9 +7,7 @@
 ![haxbotron-image](haxbotron-img.png)
 
 ## What is this
-Haxbotron is a host bot application for Haxball game.
-
-You can power your own host by electron-based launcher.
+`Haxbotron` is a headless host server for `Haxball` game.
 
 This Project is open source and free to use. Enjoy it :)
 
@@ -20,34 +18,19 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 
 ## Features
 - launch on Multi platforms: Windows, Linux, OS X and so on.
+- Automatic game operating system
 - Detailed player data and statistics
+- Sophisticated tier and rating system
+- Powerful anti-trolling system
 - Practical tools for actual gaming
 - Built-in maps, especially popular in Korea.
 
 ## Manuals for Use
-
-- [How to Run(English)](https://github.com/dapucita/haxbotron/wiki/How-to-Run) / [설치와 실행 방법(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%84%A4%EC%B9%98%EC%99%80-%EC%8B%A4%ED%96%89-%EB%B0%A9%EB%B2%95)
-- [How to Configure Initially](https://github.com/dapucita/haxbotron/wiki/How-to-Configure-Initially) / [사전에 미리 설정하기(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%82%AC%EC%A0%84%EC%97%90-%EB%AF%B8%EB%A6%AC-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0)
-- [How to launch via CLI](https://github.com/dapucita/haxbotron/wiki/How-to-launch-via-CLI)
-- [Commands available in game](https://github.com/dapucita/haxbotron/wiki/Chat-Commands)
-- [Emergency tools in game](https://github.com/dapucita/haxbotron/wiki/Emergency-tools-on-GUI-Launcher)
-- [Player Hierarchy](https://github.com/dapucita/haxbotron/wiki/Player-Hierarchy)
-- [Placeholders for interpolation](https://github.com/dapucita/haxbotron/wiki/Placeholders-for-interpolation)
-- [Anti-Trolling options](https://github.com/dapucita/haxbotron/wiki/AntiTrolling-Options) / [트롤링 방지 옵션(한국어)](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%ED%8A%B8%EB%A1%A4%EB%A7%81-%EB%B0%A9%EC%A7%80-%EC%98%B5%EC%85%98)
-- [How to disable some game commands](https://github.com/dapucita/haxbotron/wiki/How-to-disable-some-game-commands)
-- [Colorset for Game Messages](https://github.com/dapucita/haxbotron/wiki/Colorset-for-Game-Messages)
-- [Other Utilities](https://github.com/dapucita/haxbotron/wiki/Utilities-for-this-bot)
-
-## How to Build
-You need to install dependencies if you didn't.
-
-You don't have to build again if you did it already unless any changes made.
-
-```
-npm install
-npm run build
-npm start
-```
+- [Getting Started](https://github.com/dapucita/haxbotron/wiki/Getting-Started)
+- [Game Playing](https://github.com/dapucita/haxbotron/wiki/Game-Playing)
+- [Core Server](https://github.com/dapucita/haxbotron/wiki/Core-Server)
+- [DB Server](https://github.com/dapucita/haxbotron/wiki/DB-Server)
+- ...and check also our [wiki](https://github.com/dapucita/haxbotron/wiki) and documents in `docs`.
 
 ## How to Use
 You need to prepare `headless token key`. You can get it from [here](https://www.haxball.com/headlesstoken).
@@ -57,11 +40,11 @@ If you got the token, you have to launch the application and input your room's c
 Then, you can launch your own game room.
 
 ## How to Backup
-You have to keep a copy of `.node-persist` directory to preserve important player data.
+Players' data are saved on `DB Server`.
 
-All data would be saved in that directory and you can also modify them using text editor.
+And you have to keep a copy of `.node-persist` directory to preserve some bot data.
 
-And you can also check the log in `.logs` directory. These log data will be kept for 30 days.
+You can also check the log in `.logs` directory. These log data will be kept for 30 days.
 
 ## Contacts
 - [Github](https://github.com/dapucita/haxbotron)
