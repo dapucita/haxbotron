@@ -64,16 +64,16 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
             // window.room.clearBan(player.id); //useless cuz banned player in haxball couldn't make join-event.
         }
     }
-
+    
     // if this player has already joinned by other connection
-    window.playerList.forEach((eachPlayer: Player) => {
-        if (eachPlayer.conn == player.conn) {
+    for (let eachPlayer of window.playerList.values()) {
+        if(eachPlayer.conn === player.conn) {
             window.logger.i(`${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
             window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
-            window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin), null, 0xFF0000, "normal", 0); // notify
+            //window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin), null, 0xFF0000, "normal", 0); // notify
             return; // exit from this join event
         }
-    });
+    }
 
     // add the player who joined into playerList by creating class instance
     let existPlayerData = await getPlayerDataFromDB(player.auth);
