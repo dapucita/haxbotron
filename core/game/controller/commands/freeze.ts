@@ -1,5 +1,5 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 
 export function cmdFreeze(byPlayer: PlayerObject): void {
     if(window.playerList.get(byPlayer.id)!.admin == true) {

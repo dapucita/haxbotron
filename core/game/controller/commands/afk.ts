@@ -1,6 +1,6 @@
 import * as Tst from "../Translator";
-import * as BotSettings from "../../resources/settings.json";
-import * as LangRes from "../../resources/strings";
+import * as BotSettings from "../../resource/settings.json";
+import * as LangRes from "../../resource/strings";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
 import { getUnixTimestamp } from "../Statistics";

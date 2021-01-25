@@ -1,5 +1,5 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 import * as Tst from "../Translator";
 
 export function cmdAbout(byPlayer: PlayerObject): void {

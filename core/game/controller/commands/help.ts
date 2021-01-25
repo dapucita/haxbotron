@@ -1,5 +1,5 @@
-import * as LangRes from "../../resources/strings";
-import * as CommandSet from "../../resources/command.json";
+import * as LangRes from "../../resource/strings";
+import * as CommandSet from "../../resource/command.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function cmdHelp(byPlayer: PlayerObject, message?: string): void {

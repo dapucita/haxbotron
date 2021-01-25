@@ -1,6 +1,6 @@
 import * as Tst from "../Translator";
-import * as LangRes from "../../resources/strings";
-import * as BotSettings from "../../resources/settings.json";
+import * as LangRes from "../../resource/strings";
+import * as BotSettings from "../../resource/settings.json";
 import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";

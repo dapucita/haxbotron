@@ -1,4 +1,4 @@
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 
 export enum TeamID {
     Spec = 0,

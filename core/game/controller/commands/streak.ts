@@ -1,4 +1,4 @@
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 import * as Tst from "../Translator";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name } from "../../model/GameObject/TeamID";

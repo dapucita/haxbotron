@@ -1,7 +1,7 @@
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 import * as Tst from "../Translator";
-import * as TierClass from "../../resources/HElo/tiers.json";
-import * as AvatarSet from "../../resources/HElo/avatars.json";
+import * as TierClass from "../../resource/HElo/tiers.json";
+import * as AvatarSet from "../../resource/HElo/avatars.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function cmdTier(byPlayer: PlayerObject): void {

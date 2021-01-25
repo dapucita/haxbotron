@@ -1,5 +1,5 @@
-import * as TierClass from "../../resources/HElo/tiers.json";
-import * as AvatarSet from "../../resources/HElo/avatars.json";
+import * as TierClass from "../../resource/HElo/tiers.json";
+import * as AvatarSet from "../../resource/HElo/avatars.json";
 
 export function decideTier(rating: number): Tier {
     if(rating < TierClass.class_tier_2) return Tier.Tier1;

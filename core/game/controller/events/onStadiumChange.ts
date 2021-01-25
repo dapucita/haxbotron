@@ -1,5 +1,5 @@
 import * as Tst from "../Translator";
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { setDefaultStadiums } from "../RoomTools";

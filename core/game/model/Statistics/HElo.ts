@@ -1,4 +1,4 @@
-import * as RatingSystemSettings from "../../resources/HElo/rating.json";
+import * as RatingSystemSettings from "../../resource/HElo/rating.json";
 import { PlayerObject } from "../GameObject/PlayerObject";
 
 export class HElo {

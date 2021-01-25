@@ -1,7 +1,7 @@
 import * as Tst from "../Translator";
-import * as LangRes from "../../resources/strings";
-import * as BotSettings from "../../resources/settings.json";
-import * as RatingSystemSettings from "../../resources/HElo/rating.json";
+import * as LangRes from "../../resource/strings";
+import * as BotSettings from "../../resource/settings.json";
+import * as RatingSystemSettings from "../../resource/HElo/rating.json";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";

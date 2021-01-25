@@ -2,9 +2,9 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { Player } from "../../model/GameObject/Player";
 import { getUnixTimestamp } from "../Statistics";
 import { roomPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 import * as Tst from "../Translator";
-import * as BotSettings from "../../resources/settings.json";
+import * as BotSettings from "../../resource/settings.json";
 import { setBanlistDataToDB } from "../Storage";
 
 export function cmdVote(byPlayer: PlayerObject, message?: string): void {

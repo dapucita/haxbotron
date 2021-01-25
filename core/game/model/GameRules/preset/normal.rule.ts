@@ -1,6 +1,6 @@
 import { GameRule } from "../GameRule";
-import * as gbhothuge from "../../../resources/stadium/gbhothuge.hbs";
-import * as gbtraining from "../../../resources/stadium/gbtraining.hbs";
+import * as gbhothuge from "../../../resource/stadium/gbhothuge.hbs";
+import * as gbtraining from "../../../resource/stadium/gbtraining.hbs";
 
 export var gameRule: GameRule = {
     ruleName: "normal",

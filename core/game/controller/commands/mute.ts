@@ -1,8 +1,8 @@
 import { getUnixTimestamp } from "../Statistics";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 import * as Tst from "../Translator";
-import * as BotSettings from "../../resources/settings.json";
+import * as BotSettings from "../../resource/settings.json";
 
 export function cmdMute(byPlayer: PlayerObject, message?: string): void {
     if(window.playerList.get(byPlayer.id)!.admin == true) {

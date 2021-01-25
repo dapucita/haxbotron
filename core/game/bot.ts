@@ -2,8 +2,8 @@
 // This is the main part of the bot
 
 // import modules
-import * as BotSettings from "./resources/settings.json";
-import * as LangRes from "./resources/strings";
+import * as BotSettings from "./resource/settings.json";
+import * as LangRes from "./resource/strings";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
 import { Player } from "./model/GameObject/Player";

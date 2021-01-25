@@ -1,6 +1,6 @@
-import * as BotSettings from "../../resources/settings.json";
-import * as LangRes from "../../resources/strings";
-import * as CommandSet from "../../resources/command.json";
+import * as BotSettings from "../../resource/settings.json";
+import * as LangRes from "../../resource/strings";
+import * as CommandSet from "../../resource/command.json";
 import * as Tst from "../Translator";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { superAdminLogin } from "../SuperAdmin";

@@ -1,4 +1,4 @@
-import * as LangRes from "../../resources/strings";
+import * as LangRes from "../../resource/strings";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function onGamePauseListener(byPlayer: PlayerObject | null): void {

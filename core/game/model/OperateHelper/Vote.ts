@@ -1,4 +1,4 @@
-import * as BotSettings from "../../resources/settings.json";
+import * as BotSettings from "../../resource/settings.json";
 import { PlayerObject } from "../GameObject/PlayerObject";
 
 export function refreshBanVoteCache(): void {

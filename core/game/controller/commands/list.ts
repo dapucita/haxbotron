@@ -1,7 +1,7 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
-import * as LangRes from "../../resources/strings";
-import * as CommandSet from "../../resources/command.json";
+import * as LangRes from "../../resource/strings";
+import * as CommandSet from "../../resource/command.json";
 import * as Tst from "../Translator";
 
 export function cmdList(byPlayer: PlayerObject, message?: string): void {
