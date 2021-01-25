@@ -1,6 +1,6 @@
 {
     "name": "haxbotron-db",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "description": "Haxbotron is a host bot application for Haxball game.",
     "main": "out/app.js",
     "author": "dapucita",

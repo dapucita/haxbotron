@@ -1,6 +1,6 @@
 {
   "name": "haxbotron-core",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Haxbotron is a host bot application for Haxball game.",
   "main": "out/index.js",
   "scripts": {
@@ -22,12 +22,18 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "inquirer": "^7.3.3",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
     "node-persist": "^3.1.0",
     "puppeteer": "^5.4.1",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
+    "@types/koa": "^2.11.6",
+    "@types/koa-router": "^7.4.1",
+    "@types/koa-bodyparser": "^4.3.0",
     "@types/node-persist": "3.1.0",
     "@types/puppeteer": "^5.4.0",
     "electron": "^10.1.5",
