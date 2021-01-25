@@ -25,7 +25,7 @@ export const winstonLogger = winston.createLogger({
             format: winston.format.combine(
                 winston.format.colorize(),  // make it colorful
                 winston.format.simple(),  // `${info.level}: ${info.message} JSON.stringify({ ...rest })`
-              )
+            )
         }),
 
         // daily save part

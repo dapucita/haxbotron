@@ -5,7 +5,7 @@
 import "dotenv/config";
 import * as dbUtilityInject from "./injection/function/db.utility";
 import { winstonLogger } from "./winstonLoggerSystem";
-import { RoomConfig } from "./model/RoomObject/RoomConfig";
+import { RoomConfig } from "./game/model/RoomObject/RoomConfig";
 
 
 // BOT Loader

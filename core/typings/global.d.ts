@@ -1,14 +1,14 @@
 import { Logger } from "./controller/Logger";
-import { RoomConfig } from '../model/RoomObject/RoomConfig';
-import { KickStack } from "../model/GameObject/BallTrace";
-import { Logger } from "../controller/Logger";
-import { AdminKickTrace } from "../model/PlayerBan/AdminKickTrace";
-import { Player } from "../model/GameObject/Player";
-import { BotConfig } from "../model/BotConifg";
-import { TeamID } from "../model/GameObject/TeamID";
-import { Room } from "../model/RoomObject/RoomObject";
-import { BanList } from "../model/PlayerBan/BanList";
-import { PlayerStorage } from "../model/GameObject/PlayerObject";
+import { RoomConfig } from '../game/model/RoomObject/RoomConfig';
+import { KickStack } from "../game/model/GameObject/BallTrace";
+import { Logger } from "../game/controller/Logger";
+import { AdminKickTrace } from "../game/model/PlayerBan/AdminKickTrace";
+import { Player } from "../game/model/GameObject/Player";
+import { BotConfig } from "../game/model/BotConifg";
+import { TeamID } from "../game/model/GameObject/TeamID";
+import { Room } from "../game/model/RoomObject/RoomObject";
+import { BanList } from "../game/model/PlayerBan/BanList";
+import { PlayerStorage } from "../game/model/GameObject/PlayerObject";
 
 declare global {
     interface Window {

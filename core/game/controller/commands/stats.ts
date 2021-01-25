@@ -1,6 +1,6 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resources/strings";
-import * as StatCalc from "../../controller/Statistics";
+import * as StatCalc from "../Statistics";
 import * as RatingSystemSettings from "../../resources/HElo/rating.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";

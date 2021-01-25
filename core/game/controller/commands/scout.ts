@@ -1,6 +1,6 @@
 import * as LangRes from "../../resources/strings";
 import * as Tst from "../Translator";
-import * as StatCalc from "../../controller/Statistics";
+import * as StatCalc from "../Statistics";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function cmdScout(byPlayer: PlayerObject): void {

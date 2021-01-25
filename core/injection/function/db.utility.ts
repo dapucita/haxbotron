@@ -1,8 +1,8 @@
 import "dotenv/config";
 import axios from "axios";
-import { PlayerStorage } from "../../model/GameObject/PlayerObject";
+import { PlayerStorage } from "../../game/model/GameObject/PlayerObject";
 import { winstonLogger } from "../../winstonLoggerSystem";
-import { BanList } from "../../model/PlayerBan/BanList";
+import { BanList } from "../../game/model/PlayerBan/BanList";
 
 // These functions will be injected into bot script on puppeteer
 
