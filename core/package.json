@@ -5,7 +5,7 @@
   "main": "out/index.js",
   "scripts": {
     "start": "node out/app.js",
-    "build": "tsc && webpack --config webpack.config.bot.js"
+    "build": "tsc && webpack --config webpack.config.bot.js && webpack --config webpack.config.react.js"
   },
   "author": "dapucita",
   "license": "MIT",
@@ -19,19 +19,28 @@
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/koa-logger": "^3.1.1",
+    "@types/koa-static": "^4.0.1",
     "@types/koa__cors": "^3.0.2",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "inquirer": "^7.3.3",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-ip": "^2.1.0",
     "koa-logger": "^3.2.1",
     "koa-router": "^10.0.0",
+    "koa-static": "^5.0.0",
     "node-persist": "^3.1.0",
     "puppeteer": "^5.4.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"
   },
@@ -41,7 +50,8 @@
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.1",
     "@types/node-persist": "^3.1.0",
-    "@types/puppeteer": "^5.4.0",
+    "@types/puppeteer": "^5.4.2",
+    "ts-loader": "^8.0.14",
     "typescript": "^4.0.5",
     "webpack": "^5.4.0",
     "webpack-cli": "^4.2.0"

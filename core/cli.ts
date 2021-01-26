@@ -3,7 +3,7 @@
 
 //import modules
 import "dotenv/config";
-import * as dbUtilityInject from "./injection/function/db.utility";
+import * as dbUtilityInject from "./lib/db.injection";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { RoomConfig } from "./game/model/RoomObject/RoomConfig";
 
@@ -34,7 +34,7 @@ hostRoomConfig = { //default init
     noPlayer: true
 }
 
-if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.toLowerCase()) === true) { // tweak by .env
+if (process.env.TWEAKS_GEOLOCATIONOVERRIDE && JSON.parse(process.env.TWEAKS_GEOLOCATIONOVERRIDE.toLowerCase()) === true) { // tweak by .env
     hostRoomConfig.geo = {
         code: process.env.TWEAKS_GEOLOCATIONOVERRIDE_CODE || "KR"
         , lat: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LAT || "37.5665")
@@ -49,6 +49,7 @@ isBotLaunched = true;
 
 // In this file you can include the rest of your app's specific main process code.
 // You can also put them in separate files and require them here.
+
 
 async function makeBot(hostConfig: any) {
     winstonLogger.info("Haxbotron CLI starts now !!!");
