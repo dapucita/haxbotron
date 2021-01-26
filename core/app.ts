@@ -10,9 +10,8 @@ import ip from "koa-ip";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { indexRouter } from "./web/router/index";
 import { installRouter } from "./web/router/install";
-import { roomRouter } from "./web/router/api/v1/room";
-import { authRouter } from "./web/router/api/v1/auth";
 import nodeStorage from "node-persist";
+import { indexAPIRouter } from "./web/router/api/v1";
 
 // ========================================================
 const app = new Koa();
@@ -31,8 +30,7 @@ nodeStorage.init();
 router
     .use('/', indexRouter.routes())
     .use('/install', installRouter.routes())
-    .use('/api/v1/room', roomRouter.routes())
-    .use('/api/v1/auth', authRouter.routes());
+    .use('/api/v1', indexAPIRouter.routes());
 
 app
     .use(ip(whiteListIPs))
