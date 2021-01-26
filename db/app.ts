@@ -7,6 +7,7 @@ import express, { Request, Response, NextFunction } from "express";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import morgan from "morgan";
+import { IpDeniedError, IpFilter } from "express-ipfilter";
 
 import { createConnection } from "typeorm"
 import { winstonLogger } from "./utility/winstonLoggerSystem";
@@ -16,11 +17,12 @@ import { BanList } from "./entity/banlist.entity";
 import { SuperAdmin } from "./entity/superadmin.entity";
 import { apiRouterV1 } from "./router/v1.api.router";
 
-
 // START
 winstonLogger.info(`haxbotron-db server is launched at ${new Date().toLocaleString()}`);
 
 const app: express.Application = express();
+
+const whiteListIPs: string[] = process.env.SERVER_WHITELIST_IP?.split(",") || ['127.0.0.1'];
 
 // DB CONNECTION
 createConnection({
@@ -39,12 +41,13 @@ app.set('view engine', 'pug');
 app.set('port', process.env.SERVER_PORT ? parseInt(JSON.parse(process.env.SERVER_PORT)) : 13001);
 
 // Middlewares
+app.use(IpFilter(whiteListIPs, { mode: 'allow' }));
 app.use(morgan(process.env.SERVER_LEVEL || 'common'));
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-// Routers
+// Routerss
 app.use("/api/v1", apiRouterV1);
 
 // Error Handler
@@ -59,13 +62,19 @@ app.use((err: ResponseError, req: Request, res: Response) => {
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    res.status(err.status || 500);
+    if (err instanceof IpDeniedError) {
+        res.status(401);
+    } else {
+        res.status(err.status || 500);
+    }
+
     res.render('error');
 });
 
 // LISTENING
 app.listen(app.get('port'), () => {
-    winstonLogger.info(`haxbotron-db server is opened at ${app.get('port')} port.`);
+    winstonLogger.info(`[db] Haxbotron DB server is opened at ${app.get('port')} port.`);
+    winstonLogger.info(`[db] IP Whitelist : ${whiteListIPs}`);
 });
 
 export default app;
