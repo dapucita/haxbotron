@@ -7,6 +7,7 @@ import Koa from "koa";
 import Router from "koa-router";
 import bodyParser from "koa-bodyparser";
 import ip from "koa-ip";
+import logger from "koa-logger";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { indexRouter } from "./web/router/index";
 import { installRouter } from "./web/router/install";
@@ -34,6 +35,7 @@ router
 
 app
     .use(ip(whiteListIPs))
+    .use(logger())
     .use(bodyParser())
     .use(router.routes())
     .use(router.allowedMethods());
