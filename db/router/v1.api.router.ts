@@ -6,7 +6,10 @@ import cors from "cors";
 
 export const apiRouterV1: Router = express.Router({ mergeParams: true });
 
-apiRouterV1.use(cors()); // CORS '*' : allow all cuz IP Whitelist is enabled
+apiRouterV1.use(cors({
+    origin: true, // Access-Control-Allow-Origin
+    credentials: true // Access-Control-Allow-Credentials
+}));
 
 apiRouterV1.use('/:ruid/player', playerRouter);
 apiRouterV1.use('/:ruid/banlist', banlistRouter);
