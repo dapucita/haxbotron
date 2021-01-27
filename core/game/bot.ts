@@ -55,6 +55,8 @@ window.antiTrollingChatFloodCount = [];
 window.antiInsufficientStartAbusingCount = [];
 window.antiPlayerKickAbusingCount = [];
 
+window.document.title = `Haxbotron ${window.settings.room._RUID}`;
+
 window.room = window.HBInit(window.settings.room.config);
 initialiseRoom();
 
