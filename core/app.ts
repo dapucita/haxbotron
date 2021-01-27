@@ -12,14 +12,15 @@ import serve from "koa-static";
 import send from "koa-send";
 import path from "path";
 import nodeStorage from "node-persist";
-import puppeteer from "puppeteer";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { indexAPIRouter } from "./web/router/api/v1";
 import { jwtMiddleware } from "./web/lib/jwt.middleware";
+import { HeadlessBrowser } from "./lib/browser";
 
 // ========================================================
 const app = new Koa();
 const router = new Router();
+const browser = HeadlessBrowser.getInstance();
 
 const coreServerSettings = {
     port: (process.env.SERVER_PORT ? parseInt(JSON.parse(process.env.SERVER_PORT)) : 12001)
@@ -28,16 +29,6 @@ const coreServerSettings = {
 const buildOutputDirectory = path.resolve(__dirname, "../public");
 const whiteListIPs: string[] = process.env.SERVER_WHITELIST_IP?.split(",") || ['127.0.0.1'];
 
-const browserSettings = {
-    customArgs: ['--no-sandbox', '--disable-setuid-sandbox']
-    ,openHeadless: true
-}
-if (process.env.TWEAKS_HEADLESSMODE && JSON.parse(process.env.TWEAKS_HEADLESSMODE.toLowerCase()) === false) {
-    browserSettings.openHeadless = false;
-}
-if (process.env.TWEAKS_WEBRTCANOYM && JSON.parse(process.env.TWEAKS_WEBRTCANOYM.toLowerCase()) === false) {
-    browserSettings.customArgs.push('--disable-features=WebRtcHideLocalIpsWithMdns');
-}
 /*
 if (process.env.TWEAKS_GEOLOCATIONOVERRIDE && JSON.parse(process.env.TWEAKS_GEOLOCATIONOVERRIDE.toLowerCase()) === true) {
     hostRoomConfig.geo = {
@@ -47,8 +38,6 @@ if (process.env.TWEAKS_GEOLOCATIONOVERRIDE && JSON.parse(process.env.TWEAKS_GEOL
     }
 }
 */
-
-const puppeteerBrowser = puppeteer.launch({ headless: browserSettings.openHeadless, args: browserSettings.customArgs });
 
 nodeStorage.init();
 
