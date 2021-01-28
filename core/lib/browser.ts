@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 import { winstonLogger } from "../winstonLoggerSystem";
-import { BrowserHostConfig } from "./browser.hostconfig";
+import { BrowserHostRoomInitConfig } from "./browser.hostconfig";
 import * as dbUtilityInject from "./db.injection";
 
 /**
@@ -81,9 +81,9 @@ export class HeadlessBrowser {
     /**
     * Create new page.
     */
-    private async createPage(ruid: string, hostConfig: BrowserHostConfig): Promise<puppeteer.Page> {
+    private async createPage(ruid: string, initConfig: BrowserHostRoomInitConfig): Promise<puppeteer.Page> {
         if (process.env.TWEAKS_GEOLOCATIONOVERRIDE && JSON.parse(process.env.TWEAKS_GEOLOCATIONOVERRIDE.toLowerCase()) === true) {
-            hostConfig.geo = {
+            initConfig._config.geo = {
                 code: process.env.TWEAKS_GEOLOCATIONOVERRIDE_CODE || "KR"
                 , lat: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LAT || "37.5665")
                 , lon: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LON || "126.978")
@@ -95,32 +95,32 @@ export class HeadlessBrowser {
         page.on('console', (msg: any) => {
             switch (msg.type()) {
                 case "log": {
-                    winstonLogger.info(msg.text());
+                    winstonLogger.info(`[${ruid}] ${msg.text()}`);
                     break;
                 }
                 case "info": {
-                    winstonLogger.info(msg.text());
+                    winstonLogger.info(`[${ruid}] ${msg.text()}`);
                     break;
                 }
                 case "error": {
-                    winstonLogger.error(msg.text());
+                    winstonLogger.error(`[${ruid}] ${msg.text()}`);
                     break;
                 }
                 case "warning": {
-                    winstonLogger.warn(msg.text());
+                    winstonLogger.warn(`[${ruid}] ${msg.text()}`);
                     break;
                 }
                 default: {
-                    winstonLogger.info(msg.text());
+                    winstonLogger.info(`[${ruid}] ${msg.text()}`);
                     break;
                 }
             }
         });
         page.on('pageerror', (msg: any) => {
-            winstonLogger.error(msg);
+            winstonLogger.error(`[${ruid}] ${msg}`);
         });
         page.on('requestfailed', (msg: any) => {
-            winstonLogger.error(`${msg.failure().errorText} ${msg.url()}`);
+            winstonLogger.error(`[${ruid}] ${msg.failure().errorText} ${msg.url()}`);
         });
         page.on('close', () => {
             winstonLogger.info(`[core] The page for the game room '${ruid}' is closed.`);
@@ -130,10 +130,10 @@ export class HeadlessBrowser {
             waitUntil: 'networkidle2'
         });
 
-        await page.setCookie( // convey room host configuration via cookie
-            { name: 'botConfig', value: JSON.stringify(hostConfig) },
-            { name: 'botRoomRUID', value: ruid }
-        );
+        // convey configuration values
+        await page.evaluate((initConfig: any) => {
+            window.gameRoom.config = initConfig;
+        }, JSON.stringify(initConfig));
 
         await page.addScriptTag({
             path: './out/bot_bundle.js'
@@ -160,10 +160,10 @@ export class HeadlessBrowser {
     }
 
     private async fetchRoomURILink(ruid: string): Promise<string> {
-        await this._PageContainer.get(ruid)!.waitForFunction(() => window.roomURIlink !== undefined);
+        await this._PageContainer.get(ruid)!.waitForFunction(() => window.gameRoom.link !== undefined);
             
         let link: string = await this._PageContainer.get(ruid)!.evaluate(() => {
-            return window.roomURIlink;
+            return window.gameRoom.link;
         });
 
         return link;
@@ -188,12 +188,12 @@ export class HeadlessBrowser {
     /**
     * Open new room.
     */
-    public async openNewRoom(ruid: string, hostConfig: BrowserHostConfig) {
+    public async openNewRoom(ruid: string, initHostRoomConfig: BrowserHostRoomInitConfig) {
         if (this.isExistRoom(ruid)) {
             throw Error(`The room '${ruid}' is already exist.`);
         } else {
             winstonLogger.info(`[core] New game room '${ruid}' will be opened.`);
-            await this.createPage(ruid, hostConfig);
+            await this.createPage(ruid, initHostRoomConfig);
         }
     }
 
@@ -218,5 +218,19 @@ export class HeadlessBrowser {
         } else {
             throw Error(`The room '${ruid}' is not exist.`);
         }
+    }
+
+    /**
+    * Get how many game rooms are exist.
+    */
+    public getExistRoomNumber(): number {
+        return this._PageContainer.size;
+    }
+
+    /**
+    * Get all list of exist game rooms.
+    */
+    public getExistRoomList(): string[] {
+        return Array.from(this._PageContainer.keys());
     }
 }
