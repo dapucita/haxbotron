@@ -14,20 +14,19 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
 
     //TODO: CHAT FILTERING : https://github.com/web-mech/badwords
 
-    window.logger.i(`${player.name}#${player.id} said, "${message}"`);
+    window.gameRoom.logger.i(`${player.name}#${player.id} said, "${message}"`);
 
     var placeholderChat = {
         playerID: player.id,
         playerName: player.name,
-        gameRuleName: window.settings.game.rule.ruleName,
-        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
-        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
-        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
-        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
-        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
-        streakTeamCount: window.winningStreak.count
+        gameRuleName: window.gameRoom.config.rules.ruleName,
+        gameRuleLimitTime: window.gameRoom.config.rules.requisite.timeLimit,
+        gameRuleLimitScore: window.gameRoom.config.rules.requisite.scoreLimit,
+        gameRuleNeedMin: window.gameRoom.config.rules.requisite.minimumPlayers,
+        possTeamRed: window.gameRoom.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.gameRoom.ballStack.possCalculate(TeamID.Blue),
+        streakTeamName: convertTeamID2Name(window.gameRoom.winningStreak.teamID),
+        streakTeamCount: window.gameRoom.winningStreak.count
     };
 
     // =========
@@ -39,16 +38,16 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
         if (player.admin === true) { // if this player is admin
             return true; // admin can chat regardless of mute
         } else {
-            if (window.isMuteAll === true || window.playerList.get(player.id)!.permissions['mute'] === true) { // if this player is muted or whole chat is frozen
-                window.room.sendAnnouncement(Tst.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
+            if (window.gameRoom.isMuteAll === true || window.gameRoom.playerList.get(player.id)!.permissions['mute'] === true) { // if this player is muted or whole chat is frozen
+                window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
                 return false; // and hide this chat
             } else {
                 //Anti Chat Flood Checking
-                if (BotSettings.antiChatFlood === true && window.isStatRecord === true) { // if anti chat flood options is enabled
+                if (BotSettings.antiChatFlood === true && window.gameRoom.isStatRecord === true) { // if anti chat flood options is enabled
                     let chatFloodCritFlag: boolean = false;
-                    window.antiTrollingChatFloodCount.push(player.id); // record who said this chat
+                    window.gameRoom.antiTrollingChatFloodCount.push(player.id); // record who said this chat
                     for (let floodCritCount = 1; floodCritCount <= BotSettings.chatFloodCriterion; floodCritCount++) {
-                        let floodID: number = window.antiTrollingChatFloodCount[window.antiTrollingChatFloodCount.length - floodCritCount] || 0;
+                        let floodID: number = window.gameRoom.antiTrollingChatFloodCount[window.gameRoom.antiTrollingChatFloodCount.length - floodCritCount] || 0;
                         if (floodID === player.id) {
                             chatFloodCritFlag = true;
                         } else {
@@ -56,12 +55,12 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                             break; // abort loop
                         }
                     }
-                    if (chatFloodCritFlag === true && window.playerList.get(player.id)!.permissions['mute'] === false) { // after complete loop, check flag
+                    if (chatFloodCritFlag === true && window.gameRoom.playerList.get(player.id)!.permissions['mute'] === false) { // after complete loop, check flag
                         const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
                         // judge as chat flood.
-                        window.playerList.get(player.id)!.permissions['mute'] = true; // mute this player
-                        window.playerList.get(player.id)!.permissions.muteExpire = nowTimeStamp + BotSettings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
-                        window.room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "normal", 1); // notify that fact
+                        window.gameRoom.playerList.get(player.id)!.permissions['mute'] = true; // mute this player
+                        window.gameRoom.playerList.get(player.id)!.permissions.muteExpire = nowTimeStamp + BotSettings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
+                        window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "normal", 1); // notify that fact
                         return false;
                     }
                 }

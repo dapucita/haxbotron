@@ -13,31 +13,31 @@ export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer
         targetAfkReason: ''
     }
 
-    if(window.settings.game.rule.autoOperating === true && window.playerList.has(changedPlayer.id) === true) {
-        let matchEntryTime: number = window.room.getScores()?.time ?? 0; // get match time (it will be null if the game isn't in progress)
-        window.playerList.get(changedPlayer.id)!.entrytime.matchEntryTime = matchEntryTime;
+    if(window.gameRoom.config.rules.autoOperating === true && window.gameRoom.playerList.has(changedPlayer.id) === true) {
+        let matchEntryTime: number = window.gameRoom._room.getScores()?.time ?? 0; // get match time (it will be null if the game isn't in progress)
+        window.gameRoom.playerList.get(changedPlayer.id)!.entrytime.matchEntryTime = matchEntryTime;
     }
 
     if (changedPlayer.id === 0) { // if the player changed into other team is host player(always id 0),
-        window.room.setPlayerTeam(0, TeamID.Spec); // stay host player in Spectators team.
-        window.logger.i(`Bot host is moved team but it is rejected.`);
+        window.gameRoom._room.setPlayerTeam(0, TeamID.Spec); // stay host player in Spectators team.
+        window.gameRoom.logger.i(`Bot host is moved team but it is rejected.`);
     } else {
         if (byPlayer !== null && byPlayer.id !== 0) { // if changed by admin player
-            if (window.playerList.get(changedPlayer.id)!.permissions.afkmode == true) { // if changed player is afk status
-                placeholderTeamChange.targetAfkReason = window.playerList.get(changedPlayer.id)!.permissions.afkreason;
-                window.room.setPlayerTeam(changedPlayer.id, TeamID.Spec); // stay the player in Spectators team.
-                window.room.sendAnnouncement(Tst.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), null, 0xFF0000, "normal", 0);
-                window.logger.i(`${changedPlayer.name}#${changedPlayer.id} is moved team but it is rejected as afk mode.`);
+            if (window.gameRoom.playerList.get(changedPlayer.id)!.permissions.afkmode == true) { // if changed player is afk status
+                placeholderTeamChange.targetAfkReason = window.gameRoom.playerList.get(changedPlayer.id)!.permissions.afkreason;
+                window.gameRoom._room.setPlayerTeam(changedPlayer.id, TeamID.Spec); // stay the player in Spectators team.
+                window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), null, 0xFF0000, "normal", 0);
+                window.gameRoom.logger.i(`${changedPlayer.name}#${changedPlayer.id} is moved team but it is rejected as afk mode.`);
                 return; // exit this event
             }
         }
-        if (window.settings.game.rule.statsRecord == true && window.isStatRecord == true) {
-            if(window.isGamingNow === true && changedPlayer.team !== TeamID.Spec) { // In the case of a substitute for previous player who abscond
-                window.playerList.get(changedPlayer.id)!.matchRecord.factorK = MatchKFactor.Replace; // set K Factor as a Replacement match
+        if (window.gameRoom.config.rules.statsRecord == true && window.gameRoom.isStatRecord == true) {
+            if(window.gameRoom.isGamingNow === true && changedPlayer.team !== TeamID.Spec) { // In the case of a substitute for previous player who abscond
+                window.gameRoom.playerList.get(changedPlayer.id)!.matchRecord.factorK = MatchKFactor.Replace; // set K Factor as a Replacement match
             }
         }
 
-        window.playerList.get(changedPlayer.id)!.team = changedPlayer.team;
-        window.logger.i(`${changedPlayer.name}#${changedPlayer.id} is moved team to ${convertTeamID2Name(changedPlayer.team)}.`);
+        window.gameRoom.playerList.get(changedPlayer.id)!.team = changedPlayer.team;
+        window.gameRoom.logger.i(`${changedPlayer.name}#${changedPlayer.id} is moved team to ${convertTeamID2Name(changedPlayer.team)}.`);
     }
 }

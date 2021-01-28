@@ -58,7 +58,7 @@ export function calcExpectedWinRate(wins: number, loses: number): number { // Py
 }
 
 export function getTeamWinningExpectation(): number[] {
-    if (window.isStatRecord == true) { // if the game mode is stats
+    if (window.gameRoom.isStatRecord == true) { // if the game mode is stats
         // init for count
         let goalsCount: number[] = [
             0, 0, 0 // spec, red, blue team
@@ -67,10 +67,10 @@ export function getTeamWinningExpectation(): number[] {
             0, 0, 0 // spec, red, blue team
         ]
 
-        window.room.getPlayerList().filter((player: PlayerObject) => player.id != 0).forEach((player: PlayerObject) => {
+        window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id != 0).forEach((player: PlayerObject) => {
             // count win and lose games
-            goalsCount[player.team] += window.playerList.get(player.id)!.stats.goals;
-            losesCount[player.team] += window.playerList.get(player.id)!.stats.losePoints;
+            goalsCount[player.team] += window.gameRoom.playerList.get(player.id)!.stats.goals;
+            losesCount[player.team] += window.gameRoom.playerList.get(player.id)!.stats.losePoints;
         });
 
         return [

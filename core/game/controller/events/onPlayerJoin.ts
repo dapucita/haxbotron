@@ -15,7 +15,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
     const joinTimeStamp: number = getUnixTimestamp();
 
     // logging into console
-    window.logger.i(`${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
+    window.gameRoom.logger.i(`${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
 
     // Event called when a new player joins the room.
     var placeholderJoin = {
@@ -30,15 +30,14 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         playerStatsAssists: 0,
         playerStatsOgs: 0,
         playerStatsLosepoints: 0,
-        gameRuleName: window.settings.game.rule.ruleName,
-        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
-        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
-        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
-        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
-        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
-        streakTeamCount: window.winningStreak.count,
+        gameRuleName: window.gameRoom.config.rules.ruleName,
+        gameRuleLimitTime: window.gameRoom.config.rules.requisite.timeLimit,
+        gameRuleLimitScore: window.gameRoom.config.rules.requisite.scoreLimit,
+        gameRuleNeedMin: window.gameRoom.config.rules.requisite.minimumPlayers,
+        possTeamRed: window.gameRoom.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.gameRoom.ballStack.possCalculate(TeamID.Blue),
+        streakTeamName: convertTeamID2Name(window.gameRoom.winningStreak.teamID),
+        streakTeamCount: window.gameRoom.winningStreak.count,
         banListReason: ''
     };
 
@@ -48,28 +47,28 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         placeholderJoin.banListReason = playerBanChecking.reason;
 
         if (playerBanChecking.expire == -1) { // Permanent ban
-            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
-            window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), true); // auto ban
+            window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
+            window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), true); // auto ban
             return;
         }
         if (playerBanChecking.expire > joinTimeStamp) { // Fixed-term ban (time limited ban)
-            window.logger.i(`${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
-            window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.fixedTermBan, placeholderJoin), false); // auto kick
+            window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
+            window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.fixedTermBan, placeholderJoin), false); // auto kick
             return;
         }
         if (playerBanChecking.expire != -1 && playerBanChecking.expire <= joinTimeStamp) { // time-over from expiration date
             // ban clear for this player
-            window.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking.reason})`);
+            window.gameRoom.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking.reason})`);
             await removeBanlistDataFromDB(player.conn);
             // window.room.clearBan(player.id); //useless cuz banned player in haxball couldn't make join-event.
         }
     }
     
     // if this player has already joinned by other connection
-    for (let eachPlayer of window.playerList.values()) {
+    for (let eachPlayer of window.gameRoom.playerList.values()) {
         if(eachPlayer.conn === player.conn) {
-            window.logger.i(`${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
-            window.room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
+            window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
+            window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
             //window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin), null, 0xFF0000, "normal", 0); // notify
             return; // exit from this join event
         }
@@ -79,7 +78,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
     let existPlayerData = await getPlayerDataFromDB(player.auth);
     if (existPlayerData !== undefined) {
         // if this player is existing player (not new player)
-        window.playerList.set(player.id, new Player(player, {
+        window.gameRoom.playerList.set(player.id, new Player(player, {
             rating: existPlayerData.rating,
             totals: existPlayerData.totals,
             disconns: existPlayerData.disconns,
@@ -119,7 +118,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
             // if this player changed his/her name
             // notify that fact to other players only once ( it will never be notified if he/she rejoined next time)
             placeholderJoin.playerNameOld = existPlayerData.name
-            window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.changename, placeholderJoin), null, 0x00FF00, "normal", 0);
+            window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onJoin.changename, placeholderJoin), null, 0x00FF00, "normal", 0);
         }
 
         // check anti-rejoin flood when this option is enabled
@@ -127,25 +126,25 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
             if (joinTimeStamp - existPlayerData.leftDate <= BotSettings.joinFloodIntervalMillisecs) { // when rejoin flood
                 if (existPlayerData.rejoinCount > BotSettings.joinFloodAllowLimitation) {
                     // kick this player
-                    window.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
-                    window.room.kickPlayer(player.id, LangRes.antitrolling.joinFlood.banReason, false); // kick
+                    window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
+                    window.gameRoom._room.kickPlayer(player.id, LangRes.antitrolling.joinFlood.banReason, false); // kick
                     //and add into ban list (not permanent ban, but fixed-term ban)
                     await setBanlistDataToDB({ conn: player.conn, reason: LangRes.antitrolling.joinFlood.banReason, register: joinTimeStamp, expire: joinTimeStamp + BotSettings.joinFloodBanMillisecs })
                     return; // exit from this join event
                 } else { //just warn
-                    window.room.sendAnnouncement(LangRes.antitrolling.joinFlood.floodWarning, player.id, 0xFF0000, "bold", 2);
-                    window.playerList.get(player.id)!.entrytime.rejoinCount++; // and add count
+                    window.gameRoom._room.sendAnnouncement(LangRes.antitrolling.joinFlood.floodWarning, player.id, 0xFF0000, "bold", 2);
+                    window.gameRoom.playerList.get(player.id)!.entrytime.rejoinCount++; // and add count
                 }
             } else {
                 // init rejoin count
-                window.playerList.get(player.id)!.entrytime.rejoinCount = 0;
+                window.gameRoom.playerList.get(player.id)!.entrytime.rejoinCount = 0;
             }
         }
 
     } else {
         // if new player
         // create a Player Object
-        window.playerList.set(player.id, new Player(player, {
+        window.gameRoom.playerList.set(player.id, new Player(player, {
             rating: 1000,
             totals: 0,
             disconns: 0,
@@ -172,49 +171,49 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         }));
     }
 
-    await setPlayerDataToDB(convertToPlayerStorage(window.playerList.get(player.id)!)); // register(or update) this player into DB
+    await setPlayerDataToDB(convertToPlayerStorage(window.gameRoom.playerList.get(player.id)!)); // register(or update) this player into DB
 
-    if (window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
+    if (window.gameRoom.config.rules.autoAdmin === true) { // if auto admin option is enabled
         updateAdmins(); // check there are any admin players, if not make an admin player.
     }
 
     if (BotSettings.avatarOverridingByTier === true) {
         // if avatar overrding option is enabled
-        window.room.setPlayerAvatar(player.id, getAvatarByTier( // set avatar
-            (window.playerList.get(player.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
+        window.gameRoom._room.setPlayerAvatar(player.id, getAvatarByTier( // set avatar
+            (window.gameRoom.playerList.get(player.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
                 ? Tier.TierNew
-                : decideTier(window.playerList.get(player.id)!.stats.rating)
+                : decideTier(window.gameRoom.playerList.get(player.id)!.stats.rating)
         ));
     }
 
     // send welcome message to new player. other players cannot read this message.
-    window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
+    window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
 
     // check number of players joined and change game mode
     let activePlayersNumber: number = roomActivePlayersNumberCheck();
-    if (window.settings.game.rule.statsRecord === true && activePlayersNumber >= window.settings.game.rule.requisite.minimumPlayers) {
-        if (window.isStatRecord === false) {
-            window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.startRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
-            window.isStatRecord = true;
-            if (window.settings.game.rule.autoOperating === true && window.isGamingNow === true) {
+    if (window.gameRoom.config.rules.statsRecord === true && activePlayersNumber >= window.gameRoom.config.rules.requisite.minimumPlayers) {
+        if (window.gameRoom.isStatRecord === false) {
+            window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onJoin.startRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
+            window.gameRoom.isStatRecord = true;
+            if (window.gameRoom.config.rules.autoOperating === true && window.gameRoom.isGamingNow === true) {
                 // if auto emcee mode is enabled and the match has been playing as ready mode
-                window.room.stopGame(); // stop game
+                window.gameRoom._room.stopGame(); // stop game
             }
         }
     } else {
-        if (window.isStatRecord === true) {
-            window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.stopRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
-            window.isStatRecord = false;
+        if (window.gameRoom.isStatRecord === true) {
+            window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onJoin.stopRecord, placeholderJoin), null, 0x00FF00, "normal", 0);
+            window.gameRoom.isStatRecord = false;
         }
     }
 
     // when auto emcee mode is enabled
-    if (window.settings.game.rule.autoOperating === true) {
+    if (window.gameRoom.config.rules.autoOperating === true) {
         putTeamNewPlayerConditional(player.id); // move team
-        if (window.isGamingNow === false) {
+        if (window.gameRoom.isGamingNow === false) {
             // if game is not started then start the game for active players
             setDefaultStadiums(); // set stadium
-            window.room.startGame();
+            window.gameRoom._room.startGame();
         }
     }
 }

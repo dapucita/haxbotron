@@ -36,7 +36,7 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
     let msgChunk: string[] = getCommandChunk(message);
     let commandSign: string = msgChunk[0].substring(1); // remove prefix character(default: !)
     if(CommandSet._disabledCommandList.includes(commandSign) === true) { // if this command is in disabled list
-        window.room.sendAnnouncement(LangRes.command._ErrorDisabled, byPlayer.id, 0xFF7777, "normal", 2); // notify
+        window.gameRoom._room.sendAnnouncement(LangRes.command._ErrorDisabled, byPlayer.id, 0xFF7777, "normal", 2); // notify
         return; // exit this function
     }
     switch(commandSign) {
@@ -129,7 +129,7 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             break;
         }
         default: {
-            window.room.sendAnnouncement(LangRes.command._ErrorWrongCommand, byPlayer.id, 0xFF7777, "normal", 2);
+            window.gameRoom._room.sendAnnouncement(LangRes.command._ErrorWrongCommand, byPlayer.id, 0xFF7777, "normal", 2);
             break;
         }
     }

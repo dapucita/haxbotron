@@ -7,30 +7,29 @@ export function onPlayerBallKickListener(player: PlayerObject): void {
     var placeholderBall = {
         playerID: player.id,
         playerName: player.name,
-        gameRuleName: window.settings.game.rule.ruleName,
-        gameRuleDescription: window.settings.game.rule.ruleDescripttion,
-        gameRuleLimitTime: window.settings.game.rule.requisite.timeLimit,
-        gameRuleLimitScore: window.settings.game.rule.requisite.scoreLimit,
-        gameRuleNeedMin: window.settings.game.rule.requisite.minimumPlayers,
-        possTeamRed: window.ballStack.possCalculate(TeamID.Red),
-        possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
-        streakTeamName: convertTeamID2Name(window.winningStreak.teamID),
-        streakTeamCount: window.winningStreak.count
+        gameRuleName: window.gameRoom.config.rules.ruleName,
+        gameRuleLimitTime: window.gameRoom.config.rules.requisite.timeLimit,
+        gameRuleLimitScore: window.gameRoom.config.rules.requisite.scoreLimit,
+        gameRuleNeedMin: window.gameRoom.config.rules.requisite.minimumPlayers,
+        possTeamRed: window.gameRoom.ballStack.possCalculate(TeamID.Red),
+        possTeamBlue: window.gameRoom.ballStack.possCalculate(TeamID.Blue),
+        streakTeamName: convertTeamID2Name(window.gameRoom.winningStreak.teamID),
+        streakTeamCount: window.gameRoom.winningStreak.count
     };
 
-    if (window.settings.game.rule.statsRecord === true && window.isStatRecord === true) { // record only when stat record mode
+    if (window.gameRoom.config.rules.statsRecord === true && window.gameRoom.isStatRecord === true) { // record only when stat record mode
 
-        window.playerList.get(player.id)!.matchRecord.balltouch++; // add count of ball touch in match record
+        window.gameRoom.playerList.get(player.id)!.matchRecord.balltouch++; // add count of ball touch in match record
 
-        if (window.ballStack.passJudgment(player.team) === true && window.playerList.has(window.ballStack.getLastTouchPlayerID()) === true) {
-            window.playerList.get(window.ballStack.getLastTouchPlayerID())!.matchRecord.passed++; // add count of pass success in match record
+        if (window.gameRoom.ballStack.passJudgment(player.team) === true && window.gameRoom.playerList.has(window.gameRoom.ballStack.getLastTouchPlayerID()) === true) {
+            window.gameRoom.playerList.get(window.gameRoom.ballStack.getLastTouchPlayerID())!.matchRecord.passed++; // add count of pass success in match record
         }
 
-        window.ballStack.touchTeamSubmit(player.team);
-        window.ballStack.touchPlayerSubmit(player.id); // refresh who touched the ball in last
+        window.gameRoom.ballStack.touchTeamSubmit(player.team);
+        window.gameRoom.ballStack.touchPlayerSubmit(player.id); // refresh who touched the ball in last
 
-        window.ballStack.push(player.id);
-        window.ballStack.possCount(player.team); // 1: red team, 2: blue team
+        window.gameRoom.ballStack.push(player.id);
+        window.gameRoom.ballStack.possCount(player.team); // 1: red team, 2: blue team
 
     }
 }

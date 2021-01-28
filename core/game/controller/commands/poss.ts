@@ -5,8 +5,8 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 
 export function cmdPoss(byPlayer: PlayerObject): void {
     let placeholder = {
-        possTeamRed: window.ballStack.possCalculate(TeamID.Red)
-        ,possTeamBlue: window.ballStack.possCalculate(TeamID.Blue),
+        possTeamRed: window.gameRoom.ballStack.possCalculate(TeamID.Red)
+        ,possTeamBlue: window.gameRoom.ballStack.possCalculate(TeamID.Blue),
     }
-    window.room.sendAnnouncement(Tst.maketext(LangRes.command.poss, placeholder), byPlayer.id, 0x479947, "normal", 1);
+    window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.poss, placeholder), byPlayer.id, 0x479947, "normal", 1);
 }

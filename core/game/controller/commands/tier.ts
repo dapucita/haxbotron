@@ -25,5 +25,5 @@ export function cmdTier(byPlayer: PlayerObject): void {
         ,tierCutoff2: TierClass.class_tier_2
         ,tierCutoff1: TierClass.class_tier_1
     }
-    window.room.sendAnnouncement(Tst.maketext(LangRes.command.tier, placeholder), byPlayer.id, 0x479947, "normal", 1);
+    window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.tier, placeholder), byPlayer.id, 0x479947, "normal", 1);
 }

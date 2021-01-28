@@ -81,7 +81,7 @@ export class HElo {
 
     public calcTeamRatingsMean(eachTeamPlayers: PlayerObject[]): number {
         let res: number =  parseFloat((( eachTeamPlayers
-            .map((eachPlayer: PlayerObject) => window.playerList.get(eachPlayer.id)!.stats.rating)
+            .map((eachPlayer: PlayerObject) => window.gameRoom.playerList.get(eachPlayer.id)!.stats.rating)
             .reduce((arr: number, curr: number) => { return arr+curr }, 0)
         ) / eachTeamPlayers.length).toFixed(2));
 
@@ -92,15 +92,15 @@ export class HElo {
         let statsRecords: StatsRecord[] = [];
         teamPlayers.forEach((eachPlayer: PlayerObject) => {
             statsRecords.push({
-                rating: window.playerList.get(eachPlayer.id)!.stats.rating,
+                rating: window.gameRoom.playerList.get(eachPlayer.id)!.stats.rating,
                 realResult: matchResult,
-                matchKFactor: window.playerList.get(eachPlayer.id)!.matchRecord.factorK,
-                matchGoal: window.playerList.get(eachPlayer.id)!.matchRecord.goals,
-                matchOG: window.playerList.get(eachPlayer.id)!.matchRecord.ogs,
+                matchKFactor: window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.factorK,
+                matchGoal: window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.goals,
+                matchOG: window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.ogs,
                 matchPassSuccRate: (
-                    window.playerList.get(eachPlayer.id)!.matchRecord.balltouch === 0
+                    window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.balltouch === 0
                     ? 0
-                    : parseFloat((window.playerList.get(eachPlayer.id)!.matchRecord.passed / window.playerList.get(eachPlayer.id)!.matchRecord.balltouch).toFixed(2))
+                    : parseFloat((window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.passed / window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.balltouch).toFixed(2))
                 )
             });
         });

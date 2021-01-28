@@ -12,24 +12,24 @@ export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlaye
         playerName: changedPlayer.name
     }
 
-    window.playerList.get(changedPlayer.id)!.admin = changedPlayer.admin; // update
+    window.gameRoom.playerList.get(changedPlayer.id)!.admin = changedPlayer.admin; // update
 
     if (changedPlayer.admin == true) { // if this event means that the player has been admin
-        if (window.playerList.get(changedPlayer.id)!.permissions.afkmode == true) {
+        if (window.gameRoom.playerList.get(changedPlayer.id)!.permissions.afkmode == true) {
             // if changedPlayer is in afk mode, reject
-            window.room.setPlayerAdmin(changedPlayer.id, false);
-            window.room.sendAnnouncement(Tst.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), null, 0xFF0000, "normal", 2);
+            window.gameRoom._room.setPlayerAdmin(changedPlayer.id, false);
+            window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onAdminChange.afknoadmin, placeholderAdminChange), null, 0xFF0000, "normal", 2);
             return;
         } else {
             // make this player admin
             if (byPlayer !== null) {
-                window.logger.i(`${changedPlayer.name}#${changedPlayer.id} has been admin(super:${window.playerList.get(changedPlayer.id)!.permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
+                window.gameRoom.logger.i(`${changedPlayer.name}#${changedPlayer.id} has been admin(super:${window.gameRoom.playerList.get(changedPlayer.id)!.permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
             }
             return;
         }
     }
     
-    if(window.settings.game.rule.autoAdmin === true) { // if auto admin option is enabled
+    if(window.gameRoom.config.rules.autoAdmin === true) { // if auto admin option is enabled
         updateAdmins(); // check when the last admin player disqulified by self
     }
 }

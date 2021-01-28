@@ -1,7 +1,7 @@
 export class Logger {
     // written in Singleton Pattern
     // If the bot created Logger object once, never create ever until the bot instance dead. 
-    private static instance: Logger = new Logger();
+    private static instance: Logger;
 
     private Logger() { } // not use
     
