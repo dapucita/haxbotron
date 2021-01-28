@@ -16,52 +16,22 @@ import { TeamID } from "./model/GameObject/TeamID";
 import { EmergencyTools } from "./model/DevConsole/EmergencyTools";
 import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 import { loadStadiumData } from "./resource/stadiumLoader";
-import { object } from "joi";
+import { GameRoomConfig } from "./model/Configuration/GameRoomConfig";
 
-// init global properties
-console.log(`Haxbotron loaded bot script. (UID ${window.gameRoom.config._RUID}, TOKEN ${window.gameRoom.config._config.token})`);
-
-window.gameRoom.playerList = new Map(); // player list (key: player.id, value: Player), usage: playerList.get(player.id).name
-
-window.gameRoom.winningStreak = { // count of winning streak
-    count: 0,
-    teamID: 0
-};
-
-window.gameRoom.ballStack = KickStack.getInstance();
-
-window.gameRoom.logger = Logger.getInstance();
-
-window.gameRoom.isStatRecord = false;
-window.gameRoom.isGamingNow = false;
-window.gameRoom.isMuteAll = false;
-
-window.gameRoom.banVoteCache = [];
-
-window.gameRoom.antiTrollingOgFloodCount = [];
-window.gameRoom.antiTrollingChatFloodCount = [];
-window.gameRoom.antiInsufficientStartAbusingCount = [];
-window.gameRoom.antiPlayerKickAbusingCount = [];
-
-window.gameRoom.stadiumData.default = loadStadiumData(window.gameRoom.config.rules.defaultMapName);
-window.gameRoom.stadiumData.training = loadStadiumData(window.gameRoom.config.rules.readyMapName);
-
-
-window.document.title = `Haxbotron ${window.gameRoom.config._RUID}`;
-
-window.gameRoom._room = window.HBInit(window.gameRoom.config._config);
-initialiseRoom();
+// load initial configurations
+initBotScript();
+makeRoom();
 
 var advertisementTimer = setInterval(() => {
     window.gameRoom._room.sendAnnouncement(LangRes.scheduler.advertise, null, 0x777777, "normal", 0); // advertisement
 
     refreshBanVoteCache(); // update banvote status cache
-    if(window.gameRoom.banVoteCache.length >= 1) { // if there are some votes (include top voted players only)
+    if (window.gameRoom.banVoteCache.length >= 1) { // if there are some votes (include top voted players only)
         let placeholderVote = {
             voteList: ''
         }
-        for(let i: number = 0; i < window.gameRoom.banVoteCache.length; i++) {
-            if(window.gameRoom.playerList.has(window.gameRoom.banVoteCache[i])) {
+        for (let i: number = 0; i < window.gameRoom.banVoteCache.length; i++) {
+            if (window.gameRoom.playerList.has(window.gameRoom.banVoteCache[i])) {
                 placeholderVote.voteList += `${window.gameRoom.playerList.get(window.gameRoom.banVoteCache[i])!.name}#${window.gameRoom.banVoteCache[i]} `;
             }
         }
@@ -83,34 +53,34 @@ var scheduledTimer = setInterval(() => {
         placeholderScheduler.targetName = player.name;
 
         // check muted player and unmute when it's time to unmute
-        if(player.permissions.mute === true && nowTimeStamp > player.permissions.muteExpire) {
+        if (player.permissions.mute === true && nowTimeStamp > player.permissions.muteExpire) {
             player.permissions.mute = false; //unmute
             window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.scheduler.autoUnmute, placeholderScheduler), null, 0x479947, "normal", 0); //notify it
         }
 
         // when afk too long kick option is enabled, then check sleeping with afk command and kick if afk too long
-        if(BotSettings.afkCommandAutoKick === true && player.permissions.afkmode === true && nowTimeStamp > player.permissions.afkdate + BotSettings.afkCommandAutoKickAllowMillisecs) {
+        if (BotSettings.afkCommandAutoKick === true && player.permissions.afkmode === true && nowTimeStamp > player.permissions.afkdate + BotSettings.afkCommandAutoKickAllowMillisecs) {
             window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkCommandTooLongKick, placeholderScheduler), false); // kick
         }
-        
+
         // check afk
-        if(window.gameRoom.isGamingNow === true && window.gameRoom.isStatRecord === true) { // if the game is in playing
-            if(player.team !== TeamID.Spec) { // if the player is not spectators(include afk mode)
-                if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
-                window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
+        if (window.gameRoom.isGamingNow === true && window.gameRoom.isStatRecord === true) { // if the game is in playing
+            if (player.team !== TeamID.Spec) { // if the player is not spectators(include afk mode)
+                if (player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
+                    window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
-                    if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
-                    window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), player.id, 0xFF7777, "bold", 2); // warning for all
+                    if (player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
+                        window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), player.id, 0xFF7777, "bold", 2); // warning for all
                     }
                     player.afktrace.count++; // add afk detection count
                 }
             }
         } else {
-            if(player.admin == true) { // if the player is admin
-                if(player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
+            if (player.admin == true) { // if the player is admin
+                if (player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
                     window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
-                    if(player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
+                    if (player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
                         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.scheduler.afkDetect, placeholderScheduler), player.id, 0xFF7777, "bold", 2); // warning for all
                     }
                     player.afktrace.count++; // add afk detection count
@@ -120,9 +90,39 @@ var scheduledTimer = setInterval(() => {
     });
 }, 5000); // by 5seconds
 
-function initialiseRoom(): void {
-    // Write initialising processes here.
+function initBotScript(): void {
+    const loadedConfig: GameRoomConfig = JSON.parse(localStorage.getItem('initConfig')!);
 
+    window.gameRoom = {
+        _room: window.HBInit(loadedConfig._config)
+        ,config: loadedConfig
+        ,link: ''
+        ,stadiumData: { default: '', training: '' }
+        ,logger: Logger.getInstance() 
+        ,isStatRecord: false
+        ,isGamingNow: false
+        ,isMuteAll: false
+        ,playerList: new Map()
+        ,ballStack: KickStack.getInstance()
+        ,banVoteCache: []
+        ,winningStreak: { count: 0, teamID: TeamID.Spec }
+        ,antiTrollingOgFloodCount: []
+        ,antiTrollingChatFloodCount: []
+        ,antiInsufficientStartAbusingCount: []
+        ,antiPlayerKickAbusingCount: []
+        ,onEmergency: EmergencyTools
+        }
+    
+    // init global properties
+    console.log(`Haxbotron loaded bot script. (UID ${window.gameRoom.config._RUID}, TOKEN ${window.gameRoom.config._config.token})`);
+
+    window.gameRoom.stadiumData.default = loadStadiumData(window.gameRoom.config.rules.defaultMapName);
+    window.gameRoom.stadiumData.training = loadStadiumData(window.gameRoom.config.rules.readyMapName);
+
+    window.document.title = `Haxbotron ${window.gameRoom.config._RUID}`;
+}
+
+function makeRoom(): void {
     window.gameRoom.logger.i(`The game room is opened at ${window.gameRoom.config._LaunchDate.toLocaleString()}.`);
 
     window.gameRoom.logger.i(`The game mode is '${window.gameRoom.isGamingNow}' now(by default).`);
@@ -154,6 +154,3 @@ function initialiseRoom(): void {
     window.gameRoom._room.onKickRateLimitSet = (min: number, rate: number, burst: number, byPlayer: PlayerObject): void => eventListener.onKickRateLimitSetListener(min, rate, burst, byPlayer);
     // =========================
 }
-
-// on dev-console tools for emergency
-window.gameRoom.onEmergency = EmergencyTools;

@@ -1,3 +1,4 @@
+import { init } from "node-persist";
 import puppeteer from "puppeteer";
 import { winstonLogger } from "../winstonLoggerSystem";
 import { BrowserHostRoomInitConfig } from "./browser.hostconfig";
@@ -130,14 +131,15 @@ export class HeadlessBrowser {
             waitUntil: 'networkidle2'
         });
 
-        // convey configuration values
-        await page.evaluate((initConfig: any) => {
-            window.gameRoom.config = initConfig;
+        // convey configuration values via html5 localStorage
+        await page.evaluate((initConfig: string) => {
+            localStorage.setItem('initConfig', initConfig);
         }, JSON.stringify(initConfig));
 
         await page.addScriptTag({
             path: './out/bot_bundle.js'
         });
+
         // inject functions for do CRUD with DB Server ====================================
         await page.exposeFunction('createSuperadminDB', dbUtilityInject.createSuperadminDB);
         await page.exposeFunction('readSuperadminDB', dbUtilityInject.readSuperadminDB);

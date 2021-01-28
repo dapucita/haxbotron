@@ -9,7 +9,7 @@ export interface BrowserHostRoomInitConfig {
 export interface BrowserHostRoomConfig {
     roomName: string
     playerName: string
-    password: string | null
+    password?: string
     maxPlayers: number
     public: boolean
     token: string

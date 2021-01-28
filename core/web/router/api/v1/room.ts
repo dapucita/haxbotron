@@ -1,24 +1,11 @@
-import { Context, Next } from "koa";
 import Router from "koa-router";
+import * as roomController from '../../../controller/api/v1/room';
 import { checkLoginMiddleware } from "../../../lib/logincheck.middleware";
 
 export const roomRouter = new Router();
 
-// get room list
-roomRouter
-    .get('/', checkLoginMiddleware, (ctx: Context, next: Next) => {
-        ctx.body = "ROOM GET";
-    });
+roomRouter.get('/', checkLoginMiddleware, roomController.getRoomList); // get room list
 
-// get specific room info
-roomRouter
-    .get('/:ruid', checkLoginMiddleware, (ctx: Context, next: Next) => {
-        const { ruid } = ctx.params;
-        ctx.body = `ROOM GET ${ruid}`;
-    });
+roomRouter.post('/', checkLoginMiddleware, roomController.createRoom); // create room
 
-// open new room
-//roomRouter.post('/');
-
-// close specific room
-//roomRouter.delete('/:ruid');
+roomRouter.delete('/:ruid', checkLoginMiddleware, roomController.createRoom); // create room

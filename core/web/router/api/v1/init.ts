@@ -1,19 +1,10 @@
-import { Context, Next } from "koa";
 import Router from "koa-router";
-import Joi from 'joi';
+import { Context, Next } from "koa";
+import { adminAccountSchema } from "../../../schema/adminaccount.validation"
 import { isNeedInstallation, makeHashedPassword, saveAdminAccount } from "../../../model/account";
 import { generateToken } from "../../../lib/jwt.middleware";
 
 export const initRouter = new Router();
-
-const validationSchema = Joi.object().keys({
-    username: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(20)
-        .required(),
-    password: Joi.string().required()
-});
 
 // check need for init
 initRouter.get('/', async (ctx: Context, next: Next) => {
@@ -28,7 +19,7 @@ initRouter.get('/', async (ctx: Context, next: Next) => {
 initRouter.post('/', async (ctx: Context, next: Next) => {
     if (await isNeedInstallation()) { // register new one
         // validation
-        const validationResult = validationSchema.validate(ctx.request.body);
+        const validationResult = adminAccountSchema.validate(ctx.request.body);
 
         if(validationResult.error) {
             ctx.status = 400;
