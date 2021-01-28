@@ -42,6 +42,7 @@ export async function check(ctx: Context) {
         ctx.status = 401; // Unauthorized
         return;
     }
+    ctx.status = 200;
     ctx.body = user;
 };
 
