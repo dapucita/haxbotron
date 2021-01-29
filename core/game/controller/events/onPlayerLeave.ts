@@ -1,6 +1,5 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
-import * as BotSettings from "../../resource/settings.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { updateAdmins } from "../RoomTools";
 import { getUnixTimestamp } from "../Statistics";
@@ -71,12 +70,12 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
         // if this player is disconnected (include abscond)
         window.gameRoom.playerList.get(player.id)!.stats.disconns++;
         placeholderLeft.playerStatsDisconns = window.gameRoom.playerList.get(player.id)!.stats.disconns;
-        if(BotSettings.antiGameAbscond === true) { // if anti abscond option is enabled
-            window.gameRoom.playerList.get(player.id)!.stats.rating -= BotSettings.gameAbscondRatingPenalty; // rating penalty
+        if(window.gameRoom.config.settings.antiGameAbscond === true) { // if anti abscond option is enabled
+            window.gameRoom.playerList.get(player.id)!.stats.rating -= window.gameRoom.config.settings.gameAbscondRatingPenalty; // rating penalty
             if(await getBanlistDataFromDB(window.gameRoom.playerList.get(player.id)!.conn) === undefined ) { // if this player is in match(team player), fixed-term ban this player
                 // check this player already registered in ban list to prevent overwriting other ban reason.
                 window.gameRoom.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
-                await setBanlistDataToDB({ conn: window.gameRoom.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + BotSettings.gameAbscondBanMillisecs });
+                await setBanlistDataToDB({ conn: window.gameRoom.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + window.gameRoom.config.settings.gameAbscondBanMillisecs });
             }
         }
     }

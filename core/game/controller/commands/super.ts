@@ -1,10 +1,7 @@
-import * as BotSettings from "../../resource/settings.json";
 import * as LangRes from "../../resource/strings";
 import * as CommandSet from "../../resource/command.json";
-import * as Tst from "../Translator";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { superAdminLogin } from "../SuperAdmin";
-import { BanList } from "../../model/PlayerBan/BanList";
 
 export async function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: string): Promise<void> {
     if (message !== undefined) {
@@ -22,7 +19,7 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                             window.gameRoom._room.sendAnnouncement(LangRes.command.super.loginFail, byPlayer.id, 0xFF7777, "normal", 2);
                             window.gameRoom.logger.i(`${byPlayer.name}#${byPlayer.id} has failed login to super admin and logged as malicious behaviour. (KEY ${submessage})`);
                         
-                            if(window.gameRoom.playerList.get(byPlayer.id)!.permissions.malActCount >= BotSettings.maliciousBehaviourBanCriterion) {
+                            if(window.gameRoom.playerList.get(byPlayer.id)!.permissions.malActCount >= window.gameRoom.config.settings.maliciousBehaviourBanCriterion) {
                                 // This player will be permanently banned if it fails to exceed limit.
                                 window.gameRoom._room.kickPlayer(byPlayer.id, LangRes.antitrolling.malAct.banReason, true); // ban
                             }

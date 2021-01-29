@@ -2,7 +2,6 @@
 // This is the main part of the bot
 
 // import modules
-import * as BotSettings from "./resource/settings.json";
 import * as LangRes from "./resource/strings";
 import * as eventListener from "./controller/events/eventListeners";
 import * as Tst from "./controller/Translator";
@@ -59,14 +58,14 @@ var scheduledTimer = setInterval(() => {
         }
 
         // when afk too long kick option is enabled, then check sleeping with afk command and kick if afk too long
-        if (BotSettings.afkCommandAutoKick === true && player.permissions.afkmode === true && nowTimeStamp > player.permissions.afkdate + BotSettings.afkCommandAutoKickAllowMillisecs) {
+        if (window.gameRoom.config.settings.afkCommandAutoKick === true && player.permissions.afkmode === true && nowTimeStamp > player.permissions.afkdate + window.gameRoom.config.settings.afkCommandAutoKickAllowMillisecs) {
             window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkCommandTooLongKick, placeholderScheduler), false); // kick
         }
 
         // check afk
         if (window.gameRoom.isGamingNow === true && window.gameRoom.isStatRecord === true) { // if the game is in playing
             if (player.team !== TeamID.Spec) { // if the player is not spectators(include afk mode)
-                if (player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
+                if (player.afktrace.count >= window.gameRoom.config.settings.afkCountLimit) { // if the player's count is over than limit
                     window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
                     if (player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)
@@ -77,7 +76,7 @@ var scheduledTimer = setInterval(() => {
             }
         } else {
             if (player.admin == true) { // if the player is admin
-                if (player.afktrace.count >= BotSettings.afkCountLimit) { // if the player's count is over than limit
+                if (player.afktrace.count >= window.gameRoom.config.settings.afkCountLimit) { // if the player's count is over than limit
                     window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.scheduler.afkKick, placeholderScheduler), false); // kick
                 } else {
                     if (player.afktrace.count >= 1) { // only when the player's count is not 0(in activity)

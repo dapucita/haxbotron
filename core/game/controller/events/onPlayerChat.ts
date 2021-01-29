@@ -1,7 +1,6 @@
 
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
-import * as BotSettings from "../../resource/settings.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { isCommandString, parseCommand } from "../Parser";
 import { getUnixTimestamp } from "../Statistics";
@@ -43,10 +42,10 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                 return false; // and hide this chat
             } else {
                 //Anti Chat Flood Checking
-                if (BotSettings.antiChatFlood === true && window.gameRoom.isStatRecord === true) { // if anti chat flood options is enabled
+                if (window.gameRoom.config.settings.antiChatFlood === true && window.gameRoom.isStatRecord === true) { // if anti chat flood options is enabled
                     let chatFloodCritFlag: boolean = false;
                     window.gameRoom.antiTrollingChatFloodCount.push(player.id); // record who said this chat
-                    for (let floodCritCount = 1; floodCritCount <= BotSettings.chatFloodCriterion; floodCritCount++) {
+                    for (let floodCritCount = 1; floodCritCount <= window.gameRoom.config.settings.chatFloodCriterion; floodCritCount++) {
                         let floodID: number = window.gameRoom.antiTrollingChatFloodCount[window.gameRoom.antiTrollingChatFloodCount.length - floodCritCount] || 0;
                         if (floodID === player.id) {
                             chatFloodCritFlag = true;
@@ -59,7 +58,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                         const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
                         // judge as chat flood.
                         window.gameRoom.playerList.get(player.id)!.permissions['mute'] = true; // mute this player
-                        window.gameRoom.playerList.get(player.id)!.permissions.muteExpire = nowTimeStamp + BotSettings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
+                        window.gameRoom.playerList.get(player.id)!.permissions.muteExpire = nowTimeStamp + window.gameRoom.config.settings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
                         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "normal", 1); // notify that fact
                         return false;
                     }

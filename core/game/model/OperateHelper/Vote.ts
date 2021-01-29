@@ -1,8 +1,7 @@
-import * as BotSettings from "../../resource/settings.json";
 import { PlayerObject } from "../GameObject/PlayerObject";
 
 export function refreshBanVoteCache(): void {
-    let topVotedPlayers: PlayerObject[] = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.voteGet >= Math.floor(BotSettings.banVoteExecuteMinimum / 2));
+    let topVotedPlayers: PlayerObject[] = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.voteGet >= Math.floor(window.gameRoom.config.settings.banVoteExecuteMinimum / 2));
 
     window.gameRoom.banVoteCache = []; // init
 

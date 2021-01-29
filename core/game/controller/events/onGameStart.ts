@@ -1,6 +1,5 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
-import * as BotSettings from "../../resource/settings.json";
 import * as RatingSystemSettings from "../../resource/HElo/rating.json";
 import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
@@ -32,10 +31,10 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
 
     window.gameRoom.isGamingNow = true; // turn on
 
-    if (BotSettings.antiChatFlood === true) { // if anti-chat flood option is enabled
+    if (window.gameRoom.config.settings.antiChatFlood === true) { // if anti-chat flood option is enabled
         window.gameRoom.antiTrollingOgFloodCount = []; // clear and init again
     }
-    if (BotSettings.antiOgFlood === true) { // if anti-OG flood option is enabled
+    if (window.gameRoom.config.settings.antiOgFlood === true) { // if anti-OG flood option is enabled
         window.gameRoom.antiTrollingOgFloodCount = []; // clear and init again
     }
 
@@ -46,7 +45,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
         msg += `(by ${byPlayer.name}#${byPlayer.id})`;
     }
 
-    if(BotSettings.avatarOverridingByTier === true) {
+    if(window.gameRoom.config.settings.avatarOverridingByTier === true) {
         // if avatar overrding option is enabled
         allPlayersList.forEach((eachPlayer: PlayerObject) => {
             window.gameRoom._room.setPlayerAvatar(eachPlayer.id, getAvatarByTier( // set avatar
@@ -59,7 +58,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
 
     if (window.gameRoom.config.rules.statsRecord === true && window.gameRoom.isStatRecord === true) { // if the game mode is stats, records the result of this game.
         //requisite check for anti admin's abusing (eg. prevent game playing)
-        if (BotSettings.antiInsufficientStartAbusing === true && byPlayer !== null) {
+        if (window.gameRoom.config.settings.antiInsufficientStartAbusing === true && byPlayer !== null) {
             if (roomTeamPlayersNumberCheck(TeamID.Red) < window.gameRoom.config.rules.requisite.eachTeamPlayers || roomTeamPlayersNumberCheck(TeamID.Blue) < window.gameRoom.config.rules.requisite.eachTeamPlayers) {
                 let abusingID: number = byPlayer.id || 0;
                 let abusingTimestamp: number = getUnixTimestamp();
@@ -68,9 +67,9 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
                 window.gameRoom._room.stopGame();
                 window.gameRoom._room.sendAnnouncement(LangRes.antitrolling.insufficientStartAbusing.abusingWarning, null, 0xFF0000, "bold", 2);
 
-                if (abusingID !== 0 && window.gameRoom.antiInsufficientStartAbusingCount.filter(eachID => eachID === abusingID).length > BotSettings.insufficientStartAllowLimitation) {
+                if (abusingID !== 0 && window.gameRoom.antiInsufficientStartAbusingCount.filter(eachID => eachID === abusingID).length > window.gameRoom.config.settings.insufficientStartAllowLimitation) {
                     //if limitation has over then fixed-term ban that admin player
-                    setBanlistDataToDB({ conn: window.gameRoom.playerList.get(abusingID)!.conn, reason: LangRes.antitrolling.insufficientStartAbusing.banReason, register: abusingTimestamp, expire: abusingTimestamp + BotSettings.insufficientStartAbusingBanMillisecs });
+                    setBanlistDataToDB({ conn: window.gameRoom.playerList.get(abusingID)!.conn, reason: LangRes.antitrolling.insufficientStartAbusing.banReason, register: abusingTimestamp, expire: abusingTimestamp + window.gameRoom.config.settings.insufficientStartAbusingBanMillisecs });
                     window.gameRoom._room.kickPlayer(abusingID, LangRes.antitrolling.insufficientStartAbusing.banReason, false);     
                 }
                 

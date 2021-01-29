@@ -1,6 +1,5 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
-import * as BotSettings from "../../resource/settings.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
@@ -78,7 +77,7 @@ export async function onTeamGoalListener(team: TeamID): Promise<void> {
             window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onGoal.og, placeholderGoal), null, 0x00FF00, "normal", 0);
             window.gameRoom.logger.i(`${window.gameRoom.playerList.get(touchPlayer)!.name}#${touchPlayer} made an OG.`);
 
-            if(BotSettings.antiOgFlood === true) { // if anti-OG flood option is enabled
+            if(window.gameRoom.config.settings.antiOgFlood === true) { // if anti-OG flood option is enabled
                 window.gameRoom.antiTrollingOgFloodCount.push(touchPlayer); // record it
 
                 let ogCountByPlayer: number = 0;
@@ -88,13 +87,13 @@ export async function onTeamGoalListener(team: TeamID): Promise<void> {
                     }
                 });
 
-                if(ogCountByPlayer >= BotSettings.ogFloodCriterion) { // if too many OGs were made
+                if(ogCountByPlayer >= window.gameRoom.config.settings.ogFloodCriterion) { // if too many OGs were made
                     // kick this player
                     const banTimeStamp: number = getUnixTimestamp(); // get current timestamp
                     window.gameRoom.logger.i(`${window.gameRoom.playerList.get(touchPlayer)!.name}#${touchPlayer} was kicked for anti-OGs flood. He made ${ogCountByPlayer} OGs. (conn:${window.gameRoom.playerList.get(touchPlayer)!.conn})`);
                     window.gameRoom._room.kickPlayer(touchPlayer, LangRes.antitrolling.ogFlood.banReason, false); // kick
                     //and add into ban list (not permanent ban, but fixed-term ban)
-                    await setBanlistDataToDB({ conn: window.gameRoom.playerList.get(touchPlayer)!.conn, reason: LangRes.antitrolling.ogFlood.banReason, register: banTimeStamp, expire: banTimeStamp+BotSettings.ogFloodBanMillisecs });
+                    await setBanlistDataToDB({ conn: window.gameRoom.playerList.get(touchPlayer)!.conn, reason: LangRes.antitrolling.ogFlood.banReason, register: banTimeStamp, expire: banTimeStamp+window.gameRoom.config.settings.ogFloodBanMillisecs });
                 }
             }
             

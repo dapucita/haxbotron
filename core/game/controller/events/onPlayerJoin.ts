@@ -1,6 +1,5 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
-import * as BotSettings from "../../resource/settings.json";
 import * as RatingSystemSettings from "../../resource/HElo/rating.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { Player } from "../../model/GameObject/Player";
@@ -122,14 +121,14 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         }
 
         // check anti-rejoin flood when this option is enabled
-        if (BotSettings.antiJoinFlood === true) { //FIXME: Connection Closed Message is shown when anti-rejoin flooding kick (FIND the reason why)
-            if (joinTimeStamp - existPlayerData.leftDate <= BotSettings.joinFloodIntervalMillisecs) { // when rejoin flood
-                if (existPlayerData.rejoinCount > BotSettings.joinFloodAllowLimitation) {
+        if (window.gameRoom.config.settings.antiJoinFlood === true) { //FIXME: Connection Closed Message is shown when anti-rejoin flooding kick (FIND the reason why)
+            if (joinTimeStamp - existPlayerData.leftDate <= window.gameRoom.config.settings.joinFloodIntervalMillisecs) { // when rejoin flood
+                if (existPlayerData.rejoinCount > window.gameRoom.config.settings.joinFloodAllowLimitation) {
                     // kick this player
                     window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
                     window.gameRoom._room.kickPlayer(player.id, LangRes.antitrolling.joinFlood.banReason, false); // kick
                     //and add into ban list (not permanent ban, but fixed-term ban)
-                    await setBanlistDataToDB({ conn: player.conn, reason: LangRes.antitrolling.joinFlood.banReason, register: joinTimeStamp, expire: joinTimeStamp + BotSettings.joinFloodBanMillisecs })
+                    await setBanlistDataToDB({ conn: player.conn, reason: LangRes.antitrolling.joinFlood.banReason, register: joinTimeStamp, expire: joinTimeStamp + window.gameRoom.config.settings.joinFloodBanMillisecs })
                     return; // exit from this join event
                 } else { //just warn
                     window.gameRoom._room.sendAnnouncement(LangRes.antitrolling.joinFlood.floodWarning, player.id, 0xFF0000, "bold", 2);
@@ -177,7 +176,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         updateAdmins(); // check there are any admin players, if not make an admin player.
     }
 
-    if (BotSettings.avatarOverridingByTier === true) {
+    if (window.gameRoom.config.settings.avatarOverridingByTier === true) {
         // if avatar overrding option is enabled
         window.gameRoom._room.setPlayerAvatar(player.id, getAvatarByTier( // set avatar
             (window.gameRoom.playerList.get(player.id)!.stats.totals < RatingSystemSettings.placement_match_chances)

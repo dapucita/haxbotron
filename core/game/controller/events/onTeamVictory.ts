@@ -1,6 +1,5 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
-import * as BotSettings from "../../resource/settings.json";
 import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
@@ -137,9 +136,9 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
 
     // when auto emcee mode is enabled
     if (window.gameRoom.config.rules.autoOperating === true) {
-        if (window.gameRoom.winningStreak.count >= BotSettings.rerollWinstreakCriterion) {
+        if (window.gameRoom.winningStreak.count >= window.gameRoom.config.settings.rerollWinstreakCriterion) {
             // if winning streak count has reached limit
-            if (BotSettings.rerollWinStreak === true && roomActivePlayersNumberCheck() >= window.gameRoom.config.rules.requisite.minimumPlayers) {
+            if (window.gameRoom.config.settings.rerollWinStreak === true && roomActivePlayersNumberCheck() >= window.gameRoom.config.rules.requisite.minimumPlayers) {
                 // if rerolling option is enabled, then reroll randomly
 
                 window.gameRoom.winningStreak.count = 0; // init count
@@ -171,9 +170,9 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
             teamPlayers
                 .filter((player: PlayerObject) => player.team === loserTeamID)
                 .forEach((eachPlayer: PlayerObject) => {
-                    if (BotSettings.guaranteePlayingTime === true) {
+                    if (window.gameRoom.config.settings.guaranteePlayingTime === true) {
                         // if guarantee playing time option is enabled
-                        if ((scores.time - window.gameRoom.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime) > BotSettings.guaranteedPlayingTimeSeconds) {
+                        if ((scores.time - window.gameRoom.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime) > window.gameRoom.config.settings.guaranteedPlayingTimeSeconds) {
                             window.gameRoom._room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move losers played enough time to Spec team
                         } else {
                             outPlayersCount--; // decrease count as this player will be alive in loser team
