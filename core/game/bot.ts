@@ -12,7 +12,7 @@ import { ScoresObject } from "./model/GameObject/ScoresObject";
 import { KickStack } from "./model/GameObject/BallTrace";
 import { getUnixTimestamp } from "./controller/Statistics";
 import { TeamID } from "./model/GameObject/TeamID";
-import { EmergencyTools } from "./model/DevConsole/EmergencyTools";
+import { EmergencyTools } from "./model/ExposeLibs/EmergencyTools";
 import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 import { loadStadiumData } from "./resource/stadiumLoader";
 import { GameRoomConfig } from "./model/Configuration/GameRoomConfig";
