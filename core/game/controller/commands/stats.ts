@@ -1,7 +1,6 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
 import * as StatCalc from "../Statistics";
-import * as RatingSystemSettings from "../../resource/HElo/rating.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
 
@@ -16,7 +15,7 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
                     ,targetName: window.gameRoom.playerList.get(targetStatsID)!.name
                     ,targetAfkReason: window.gameRoom.playerList.get(targetStatsID)!.permissions.afkreason
                     ,targetStatsRatingAvatar: getAvatarByTier( // set avatar
-                        (window.gameRoom.playerList.get(targetStatsID)!.stats.totals < RatingSystemSettings.placement_match_chances)
+                        (window.gameRoom.playerList.get(targetStatsID)!.stats.totals < window.gameRoom.config.HElo.factor.placement_match_chances)
                         ? Tier.TierNew
                         : decideTier(window.gameRoom.playerList.get(targetStatsID)!.stats.rating))
                     ,targetStatsRating: window.gameRoom.playerList.get(targetStatsID)!.stats.rating
@@ -48,7 +47,7 @@ export function cmdStats(byPlayer: PlayerObject, message?: string): void {
             ,targetName: window.gameRoom.playerList.get(byPlayer.id)!.name
             ,targetAfkReason: window.gameRoom.playerList.get(byPlayer.id)!.permissions.afkreason
             ,targetStatsRatingAvatar: getAvatarByTier( // set avatar
-                (window.gameRoom.playerList.get(byPlayer.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
+                (window.gameRoom.playerList.get(byPlayer.id)!.stats.totals < window.gameRoom.config.HElo.factor.placement_match_chances)
                 ? Tier.TierNew
                 : decideTier(window.gameRoom.playerList.get(byPlayer.id)!.stats.rating))
             ,targetStatsRating: window.gameRoom.playerList.get(byPlayer.id)!.stats.rating

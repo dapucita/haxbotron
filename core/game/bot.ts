@@ -1,5 +1,5 @@
 // Haxbotron
-// This is the main part of the bot
+// This is main part of the bot
 
 // import modules
 import * as LangRes from "./resource/strings";
@@ -21,6 +21,7 @@ import { GameRoomConfig } from "./model/Configuration/GameRoomConfig";
 initBotScript();
 makeRoom();
 
+// set schedulers
 var advertisementTimer = setInterval(() => {
     window.gameRoom._room.sendAnnouncement(LangRes.scheduler.advertise, null, 0x777777, "normal", 0); // advertisement
 
@@ -89,8 +90,10 @@ var scheduledTimer = setInterval(() => {
     });
 }, 5000); // by 5seconds
 
+// declare functions
 function initBotScript(): void {
     const loadedConfig: GameRoomConfig = JSON.parse(localStorage.getItem('initConfig')!);
+    localStorage.removeItem('initConfig');
 
     window.gameRoom = {
         _room: window.HBInit(loadedConfig._config)

@@ -20,6 +20,7 @@ export async function createRoom(ctx: Context) {
         ,_config: ctx.request.body._config
         ,settings: ctx.request.body.settings
         ,rules: ctx.request.body.rules
+        ,HElo: ctx.request.body.helo
     }
 
     if (!browser.checkExistRoom(newRoomConfig._RUID)) {

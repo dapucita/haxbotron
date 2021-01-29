@@ -1,6 +1,5 @@
 import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
-import * as RatingSystemSettings from "../../resource/HElo/rating.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { Player } from "../../model/GameObject/Player";
 import { convertToPlayerStorage, getBanlistDataFromDB, getPlayerDataFromDB, removeBanlistDataFromDB, setBanlistDataToDB, setPlayerDataToDB } from "../Storage";
@@ -179,7 +178,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
     if (window.gameRoom.config.settings.avatarOverridingByTier === true) {
         // if avatar overrding option is enabled
         window.gameRoom._room.setPlayerAvatar(player.id, getAvatarByTier( // set avatar
-            (window.gameRoom.playerList.get(player.id)!.stats.totals < RatingSystemSettings.placement_match_chances)
+            (window.gameRoom.playerList.get(player.id)!.stats.totals < window.gameRoom.config.HElo.factor.placement_match_chances)
                 ? Tier.TierNew
                 : decideTier(window.gameRoom.playerList.get(player.id)!.stats.rating)
         ));

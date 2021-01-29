@@ -1,3 +1,4 @@
+// IMPORT MAP FILE
 import * as mapBig from "./stadium/big.hbs"
 import * as mapBigEasy from "./stadium/bigeasy.hbs"
 import * as mapBigHockey from "./stadium/bighockey.hbs"
@@ -21,6 +22,7 @@ import * as mapRealSoccer from "./stadium/realsoccer.hbs"
 * load stadium map (JSON stringified).
 */
 export function loadStadiumData(mapName: string): string {
+    // LINK MAP FILE
     switch (mapName) {
         case 'big':
             return mapBig.stadiumText;
