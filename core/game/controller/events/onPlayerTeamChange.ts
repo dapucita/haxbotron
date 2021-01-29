@@ -2,7 +2,6 @@ import * as Tst from "../Translator";
 import * as LangRes from "../../resource/strings";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
-import { MatchKFactor } from "../../model/Statistics/HElo";
 
 export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer: PlayerObject): void {
     // Event called when a player team is changed.
@@ -33,7 +32,7 @@ export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer
         }
         if (window.gameRoom.config.rules.statsRecord == true && window.gameRoom.isStatRecord == true) {
             if(window.gameRoom.isGamingNow === true && changedPlayer.team !== TeamID.Spec) { // In the case of a substitute for previous player who abscond
-                window.gameRoom.playerList.get(changedPlayer.id)!.matchRecord.factorK = MatchKFactor.Replace; // set K Factor as a Replacement match
+                window.gameRoom.playerList.get(changedPlayer.id)!.matchRecord.factorK = window.gameRoom.config.HElo.factor.factor_k_replace; // set K Factor as a Replacement match
             }
         }
 

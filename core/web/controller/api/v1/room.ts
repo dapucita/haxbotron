@@ -5,6 +5,9 @@ import { nestedHostRoomConfigSchema } from "../../../schema/hostroomconfig.valid
 
 const browser = HeadlessBrowser.getInstance();
 
+/**
+ * create new room
+ */
 export async function createRoom(ctx: Context) {
     const validationResult = nestedHostRoomConfigSchema.validate(ctx.request.body);
 
@@ -31,6 +34,9 @@ export async function createRoom(ctx: Context) {
     }
 }
 
+/**
+ * close the room
+ */
 export async function terminateRoom(ctx: Context) {
     const { ruid } = ctx.params;
     if (browser.checkExistRoom(ruid)) {
@@ -41,6 +47,9 @@ export async function terminateRoom(ctx: Context) {
     }
 }
 
+/**
+ * get exist room list
+ */
 export function getRoomList(ctx: Context) {
     const list: string[] = browser.getExistRoomList();
     if (Array.isArray(list) && list.length) {
@@ -50,3 +59,29 @@ export function getRoomList(ctx: Context) {
         ctx.status = 404;
     }
 }
+
+/**
+ * get online player list
+ */
+export async function getPlayersList(ctx: Context) {
+    const { ruid } = ctx.params;
+    if (browser.checkExistRoom(ruid)) {
+        const list: number[] = await browser.getOnlinePlayersIDList(ruid);
+        ctx.body = list;
+        ctx.status = 200;
+    } else {
+        ctx.status = 404;
+    }
+    
+}
+
+/**
+ * 
+ */
+export function getPlayerInfo(ctx: Context) {}
+
+/**
+ * 
+ */
+export function broadcast(ctx: Context) {}
+

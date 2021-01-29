@@ -59,7 +59,7 @@ export class HElo {
     }
 
     // K*MoVM*(S-E)
-    public calcBothDiff(targetRecord: StatsRecord, counterpartRecord: StatsRecord, ratingWinnersMean: number, ratingLosersMean: number, factorK: MatchKFactor): number {
+    public calcBothDiff(targetRecord: StatsRecord, counterpartRecord: StatsRecord, ratingWinnersMean: number, ratingLosersMean: number, factorK: number): number {
         let res: number = 
             parseFloat((factorK 
             * this.calcMoVMultiplier(this.calcPD(targetRecord, counterpartRecord), this.calcQMultiplier(ratingWinnersMean, ratingLosersMean))
@@ -111,7 +111,7 @@ export class HElo {
 export interface StatsRecord {
     rating: number;
     realResult: MatchResult;
-    matchKFactor: MatchKFactor;
+    matchKFactor: number;
     matchGoal: number;
     matchOG: number;
     matchPassSuccRate: number;
@@ -121,10 +121,4 @@ export enum MatchResult {
     Win = 1.0,
     Draw = 0.5,
     Lose = 0.0
-}
-
-export enum MatchKFactor {
-    Normal = window.gameRoom.config.HElo.factor.factor_k_normal, // normal match
-    Placement = window.gameRoom.config.HElo.factor.factor_k_placement, // placement match
-    Replace = window.gameRoom.config.HElo.factor.facotr_k_replace // the match for replace other player who abscond from the match
 }

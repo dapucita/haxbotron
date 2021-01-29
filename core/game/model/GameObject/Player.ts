@@ -1,4 +1,3 @@
-import { MatchKFactor } from "../Statistics/HElo";
 import { PlayerObject, PlayerPosition, PlayerStats, PlayerPermissions, PlayerAfkTrace, PlayerEntryTime, PlayerMatchRecord } from "./PlayerObject";
 import { TeamID } from "./TeamID";
 export class Player implements PlayerObject {
@@ -63,7 +62,7 @@ export class Player implements PlayerObject {
             losePoints: 0, // it means the points this player lost (in Korean, '실점')
             balltouch: 0,  // total count of touch(kick) ball
             passed: 0, // total count of pass success
-            factorK: MatchKFactor.Normal // K Factor for HElo rating
+            factorK: window.gameRoom.config.HElo.factor.factor_k_normal // K Factor for HElo rating
         }
         this.stats = stats;
         this.permissions = permissions;

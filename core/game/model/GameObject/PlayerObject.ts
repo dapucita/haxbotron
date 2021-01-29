@@ -1,4 +1,3 @@
-import { MatchKFactor } from "../Statistics/HElo";
 import { TeamID } from "./TeamID";
 
 export interface PlayerObject {
@@ -38,7 +37,7 @@ export interface PlayerMatchRecord { // Temporary stat record for current match
     losePoints: number; // it means the points this player lost (in Korean, '실점')
     balltouch: number; // total count of touch(kick) ball
     passed: number; // total count of pass success
-    factorK: MatchKFactor; // K Factor for HElo rating
+    factorK: number; // K Factor for HElo rating
 }
 
 export interface PlayerStats {

@@ -4,7 +4,6 @@ import { getTeamWinningExpectation, getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
-import { MatchKFactor } from "../../model/Statistics/HElo";
 import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
 import { setBanlistDataToDB } from "../Storage";
 
@@ -83,7 +82,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
                 .forEach((eachPlayer: PlayerObject) => { 
                     window.gameRoom.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime = 0; // init each player's entry match time
                     if(window.gameRoom.playerList.get(eachPlayer.id)!.stats.totals < 10) {
-                        window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.factorK = MatchKFactor.Placement; // set K Factor as a Placement match
+                        window.gameRoom.playerList.get(eachPlayer.id)!.matchRecord.factorK = window.gameRoom.config.HElo.factor.factor_k_placement; // set K Factor as a Placement match
                     } // or default value is Normal match
                 });
 

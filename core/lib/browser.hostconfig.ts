@@ -104,7 +104,7 @@ export interface BrowserHostRoomHEloConfig {
         placement_match_chances: number
         factor_k_placement: number
         factor_k_normal: number
-        facotr_k_replace: number
+        factor_k_replace: number
     }
     tier: {
         class_tier_1: number

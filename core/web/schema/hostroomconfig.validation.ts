@@ -97,7 +97,7 @@ const configHEloSchema = Joi.object().keys({
         placement_match_chances: Joi.number().required()
         ,factor_k_placement: Joi.number().required()
         ,factor_k_normal: Joi.number().required()
-        ,facotr_k_replace: Joi.number().required()
+        ,factor_k_replace: Joi.number().required()
     }).required()
     ,tier: Joi.object().keys({
         class_tier_1: Joi.number().required()

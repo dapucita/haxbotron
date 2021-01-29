@@ -161,6 +161,9 @@ export class HeadlessBrowser {
         return this._PageContainer.get(ruid)!
     }
 
+    /**
+    * Get URI link of the room.
+    */
     private async fetchRoomURILink(ruid: string): Promise<string> {
         await this._PageContainer.get(ruid)!.waitForFunction(() => window.gameRoom.link !== undefined);
             
@@ -234,5 +237,14 @@ export class HeadlessBrowser {
     */
     public getExistRoomList(): string[] {
         return Array.from(this._PageContainer.keys());
+    }
+
+    /**
+     * Get all ID list of players joinned.
+     */
+    public async getOnlinePlayersIDList(ruid: string): Promise<number[]> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return Array.from(window.gameRoom.playerList.keys());
+        });
     }
 }

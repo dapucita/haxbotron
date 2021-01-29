@@ -18,6 +18,29 @@ import { loadStadiumData } from "./resource/stadiumLoader";
 import { GameRoomConfig } from "./model/Configuration/GameRoomConfig";
 
 // load initial configurations
+const loadedConfig: GameRoomConfig = JSON.parse(localStorage.getItem('initConfig')!);
+    localStorage.removeItem('initConfig');
+
+    window.gameRoom = {
+        _room: window.HBInit(loadedConfig._config)
+        ,config: loadedConfig
+        ,link: ''
+        ,stadiumData: { default: '', training: '' }
+        ,logger: Logger.getInstance() 
+        ,isStatRecord: false
+        ,isGamingNow: false
+        ,isMuteAll: false
+        ,playerList: new Map()
+        ,ballStack: KickStack.getInstance()
+        ,banVoteCache: []
+        ,winningStreak: { count: 0, teamID: TeamID.Spec }
+        ,antiTrollingOgFloodCount: []
+        ,antiTrollingChatFloodCount: []
+        ,antiInsufficientStartAbusingCount: []
+        ,antiPlayerKickAbusingCount: []
+        ,onEmergency: EmergencyTools
+        }
+        
 initBotScript();
 makeRoom();
 
@@ -92,28 +115,7 @@ var scheduledTimer = setInterval(() => {
 
 // declare functions
 function initBotScript(): void {
-    const loadedConfig: GameRoomConfig = JSON.parse(localStorage.getItem('initConfig')!);
-    localStorage.removeItem('initConfig');
-
-    window.gameRoom = {
-        _room: window.HBInit(loadedConfig._config)
-        ,config: loadedConfig
-        ,link: ''
-        ,stadiumData: { default: '', training: '' }
-        ,logger: Logger.getInstance() 
-        ,isStatRecord: false
-        ,isGamingNow: false
-        ,isMuteAll: false
-        ,playerList: new Map()
-        ,ballStack: KickStack.getInstance()
-        ,banVoteCache: []
-        ,winningStreak: { count: 0, teamID: TeamID.Spec }
-        ,antiTrollingOgFloodCount: []
-        ,antiTrollingChatFloodCount: []
-        ,antiInsufficientStartAbusingCount: []
-        ,antiPlayerKickAbusingCount: []
-        ,onEmergency: EmergencyTools
-        }
+    
     
     // init global properties
     console.log(`Haxbotron loaded bot script. (UID ${window.gameRoom.config._RUID}, TOKEN ${window.gameRoom.config._config.token})`);

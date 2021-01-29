@@ -5,7 +5,7 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { shuffleArray } from "../RoomTools";
 import { roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
-import { HElo, MatchKFactor, MatchResult, StatsRecord } from "../../model/Statistics/HElo";
+import { HElo, MatchResult, StatsRecord } from "../../model/Statistics/HElo";
 import { convertToPlayerStorage, setPlayerDataToDB } from "../Storage";
 
 export async function onTeamVictoryListener(scores: ScoresObject): Promise<void> {
@@ -108,7 +108,7 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
                 losePoints: 0,
                 balltouch: 0,
                 passed: 0,
-                factorK: MatchKFactor.Normal
+                factorK: window.gameRoom.config.HElo.factor.factor_k_normal
             }
 
             await setPlayerDataToDB(convertToPlayerStorage(window.gameRoom.playerList.get(eachPlayer.id)!)); // updates stats
