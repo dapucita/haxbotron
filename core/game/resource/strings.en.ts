@@ -72,7 +72,7 @@ export const command = {
         ,vote: '📑 !vote shows you progress of the vote.\n📑 !vote #ID : vote for kick that player. (eg: !vote #12)'
         ,tier: '📑 !tier shows you information of tier and rating system.'
     } 
-    ,about: '📄 This room is powered by Haxbotron🤖 bot. The host started on {_LaunchTime}.\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
+    ,about: '📄 {RoomName} ({_LaunchTime})\n💬 This room is powered by Haxbotron🤖 bot. https://github.com/dapucita/haxbotron\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !stats #12)\n📑 You can check IDs by command !list red,blue,spec'
         ,statsMsg: '📊 {targetName}#{ticketTarget} (Rating {targetStatsRatingAvatar}{targetStatsRating}) Total {targetStatsTotal} games(winrate {targetStatsWinRate}%), Disconnected {targetStatsDisconns} games\n📊 Goal {targetStatsGoals}, Assist {targetStatsAssists}, OG {targetStatsOgs}, Lose goal {targetStatsLosepoints}, Pass Success Rate {targetStatsPassSuccess}%\n📊 and Per Game : {targetStatsGoalsPerGame}goals, {targetStatsAssistsPerGame}assists, {targetStatsOgsPerGame}ogs, {targetStatsLostGoalsPerGame}lose goals.'
