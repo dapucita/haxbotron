@@ -12,8 +12,8 @@ roomRouter.delete('/:ruid', checkLoginMiddleware, roomController.terminateRoom);
 
 roomRouter.get('/:ruid/player', checkLoginMiddleware, roomController.getPlayersList); // get player list
 
+roomRouter.get('/:ruid/player/:id', checkLoginMiddleware, roomController.getPlayerInfo); // get player info
+
 /*
-GET /:ruid/player player list
-GET /:ruid/player/:id player info
 POST /:ruid/chat broadcast
 */

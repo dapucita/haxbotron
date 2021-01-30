@@ -1,4 +1,5 @@
 import { Context } from "koa";
+import { Player } from "../../../../game/model/GameObject/Player";
 import { HeadlessBrowser } from "../../../../lib/browser";
 import { BrowserHostRoomInitConfig } from '../../../../lib/browser.hostconfig';
 import { nestedHostRoomConfigSchema } from "../../../schema/hostroomconfig.validation";
@@ -76,9 +77,19 @@ export async function getPlayersList(ctx: Context) {
 }
 
 /**
- * 
+ * get player's information
  */
-export function getPlayerInfo(ctx: Context) {}
+export async function getPlayerInfo(ctx: Context) {
+    const { ruid, id } = ctx.params;
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid)) {
+        const player: Player | undefined = await browser.getPlayerInfo(ruid, parseInt(id));
+        if(player !== undefined) {
+            ctx.body = player;
+            ctx.status = 200;
+        }
+    }
+}
 
 /**
  * 
