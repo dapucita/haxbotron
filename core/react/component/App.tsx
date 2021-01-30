@@ -1,12 +1,21 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import { Route, Switch } from 'react-router-dom';
+import Admin from './Admin';
+import Install from './Install';
+import Main from './Main';
+import NotFound from './NotFound';
 
 function App() {
     return (
-        <div className="App">
-            <h1>Haxbotron Headless Host Server</h1>
-            <Button variant="contained" color="primary">Login!</Button>
+        <div>
+            <Switch>
+                <Route path='/' component={Main} exact={true} />
+                <Route path='/install' component={Install} />
+                <Route path='/admin' component={Admin} />
+                <Route component={NotFound} />
+            </Switch>
         </div>
+
     );
 }
 
