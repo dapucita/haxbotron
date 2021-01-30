@@ -20,6 +20,7 @@
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/koa-logger": "^3.1.1",
     "@types/koa-static": "^4.0.1",
