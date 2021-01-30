@@ -3,7 +3,7 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 export function onPlayerActivityListener(player : PlayerObject): void {
     // Event called when a player gives signs of activity, such as pressing a key.
     // This is useful for detecting inactive players.
-    if(window.gameRoom.playerList.has(player.id) === true) {
+    if(player != null && window.gameRoom.playerList.has(player.id) === true) {
         window.gameRoom.playerList.get(player.id)!.afktrace.count = 0;
 
         // reflect position in the field

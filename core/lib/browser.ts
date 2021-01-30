@@ -1,8 +1,9 @@
-import { init } from "node-persist";
 import puppeteer from "puppeteer";
+import { Player } from "../game/model/GameObject/Player";
 import { winstonLogger } from "../winstonLoggerSystem";
 import { BrowserHostRoomInitConfig } from "./browser.hostconfig";
 import * as dbUtilityInject from "./db.injection";
+import { loadStadiumData } from "./stadiumLoader";
 
 /**
 * Use this class for control Headless Browser.
@@ -52,14 +53,15 @@ export class HeadlessBrowser {
             browserSettings.customArgs.push('--disable-features=WebRtcHideLocalIpsWithMdns');
         }
 
-        winstonLogger.info("[core] The browser is opened.");
+        //winstonLogger.info("[core] The browser is opened.");
         
         this._BrowserContainer = await puppeteer.launch({ headless: browserSettings.openHeadless, args: browserSettings.customArgs });
 
         this._BrowserContainer.on('disconnected', () => {
-            winstonLogger.info("[core] The browser is closed. Core server will open new one automatically.");
+            //winstonLogger.info("[core] The browser is closed. Core server will open new one automatically.");
+            winstonLogger.info("[core] The browser is closed. Restart core server for recovery browser container.");
             this._BrowserContainer!.close();
-            this.initBrowser();
+            //this.initBrowser();
             return;
         });
     }
@@ -132,9 +134,11 @@ export class HeadlessBrowser {
         });
 
         // convey configuration values via html5 localStorage
-        await page.evaluate((initConfig: string) => {
-            localStorage.setItem('initConfig', initConfig);
-        }, JSON.stringify(initConfig));
+        await page.evaluate((initConfig: string, defaultMap: string, readyMap: string) => {
+            localStorage.setItem('_initConfig', initConfig);
+            localStorage.setItem('_defaultMap', defaultMap);
+            localStorage.setItem('_readyMap', readyMap);
+        }, JSON.stringify(initConfig), loadStadiumData(initConfig.rules.defaultMapName), loadStadiumData(initConfig.rules.readyMapName));
 
         await page.addScriptTag({
             path: './out/bot_bundle.js'
@@ -246,5 +250,19 @@ export class HeadlessBrowser {
         return await this._PageContainer.get(ruid)!.evaluate(() => {
             return Array.from(window.gameRoom.playerList.keys());
         });
+    }
+
+    /**
+     * Get Player's Information
+     */
+    public async getPlayerInfo(ruid: string, id: number): Promise<Player | undefined> {
+        return await this._PageContainer.get(ruid)!.evaluate((id: number) => {
+            //let idNum: number = parseInt(id);
+            if(window.gameRoom.playerList.has(id)) {
+                return window.gameRoom.playerList.get(id);
+            } else {
+                return undefined;
+            }
+        }, id);
     }
 }
