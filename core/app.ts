@@ -16,7 +16,7 @@ import { winstonLogger } from "./winstonLoggerSystem";
 import { indexAPIRouter } from "./web/router/api/v1";
 import { jwtMiddleware } from "./web/lib/jwt.middleware";
 import { HeadlessBrowser } from "./lib/browser";
-
+import axios from "axios";
 // ========================================================
 const app = new Koa();
 const router = new Router();
@@ -24,7 +24,7 @@ const browser = HeadlessBrowser.getInstance();
 
 const coreServerSettings = {
     port: (process.env.SERVER_PORT ? parseInt(JSON.parse(process.env.SERVER_PORT)) : 12001)
-    ,level: (process.env.SERVER_LEVEL || 'common')
+    , level: (process.env.SERVER_LEVEL || 'common')
 }
 const buildOutputDirectory = path.resolve(__dirname, "../public");
 const whiteListIPs: string[] = process.env.SERVER_WHITELIST_IP?.split(",") || ['127.0.0.1'];
@@ -56,13 +56,21 @@ app
     .use(router.allowedMethods())
     .use(serve(buildOutputDirectory))
     .use((async (ctx: Context) => {
-        if(ctx.status === 404 && ctx.path.indexOf('/api') !== 0) {
+        if (ctx.status === 404 && ctx.path.indexOf('/api') !== 0) {
             await send(ctx, "index.html", { root: buildOutputDirectory });
         }
     }));
 
 app
-    .listen(coreServerSettings.port, () => {
+    .listen(coreServerSettings.port, async () => {
+        const _GitHublastestRelease = await axios.get('https://api.github.com/repos/dapucita/haxbotron/releases/latest');
+        console.log("_|    _|                      _|                    _|                                  "+"\n"+
+                    "_|    _|    _|_|_|  _|    _|  _|_|_|      _|_|    _|_|_|_|  _|  _|_|    _|_|    _|_|_|  "+"\n"+
+                    "_|_|_|_|  _|    _|    _|_|    _|    _|  _|    _|    _|      _|_|      _|    _|  _|    _|"+"\n"+
+                    "_|    _|  _|    _|  _|    _|  _|    _|  _|    _|    _|      _|        _|    _|  _|    _|"+"\n"+
+                    "_|    _|    _|_|_|  _|    _|  _|_|_|      _|_|        _|_|  _|          _|_|    _|    _|");
+        console.log(`Lastest Version : ${_GitHublastestRelease.data.tag_name} | Current Version : v${process.env.npm_package_version}`);
+        console.log(`Haxbotron by dapucita (Visit our GitHub : https://github.com/dapucita/haxbotron)`);
         winstonLogger.info(`[core] Haxbotron core server is opened at ${coreServerSettings.port} port.`);
         winstonLogger.info(`[core] IP Whitelist : ${whiteListIPs}`);
     });
