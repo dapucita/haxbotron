@@ -12,23 +12,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link as RouterLink, useHistory  } from 'react-router-dom';
 import client from '../lib/client';
+import Copyright from './common/Sign.Footer';
 
 interface checkProps {
     installed: boolean
-}
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'MIT License Copyright © '}
-            {new Date().getFullYear()}
-            {' '}
-            <Link color="inherit" href="https://github.com/dapucita">
-                dapucita
-            </Link>
-            {'.'}
-        </Typography>
-    );
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +71,7 @@ export default function SignUp({ installed }: checkProps) {
                 if(result.status === 201) {
                     setFlashMessage('Configuration succeeded.');
                     setTimeout(()=>{
-                        history.push('/admin')
+                        history.push('/admin');
                     }, 5000);
                 }
             } catch (e) {

@@ -3,6 +3,7 @@ import cors from "@koa/cors";
 import { authRouter } from "./auth";
 import { roomRouter } from "./room";
 import { initRouter } from "./init";
+import { systemRouter } from "./system";
 
 export const indexAPIRouter = new Router();
 
@@ -13,4 +14,5 @@ indexAPIRouter
         }))
     .use('/room', roomRouter.routes())
     .use('/auth', authRouter.routes())
-    .use('/init', initRouter.routes());
+    .use('/init', initRouter.routes())
+    .use('/system', systemRouter.routes());
