@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import client from '../lib/client';
-import GetServerInfo from './Admin/GetServerInfo';
+import Dashboard from './Admin/Dashboard';
 import SignIn from './SignIn';
 
 export default function Admin() {
@@ -24,11 +24,7 @@ export default function Admin() {
 
     if(loginCheck) {
         return (
-            <div>
-                <h1>Administration</h1>
-                <p>you are loginned.</p>
-                <GetServerInfo />
-            </div>
+            <Dashboard />
         );
     } else {
         return (
