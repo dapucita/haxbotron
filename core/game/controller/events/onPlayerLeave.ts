@@ -80,6 +80,12 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
         }
     }
 
+    if (window.gameRoom.config.settings.banVoteEnable) { // check vote and reduce
+        if(window.gameRoom.playerList.has(window.gameRoom.playerList.get(player.id)!.voteTarget)) {
+            window.gameRoom.playerList.get(window.gameRoom.playerList.get(player.id)!.voteTarget)!.voteGet -= 1;
+        }
+    }
+
     window.gameRoom.playerList.get(player.id)!.entrytime.leftDate = leftTimeStamp; // save left time
     await setPlayerDataToDB(convertToPlayerStorage(window.gameRoom.playerList.get(player.id)!)); // save
     window.gameRoom.playerList.delete(player.id); // delete from player list
