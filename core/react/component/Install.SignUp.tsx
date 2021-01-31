@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory  } from 'react-router-dom';
 import client from '../lib/client';
 
 interface checkProps {
@@ -53,8 +53,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp({ installed }: checkProps) {
     const classes = useStyles();
+    const history = useHistory();
 
-    const [submitDisabled, setSubmitDisabled] = useState(true);
     const [flashMessage, setFlashMessage] = useState('');
     const [adminAccount, setAdminAccount] = useState({
         username: '',
@@ -69,26 +69,23 @@ export default function SignUp({ installed }: checkProps) {
             ...adminAccount,
             [name]: value
         });
-        switchSubmitEnable();
     }
 
-    const switchSubmitEnable = (): boolean => {
-        if(username && password && password.length >= 3 && password.length <= 20) {
-            setSubmitDisabled(false);
-            return true;
-        } else {
-            setSubmitDisabled(true);
-            return false;
-        }
+    const validateForm = (): boolean => {
+        if(username && password && password.length >= 3 && password.length <= 20) return true;
+        else return false;
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(switchSubmitEnable()) {
+        if(validateForm()) {
             try {
                 const result = await client.post('/api/v1/init', { username, password });
                 if(result.status === 201) {
                     setFlashMessage('Configuration succeeded.');
+                    setTimeout(()=>{
+                        history.push('/admin')
+                    }, 5000);
                 }
             } catch (e) {
                 switch(e.status) {
@@ -123,7 +120,7 @@ export default function SignUp({ installed }: checkProps) {
                     <Typography component="h1" variant="h5">
                         Initial Configuration
                     </Typography>
-                    <Typography variant="body1">Already done. Login and start manage the server.</Typography>
+                    <Typography variant="body1">Already done. Login and start managing the server.</Typography>
                 </div>
                 <Box mt={5}>
                     <Typography variant="body1" align="center">
@@ -184,7 +181,6 @@ export default function SignUp({ installed }: checkProps) {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            disabled={submitDisabled}
                             className={classes.submit}
                         >
                             Sign Up
@@ -211,6 +207,4 @@ export default function SignUp({ installed }: checkProps) {
             </Container>
         )
     }
-
-    
 }
