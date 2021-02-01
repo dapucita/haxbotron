@@ -8,6 +8,8 @@ roomRouter.get('/', checkLoginMiddleware, roomController.getRoomList); // get ro
 
 roomRouter.post('/', checkLoginMiddleware, roomController.createRoom); // create room
 
+roomRouter.get('/:ruid', checkLoginMiddleware, roomController.getRoomInfo); // get room info
+
 roomRouter.delete('/:ruid', checkLoginMiddleware, roomController.terminateRoom); // create room
 
 roomRouter.get('/:ruid/player', checkLoginMiddleware, roomController.getPlayersList); // get player list

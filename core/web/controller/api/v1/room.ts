@@ -62,6 +62,19 @@ export function getRoomList(ctx: Context) {
 }
 
 /**
+ * get the room's information
+ */
+export async function getRoomInfo(ctx: Context) {
+    const { ruid } = ctx.params;
+    if (browser.checkExistRoom(ruid)) {
+        ctx.status = 200;
+        ctx.body = await browser.getRoomInfo(ruid);
+    } else {
+        ctx.status = 404;
+    }
+}
+
+/**
  * get online player list
  */
 export async function getPlayersList(ctx: Context) {

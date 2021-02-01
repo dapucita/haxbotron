@@ -276,6 +276,23 @@ export class HeadlessBrowser {
     }
 
     /**
+     * Get the game room's information.
+     * @param ruid Game room's RUID
+     */
+    public async getRoomInfo(ruid: string) {
+        if (this.isExistRoom(ruid)) {
+            return await this._PageContainer.get(ruid)!.evaluate(() => {
+                return {
+                    roomName: window.gameRoom.config._config.roomName,
+                    onlinePlayers: window.gameRoom.playerList.size
+                }
+            });
+        } else {
+            throw Error(`The room '${ruid}' is not exist.`);
+        }
+    }
+
+    /**
      * Get all ID list of players joinned.
      */
     public async getOnlinePlayersIDList(ruid: string): Promise<number[]> {

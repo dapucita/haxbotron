@@ -64,9 +64,10 @@ export default function SignIn() {
                 const result = await client.post('/api/v1/auth', { username, password });
                 if(result.status === 201) {
                     setFlashMessage('Configuration succeeded.');
-                    setTimeout(()=>{
-                        history.goBack();
-                    }, 1000);
+                    /*setTimeout(()=>{
+                        history.push('/admin');
+                    }, 1000);*/
+                    history.push('/admin');
                 }
             } catch (e) {
                 switch(e.status) {

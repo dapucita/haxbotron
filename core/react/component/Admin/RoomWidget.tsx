@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -7,19 +7,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
+import client from '../../lib/client';
 
-// Generate Order Data
-function createData(id: number, ruid: string, title: string, amount: number) {
-    return { id, ruid, title, amount };
+interface roomInfoItem {
+    ruid: string
+    roomName: string
+    onlinePlayers: number
 }
-
-const rows = [
-    createData(0, 'testroom1', '4:4 핫휴 승릴', 3),
-    createData(1, 'testroom2', '4:4 핫휴 클관', 13),
-    createData(2, 'testroom3', '수다방', 5),
-    createData(3, 'testroom4', '수다방', 0),
-    createData(4, 'testroom5', '1:1 챌린지', 12),
-];
 
 function preventDefault(event: React.MouseEvent<HTMLElement>) {
     event.preventDefault();
@@ -33,6 +27,34 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RoomWidget() {
     const classes = useStyles();
+    const [roomInfoList, setRoomInfoList] = useState([] as roomInfoItem[]);
+
+    useEffect(() => {
+        const getRoomList = async () => {
+            try {
+                const result = await client.get('/api/v1/room');
+                if(result.status === 200) {
+                    const roomList: string[] = result.data;
+                    const roomInfoList: roomInfoItem[] = await Promise.all(roomList.map(async (ruid) => {
+                        const result = await client.get('/api/v1/room/'+ruid);
+                        return {
+                            ruid: ruid,
+                            roomName: result.data.roomName,
+                            onlinePlayers: result.data.onlinePlayers
+                        }
+                    }));
+
+                    setRoomInfoList(roomInfoList);
+                }
+            } catch (e) { }
+        }
+        getRoomList();
+
+        return (() => {
+            setRoomInfoList([]);
+        });
+    }, []);
+
     return (
         <React.Fragment>
             <Title>Current Game Rooms</Title>
@@ -45,11 +67,11 @@ export default function RoomWidget() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell>{row.ruid}</TableCell>
-                            <TableCell>{row.title}</TableCell>
-                            <TableCell align="right">{row.amount}</TableCell>
+                    {roomInfoList.map((item, idx) => (
+                        <TableRow key={idx}>
+                            <TableCell>{item.ruid}</TableCell>
+                            <TableCell>{item.roomName}</TableCell>
+                            <TableCell align="right">{item.onlinePlayers}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
