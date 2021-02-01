@@ -19,26 +19,28 @@ export async function makeHashedPassword(given: string): Promise<string> {
 /**
  * Check whether correct or not hashed-password.
  */
-/*
-export async function checkPassword(given: string, compare: string): Promise<boolean> {
-    return await bcrypt.compare(given, compare);
+export async function checkPassword(givenData: string, encryptedCompare: string): Promise<boolean> {
+    return await bcrypt.compare(givenData, encryptedCompare);
 }
-*/
 
 /**
  * Check is correct password for given admin account.
  */
 export async function isCorrectPassword(accounts: IAdminAccount[], account: IAdminAccount): Promise<boolean> {
-    if (account.hashedPassword === accounts.find(acc => acc.accountName === account.accountName)?.hashedPassword) { return true; }
-    else { return false; }
+    for(const acc of accounts) {
+        if(acc.accountName === account.accountName && await checkPassword(account.hashedPassword, acc.hashedPassword) === true) return true;
+    }
+    return false;
 }
 
 /**
  * Check whether exist admin account.
  */
-export async function isExistAdminAccount(accounts: IAdminAccount[], account: IAdminAccount): Promise<boolean> {
-    if (accounts.includes(account)) { return true; }
-    else { return false }
+export function isExistAdminAccount(accounts: IAdminAccount[], account: IAdminAccount): boolean {
+    for(const acc of accounts) {
+        if(acc.accountName === account.accountName) return true;
+    }
+    return false;
 }
 
 /**

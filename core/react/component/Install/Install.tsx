@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SignUp from './Install.SignUp';
-import client from '../lib/client';
+import client from '../../lib/client';
 
 export default function Install() {
     const [installAlready, setInstallAlready] = useState(false);
@@ -12,7 +12,7 @@ export default function Install() {
                     setInstallAlready(true);
                 }
             } catch (e) {
-                if(e.status === 404) {
+                if(e.response.status === 404) {
                     setInstallAlready(false);
                 }
             }

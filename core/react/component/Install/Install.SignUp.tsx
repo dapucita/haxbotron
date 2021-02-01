@@ -11,8 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link as RouterLink, useHistory  } from 'react-router-dom';
-import client from '../lib/client';
-import Copyright from './common/Sign.Footer';
+import client from '../../lib/client';
+import Copyright from '../common/Footer.Copyright';
 
 interface checkProps {
     installed: boolean
@@ -75,7 +75,7 @@ export default function SignUp({ installed }: checkProps) {
                     }, 5000);
                 }
             } catch (e) {
-                switch(e.status) {
+                switch(e.response.status) {
                     case 400: {
                         setFlashMessage('Form is unfulfilled.');
                         break;
@@ -110,13 +110,6 @@ export default function SignUp({ installed }: checkProps) {
                     <Typography variant="body1">Already done. Login and start managing the server.</Typography>
                 </div>
                 <Box mt={5}>
-                    <Typography variant="body1" align="center">
-                        {'Powered by '} 
-                        <Link color="inherit" href="https://github.com/dapucita/haxbotron">
-                            Haxbotron
-                        </Link>
-                        {'.'}
-                    </Typography>
                     <Copyright />
                 </Box>
             </Container>
@@ -182,13 +175,6 @@ export default function SignUp({ installed }: checkProps) {
                     </form>
                 </div>
                 <Box mt={5}>
-                    <Typography variant="body1" align="center">
-                        {'Powered by '} 
-                        <Link color="inherit" href="https://github.com/dapucita/haxbotron">
-                            Haxbotron
-                        </Link>
-                        {'.'}
-                    </Typography>
                     <Copyright />
                 </Box>
             </Container>

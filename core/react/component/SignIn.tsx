@@ -8,7 +8,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Copyright from './common/Sign.Footer';
+import Copyright from './common/Footer.Copyright';
 import client from '../lib/client';
 import { useHistory } from 'react-router-dom';
 
@@ -70,7 +70,7 @@ export default function SignIn() {
                     history.push('/admin');
                 }
             } catch (e) {
-                switch(e.status) {
+                switch(e.response.status) {
                     case 401: {
                         setFlashMessage('Login failed.');
                         break;

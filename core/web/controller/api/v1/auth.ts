@@ -16,11 +16,23 @@ export async function login(ctx: Context) {
         const storage: IAdminAccount[] | undefined = await loadAdminAccounts();
         const account: IAdminAccount = {
             accountName: username
-            , hashedPassword: await makeHashedPassword(password)
+            ,hashedPassword: password // not yet hashed! (for bcrypt.compare)
         }
 
-        if (!storage || await !isExistAdminAccount(storage, account) || await !isCorrectPassword(storage, account)) { // if no exist account or wrong password
+        // if no exist account or wrong password
+        if(!storage) {
             ctx.status = 401;
+            ctx.body = { error: 'Any accounts are not found.' }
+            return;
+        }
+        if(isExistAdminAccount(storage, account) === false) {
+            ctx.status = 401;
+            ctx.body = { error: `This account(${username}) is not found.` }
+            return;
+        }
+        if(await isCorrectPassword(storage, account) === false) {
+            ctx.status = 401;
+            ctx.body = { error: 'Given password is not correct.' }
             return;
         }
 

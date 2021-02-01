@@ -4,7 +4,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import VideogameAssetIcon from '@material-ui/icons/VideogameAsset';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 
 export const mainMenuList = (

@@ -4,7 +4,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import { Box } from '@material-ui/core';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NotFound() {
     const classes = useStyles();
+    const location = useLocation();
 
     return (
         <div className={classes.root}>
@@ -31,6 +33,9 @@ export default function NotFound() {
                 </Typography>
                 <Typography variant="h5" component="h2" gutterBottom>
                     {'This page is not found.'}
+                </Typography>
+                <Typography variant="h5" component="h2" gutterBottom>
+                    <Box fontStyle="italic">{location.pathname}</Box>
                 </Typography>
             </Container>
             <Footer />

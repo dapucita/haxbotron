@@ -3,7 +3,7 @@ import client from '../../lib/client';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Title from './Title';
+import Title from './common/Widget.Title';
 
 function preventDefault(event: React.MouseEvent<HTMLElement>) {
     event.preventDefault();
@@ -52,8 +52,5 @@ export default function ServerInfoWidget() {
                 </Link>
             </div>
         </React.Fragment>
-    );
-    return (
-        <p>{serverInfo.usedMemoryMB} {serverInfo.upTimeSecs} {serverInfo.serverVersion}</p>
     );
 }
