@@ -90,6 +90,9 @@ const roomSettingSchema = Joi.object().keys({
     ,guaranteedPlayingTimeSeconds : Joi.number().required()
 
     ,avatarOverridingByTier : Joi.boolean().required()
+
+    ,nicknameLengthLimit : Joi.number().required()
+    ,chatLengthLimit : Joi.number().required()
 });
 
 const configHEloSchema = Joi.object().keys({

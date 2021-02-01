@@ -55,4 +55,7 @@ export interface GameRoomSettings {
     guaranteedPlayingTimeSeconds : number
 
     avatarOverridingByTier : boolean
+
+    nicknameLengthLimit : number
+    chatLengthLimit : number
 }

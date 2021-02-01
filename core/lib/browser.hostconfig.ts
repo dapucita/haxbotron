@@ -97,6 +97,9 @@ export interface BrowserHostRoomSettings {
     guaranteedPlayingTimeSeconds : number
 
     avatarOverridingByTier : boolean
+
+    nicknameLengthLimit : number
+    chatLengthLimit : number
 }
 
 export interface BrowserHostRoomHEloConfig {

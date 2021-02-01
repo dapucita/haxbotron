@@ -166,6 +166,7 @@ export const onJoin = {
     ,stopRecord: '📊 Need more players. The game\'s result will not be recorded from now. (needs {gameRuleNeedMin} players at least)'
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID} has already joined.'
     ,doubleJoinningKick: '🚫 You did double joinning.'
+    ,tooLongNickname: '🚫 Too long nickname.'
     ,banList: {
         permanentBan: '{banListReason}'
         ,fixedTermBan: '{banListReason}'
@@ -179,6 +180,7 @@ export const onLeft = {
 
 export const onChat = {
     mutedChat: '🔇 You are muted. You can\'t send message to others, and only can command by chat.'
+    ,tooLongChat: '🔇 Chat message is too long.'
 }
 
 export const onTeamChange = {

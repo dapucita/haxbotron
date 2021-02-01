@@ -72,6 +72,13 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         }
     }
 
+    // if player's nickname is logger than limitation
+    if (player.name.length > window.gameRoom.config.settings.nicknameLengthLimit) {
+        window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for too long nickname.`);
+        window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.tooLongNickname, placeholderJoin), false); // kick
+        return;
+    }
+
     // add the player who joined into playerList by creating class instance
     let existPlayerData = await getPlayerDataFromDB(player.auth);
     if (existPlayerData !== undefined) {

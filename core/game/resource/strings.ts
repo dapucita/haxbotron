@@ -166,6 +166,7 @@ export const onJoin = {
     ,stopRecord: '📊 최소 {gameRuleNeedMin}명이 필요합니다. 지금은 전적이 기록되지 않습니다.'
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID}님이 중복 접속하였습니다.'
     ,doubleJoinningKick: '🚫 중복 접속으로 퇴장'
+    ,tooLongNickname: '🚫 너무 긴 닉네임'
     ,banList: {
         permanentBan: '{banListReason}'
         ,fixedTermBan: '{banListReason}'
@@ -179,6 +180,7 @@ export const onLeft = {
 
 export const onChat = {
     mutedChat: '🔇 음소거되어 채팅을 할 수 없습니다. 명령어는 사용할 수 있습니다.'
+    ,tooLongChat: '🔇 채팅 메시지가 너무 깁니다.'
 }
 
 export const onTeamChange = {

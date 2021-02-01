@@ -41,7 +41,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                 window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onChat.mutedChat, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
                 return false; // and hide this chat
             } else {
-                //Anti Chat Flood Checking
+                // Anti Chat Flood Checking
                 if (window.gameRoom.config.settings.antiChatFlood === true && window.gameRoom.isStatRecord === true) { // if anti chat flood options is enabled
                     let chatFloodCritFlag: boolean = false;
                     window.gameRoom.antiTrollingChatFloodCount.push(player.id); // record who said this chat
@@ -63,6 +63,12 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                         return false;
                     }
                 }
+                // Message Length Limitation Check
+                if(message.length > window.gameRoom.config.settings.chatLengthLimit) {
+                    window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onChat.tooLongChat, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
+                    return false;
+                }
+                // otherwise, send to room
                 return true;
             }
         }
