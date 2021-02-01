@@ -4,6 +4,7 @@ import { winstonLogger } from "../winstonLoggerSystem";
 import { BrowserHostRoomInitConfig } from "./browser.hostconfig";
 import * as dbUtilityInject from "./db.injection";
 import { loadStadiumData } from "./stadiumLoader";
+import { Server as SIOserver, Socket as SIOsocket } from "socket.io";
 
 /**
 * Use this class for control Headless Browser.
@@ -20,6 +21,7 @@ export class HeadlessBrowser {
     */
     private _BrowserContainer: puppeteer.Browser | undefined;
     private _PageContainer: Map<string, puppeteer.Page> = new Map();
+    private _SIOserver: SIOserver | undefined;
 
 
     /**
@@ -33,7 +35,7 @@ export class HeadlessBrowser {
     public static getInstance(): HeadlessBrowser {
         if (this.instance == null) {
             this.instance = new HeadlessBrowser();
-            this.instance.initBrowser();
+            //this.instance.initBrowser();
         }
         return this.instance;
     }
@@ -59,12 +61,15 @@ export class HeadlessBrowser {
 
         this._BrowserContainer.on('disconnected', () => {
             //winstonLogger.info("[core] The browser is closed. Core server will open new one automatically.");
-            winstonLogger.info("[core] The browser is closed. Restart core server for recovery browser container.");
+            winstonLogger.info("[core] The browser is closed.");
             this._BrowserContainer!.close();
+            this._BrowserContainer = undefined;
             //this.initBrowser();
             return;
         });
     }
+
+
 
     /**
     * Get all pages as array.
@@ -93,7 +98,14 @@ export class HeadlessBrowser {
             }
         }
 
-        const page: puppeteer.Page = await this._BrowserContainer!.newPage();
+        if(!this._BrowserContainer) await this.initBrowser(); // open if browser isn't exist.
+
+        const page: puppeteer.Page = await this._BrowserContainer!.newPage(); // create new page(tab)
+
+        const existPages = await this._BrowserContainer?.pages(); // get exist pages for check if first blank page is exist
+        if(existPages?.length == 2 && this._PageContainer.size == 0) existPages[0].close(); // close useless blank page
+        
+
 
         page.on('console', (msg: any) => {
             switch (msg.type()) {
@@ -139,30 +151,42 @@ export class HeadlessBrowser {
             localStorage.setItem('_defaultMap', defaultMap);
             localStorage.setItem('_readyMap', readyMap);
         }, JSON.stringify(initConfig), loadStadiumData(initConfig.rules.defaultMapName), loadStadiumData(initConfig.rules.readyMapName));
+        
+        // add event listeners ============================================================
+        page.addListener('_SIO.log', (event: any) => {
+            this._SIOserver?.sockets.emit('log', { ruid: ruid, origin: event.origin, type: event.type, message: event.message });
+        });
+        // ================================================================================
 
-        await page.addScriptTag({
+        // ================================================================================
+        // inject some functions ==========================================================
+        await page.exposeFunction('_emitSIOLogEvent', (origin: string, type: string, message: string) => {
+            page.emit('_SIO.log', {origin: origin, type: type, message: message});
+        })
+        
+        // inject functions for CRUD with DB Server ====================================
+        await page.exposeFunction('_createSuperadminDB', dbUtilityInject.createSuperadminDB);
+        await page.exposeFunction('_readSuperadminDB', dbUtilityInject.readSuperadminDB);
+        //await page.exposeFunction('updateSuperadminDB', dbUtilityInject.updateSuperadminDB); //this function is not implemented.
+        await page.exposeFunction('_deleteSuperadminDB', dbUtilityInject.deleteSuperadminDB);
+
+        await page.exposeFunction('_createPlayerDB', dbUtilityInject.createPlayerDB);
+        await page.exposeFunction('_readPlayerDB', dbUtilityInject.readPlayerDB);
+        await page.exposeFunction('_updatePlayerDB', dbUtilityInject.updatePlayerDB);
+        await page.exposeFunction('_deletePlayerDB', dbUtilityInject.deletePlayerDB);
+
+        await page.exposeFunction('_createBanlistDB', dbUtilityInject.createBanlistDB);
+        await page.exposeFunction('_readBanlistDB', dbUtilityInject.readBanlistDB);
+        await page.exposeFunction('_updateBanlistDB', dbUtilityInject.updateBanlistDB);
+        await page.exposeFunction('_deleteBanlistDB', dbUtilityInject.deleteBanlistDB);
+        // ================================================================================
+
+        await page.addScriptTag({ // add and load bot script
             path: './out/bot_bundle.js'
         });
 
-        // inject functions for do CRUD with DB Server ====================================
-        await page.exposeFunction('createSuperadminDB', dbUtilityInject.createSuperadminDB);
-        await page.exposeFunction('readSuperadminDB', dbUtilityInject.readSuperadminDB);
-        //await page.exposeFunction('updateSuperadminDB', dbUtilityInject.updateSuperadminDB); //this function is not implemented.
-        await page.exposeFunction('deleteSuperadminDB', dbUtilityInject.deleteSuperadminDB);
-
-        await page.exposeFunction('createPlayerDB', dbUtilityInject.createPlayerDB);
-        await page.exposeFunction('readPlayerDB', dbUtilityInject.readPlayerDB);
-        await page.exposeFunction('updatePlayerDB', dbUtilityInject.updatePlayerDB);
-        await page.exposeFunction('deletePlayerDB', dbUtilityInject.deletePlayerDB);
-
-        await page.exposeFunction('createBanlistDB', dbUtilityInject.createBanlistDB);
-        await page.exposeFunction('readBanlistDB', dbUtilityInject.readBanlistDB);
-        await page.exposeFunction('updateBanlistDB', dbUtilityInject.updateBanlistDB);
-        await page.exposeFunction('deleteBanlistDB', dbUtilityInject.deleteBanlistDB);
-        // ================================================================================
-
-        this._PageContainer.set(ruid, page)
-        return this._PageContainer.get(ruid)!
+        this._PageContainer.set(ruid, page) // save container
+        return this._PageContainer.get(ruid)! // return container for support chaining
     }
 
     /**
@@ -184,6 +208,14 @@ export class HeadlessBrowser {
     private isExistRoom(ruid: string): boolean {
         if (this._PageContainer.has(ruid)) return true;
         else return false;
+    }
+
+    /**
+     * Attach SIO server reference.
+     */
+    public attachSIOserver(server: SIOserver) {
+        //console.log('attached SIO server.' + server);
+        this._SIOserver = server;
     }
 
     /**

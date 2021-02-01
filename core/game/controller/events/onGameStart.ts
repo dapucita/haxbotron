@@ -60,7 +60,7 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
             if (roomTeamPlayersNumberCheck(TeamID.Red) < window.gameRoom.config.rules.requisite.eachTeamPlayers || roomTeamPlayersNumberCheck(TeamID.Blue) < window.gameRoom.config.rules.requisite.eachTeamPlayers) {
                 let abusingID: number = byPlayer.id || 0;
                 let abusingTimestamp: number = getUnixTimestamp();
-                window.gameRoom.logger.i(`The game will be stopped because of insufficient players in each team.`);
+                window.gameRoom.logger.i('onGameStart', `The game will be stopped because of insufficient players in each team.`);
                 window.gameRoom.antiInsufficientStartAbusingCount.push(abusingID);
                 window.gameRoom._room.stopGame();
                 window.gameRoom._room.sendAnnouncement(LangRes.antitrolling.insufficientStartAbusing.abusingWarning, null, 0xFF0000, "bold", 2);
@@ -101,5 +101,5 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
     } else {
         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onStart.stopRecord, placeholderStart), null, 0x00FF00, "normal", 0);
     }
-    window.gameRoom.logger.i(msg);
+    window.gameRoom.logger.i('onGameStart', msg);
 }

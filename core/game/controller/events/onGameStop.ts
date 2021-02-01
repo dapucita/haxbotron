@@ -32,7 +32,7 @@ export function onGameStopListener(byPlayer: PlayerObject): void {
     if (byPlayer !== null && byPlayer.id != 0) {
         msg += `(by ${byPlayer.name}#${byPlayer.id})`;
     }
-    window.gameRoom.logger.i(msg);
+    window.gameRoom.logger.i('onGameStop', msg);
     
     setDefaultStadiums(); // check number of players and auto-set stadium
     setDefaultRoomLimitation(); // score, time, teamlock set

@@ -36,7 +36,7 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
         streakTeamCount: window.gameRoom.winningStreak.count
     };
 
-    window.gameRoom.logger.i(`${player.name}#${player.id} has left.`);
+    window.gameRoom.logger.i('onPlayerLeave', `${player.name}#${player.id} has left.`);
 
     // check number of players joined and change game mode
     let activePlayersNumber: number = roomActivePlayersNumberCheck();
@@ -74,7 +74,7 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
             window.gameRoom.playerList.get(player.id)!.stats.rating -= window.gameRoom.config.settings.gameAbscondRatingPenalty; // rating penalty
             if(await getBanlistDataFromDB(window.gameRoom.playerList.get(player.id)!.conn) === undefined ) { // if this player is in match(team player), fixed-term ban this player
                 // check this player already registered in ban list to prevent overwriting other ban reason.
-                window.gameRoom.logger.i(`${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
+                window.gameRoom.logger.i('onPlayerLeave', `${player.name}#${player.id} has been added in fixed term ban list for abscond.`);
                 await setBanlistDataToDB({ conn: window.gameRoom.playerList.get(player.id)!.conn, reason: LangRes.antitrolling.gameAbscond.banReason, register: leftTimeStamp, expire: leftTimeStamp + window.gameRoom.config.settings.gameAbscondBanMillisecs });
             }
         }

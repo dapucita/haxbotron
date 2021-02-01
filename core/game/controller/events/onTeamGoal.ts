@@ -9,7 +9,7 @@ import { setBanlistDataToDB } from "../Storage";
 export async function onTeamGoalListener(team: TeamID): Promise<void> {
     // Event called when a team scores a goal.
     let scores: ScoresObject | null = window.gameRoom._room.getScores(); //get scores object (it includes time data about seconds elapsed)
-    window.gameRoom.logger.i(`Goal time logger (secs):${Math.round(scores?.time || 0)}`);
+    window.gameRoom.logger.i('onTeamGoal', `Goal time logger (secs):${Math.round(scores?.time || 0)}`);
 
     var placeholderGoal = { 
         teamID: team,
@@ -68,14 +68,14 @@ export async function onTeamGoalListener(team: TeamID): Promise<void> {
                 goalMsg = Tst.maketext(LangRes.onGoal.goalWithAssist, placeholderGoal);
             }
             window.gameRoom._room.sendAnnouncement(goalMsg, null, 0x00FF00, "normal", 0);
-            window.gameRoom.logger.i(goalMsg);
+            window.gameRoom.logger.i('onTeamGoal', goalMsg);
         } else { // if the goal is OG
             placeholderGoal.ogID = touchPlayer;
             placeholderGoal.ogName = window.gameRoom.playerList.get(touchPlayer)!.name;
             window.gameRoom.playerList.get(touchPlayer)!.matchRecord.ogs++; // record OG in match record
             //setPlayerData(window.playerList.get(touchPlayer)!);
             window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onGoal.og, placeholderGoal), null, 0x00FF00, "normal", 0);
-            window.gameRoom.logger.i(`${window.gameRoom.playerList.get(touchPlayer)!.name}#${touchPlayer} made an OG.`);
+            window.gameRoom.logger.i('onTeamGoal', `${window.gameRoom.playerList.get(touchPlayer)!.name}#${touchPlayer} made an OG.`);
 
             if(window.gameRoom.config.settings.antiOgFlood === true) { // if anti-OG flood option is enabled
                 window.gameRoom.antiTrollingOgFloodCount.push(touchPlayer); // record it
@@ -90,7 +90,7 @@ export async function onTeamGoalListener(team: TeamID): Promise<void> {
                 if(ogCountByPlayer >= window.gameRoom.config.settings.ogFloodCriterion) { // if too many OGs were made
                     // kick this player
                     const banTimeStamp: number = getUnixTimestamp(); // get current timestamp
-                    window.gameRoom.logger.i(`${window.gameRoom.playerList.get(touchPlayer)!.name}#${touchPlayer} was kicked for anti-OGs flood. He made ${ogCountByPlayer} OGs. (conn:${window.gameRoom.playerList.get(touchPlayer)!.conn})`);
+                    window.gameRoom.logger.i('onTeamGoal', `${window.gameRoom.playerList.get(touchPlayer)!.name}#${touchPlayer} was kicked for anti-OGs flood. He made ${ogCountByPlayer} OGs. (conn:${window.gameRoom.playerList.get(touchPlayer)!.conn})`);
                     window.gameRoom._room.kickPlayer(touchPlayer, LangRes.antitrolling.ogFlood.banReason, false); // kick
                     //and add into ban list (not permanent ban, but fixed-term ban)
                     await setBanlistDataToDB({ conn: window.gameRoom.playerList.get(touchPlayer)!.conn, reason: LangRes.antitrolling.ogFlood.banReason, register: banTimeStamp, expire: banTimeStamp+window.gameRoom.config.settings.ogFloodBanMillisecs });

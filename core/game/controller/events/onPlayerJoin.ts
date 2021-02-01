@@ -13,7 +13,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
     const joinTimeStamp: number = getUnixTimestamp();
 
     // logging into console
-    window.gameRoom.logger.i(`${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
+    window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} has joined. CONN(${player.conn}),AUTH(${player.auth})`);
 
     // Event called when a new player joins the room.
     var placeholderJoin = {
@@ -45,18 +45,18 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         placeholderJoin.banListReason = playerBanChecking.reason;
 
         if (playerBanChecking.expire == -1) { // Permanent ban
-            window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
+            window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for registered in permanent ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
             window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.permanentBan, placeholderJoin), true); // auto ban
             return;
         }
         if (playerBanChecking.expire > joinTimeStamp) { // Fixed-term ban (time limited ban)
-            window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
+            window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for registered in fixed-term ban list. (conn:${player.conn},reason:${playerBanChecking.reason})`);
             window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.banList.fixedTermBan, placeholderJoin), false); // auto kick
             return;
         }
         if (playerBanChecking.expire != -1 && playerBanChecking.expire <= joinTimeStamp) { // time-over from expiration date
             // ban clear for this player
-            window.gameRoom.logger.i(`${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking.reason})`);
+            window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} is deleted from the ban list because the date has expired. (conn:${player.conn},reason:${playerBanChecking.reason})`);
             await removeBanlistDataFromDB(player.conn);
             // window.room.clearBan(player.id); //useless cuz banned player in haxball couldn't make join-event.
         }
@@ -65,7 +65,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
     // if this player has already joinned by other connection
     for (let eachPlayer of window.gameRoom.playerList.values()) {
         if(eachPlayer.conn === player.conn) {
-            window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
+            window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for double joinning. (origin:${eachPlayer.name}#${eachPlayer.id},conn:${player.conn})`);
             window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.doubleJoinningKick, placeholderJoin), false); // kick
             //window.room.sendAnnouncement(Tst.maketext(LangRes.onJoin.doubleJoinningMsg, placeholderJoin), null, 0xFF0000, "normal", 0); // notify
             return; // exit from this join event
@@ -124,7 +124,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
             if (joinTimeStamp - existPlayerData.leftDate <= window.gameRoom.config.settings.joinFloodIntervalMillisecs) { // when rejoin flood
                 if (existPlayerData.rejoinCount > window.gameRoom.config.settings.joinFloodAllowLimitation) {
                     // kick this player
-                    window.gameRoom.logger.i(`${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
+                    window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for anti-rejoin flood. (origin:${player.name}#${player.id},conn:${player.conn})`);
                     window.gameRoom._room.kickPlayer(player.id, LangRes.antitrolling.joinFlood.banReason, false); // kick
                     //and add into ban list (not permanent ban, but fixed-term ban)
                     await setBanlistDataToDB({ conn: player.conn, reason: LangRes.antitrolling.joinFlood.banReason, register: joinTimeStamp, expire: joinTimeStamp + window.gameRoom.config.settings.joinFloodBanMillisecs })

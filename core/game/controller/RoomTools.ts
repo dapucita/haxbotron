@@ -42,7 +42,7 @@ export function updateAdmins(): void {
 
     window.gameRoom._room.setPlayerAdmin(players[0]!.id, true); // Give admin to the first non admin player in the list
     window.gameRoom.playerList.get(players[0].id)!.admin = true;
-    window.gameRoom.logger.i(`${window.gameRoom.playerList.get(players[0].id)!.name}#${players[0].id} has been admin(value:${window.gameRoom.playerList.get(players[0].id)!.admin},super:${window.gameRoom.playerList.get(players[0].id)!.permissions.superadmin}), because there were no admin players.`);
+    window.gameRoom.logger.i('updateAdmins', `${window.gameRoom.playerList.get(players[0].id)!.name}#${players[0].id} has been admin(value:${window.gameRoom.playerList.get(players[0].id)!.admin},super:${window.gameRoom.playerList.get(players[0].id)!.permissions.superadmin}), because there were no admin players.`);
     window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.funcUpdateAdmins.newAdmin, placeholderUpdateAdmins), null, 0x00FF00, "normal", 0);
 }
 

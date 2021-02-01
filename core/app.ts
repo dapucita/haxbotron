@@ -12,15 +12,20 @@ import serve from "koa-static";
 import send from "koa-send";
 import path from "path";
 import nodeStorage from "node-persist";
+import axios from "axios";
+import { createServer as HTTPcreateServer } from "http";
+import { Server as SIOserver, Socket as SIOsocket } from "socket.io";
 import { winstonLogger } from "./winstonLoggerSystem";
 import { indexAPIRouter } from "./web/router/api/v1";
-import { jwtMiddleware } from "./web/lib/jwt.middleware";
+import { jwtMiddleware, jwtMiddlewareWS } from "./web/lib/jwt.middleware";
 import { HeadlessBrowser } from "./lib/browser";
-import axios from "axios";
 // ========================================================
-const app = new Koa();
+const app = new Koa(); // koa server
 const router = new Router();
-const browser = HeadlessBrowser.getInstance();
+const server = HTTPcreateServer(app.callback());
+
+const sio = new SIOserver(server, { path:'/ws', transports: ['websocket'] }); // socket.io server
+const browser = HeadlessBrowser.getInstance(); // puppeteer wrapper instance
 
 const coreServerSettings = {
     port: (process.env.SERVER_PORT ? parseInt(JSON.parse(process.env.SERVER_PORT)) : 12001)
@@ -41,6 +46,8 @@ if (process.env.TWEAKS_GEOLOCATIONOVERRIDE && JSON.parse(process.env.TWEAKS_GEOL
 
 nodeStorage.init();
 
+browser.attachSIOserver(sio);
+
 // ========================================================
 router
     //.use('/', indexRouter.routes())
@@ -56,12 +63,27 @@ app
     .use(router.allowedMethods())
     .use(serve(buildOutputDirectory))
     .use((async (ctx: Context) => {
-        if (ctx.status === 404 && ctx.path.indexOf('/api') !== 0) {
+        if (ctx.status === 404 && ctx.path.indexOf('/api') !== 0 && ctx.path.indexOf('/ws') !== 0) {
             await send(ctx, "index.html", { root: buildOutputDirectory });
         }
     }));
 
-app
+sio.on('connection', (socket: SIOsocket) => {
+    /*
+    console.log('ws connected');
+    
+    socket.on('ping', (msg: string) => {
+        console.log('ws message: ' + msg);
+        sio.emit('ping', 'ping from server');
+    });
+    socket.on('disconnect', () => {
+        console.log('ws user disconnected');
+    });
+    */
+})
+sio.use((socket, next) => jwtMiddlewareWS(socket, next));
+
+server
     .listen(coreServerSettings.port, async () => {
         const _GitHublastestRelease = await axios.get('https://api.github.com/repos/dapucita/haxbotron/releases/latest');
         console.log("_|    _|                      _|                    _|                                  "+"\n"+

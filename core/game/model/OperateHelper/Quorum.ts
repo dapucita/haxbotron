@@ -29,7 +29,7 @@ export function putTeamNewPlayerConditional(playerID: number, redPlayers?: numbe
             // move only when team limitation is not reached.
             newTeamID = TeamID.Red;
             window.gameRoom._room.setPlayerTeam(playerID, TeamID.Red);
-            window.gameRoom.logger.i(`The player #${playerID} is moved to Red Team by system.`);
+            window.gameRoom.logger.i('autoOperating', `The player #${playerID} is moved to Red Team by system.`);
         }
     } else {
         // or move to blue team.
@@ -37,7 +37,7 @@ export function putTeamNewPlayerConditional(playerID: number, redPlayers?: numbe
             // move only when team limitation is not reached.
             newTeamID = TeamID.Blue;
             window.gameRoom._room.setPlayerTeam(playerID, TeamID.Blue);
-            window.gameRoom.logger.i(`The player #${playerID} is moved to Blue Team by system.`);
+            window.gameRoom.logger.i('autoOperating', `The player #${playerID} is moved to Blue Team by system.`);
         }
     }
     return newTeamID;

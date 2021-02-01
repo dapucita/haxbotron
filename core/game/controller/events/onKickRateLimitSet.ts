@@ -5,5 +5,5 @@ export function onKickRateLimitSetListener(min: number, rate: number, burst: num
     if(byPlayer !== null) {
         byPlayerInfo = byPlayer.name + '#' + byPlayer.id;
     }
-    window.gameRoom.logger.i(`The kick rate is changed by ${byPlayerInfo}. (min:${min},rate:${rate},burst:${burst})`);
+    window.gameRoom.logger.i('onKickRateLimitSet', `The kick rate is changed by ${byPlayerInfo}. (min:${min},rate:${rate},burst:${burst})`);
 }

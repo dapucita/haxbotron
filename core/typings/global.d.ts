@@ -1,4 +1,4 @@
-import { Logger } from "./controller/Logger";
+import { Logger } from "../game/controller/Logger"
 import { RoomConfig } from '../game/model/RoomObject/RoomConfig';
 import { KickStack } from "../game/model/GameObject/BallTrace";
 import { Logger } from "../game/controller/Logger";
@@ -61,21 +61,23 @@ declare global {
 
         // ==============================
         // INJECTED from Core Server
+        // Injected functions
+        _emitSIOLogEvent(origin: string, type: string, message: string): void
         // CRUD with DB Server via REST API
-        async createPlayerDB(ruid: string, player: PlayerStorage): Promise<void>
-        async readPlayerDB(ruid: string, playerAuth: string): Promise<PlayerStorage | undefined>
-        async updatePlayerDB(ruid: string, player: PlayerStorage): Promise<void>
-        async deletePlayerDB(ruid: string, playerAuth: string): Promise<void>
+        async _createPlayerDB(ruid: string, player: PlayerStorage): Promise<void>
+        async _readPlayerDB(ruid: string, playerAuth: string): Promise<PlayerStorage | undefined>
+        async _updatePlayerDB(ruid: string, player: PlayerStorage): Promise<void>
+        async _deletePlayerDB(ruid: string, playerAuth: string): Promise<void>
 
-        async createBanlistDB(ruid: string, banList: BanList): Promise<void>
-        async readBanlistDB(ruid: string, playerConn: string): Promise<BanList | undefined>
-        async updateBanlistDB(ruid: string, banList: BanList): Promise<void>
-        async deleteBanlistDB(ruid: string, playerConn: string): Promise<void>
+        async _createBanlistDB(ruid: string, banList: BanList): Promise<void>
+        async _readBanlistDB(ruid: string, playerConn: string): Promise<BanList | undefined>
+        async _updateBanlistDB(ruid: string, banList: BanList): Promise<void>
+        async _deleteBanlistDB(ruid: string, playerConn: string): Promise<void>
 
-        async createSuperadminDB(ruid: string, key: string, description: string): Promise<void>
-        async readSuperadminDB(ruid: string, key: string): Promise<string | undefined>
+        async _createSuperadminDB(ruid: string, key: string, description: string): Promise<void>
+        async _readSuperadminDB(ruid: string, key: string): Promise<string | undefined>
         //async updateSuperadminDB is not implemented.
-        async deleteSuperadminDB(ruid: string, key: string): Promise<void>
+        async _deleteSuperadminDB(ruid: string, key: string): Promise<void>
         // ==============================
 
         // ==============================

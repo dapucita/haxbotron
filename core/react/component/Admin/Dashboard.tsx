@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,11 +17,14 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { mainListItems, secondaryListItems } from './listItems';
+import { mainMenuList, secondaryMenuList } from './SideMenu';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ServerInfoWidget from './ServerInfoWidget';
 import RoomWidget from './RoomWidget';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import client from '../../lib/client';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
     return (
@@ -120,13 +123,26 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
+    const history = useHistory();
+    const [open, setOpen] = useState(true); // dashboard sidemenu
+    const [noti, setNoti] = useState(0); // notification alarm count
+
+    const onClickLogout = async () => {
+        try {
+            const result = await client.delete('/api/v1/auth');
+            if(result.status === 204) {
+                history.push('/');
+            }
+        } catch (e) { }
+    }
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
@@ -147,13 +163,18 @@ export default function Dashboard() {
                         Haxbotron Administrative Dashboard
                     </Typography>
                     <IconButton color="inherit">
+                    <Badge badgeContent={noti} color="secondary">
+                        <NotificationsIcon />
+                    </Badge>
+                    </IconButton>
+                    <IconButton color="inherit">
                         <Badge color="secondary">
                             <SettingsIcon />
                         </Badge>
                     </IconButton>
                     <IconButton color="inherit">
                         <Badge color="secondary">
-                            <PowerSettingsNewIcon />
+                            <PowerSettingsNewIcon onClick={onClickLogout} />
                         </Badge>
                     </IconButton>
                 </Toolbar>
@@ -171,9 +192,9 @@ export default function Dashboard() {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{mainListItems}</List>
+                <List>{mainMenuList}</List>
                 <Divider />
-                <List>{secondaryListItems}</List>
+                <List>{secondaryMenuList}</List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
@@ -184,7 +205,6 @@ export default function Dashboard() {
                                 <ServerInfoWidget />
                             </Paper>
                         </Grid>
-                        {/* Recent Orders */}
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <RoomWidget />

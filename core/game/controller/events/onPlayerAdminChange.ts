@@ -23,7 +23,7 @@ export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlaye
         } else {
             // make this player admin
             if (byPlayer !== null) {
-                window.gameRoom.logger.i(`${changedPlayer.name}#${changedPlayer.id} has been admin(super:${window.gameRoom.playerList.get(changedPlayer.id)!.permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
+                window.gameRoom.logger.i('onPlayerAdminChange', `${changedPlayer.name}#${changedPlayer.id} has been admin(super:${window.gameRoom.playerList.get(changedPlayer.id)!.permissions.superadmin}) by ${byPlayer.name}#${byPlayer.id}`);
             }
             return;
         }

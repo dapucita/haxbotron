@@ -12,18 +12,18 @@ export class Logger {
         return this.instance;
     }
 
-    public i(msg: string): void { // for common info log
-        //this.push({type: 2, context: msg});
+    public i(origin: string, msg: string): void { // for common info log
         console.info(msg);
+        window._emitSIOLogEvent(origin, 'info', msg);
     }
 
-    public e(msg: string): void { // for error log
-        //this.push({type: 0, context: msg});
+    public e(origin: string, msg: string): void { // for error log
         console.error(msg);
+        window._emitSIOLogEvent(origin, 'error', msg);
     }
 
-    public w(msg: string): void { // for warning log
-        //this.push({type: 1, context: msg});
+    public w(origin: string, msg: string): void { // for warning log
         console.warn(msg);
+        window._emitSIOLogEvent(origin, 'warn', msg);
     }
 }

@@ -12,7 +12,7 @@ export function onPlayerActivityListener(player : PlayerObject): void {
             ,y: player.position.y
         }
     } else {
-        window.gameRoom.logger.e(`Error on onPlayerActivityListener: Cannot access to afktrace.count. ${player.name}#${player.id}(team ${player.team}, conn ${player.conn}) is not registered in playerList.`)
+        window.gameRoom.logger.e('onPlayerActivity', `Error on onPlayerActivityListener: Cannot access to afktrace.count. ${player.name}#${player.id}(team ${player.team}, conn ${player.conn}) is not registered in playerList.`)
     }
     
 }

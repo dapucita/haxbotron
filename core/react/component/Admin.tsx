@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { wsocket, WSocketContext } from '../context/ws';
 import client from '../lib/client';
 import Dashboard from './Admin/Dashboard';
 import SignIn from './SignIn';
@@ -6,7 +7,21 @@ import SignIn from './SignIn';
 export default function Admin() {
     const [loginCheck, setLoginCheck] = useState(false);
 
-    useEffect(() => {
+    const ws = useContext(WSocketContext);
+
+    useEffect(() => { // websocket with socket.io
+        ws.on('log', (content: any) => {
+            console.log(`[LOG] ruid:${content.ruid} origin:${content.origin} type:${content.type} message:${content.message}`);
+        });
+        return () => {
+            // before the component is destroyed
+            // unbind all event handlers used in this component
+            
+        }
+
+    }, [ws]);
+
+    useEffect(() => { // check login
         const check = async () => {
             try {
                 const result = await client.get('/api/v1/auth');
@@ -24,7 +39,9 @@ export default function Admin() {
 
     if(loginCheck) {
         return (
-            <Dashboard />
+            <WSocketContext.Provider value={wsocket}>
+                <Dashboard />
+            </WSocketContext.Provider>
         );
     } else {
         return (

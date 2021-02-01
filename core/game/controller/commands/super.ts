@@ -13,11 +13,11 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                             window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin = true; // set super admin
                             //setPlayerData(playerList.get(playerID)); // update
                             window.gameRoom._room.sendAnnouncement(LangRes.command.super.loginSuccess, byPlayer.id, 0x479947, "normal", 2);
-                            window.gameRoom.logger.i(`${byPlayer.name}#${byPlayer.id} did successfully login to super admin with the key. (KEY ${submessage})`);
+                            window.gameRoom.logger.i('super', `${byPlayer.name}#${byPlayer.id} did successfully login to super admin with the key. (KEY ${submessage})`);
                         } else {
                             window.gameRoom.playerList.get(byPlayer.id)!.permissions.malActCount++; // add malicious behaviour count
                             window.gameRoom._room.sendAnnouncement(LangRes.command.super.loginFail, byPlayer.id, 0xFF7777, "normal", 2);
-                            window.gameRoom.logger.i(`${byPlayer.name}#${byPlayer.id} has failed login to super admin and logged as malicious behaviour. (KEY ${submessage})`);
+                            window.gameRoom.logger.i('super', `${byPlayer.name}#${byPlayer.id} has failed login to super admin and logged as malicious behaviour. (KEY ${submessage})`);
                         
                             if(window.gameRoom.playerList.get(byPlayer.id)!.permissions.malActCount >= window.gameRoom.config.settings.maliciousBehaviourBanCriterion) {
                                 // This player will be permanently banned if it fails to exceed limit.
@@ -39,7 +39,7 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                     window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin = false; // disqualify super admin
                     //setPlayerData(playerList.get(playerID)); // update
                     window.gameRoom._room.sendAnnouncement(LangRes.command.super.logoutSuccess, byPlayer.id, 0x479947, "normal", 2);
-                    window.gameRoom.logger.i(`${byPlayer.name}#${byPlayer.id} did logout from super admin.`);
+                    window.gameRoom.logger.i('super', `${byPlayer.name}#${byPlayer.id} did logout from super admin.`);
                 } else {
                     window.gameRoom._room.sendAnnouncement(LangRes.command.super._ErrorNoPermission, byPlayer.id, 0xFF7777, "normal", 2);
                 }

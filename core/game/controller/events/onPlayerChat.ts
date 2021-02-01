@@ -13,7 +13,7 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
 
     //TODO: CHAT FILTERING : https://github.com/web-mech/badwords
 
-    window.gameRoom.logger.i(`${player.name}#${player.id} said, "${message}"`);
+    window.gameRoom.logger.i('onPlayerChat', `[${player.name}#${player.id}] ${message}`);
 
     var placeholderChat = {
         playerID: player.id,

@@ -66,7 +66,7 @@ export default function SignIn() {
                     setFlashMessage('Configuration succeeded.');
                     setTimeout(()=>{
                         history.goBack();
-                    }, 5000);
+                    }, 1000);
                 }
             } catch (e) {
                 switch(e.status) {

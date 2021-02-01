@@ -75,7 +75,7 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
             }
             let newRating: number = ratingHelper.calcNewRating(eachItem.rating, diffArray);
             window.gameRoom.playerList.get(redTeamPlayers[idx].id)!.stats.rating = newRating;
-            window.gameRoom.logger.i(`Red Player ${redTeamPlayers[idx].name}#${redTeamPlayers[idx].id}'s rating has become ${newRating} from ${oldRating}.`);
+            window.gameRoom.logger.i('onTeamVictory', `Red Player ${redTeamPlayers[idx].name}#${redTeamPlayers[idx].id}'s rating has become ${newRating} from ${oldRating}.`);
         });
         blueStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
             let diffArray: number[] = []; 
@@ -85,7 +85,7 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
             }
             let newRating: number = ratingHelper.calcNewRating(eachItem.rating, diffArray);
             window.gameRoom.playerList.get(blueTeamPlayers[idx].id)!.stats.rating = newRating;
-            window.gameRoom.logger.i(`Blue Player ${blueTeamPlayers[idx].name}#${blueTeamPlayers[idx].id}'s rating has become ${newRating} from ${oldRating}.`);
+            window.gameRoom.logger.i('onTeamVictory', `Blue Player ${blueTeamPlayers[idx].name}#${blueTeamPlayers[idx].id}'s rating has become ${newRating} from ${oldRating}.`);
         });
 
         // record stats part ================
@@ -127,7 +127,7 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
         placeholderVictory.streakTeamName = convertTeamID2Name(window.gameRoom.winningStreak.teamID);
         placeholderVictory.streakTeamCount = window.gameRoom.winningStreak.count;
 
-        window.gameRoom.logger.i(`${placeholderVictory.streakTeamName} team wins streak ${placeholderVictory.streakTeamCount} games.`); // log it
+        window.gameRoom.logger.i('onTeamVictory', `${placeholderVictory.streakTeamName} team wins streak ${placeholderVictory.streakTeamCount} games.`); // log it
 
         if (window.gameRoom.winningStreak.count >= 3) {
             winningMessage += '\n' + Tst.maketext(LangRes.onVictory.burning, placeholderVictory);
@@ -161,7 +161,7 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
                 }
 
                 winningMessage += '\n' + Tst.maketext(LangRes.onVictory.reroll, placeholderVictory);
-                window.gameRoom.logger.i(`Whole players are shuffled. (${shuffledIDList.toString()})`);
+                window.gameRoom.logger.i('onTeamVictory', `Whole players are shuffled. (${shuffledIDList.toString()})`);
             }
         } else { // or still under the limit, then change spec and loser team
             // this count is for determine how many players will be alive in loser team
@@ -193,6 +193,6 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
     }
 
     // notify victory
-    window.gameRoom.logger.i(`The game has ended. Scores ${scores.red}:${scores.blue}.`);
+    window.gameRoom.logger.i('onTeamVictory', `The game has ended. Scores ${scores.red}:${scores.blue}.`);
     window.gameRoom._room.sendAnnouncement(winningMessage, null, 0x00FF00, "bold", 1);
 }

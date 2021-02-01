@@ -125,9 +125,9 @@ var scheduledTimer = setInterval(() => {
 
 // declare functions
 function makeRoom(): void {
-    window.gameRoom.logger.i(`The game room is opened at ${window.gameRoom.config._LaunchDate.toLocaleString()}.`);
+    window.gameRoom.logger.i('initialisation', `The game room is opened at ${window.gameRoom.config._LaunchDate.toLocaleString()}.`);
 
-    window.gameRoom.logger.i(`The game mode is '${window.gameRoom.isGamingNow}' now(by default).`);
+    window.gameRoom.logger.i('initialisation', `The game mode is '${window.gameRoom.isGamingNow}' now(by default).`);
 
     window.gameRoom._room.setCustomStadium(window.gameRoom.stadiumData.training);
     window.gameRoom._room.setScoreLimit(window.gameRoom.config.rules.requisite.scoreLimit);

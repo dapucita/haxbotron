@@ -19,14 +19,14 @@ export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer
 
     if (changedPlayer.id === 0) { // if the player changed into other team is host player(always id 0),
         window.gameRoom._room.setPlayerTeam(0, TeamID.Spec); // stay host player in Spectators team.
-        window.gameRoom.logger.i(`Bot host is moved team but it is rejected.`);
+        window.gameRoom.logger.i('onPlayerTeamChange', `Bot host is moved team but it is rejected.`);
     } else {
         if (byPlayer !== null && byPlayer.id !== 0) { // if changed by admin player
             if (window.gameRoom.playerList.get(changedPlayer.id)!.permissions.afkmode == true) { // if changed player is afk status
                 placeholderTeamChange.targetAfkReason = window.gameRoom.playerList.get(changedPlayer.id)!.permissions.afkreason;
                 window.gameRoom._room.setPlayerTeam(changedPlayer.id, TeamID.Spec); // stay the player in Spectators team.
                 window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onTeamChange.afkPlayer, placeholderTeamChange), null, 0xFF0000, "normal", 0);
-                window.gameRoom.logger.i(`${changedPlayer.name}#${changedPlayer.id} is moved team but it is rejected as afk mode.`);
+                window.gameRoom.logger.i('onPlayerTeamChange', `${changedPlayer.name}#${changedPlayer.id} is moved team but it is rejected as afk mode.`);
                 return; // exit this event
             }
         }
@@ -37,6 +37,6 @@ export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer
         }
 
         window.gameRoom.playerList.get(changedPlayer.id)!.team = changedPlayer.team;
-        window.gameRoom.logger.i(`${changedPlayer.name}#${changedPlayer.id} is moved team to ${convertTeamID2Name(changedPlayer.team)}.`);
+        window.gameRoom.logger.i('onPlayerTeamChange', `${changedPlayer.name}#${changedPlayer.id} is moved team to ${convertTeamID2Name(changedPlayer.team)}.`);
     }
 }
