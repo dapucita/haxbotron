@@ -129,7 +129,7 @@ const configHEloSchema = Joi.object().keys({
 });
 
 export const nestedHostRoomConfigSchema = Joi.object().keys({
-    ruid: Joi.string().required()
+    ruid: Joi.string().alphanum().required()
     ,_config: roomConfigSchema.required()
     ,settings: roomSettingSchema.required()
     ,rules: gameRuleSchema.required()
