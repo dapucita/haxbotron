@@ -26,10 +26,15 @@ export function cmdVote(byPlayer: PlayerObject, message?: string): void {
                     window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.vote.voteCancel, placeholderVote), byPlayer.id, 0x479947, "normal", 1);
                 } else { // or vote
                     if (roomPlayersNumberCheck() >= window.gameRoom.config.settings.banVoteAllowMinimum) { // check current players and vote
+                        if(window.gameRoom.playerList.has(window.gameRoom.playerList.get(byPlayer.id)!.voteTarget)) {
+                            // if this playeralready had voted other playerr, delete the old vote.
+                            window.gameRoom.playerList.get(window.gameRoom.playerList.get(byPlayer.id)!.voteTarget)!.voteGet--;
+                        }
+                        
                         window.gameRoom.playerList.get(byPlayer.id)!.voteTarget = targetVoteID; // vote and set
                         window.gameRoom.playerList.get(targetVoteID)!.voteGet++; // increase voted count
                         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.vote.voteComplete, placeholderVote), byPlayer.id, 0x479947, "normal", 1);
-
+                        //TODO: 기존 투표를 해놓고 새로 투표하는 경우, 기존것은 무효화하는 로직 추가할것
                         const banTimeStamp: number = getUnixTimestamp(); // get current timestamp
                         window.gameRoom.playerList.forEach(async (player: Player) => {
                             if(player.voteGet >= window.gameRoom.config.settings.banVoteExecuteMinimum) { // if the player got votes over minimum requirements, then kick (fixed-term ban)
