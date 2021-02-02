@@ -4,10 +4,7 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Title from './common/Widget.Title';
-
-function preventDefault(event: React.MouseEvent<HTMLElement>) {
-    event.preventDefault();
-}
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles({
     infoContext: {
@@ -47,8 +44,8 @@ export default function ServerInfoWidget() {
                 uptime {Math.round(serverInfo.upTimeSecs/60)} minutes.
             </Typography>
             <div>
-                <Link color="primary" href="#" onClick={preventDefault}>
-                    Get more information
+                <Link component={RouterLink} to="/admin/serverinfo" variant="body2" color="primary">
+                Get more information
                 </Link>
             </div>
         </React.Fragment>

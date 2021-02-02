@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import ServerInfoWidget from './ServerInfoWidget';
-import RoomWidget from './RoomWidget';
-import Copyright from '../common/Footer.Copyright';
-import { useHistory } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import client from '../../lib/client';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,8 +15,13 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainMenuList, secondaryMenuList } from './SideMenu';
+import SideMenu from './SideMenu/SideMenu';
 import { makeStyles } from '@material-ui/core/styles';
+import Mainboard from './Mainboard';
+import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import NotFound from '../NotFound';
+import RoomList from './RoomList';
+import ServerInfo from './ServerInfo';
 
 const drawerWidth = 240;
 
@@ -107,11 +104,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Dashboard() {
+function Dashboard({ match }: RouteComponentProps) {
     const classes = useStyles();
     const history = useHistory();
     const [open, setOpen] = useState(true); // dashboard sidemenu
     const [noti, setNoti] = useState(0); // notification alarm count
+    const [styleClass, setStyleClass] = useState(classes);
 
     const onClickLogout = async () => {
         try {
@@ -128,8 +126,6 @@ export default function Dashboard() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
         <div className={classes.root}>
@@ -178,30 +174,24 @@ export default function Dashboard() {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{mainMenuList}</List>
-                <Divider />
-                <List>{secondaryMenuList}</List>
+                <Switch>
+                    <Route path={match.path} render={()=><SideMenu menuPath="/admin" />} exact />
+                    <Route path={`${match.path}/room`} render={()=><SideMenu menuPath="/admin/room" />} />
+                    <Route path={`${match.path}/serverinfo`} render={()=><SideMenu menuPath="/admin/serverinfo" />} />
+                </Switch>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                <ServerInfoWidget />
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <RoomWidget />
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                    <Box pt={4}>
-                        <Copyright />
-                    </Box>
-                </Container>
+                { /* Main Content */ }
+                <Switch>
+                    <Route path={match.path} render={()=><Mainboard styleClass={styleClass} />} exact />
+                    <Route path={`${match.path}/room`} render={()=><RoomList styleClass={styleClass} />} />
+                    <Route path={`${match.path}/serverinfo`} render={()=><ServerInfo styleClass={styleClass} />} />
+                    <Route component={NotFound} />
+                </Switch>
             </main>
         </div>
     );
 }
+
+export default withRouter(Dashboard);

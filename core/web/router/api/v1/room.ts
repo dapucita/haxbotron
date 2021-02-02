@@ -17,3 +17,5 @@ roomRouter.get('/:ruid/player', checkLoginMiddleware, roomController.getPlayersL
 roomRouter.get('/:ruid/player/:id', checkLoginMiddleware, roomController.getPlayerInfo); // get player info
 
 roomRouter.post('/:ruid/chat', checkLoginMiddleware, roomController.broadcast); // send message
+
+roomRouter.get('/:ruid/info', checkLoginMiddleware, roomController.getRoomDetailInfo); // get detail room info

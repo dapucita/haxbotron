@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -8,15 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './common/Widget.Title';
 import client from '../../lib/client';
+import { WSocketContext } from '../../context/ws';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface roomInfoItem {
     ruid: string
     roomName: string
     onlinePlayers: number
-}
-
-function preventDefault(event: React.MouseEvent<HTMLElement>) {
-    event.preventDefault();
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -28,32 +26,49 @@ const useStyles = makeStyles((theme) => ({
 export default function RoomWidget() {
     const classes = useStyles();
     const [roomInfoList, setRoomInfoList] = useState([] as roomInfoItem[]);
+    const ws = useContext(WSocketContext);
+
+    const getRoomList = async () => {
+        try {
+            const result = await client.get('/api/v1/room');
+            if(result.status === 200) {
+                const roomList: string[] = result.data;
+                const roomInfoList: roomInfoItem[] = await Promise.all(roomList.map(async (ruid) => {
+                    const result = await client.get('/api/v1/room/'+ruid);
+                    return {
+                        ruid: ruid,
+                        roomName: result.data.roomName,
+                        onlinePlayers: result.data.onlinePlayers
+                    }
+                }));
+
+                setRoomInfoList(roomInfoList);
+            }
+        } catch (e) { }
+    }
 
     useEffect(() => {
-        const getRoomList = async () => {
-            try {
-                const result = await client.get('/api/v1/room');
-                if(result.status === 200) {
-                    const roomList: string[] = result.data;
-                    const roomInfoList: roomInfoItem[] = await Promise.all(roomList.map(async (ruid) => {
-                        const result = await client.get('/api/v1/room/'+ruid);
-                        return {
-                            ruid: ruid,
-                            roomName: result.data.roomName,
-                            onlinePlayers: result.data.onlinePlayers
-                        }
-                    }));
-
-                    setRoomInfoList(roomInfoList);
-                }
-            } catch (e) { }
-        }
         getRoomList();
 
         return (() => {
             setRoomInfoList([]);
         });
     }, []);
+
+    useEffect(() => { // websocket with socket.io
+        ws.on('roomct', (content: any) => {
+            setRoomInfoList([]);
+            getRoomList();
+        });
+        ws.on('joinleft', (content: any) => {
+            setRoomInfoList([]);
+            getRoomList();
+        });
+        return () => {
+            // before the component is destroyed
+            // unbind all event handlers used in this component
+        }
+    }, [ws]);
 
     return (
         <React.Fragment>
@@ -77,9 +92,9 @@ export default function RoomWidget() {
                 </TableBody>
             </Table>
             <div className={classes.seeMore}>
-                <Link color="primary" href="#" onClick={preventDefault}>
+                <Link component={RouterLink} to="/admin/room" variant="body2" color="primary">
                     See all game rooms
-        </Link>
+                </Link>
             </div>
         </React.Fragment>
     );

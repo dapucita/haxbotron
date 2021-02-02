@@ -139,6 +139,7 @@ export class HeadlessBrowser {
         });
         page.on('close', () => {
             winstonLogger.info(`[core] The page for the game room '${ruid}' is closed.`);
+            this._SIOserver?.sockets.emit('roomct', { ruid: ruid }); // emit websocket event for room create/terminate
         });
 
         await page.goto('https://www.haxball.com/headless', {
@@ -191,7 +192,10 @@ export class HeadlessBrowser {
             path: './out/bot_bundle.js'
         });
 
+        await page.waitForFunction(() => window.gameRoom.link !== undefined && window.gameRoom.link.length > 0); // wait for 30secs(default) until room link is created
+
         this._PageContainer.set(ruid, page) // save container
+        this._SIOserver?.sockets.emit('roomct', { ruid: ruid }); // emit websocket event for room create/terminate
         return this._PageContainer.get(ruid)! // return container for support chaining
     }
 
@@ -199,7 +203,7 @@ export class HeadlessBrowser {
     * Get URI link of the room.
     */
     private async fetchRoomURILink(ruid: string): Promise<string> {
-        await this._PageContainer.get(ruid)!.waitForFunction(() => window.gameRoom.link !== undefined);
+        await this._PageContainer.get(ruid)!.waitForFunction(() => window.gameRoom.link !== undefined && window.gameRoom.link.length > 0); // wait for 30secs(default) until room link is created
             
         let link: string = await this._PageContainer.get(ruid)!.evaluate(() => {
             return window.gameRoom.link;
@@ -291,6 +295,28 @@ export class HeadlessBrowser {
                 return {
                     roomName: window.gameRoom.config._config.roomName,
                     onlinePlayers: window.gameRoom.playerList.size
+                }
+            });
+        } else {
+            throw Error(`The room '${ruid}' is not exist.`);
+        }
+    }
+
+    /**
+     * Get the game room's detail information.
+     * @param ruid Game room's RUID
+     */
+    public async getRoomDetailInfo(ruid: string) {
+        if (this.isExistRoom(ruid)) {
+            return await this._PageContainer.get(ruid)!.evaluate(() => {
+                return {
+                    roomName: window.gameRoom.config._config.roomName,
+                    onlinePlayers: window.gameRoom.playerList.size,
+                    _link: window.gameRoom.link,
+                    _roomConfig: window.gameRoom.config._config,
+                    _settings: window.gameRoom.config.settings,
+                    _rules: window.gameRoom.config.rules,
+                    _HElo: window.gameRoom.config.HElo
                 }
             });
         } else {
