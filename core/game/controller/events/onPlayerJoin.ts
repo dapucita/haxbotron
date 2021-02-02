@@ -221,4 +221,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
             window.gameRoom._room.startGame();
         }
     }
+
+    // emit websocket event
+    window._emitSIOPlayerInOutEvent(player.id);
 }

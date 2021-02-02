@@ -105,7 +105,18 @@ export async function getPlayerInfo(ctx: Context) {
 }
 
 /**
- * 
+ * send broadcast message
  */
-export function broadcast(ctx: Context) {}
-
+export function broadcast(ctx: Context) {
+    const { ruid } = ctx.params;
+    const message: string | undefined = ctx.request.body.message;
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid)) {
+        if(message) {
+            browser.broadcast(ruid, message);
+            ctx.status = 201;
+        } else {
+            ctx.status = 400;
+        }
+    }
+}

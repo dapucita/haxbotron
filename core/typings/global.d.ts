@@ -63,6 +63,7 @@ declare global {
         // INJECTED from Core Server
         // Injected functions
         _emitSIOLogEvent(origin: string, type: string, message: string): void
+        _emitSIOPlayerInOutEvent(playerID: number): void
         // CRUD with DB Server via REST API
         async _createPlayerDB(ruid: string, player: PlayerStorage): Promise<void>
         async _readPlayerDB(ruid: string, playerAuth: string): Promise<PlayerStorage | undefined>

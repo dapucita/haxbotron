@@ -153,15 +153,21 @@ export class HeadlessBrowser {
         }, JSON.stringify(initConfig), loadStadiumData(initConfig.rules.defaultMapName), loadStadiumData(initConfig.rules.readyMapName));
         
         // add event listeners ============================================================
-        page.addListener('_SIO.log', (event: any) => {
+        page.addListener('_SIO.Log', (event: any) => {
             this._SIOserver?.sockets.emit('log', { ruid: ruid, origin: event.origin, type: event.type, message: event.message });
+        });
+        page.addListener('_SIO.InOut', (event: any) => {
+            this._SIOserver?.sockets.emit('joinleft', { ruid: ruid, playerID: event.playerID });
         });
         // ================================================================================
 
         // ================================================================================
         // inject some functions ==========================================================
         await page.exposeFunction('_emitSIOLogEvent', (origin: string, type: string, message: string) => {
-            page.emit('_SIO.log', {origin: origin, type: type, message: message});
+            page.emit('_SIO.Log', {origin: origin, type: type, message: message});
+        })
+        await page.exposeFunction('_emitSIOPlayerInOutEvent', (playerID: number) => {
+            page.emit('_SIO.InOut', { playerID: playerID });
         })
         
         // inject functions for CRUD with DB Server ====================================
@@ -313,5 +319,14 @@ export class HeadlessBrowser {
                 return undefined;
             }
         }, id);
+    }
+
+    /**
+     * Broadcast text message
+     */
+    public async broadcast(ruid: string, message: string): Promise<void> {
+        await this._PageContainer.get(ruid)?.evaluate((message: string) => {
+            window.gameRoom._room.sendAnnouncement(message, null, 0xFFFF00, "bold", 2);
+        }, message);
     }
 }

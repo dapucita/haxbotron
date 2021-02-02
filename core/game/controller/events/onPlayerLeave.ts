@@ -93,4 +93,7 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
     if(window.gameRoom.config.rules.autoAdmin === true) { // if auto admin option is enabled
         updateAdmins(); // update admin
     }
+
+    // emit websocket event
+    window._emitSIOPlayerInOutEvent(player.id);
 }
