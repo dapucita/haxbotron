@@ -3,7 +3,7 @@ import Joi from 'joi';
 const roomConfigSchema = Joi.object().keys({
     roomName: Joi.string().required()
     ,playerName: Joi.string().required()
-    ,password: Joi.string().optional()
+    ,password: Joi.string().optional().allow(null, '')
     ,maxPlayers: Joi.number().required()
     ,public: Joi.boolean().required()
     ,token: Joi.string().required()
@@ -12,7 +12,7 @@ const roomConfigSchema = Joi.object().keys({
         code: Joi.string()
         ,lat: Joi.number()
         ,lon: Joi.number()
-    }).optional()
+    }).optional().allow(null)
 });
 
 const gameRuleSchema = Joi.object().keys({
@@ -30,7 +30,7 @@ const gameRuleSchema = Joi.object().keys({
     ,statsRecord: Joi.boolean().required()
     ,defaultMapName: Joi.string().required()
     ,readyMapName: Joi.string().required()
-    ,customJSONOptions: Joi.string().optional()
+    ,customJSONOptions: Joi.string().optional().allow(null, '')
 });
 
 const roomSettingSchema = Joi.object().keys({

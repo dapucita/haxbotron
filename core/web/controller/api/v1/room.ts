@@ -27,6 +27,10 @@ export async function createRoom(ctx: Context) {
         ,HElo: ctx.request.body.helo
     }
 
+    if(newRoomConfig._config.password == "") {
+        newRoomConfig._config.password = undefined;
+    }
+
     if (!browser.checkExistRoom(newRoomConfig._RUID)) {
         await browser.openNewRoom(newRoomConfig._RUID, newRoomConfig);
         ctx.status = 201;
