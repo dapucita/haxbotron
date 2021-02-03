@@ -33,13 +33,13 @@ export default function MainboardSideMenu() {
                         <ListItemIcon>
                             <SportsEsportsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Game Rooms" />
+                        <ListItemText primary="Room List" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
                             <PeopleAltIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Players" />
+                        <ListItemText primary="Player List" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
@@ -47,7 +47,7 @@ export default function MainboardSideMenu() {
                         </ListItemIcon>
                         <ListItemText primary="Ban List" />
                     </ListItem>
-                    <ListItem button component={RouterLink} to="/admin/superadmin">
+                    <ListItem button>
                         <ListItemIcon>
                             <VpnKeyIcon />
                         </ListItemIcon>

@@ -1,6 +1,6 @@
 import { Context } from "koa";
 import { generateToken } from "../../../lib/jwt.middleware";
-import { IAdminAccount, isCorrectPassword, isExistAdminAccount, loadAdminAccounts, makeHashedPassword } from "../../../model/account";
+import { IAdminAccount, isCorrectPassword, isExistAdminAccount, loadAdminAccounts } from "../../../model/account";
 
 // export async function register(ctx: Context) { }
 

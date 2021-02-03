@@ -15,6 +15,12 @@ superadminRouter.post('/', validateSuperAdminModelRules, checkValidationRules, a
     await controller.addSuperAdmin(request, response, next);
 });
 
+// /v1/superadmin GET
+// get all superadmin data
+superadminRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
+    await controller.getAllSuperAdmins(request, response, next);
+});
+
 // /v1/superadmin/:key GET
 // get the superadmin data (key and description)
 superadminRouter.get('/:key', async (request: Request, response: Response, next: NextFunction) => {

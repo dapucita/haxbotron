@@ -25,7 +25,7 @@ export default function RoomListSideMenu() {
                         <ListItemIcon>
                             <SportsEsportsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Game Rooms" />
+                        <ListItemText primary="Room List" />
                     </ListItem>
                 </div>
             </List>
@@ -37,7 +37,7 @@ export default function RoomListSideMenu() {
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>
-                        <ListItemText primary="New Game Room" />
+                        <ListItemText primary="New Room" />
                     </ListItem>
                 </div>
             </List>
