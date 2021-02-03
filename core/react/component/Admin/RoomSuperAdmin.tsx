@@ -12,8 +12,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './common/Widget.Title';
 import client from '../../lib/client';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Button, TextField, Typography } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { Button, IconButton, TextField, Typography } from '@material-ui/core';
+import BackspaceIcon from '@material-ui/icons/Backspace';
 
 interface styleClass {
     styleClass: any
@@ -26,6 +27,16 @@ interface superAdminItem {
 
 interface matchParams {
     ruid: string
+}
+
+function generateRandKey() { // from https://stackoverflow.com/questions/1497481
+    var length = 20,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
 }
 
 export default function RoomSuperAdmin({ styleClass }: styleClass) {
@@ -48,8 +59,9 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
                 setSuperAdminKeyList(keyList);
             }
         } catch (error) {
-            if(error.response.status === 404) {
+            if (error.response.status === 404) {
                 setFlashMessage('Failed to load list.');
+                setSuperAdminKeyList([]);
             } else {
                 setFlashMessage('Unexpected error is caused. Please try again.');
             }
@@ -60,14 +72,38 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
         setNewAdminKey(e.target.value);
     }
 
+    const onClickKeyDelete = async (key: string) => {
+        try {
+            const result = await client.delete(`/api/v1/superadmin/${matchParams.ruid}/${key}`);
+            if (result.status === 204) {
+                setFlashMessage('Successfully deleted.');
+                setTimeout(() => {
+                    setFlashMessage('');
+                }, 3000);
+            }
+        } catch (error) {
+            //error.response.status
+            setFlashMessage('Failed to delete the key.');
+            setTimeout(() => {
+                setFlashMessage('');
+            }, 3000);
+        }
+        getSuperAdminKeyList();
+    }
+
+    const onClickKeyGenerate = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+        setNewAdminKey(generateRandKey());
+    }
+
     const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             const result = await client.post(`/api/v1/superadmin/${matchParams.ruid}`, {
                 key: newAdminKey
-                ,description: `registered at ${new Date()}`
+                , description: `registered at ${new Date()}`
             } as superAdminItem);
-            if (result.status === 201) {
+            if (result.status === 204) {
                 setFlashMessage('Successfully added.');
                 setNewAdminKey('');
                 setTimeout(() => {
@@ -111,12 +147,14 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
                                     className={classes.halfInput}
                                 />
                                 <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Add</Button>
+                                <Button onClick={onClickKeyGenerate} size="small" type="button" variant="contained" color="inherit" className={classes.submit}>Generate</Button>
                             </form>
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="left">Key</TableCell>
                                         <TableCell>Description</TableCell>
+                                        <TableCell align="right"></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -124,6 +162,11 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
                                         <TableRow key={idx}>
                                             <TableCell align="left">{item.key}</TableCell>
                                             <TableCell>{item.description}</TableCell>
+                                            <TableCell align="right">
+                                                <IconButton name={item.key} onClick={() => onClickKeyDelete(item.key)} aria-label="delete" className={classes.margin}>
+                                                    <BackspaceIcon fontSize="small" />
+                                                </IconButton>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

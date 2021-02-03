@@ -1,12 +1,12 @@
 {
-	"ruid": "room1",
+	"ruid": "haxbotron-room-default",
 	"_config": {
-		"roomName": "Play with 𝙃𝙖𝙭𝙗𝙤𝙩𝙧𝙤𝙣",
+		"roomName": "Play with 𝙃𝙖𝙭𝙗𝙤𝙩𝙧𝙤𝙣 🤖",
 		"playerName": "🤖",
 		"password": "",
 		"maxPlayers": 12,
 		"public": true,
-		"token": "",
+		"token": "https://www.haxball.com/headlesstoken",
 		"noPlayer": true
 	},
 	"settings": {

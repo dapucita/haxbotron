@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Copyright from '../common/Footer.Copyright';
 import Title from './common/Widget.Title';
-import { ReactHostRoomInfo } from '../../../lib/browser.hostconfig';
+import { BrowserHostRoomConfig, ReactHostRoomInfo } from '../../../lib/browser.hostconfig';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -14,91 +14,121 @@ import * as DefaultConfigSet from "../../lib/defaultroomconfig.json";
 import { useHistory } from 'react-router-dom';
 import { Switch } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import client from '../../lib/client';
 
 interface styleClass {
     styleClass: any
 }
 
-function getSavedRoomConfig(): ReactHostRoomInfo {
+const getSavedRoomConfig = (): ReactHostRoomInfo => {
     let savedRoomInfo: ReactHostRoomInfo = DefaultConfigSet;
     if (localStorage.getItem('_savedRoomInfo') !== null) savedRoomInfo = JSON.parse(localStorage.getItem('_savedRoomInfo')!);
     return savedRoomInfo;
 }
 
 export default function RoomCreate({ styleClass }: styleClass) {
-
-    //TODO: REMAKE THIS....
     const classes = styleClass;
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-    const savedRoomInfo: ReactHostRoomInfo = getSavedRoomConfig();
-
+    const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
     const history = useHistory();
-
-    const [roomInfoConfig, setRoomInfoConfig] = useState(savedRoomInfo);
     const [flashMessage, setFlashMessage] = useState('');
 
-    const [roomUID, setRoomUID] = useState(roomInfoConfig.ruid);
-    const [roomConfigForm, setRoomConfigForm] = useState(roomInfoConfig._config);
-    const [roomSettingsForm, setRoomSettingsForm] = useState(roomInfoConfig.settings);
-    //const [roomRulesForm, setRoomRulesForm] = useState(roomInfoConfig.rules);
-    //const [roomHEloForm, setRoomHEloForm] = useState(roomInfoConfig.helo);
+    const [roomConfigComplex, setRoomConfigComplex] = useState({} as ReactHostRoomInfo); // Total complex of Room Config (will be sent with API request body)
+    const [roomUIDFormField, setRoomUIDFormField] = useState(''); // RUID Field
+    const [roomPublicFormField, setRoomPublicFormField] = useState(true); // Room as Public Field (switch toggle component)
+    const [configFormField, setConfigFormField] = useState({} as BrowserHostRoomConfig); // Room Configuration Form
+    //TODO: settings,rules,helo
 
-    const [formConfigField, setFormConfigField] = useState()
+    useEffect(() => {
+        // LOAD DEFAULT OR LASTEST SETTINGS WHEN THIS COMPONENT IS LOADED
+        const loadedDefaultSettings: ReactHostRoomInfo = getSavedRoomConfig();
+
+        setRoomUIDFormField(loadedDefaultSettings.ruid);
+        setConfigFormField(loadedDefaultSettings._config);
+        setRoomPublicFormField(loadedDefaultSettings._config.public); // switch toggle component
+        //TODO: settings,rules,helo
+
+        return () => {
+            // WHEN UNMOUNTED
+            setRoomUIDFormField(loadedDefaultSettings.ruid);
+            setConfigFormField(loadedDefaultSettings._config);
+            setRoomPublicFormField(loadedDefaultSettings._config.public); // switch toggle component
+            //TODO: settings,rules,helo
+        }
+    }, []);
+
+    useEffect(() => {
+        // SAVE ONTO CONFIG COMPLEX WHEN EACH STATES ARE CHANGED
+        setRoomConfigComplex({
+            ruid: roomUIDFormField,
+            _config: { ...configFormField, public: roomPublicFormField }, // include switch toggle component
+            //TODO: settings,rules,helo
+            settings: DefaultConfigSet.settings,
+            rules: DefaultConfigSet.rules,
+            helo: DefaultConfigSet.helo
+        });
+    }, [roomUIDFormField, roomPublicFormField, configFormField]); //TODO: settings,rules,helo // include switch toggle component
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (true) {
+            // create room
+            try {
+                const result = await client.post(`/api/v1/room`, roomConfigComplex);
+                if (result.status === 201) {
+                    // save as lastest settings value (it will be loaded as default next time)
+                    localStorage.setItem('_savedRoomInfo', JSON.stringify(roomConfigComplex));
+                    // redirect to room list page
+                    history.push('/admin/roomlist');
+                }
+            } catch (error) {
+                switch (error.response.status) {
+                    case 400: {
+                        setFlashMessage('Configuration schema is unfulfilled.');
+                        break;
+                    }
+                    case 401: {
+                        setFlashMessage('Rejected.');
+                        break;
+                    }
+                    case 409: {
+                        setFlashMessage('The same RUID value is already in use.');
+                        break;
+                    }
+                    default: {
+                        setFlashMessage('Unexpected error is caused. Please try again.');
+                        break;
+                    }
+                }
+                setTimeout(() => {
+                    setFlashMessage('');
+                }, 3000);
+            }
 
-        localStorage.setItem('_savedRoomInfo', JSON.stringify(roomInfoConfig));
-        history.push('/admin/roomlist');
+        }
     }
 
     const handleReset = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-
         localStorage.removeItem('_savedRoomInfo');
-        setRoomInfoConfig(DefaultConfigSet);
-
-        setRoomConfigForm(roomInfoConfig._config);
-        setRoomSettingsForm(roomInfoConfig.settings);
         history.push('/admin/roomlist');
     }
 
     const onChangeRUID = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRoomUID(e.target.value);
-    }
-    const onChangePublic = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-        setRoomConfigForm({
-            ...roomConfigForm,
-            public: checked
-        })
-    }
-    const onChangeRoomConfig = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setRoomConfigForm({
-            ...roomConfigForm,
-            [name]: value
-        });
-        setRoomInfoConfig({
-            ...roomInfoConfig
-            ,_config: roomConfigForm
-        });
-    }
-    const onChangeRoomSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setRoomSettingsForm({
-            ...roomSettingsForm,
-            [name]: value
-        });
-        setRoomInfoConfig({
-            ...roomInfoConfig
-            ,settings: roomSettingsForm
-        });
+        setRoomUIDFormField(e.target.value);
     }
 
-    useEffect(() => {
-        
-    }, []);
+    const onChangePublic = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setRoomPublicFormField(e.target.checked); // switch toggle component
+    }
+
+    const onChangeRoomConfig = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setConfigFormField({
+            ...configFormField,
+            [name]: value
+        });
+    }
 
     return (
         <Container maxWidth="lg" className={classes.container}>
@@ -108,28 +138,56 @@ export default function RoomCreate({ styleClass }: styleClass) {
                         <React.Fragment>
                             <Typography variant="body1">{flashMessage}</Typography>
                             <Title>Create New Game Room</Title>
+                        </React.Fragment>
+
+                        <React.Fragment>
                             <form className={classes.form} onSubmit={handleSubmit} method="post">
-                                <Button type="submit" variant="contained" color="primary" className={classes.submit}>Create</Button>
-                                <Button type="reset" variant="contained" color="secondary" className={classes.submit} onClick={handleReset}>Reset</Button>
-                                <TextField
-                                    id="ruid" name="ruid" label="RUID" variant="outlined" margin="normal" required autoFocus value={roomUID} onChange={onChangeRUID} 
-                                />
-                                <TextField
-                                    id="roomName" name="roomName" label="Title" variant="outlined" margin="normal" required value={roomInfoConfig._config.roomName} onChange={onChangeRoomConfig} 
-                                />
-                                <TextField
-                                    id="password" name="password" label="Password" variant="outlined" margin="normal" value={roomInfoConfig._config.password} onChange={onChangeRoomConfig} 
-                                />
-                                <TextField
-                                    id="maxPlayers" name="maxPlayers" label="Max Players" variant="outlined" margin="normal" type="number" required value={roomInfoConfig._config.maxPlayers} onChange={onChangeRoomConfig} 
-                                />
-                                <FormControlLabel
-                                    control={<Switch id="public" name="public" checked={roomInfoConfig._config.public} onChange={onChangePublic} color="primary" />}
-                                    label="Public"
-                                />
-                                <TextField
-                                    id="token" name="token" label="Token" variant="outlined" margin="normal" required value={roomInfoConfig._config.token} onChange={onChangeRoomConfig} 
-                                />
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6} sm={3}>
+                                        <Button fullWidth type="submit" variant="contained" color="primary" className={classes.submit}>Create</Button>
+                                    </Grid>
+                                    <Grid item xs={6} sm={3}>
+                                        <Button fullWidth type="reset" variant="contained" color="secondary" className={classes.submit} onClick={handleReset}>Reset</Button>
+                                    </Grid>
+                                </Grid>
+
+                                <Typography component="h2" variant="subtitle1" color="primary" gutterBottom>Room configuration</Typography>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={4} sm={2}>
+                                        <TextField
+                                            fullWidth id="ruid" name="ruid" label="RUID" variant="outlined" margin="normal" size="small" required autoFocus value={roomUIDFormField} onChange={onChangeRUID}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={8} sm={4}>
+                                        <TextField
+                                            fullWidth id="token" name="token" label="Headless Token" variant="outlined" margin="normal" size="small" required value={configFormField.token} onChange={onChangeRoomConfig}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={4} sm={2}>
+                                        <FormControlLabel
+                                            control={<Switch id="public" name="public" size="small" checked={roomPublicFormField} onChange={onChangePublic} color="primary" />}
+                                            label="Public" labelPlacement="top"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={8} sm={4}>
+                                        <TextField
+                                            fullWidth id="roomName" name="roomName" label="Room Title" variant="outlined" margin="normal" size="small" required value={configFormField.roomName} onChange={onChangeRoomConfig}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6} sm={3}>
+                                        <TextField
+                                            fullWidth id="password" name="password" label="Password" variant="outlined" margin="normal" size="small" value={configFormField.password} onChange={onChangeRoomConfig}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={4} sm={2}>
+                                        <TextField
+                                            fullWidth id="maxPlayers" name="maxPlayers" label="Max Players" variant="outlined" margin="normal" type="number" size="small" required value={configFormField.maxPlayers} onChange={onChangeRoomConfig}
+                                        />
+                                    </Grid>
+
+                                </Grid>
                             </form>
                         </React.Fragment>
                     </Paper>
