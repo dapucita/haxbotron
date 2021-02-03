@@ -48,6 +48,7 @@ export default function RoomLog({ styleClass }: styleClass) {
             const result = await client.post(`/api/v1/room/${matchParams.ruid}/chat`, { message: broadcastMessage });
             if (result.status === 201) {
                 setFlashMessage('Successfully sent.');
+                setBroadcastMessage('');
                 setTimeout(() => {
                     setFlashMessage('');
                 }, 3000);
@@ -103,24 +104,20 @@ export default function RoomLog({ styleClass }: styleClass) {
                             <Typography variant="body1">{flashMessage}</Typography>
                             <Title>Broadcast</Title>
                             <form className={classes.form} onSubmit={handleBroadcast} method="post">
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            variant="outlined"
-                                            margin="normal"
-                                            required
-                                            id="broadcast"
-                                            label="Message"
-                                            name="broadcast"
-                                            value={broadcastMessage}
-                                            onChange={onChangeBroadcastMessage}
-                                            autoFocus
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Button type="submit" variant="contained" color="primary" className={classes.submit}>Send</Button>
-                                    </Grid>
-                                </Grid>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    size="small"
+                                    id="broadcast"
+                                    label="Message"
+                                    name="broadcast"
+                                    value={broadcastMessage}
+                                    onChange={onChangeBroadcastMessage}
+                                    autoFocus
+                                    className={classes.halfInput}
+                                />
+                                <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Send</Button>
                             </form>
                         </React.Fragment>
 
