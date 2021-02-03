@@ -82,8 +82,8 @@ export default function RoomWidget() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {roomInfoList.map((item, idx) => (
-                        <TableRow key={idx}>
+                    {roomInfoList.slice(0,3).map((item, idx) => (
+                        <TableRow key={idx} component={RouterLink} to={`/admin/room/${item.ruid}`}>
                             <TableCell>{item.ruid}</TableCell>
                             <TableCell>{item.roomName}</TableCell>
                             <TableCell align="right">{item.onlinePlayers}</TableCell>
@@ -92,7 +92,7 @@ export default function RoomWidget() {
                 </TableBody>
             </Table>
             <div className={classes.seeMore}>
-                <Link component={RouterLink} to="/admin/room" variant="body2" color="primary">
+                <Link component={RouterLink} to="/admin/roomlist" variant="body2" color="primary">
                     See all game rooms
                 </Link>
             </div>

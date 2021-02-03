@@ -29,7 +29,7 @@ export default function MainboardSideMenu() {
             <List>
                 <div>
                     <ListSubheader inset>Management</ListSubheader>
-                    <ListItem button component={RouterLink} to="/admin/room">
+                    <ListItem button component={RouterLink} to="/admin/roomlist">
                         <ListItemIcon>
                             <SportsEsportsIcon />
                         </ListItemIcon>

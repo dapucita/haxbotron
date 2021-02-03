@@ -22,6 +22,8 @@ import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import NotFound from '../NotFound';
 import RoomList from './RoomList';
 import ServerInfo from './ServerInfo';
+import RoomCreate from './RoomCreate';
+import RoomLog from './RoomLog';
 
 const drawerWidth = 240;
 
@@ -102,6 +104,16 @@ const useStyles = makeStyles((theme) => ({
     fixedHeight: {
         height: 240,
     },
+    fullHeight: {
+        height: '100%',
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 }));
 
 function Dashboard({ match }: RouteComponentProps) {
@@ -176,7 +188,8 @@ function Dashboard({ match }: RouteComponentProps) {
                 <Divider />
                 <Switch>
                     <Route path={match.path} render={()=><SideMenu menuPath="/admin" />} exact />
-                    <Route path={`${match.path}/room`} render={()=><SideMenu menuPath="/admin/room" />} />
+                    <Route path={`${match.path}/roomlist`} render={()=><SideMenu menuPath="/admin/roomlist" />} />
+                    <Route path={`${match.path}/newroom`} render={()=><SideMenu menuPath="/admin/newroom" />} />
                     <Route path={`${match.path}/serverinfo`} render={()=><SideMenu menuPath="/admin/serverinfo" />} />
                 </Switch>
             </Drawer>
@@ -185,8 +198,11 @@ function Dashboard({ match }: RouteComponentProps) {
                 { /* Main Content */ }
                 <Switch>
                     <Route path={match.path} render={()=><Mainboard styleClass={styleClass} />} exact />
-                    <Route path={`${match.path}/room`} render={()=><RoomList styleClass={styleClass} />} />
+                    <Route path={`${match.path}/roomlist`} render={()=><RoomList styleClass={styleClass} />} />
+                    <Route path={`${match.path}/newroom`} render={()=><RoomCreate styleClass={styleClass} />} />
                     <Route path={`${match.path}/serverinfo`} render={()=><ServerInfo styleClass={styleClass} />} />
+                    
+                    <Route path={`${match.path}/room/:ruid`}><RoomLog styleClass={styleClass} /></Route>
                     <Route component={NotFound} />
                 </Switch>
             </main>

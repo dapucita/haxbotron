@@ -21,7 +21,7 @@ export default function RoomListSideMenu() {
                         </ListItemIcon>
                         <ListItemText primary="Dashboard" />
                     </ListItem>
-                    <ListItem button component={RouterLink} to="/admin/room">
+                    <ListItem button component={RouterLink} to="/admin/roomlist">
                         <ListItemIcon>
                             <SportsEsportsIcon />
                         </ListItemIcon>
@@ -33,11 +33,11 @@ export default function RoomListSideMenu() {
             <List>
                 <div>
                     <ListSubheader inset>Management</ListSubheader>
-                    <ListItem button component={RouterLink} to="/admin/room">
+                    <ListItem button component={RouterLink} to="/admin/newroom">
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Create" />
+                        <ListItemText primary="New Game Room" />
                     </ListItem>
                 </div>
             </List>

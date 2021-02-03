@@ -13,6 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './common/Widget.Title';
 import client from '../../lib/client';
 import { WSocketContext } from '../../context/ws';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface styleClass {
     styleClass: any
@@ -28,7 +29,7 @@ interface roomInfoItem {
 export default function RoomList({ styleClass }: styleClass) {
     const classes = styleClass;
 
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
     const [roomInfoList, setRoomInfoList] = useState([] as roomInfoItem[]);
     const ws = useContext(WSocketContext);
@@ -88,16 +89,16 @@ export default function RoomList({ styleClass }: styleClass) {
                                     <TableRow>
                                         <TableCell align="left">RUID</TableCell>
                                         <TableCell>Title</TableCell>
-                                        <TableCell>Link</TableCell>
+                                        <TableCell align="right">Link</TableCell>
                                         <TableCell align="right">Online Players</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {roomInfoList.map((item, idx) => (
-                                        <TableRow key={idx}>
+                                        <TableRow key={idx} component={RouterLink} to={`/admin/room/${item.ruid}`}>
                                             <TableCell align="left">{item.ruid}</TableCell>
                                             <TableCell>{item.roomName}</TableCell>
-                                            <TableCell>{item.roomLink}</TableCell>
+                                            <TableCell align="right">{item.roomLink}</TableCell>
                                             <TableCell align="right">{item.onlinePlayers}</TableCell>
                                         </TableRow>
                                     ))}

@@ -7,6 +7,14 @@ export interface BrowserHostRoomInitConfig {
     HElo: BrowserHostRoomHEloConfig; // configuration for HElo rating and tier system
 }
 
+export interface ReactHostRoomInfo {
+    ruid: string; // room unique identifier for this game room
+    _config: BrowserHostRoomConfig; // room config data for set this new room
+    settings: BrowserHostRoomSettings; // room settings data for set options
+    rules: BrowserHostRoomGameRule; // game playing rule
+    helo: BrowserHostRoomHEloConfig; // configuration for HElo rating and tier system
+}
+
 export interface BrowserHostRoomConfig {
     roomName: string
     playerName: string

@@ -13,7 +13,12 @@ export default function SideMenu({ menuPath }: menuProp) {
                 <MainboardSideMenu />
             );
         }
-        case "/admin/room": {
+        case "/admin/roomlist": {
+            return (
+                <RoomListSideMenu />
+            );
+        }
+        case "/admin/newroom": {
             return (
                 <RoomListSideMenu />
             );
