@@ -47,7 +47,7 @@ export default function MainboardSideMenu() {
                         </ListItemIcon>
                         <ListItemText primary="Ban List" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button component={RouterLink} to="/admin/superadmin">
                         <ListItemIcon>
                             <VpnKeyIcon />
                         </ListItemIcon>
