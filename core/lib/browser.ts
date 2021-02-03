@@ -353,6 +353,7 @@ export class HeadlessBrowser {
     public async broadcast(ruid: string, message: string): Promise<void> {
         await this._PageContainer.get(ruid)?.evaluate((message: string) => {
             window.gameRoom._room.sendAnnouncement(message, null, 0xFFFF00, "bold", 2);
+            window.gameRoom.logger.i('onPlayerChat', `[Broadcast] ${message}`);
         }, message);
     }
 }

@@ -15,7 +15,6 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import SideMenu from './SideMenu/SideMenu';
 import { makeStyles } from '@material-ui/core/styles';
 import Mainboard from './Mainboard';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
@@ -24,6 +23,10 @@ import RoomList from './RoomList';
 import ServerInfo from './ServerInfo';
 import RoomCreate from './RoomCreate';
 import RoomLog from './RoomLog';
+import MainboardSideMenu from './SideMenu/Mainboard.SideMenu';
+import RoomListSideMenu from './SideMenu/RoomList.SideMenu';
+import RoomInfoSideMenu from './SideMenu/RoomInfo.SideMenu';
+import RoomPower from './RoomPower';
 
 const drawerWidth = 240;
 
@@ -186,11 +189,13 @@ function Dashboard({ match }: RouteComponentProps) {
                     </IconButton>
                 </div>
                 <Divider />
+                { /* Side Menu */ }
                 <Switch>
-                    <Route path={match.path} render={()=><SideMenu menuPath="/admin" />} exact />
-                    <Route path={`${match.path}/roomlist`} render={()=><SideMenu menuPath="/admin/roomlist" />} />
-                    <Route path={`${match.path}/newroom`} render={()=><SideMenu menuPath="/admin/newroom" />} />
-                    <Route path={`${match.path}/serverinfo`} render={()=><SideMenu menuPath="/admin/serverinfo" />} />
+                    <Route path={match.path} exact><MainboardSideMenu /></Route>
+                    <Route path={`${match.path}/roomlist`}><RoomListSideMenu /></Route>
+                    <Route path={`${match.path}/newroom`}><RoomListSideMenu /></Route>
+                    <Route path={`${match.path}/serverinfo`}><MainboardSideMenu /></Route>
+                    <Route path={`${match.path}/room/:ruid`} component={RoomInfoSideMenu} />
                 </Switch>
             </Drawer>
             <main className={classes.content}>
@@ -202,7 +207,8 @@ function Dashboard({ match }: RouteComponentProps) {
                     <Route path={`${match.path}/newroom`} render={()=><RoomCreate styleClass={styleClass} />} />
                     <Route path={`${match.path}/serverinfo`} render={()=><ServerInfo styleClass={styleClass} />} />
                     
-                    <Route path={`${match.path}/room/:ruid`}><RoomLog styleClass={styleClass} /></Route>
+                    <Route path={`${match.path}/room/:ruid`} exact><RoomLog styleClass={styleClass} /></Route>
+                    <Route path={`${match.path}/room/:ruid/power`}><RoomPower styleClass={styleClass} /></Route>
                     <Route component={NotFound} />
                 </Switch>
             </main>

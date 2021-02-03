@@ -8,9 +8,11 @@ import Copyright from '../common/Footer.Copyright';
 import Title from './common/Widget.Title';
 import { WSocketContext } from '../../context/ws';
 import { useParams } from 'react-router-dom';
+import { Button, TextField, Typography } from '@material-ui/core';
+import client from '../../lib/client';
 
 interface styleClass {
-    styleClass: any 
+    styleClass: any
 }
 
 interface matchParams {
@@ -26,20 +28,62 @@ interface LogMessage {
 
 
 export default function RoomLog({ styleClass }: styleClass) {
-    
+
     const classes = styleClass;
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
     const ws = useContext(WSocketContext);
-    const match: matchParams = useParams();
-    
+    const matchParams: matchParams = useParams();
+
     const [logMessage, setLogMessage] = useState([] as LogMessage[]);
     const [recentLogMessage, setRecentLogMessage] = useState({} as LogMessage);
 
+    const [flashMessage, setFlashMessage] = useState('');
+    const [broadcastMessage, setBroadcastMessage] = useState('');
+
+    const handleBroadcast = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const result = await client.post(`/api/v1/room/${matchParams.ruid}/chat`, { message: broadcastMessage });
+            if (result.status === 201) {
+                setFlashMessage('Successfully sent.');
+                setTimeout(() => {
+                    setFlashMessage('');
+                }, 3000);
+            }
+        } catch (error) {
+            switch (error.response.status) {
+                case 400: {
+                    setFlashMessage('No message.');
+                    break;
+                }
+                case 401: {
+                    setFlashMessage('No permission.');
+                    break;
+                }
+                case 404: {
+                    setFlashMessage('No exists room.');
+                    break;
+                }
+                default: {
+                    setFlashMessage('Unexpected error is caused. Please try again.');
+                    break;
+                }
+            }
+            setTimeout(() => {
+                setFlashMessage('');
+            }, 3000);
+        }
+    }
+
+    const onChangeBroadcastMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBroadcastMessage(e.target.value);
+    }
+
     useEffect(() => { // websocket with socket.io
         ws.on('log', (content: LogMessage) => {
-            if(content.ruid === match.ruid) {
+            if (content.ruid === matchParams.ruid) {
                 setRecentLogMessage(content);
             }
         });
@@ -55,6 +99,31 @@ export default function RoomLog({ styleClass }: styleClass) {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
+                        <React.Fragment>
+                            <Typography variant="body1">{flashMessage}</Typography>
+                            <Title>Broadcast</Title>
+                            <form className={classes.form} onSubmit={handleBroadcast} method="post">
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            variant="outlined"
+                                            margin="normal"
+                                            required
+                                            id="broadcast"
+                                            label="Message"
+                                            name="broadcast"
+                                            value={broadcastMessage}
+                                            onChange={onChangeBroadcastMessage}
+                                            autoFocus
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Button type="submit" variant="contained" color="primary" className={classes.submit}>Send</Button>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </React.Fragment>
+
                         <React.Fragment>
                             <Title>Log Messages</Title>
                             <ul>
