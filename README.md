@@ -19,6 +19,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 
 ## Features
 - launch on Multi platforms: Windows, Linux, OS X and so on.
+- Convenient Management System on Web
 - Automatic game operating system
 - Detailed player data and statistics
 - Sophisticated tier and rating system
@@ -37,6 +38,8 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 You can easily start by following the document [Getting Started](https://github.com/dapucita/haxbotron/wiki/Getting-Started).
 
 It's simple. Just install packages, build, and launch.
+
+You can conveniently manage your server on the web management system.
 
 ## How to Backup
 Players' data, Ban list, and Superadmin keys are saved on `DB Server`.

@@ -17,6 +17,7 @@ Language : [English](README.md), Korean(한국어)
 
 ## 특징
 - Windows, Linux, OS X 등 멀티 플랫폼 지원
+- 웹 기반 관리 시스템
 - 게임 자동 운영
 - 자세한 플레이어 데이터와 전적
 - 정교한 티어 및 레이팅 시스템
@@ -35,6 +36,8 @@ Language : [English](README.md), Korean(한국어)
 [처음 시작하기](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%B2%98%EC%9D%8C-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0) 문서에 따라 과정을 진행하면 쉽게 `Haxbotron`을 시작할 수 있습니다.
 
 과정은 간단합니다. 필요한 패키지를 설치하고, 빌드한 후 시작하면 됩니다.
+
+웹 기반 관리 시스템에 접속하여 서버를 편리하게 관리할 수 있습니다.
 
 ## 백업하기
 플레이어 데이터와 밴 이력, 슈퍼어드민 키 목록은 `DB 서버`에서 관리됩니다.
