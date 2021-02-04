@@ -5,7 +5,10 @@
   "main": "out/app.js",
   "scripts": {
     "start": "node out/app.js",
-    "build": "tsc && webpack --config webpack.config.bot.js && webpack --config webpack.config.react.js"
+    "build": "npm run build:ts && npm run build:bot && npm run build:web",
+    "build:ts": "tsc",
+    "build:bot": "webpack --config webpack.config.bot.js",
+    "build:web": "webpack --config webpack.config.react.js"
   },
   "author": "dapucita",
   "license": "MIT",
@@ -62,6 +65,7 @@
     "@types/koa-router": "^7.4.1",
     "@types/node-persist": "^3.1.0",
     "@types/puppeteer": "^5.4.2",
+    "fork-ts-checker-webpack-plugin": "^6.1.0",
     "ts-loader": "^8.0.14",
     "typescript": "^4.0.5",
     "webpack": "^5.4.0",
