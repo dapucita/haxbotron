@@ -12,10 +12,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import * as DefaultConfigSet from "../../lib/defaultroomconfig.json";
 import { useHistory } from 'react-router-dom';
-import { Divider, Switch } from '@material-ui/core';
+import { Divider, IconButton, Switch } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import client from '../../lib/client';
 import Alert from '../common/Alert';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 interface styleClass {
     styleClass: any
@@ -145,7 +146,7 @@ export default function RoomCreate({ styleClass }: styleClass) {
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                         <React.Fragment>
-                            { flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert> }
+                            {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
                             <Title>Create New Game Room</Title>
                         </React.Fragment>
 
@@ -173,6 +174,11 @@ export default function RoomCreate({ styleClass }: styleClass) {
                                         <TextField
                                             fullWidth id="token" name="token" label="Headless Token" variant="outlined" margin="normal" size="small" required value={configFormField.token} onChange={onChangeRoomConfig}
                                         />
+                                    </Grid>
+                                    <Grid item xs={2} sm={1}>
+                                        <IconButton onClick={() => window.open('https://www.haxball.com/headlesstoken', '_blank')} edge="start" size="medium" aria-label="get token">
+                                            <OpenInNewIcon />
+                                        </IconButton>
                                     </Grid>
                                     <Grid item xs={4} sm={2}>
                                         <FormControlLabel
