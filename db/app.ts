@@ -73,6 +73,14 @@ app.use((err: ResponseError, req: Request, res: Response) => {
 
 // LISTENING
 app.listen(app.get('port'), () => {
+    //const _GitHublastestRelease = await axios.get('https://api.github.com/repos/dapucita/haxbotron/releases/latest');
+    console.log("_|    _|                      _|                    _|                                  "+"\n"+
+                "_|    _|    _|_|_|  _|    _|  _|_|_|      _|_|    _|_|_|_|  _|  _|_|    _|_|    _|_|_|  "+"\n"+
+                "_|_|_|_|  _|    _|    _|_|    _|    _|  _|    _|    _|      _|_|      _|    _|  _|    _|"+"\n"+
+                "_|    _|  _|    _|  _|    _|  _|    _|  _|    _|    _|      _|        _|    _|  _|    _|"+"\n"+
+                "_|    _|    _|_|_|  _|    _|  _|_|_|      _|_|        _|_|  _|          _|_|    _|    _|");
+    //console.log(`Lastest Version : ${_GitHublastestRelease.data.tag_name} | Current Version : v${process.env.npm_package_version}`);
+    console.log(`Haxbotron by dapucita (Visit our GitHub : https://github.com/dapucita/haxbotron)`);
     winstonLogger.info(`[db] Haxbotron DB server is opened at ${app.get('port')} port.`);
     winstonLogger.info(`[db] IP Whitelist : ${whiteListIPs}`);
 });

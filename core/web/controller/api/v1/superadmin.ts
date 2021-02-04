@@ -31,7 +31,7 @@ export async function getAllList(ctx: Context) {
     const { ruid } = ctx.params;
 
     try {
-        const getRes = await client.get(dbConnAddr + ruid + '/' + 'superadmin')
+        const getRes = await client.get(`${dbConnAddr}room/${ruid}/superadmin`)
         .then((response) => {
             return response.data as IGivenSuperAdminKey[];
         })
@@ -60,7 +60,7 @@ export async function registerKey(ctx: Context) {
         return;
     }
     try {
-        await client.post(dbConnAddr + ruid + '/' + 'superadmin', {
+        await client.post(`${dbConnAddr}room/${ruid}/superadmin`, {
             key: key
             ,description: description
         });
@@ -73,7 +73,7 @@ export async function registerKey(ctx: Context) {
 export async function deleteKey(ctx: Context) {
     const { ruid, key } = ctx.params;
     try {
-        await client.delete(dbConnAddr + ruid + '/' + 'superadmin/' + key);
+        await client.delete(`${dbConnAddr}room/${ruid}/superadmin/${key}`);
         ctx.status = 204;
     } catch (error) {
         ctx.status = error.response.status || 500;

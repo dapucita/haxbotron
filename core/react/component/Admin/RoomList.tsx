@@ -14,6 +14,7 @@ import Title from './common/Widget.Title';
 import client from '../../lib/client';
 import { WSocketContext } from '../../context/ws';
 import { Link as RouterLink } from 'react-router-dom';
+import { Divider } from '@material-ui/core';
 
 interface styleClass {
     styleClass: any
@@ -26,12 +27,24 @@ interface roomInfoItem {
     onlinePlayers: number
 }
 
+interface ruidListItem {
+    ruid: string
+}
+
+interface allRoomListItem {
+    ruid: string
+    online: boolean
+}
+
+
+
 export default function RoomList({ styleClass }: styleClass) {
     const classes = styleClass;
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
     const [roomInfoList, setRoomInfoList] = useState([] as roomInfoItem[]);
+    const [allRoomList, setAllRoomList] = useState([] as allRoomListItem[]);
     const ws = useContext(WSocketContext);
 
     const getRoomList = async () => {
@@ -54,21 +67,46 @@ export default function RoomList({ styleClass }: styleClass) {
         } catch (e) { }
     }
 
+    const getAllRUIDList = async () => {
+        try {
+            const result = await client.get('/api/v1/ruidlist');
+            if (result.status === 200) {
+                const allRuidList: ruidListItem[] = result.data;
+                const onlineRoomList = await client.get(`/api/v1/room`)
+                                                .then((response) => {return response.data as string[]})
+                                                .catch((error) => {return [] as string[]});
+                const allRoomList: allRoomListItem[] = await Promise.all(allRuidList.map(async (item) => {
+                    return {
+                        ruid: item.ruid,
+                        online: onlineRoomList?.includes(item.ruid) || false
+                    }
+                }));
+                setAllRoomList(allRoomList);
+            }
+        } catch (e) { }
+    }
+
     useEffect(() => {
         getRoomList();
+        getAllRUIDList();
 
         return (() => {
             setRoomInfoList([]);
+            setAllRoomList([]);
         });
     }, []);
 
     useEffect(() => { // websocket with socket.io
         ws.on('roomct', (content: any) => {
             setRoomInfoList([]);
+            setAllRoomList([]);
+
             getRoomList();
+            getAllRUIDList();
         });
         ws.on('joinleft', (content: any) => {
             setRoomInfoList([]);
+
             getRoomList();
         });
         return () => {
@@ -100,6 +138,27 @@ export default function RoomList({ styleClass }: styleClass) {
                                             <TableCell>{item.roomName}</TableCell>
                                             <TableCell align="right">{item.roomLink}</TableCell>
                                             <TableCell align="right">{item.onlinePlayers}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </React.Fragment>
+                        <Divider />
+
+                        <React.Fragment>
+                            <Title>All Rooms List</Title>
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="left">RUID</TableCell>
+                                        <TableCell align="right">Status</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {allRoomList.map((item, idx) => (
+                                        <TableRow key={idx} component={RouterLink} to={`/admin/room/${item.ruid}`}>
+                                            <TableCell align="left">{item.ruid}</TableCell>
+                                            <TableCell align="right">{item.online ? "online" : "offline"}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

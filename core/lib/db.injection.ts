@@ -19,7 +19,7 @@ const dbConnAddr: string = (
 
 export async function createSuperadminDB(ruid: string, key: string, description: string): Promise<void> {
     try {
-        const result = await axios.post(dbConnAddr + ruid + '/' + 'superadmin', {key: key, description: description});
+        const result = await axios.post(`${dbConnAddr}room/${ruid}/superadmin`, {key: key, description: description});
         if (result.status === 204 && result.data) {
             winstonLogger.info(`${result.status} Succeed on createSuperadminDB: Created. key(${key})`);
         }
@@ -34,7 +34,7 @@ export async function createSuperadminDB(ruid: string, key: string, description:
 
 export async function readSuperadminDB(ruid: string, key: string): Promise<string | undefined> {
     try {
-        const result = await axios.get(dbConnAddr + ruid + '/' + 'superadmin' + '/' + key);
+        const result = await axios.get(`${dbConnAddr}room/${ruid}/superadmin/${key}`);
         if (result.status === 200 && result.data) {
             winstonLogger.info(`200 Succeed on readSuperadminDB: Read. key(${key})`);
             return result.data.description;
@@ -52,7 +52,7 @@ export async function readSuperadminDB(ruid: string, key: string): Promise<strin
 
 export async function deleteSuperadminDB(ruid: string, key: string): Promise<void> {
     try {
-        const result = await axios.delete(dbConnAddr + ruid + '/' + 'superadmin' + '/' + key);
+        const result = await axios.delete(`${dbConnAddr}room/${ruid}/superadmin/${key}`);
         if (result.status === 204) {
             winstonLogger.info(`${result.status} Succeed on deleteSuperadminDB: Deleted. key(${key})`);
         }
@@ -67,7 +67,7 @@ export async function deleteSuperadminDB(ruid: string, key: string): Promise<voi
 
 export async function createBanlistDB(ruid: string, banList: BanList): Promise<void> {
     try {
-        const result = await axios.post(dbConnAddr + ruid + '/' + 'banlist', banList);
+        const result = await axios.post(`${dbConnAddr}room/${ruid}/banlist`, banList);
         if (result.status === 204 && result.data) {
             winstonLogger.info(`${result.status} Succeed on createBanlistDB: Created. conn(${banList.conn})`);
         }
@@ -82,7 +82,7 @@ export async function createBanlistDB(ruid: string, banList: BanList): Promise<v
 
 export async function readBanlistDB(ruid: string, playerConn: string): Promise<BanList | undefined> {
     try {
-        const result = await axios.get(dbConnAddr + ruid + '/' + 'banlist/' + playerConn);
+        const result = await axios.get(`${dbConnAddr}room/${ruid}/banlist/${playerConn}`);
         if (result.status === 200 && result.data) {
             const banlist: BanList = {
                 conn: result.data.conn,
@@ -104,7 +104,7 @@ export async function readBanlistDB(ruid: string, playerConn: string): Promise<B
 
 export async function updateBanlistDB(ruid: string, banList: BanList):Promise<void> {
     try {
-        const result = await axios.put(dbConnAddr + ruid + '/' + 'banlist/' + banList.conn, banList);
+        const result = await axios.put(`${dbConnAddr}room/${ruid}/banlist/${banList.conn}`, banList);
         if (result.status === 204 && result.data) {
             winstonLogger.info(`${result.status} Succeed on updateBanlistDB: Updated. conn(${banList.conn})`);
         }
@@ -119,7 +119,7 @@ export async function updateBanlistDB(ruid: string, banList: BanList):Promise<vo
 
 export async function deleteBanlistDB(ruid: string, playerConn: string): Promise<void> {
     try {
-        const result = await axios.delete(dbConnAddr + ruid + '/' + 'banlist/' + playerConn);
+        const result = await axios.delete(`${dbConnAddr}room/${ruid}/banlist/${playerConn}`);
         if (result.status === 204) {
             winstonLogger.info(`${result.status} Succeed on deleteBanlistDB: Deleted. conn(${playerConn})`);
         }
@@ -134,7 +134,7 @@ export async function deleteBanlistDB(ruid: string, playerConn: string): Promise
 
 export async function createPlayerDB(ruid: string, player: PlayerStorage): Promise<void> {
     try {
-        const result = await axios.post(dbConnAddr + ruid + '/' + 'player', player);
+        const result = await axios.post(`${dbConnAddr}room/${ruid}/player`, player);
         if (result.status === 204 && result.data) {
             winstonLogger.info(`${result.status} Succeed on createPlayerDB: Created. auth(${player.auth})`);
         }
@@ -149,7 +149,7 @@ export async function createPlayerDB(ruid: string, player: PlayerStorage): Promi
 
 export async function readPlayerDB(ruid: string, playerAuth: string): Promise<PlayerStorage | undefined> {
     try {
-        const result = await axios.get(dbConnAddr + ruid + '/' + 'player/' + playerAuth);
+        const result = await axios.get(`${dbConnAddr}room/${ruid}/player/${playerAuth}`);
         if (result.status === 200 && result.data) {
             const player: PlayerStorage = {
                 auth: result.data.auth,
@@ -186,7 +186,7 @@ export async function readPlayerDB(ruid: string, playerAuth: string): Promise<Pl
 
 export async function updatePlayerDB(ruid: string, player: PlayerStorage): Promise<void> {
     try {
-        const result = await axios.put(dbConnAddr + ruid + '/' + 'player/' + player.auth, player);
+        const result = await axios.put(`${dbConnAddr}room/${ruid}/player/${player.auth}`, player);
         if (result.status === 204 && result.data) {
             winstonLogger.info(`${result.status} Succeed on updatePlayerDB: Updated. auth(${player.auth})`);
         }
@@ -201,7 +201,7 @@ export async function updatePlayerDB(ruid: string, player: PlayerStorage): Promi
 
 export async function deletePlayerDB(ruid: string, playerAuth: string): Promise<void> {
     try {
-        const result = await axios.delete(dbConnAddr + ruid + '/' + 'player/' + playerAuth);
+        const result = await axios.delete(`${dbConnAddr}room/${ruid}/player/${playerAuth}`);
         if (result.status === 204) {
             winstonLogger.info(`${result.status} Succeed on deletePlayerDB: Deleted. auth(${playerAuth})`);
         }
