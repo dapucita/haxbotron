@@ -1,7 +1,6 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { TeamID } from "../../model/GameObject/TeamID";
 import * as LangRes from "../../resource/strings";
-import * as CommandSet from "../../resource/command.json";
 import * as Tst from "../Translator";
 
 export function cmdList(byPlayer: PlayerObject, message?: string): void {
@@ -10,7 +9,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
             whoisResult: LangRes.command.list._ErrorNoOne
         }
         switch (message) {
-            case CommandSet._listSubafk: {
+            case window.gameRoom.config.commands._listSubafk: {
                 let players = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === true);
                 if (players.length >= 1) {
                     placeholder.whoisResult = '💤 '; //init
@@ -21,7 +20,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                 window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case CommandSet._listSubmute: {
+            case window.gameRoom.config.commands._listSubmute: {
                 let players = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && window.gameRoom.playerList.get(player.id)!.permissions.mute === true);
                 if (players.length >= 1) {
                     placeholder.whoisResult = '🔇 '; //init
@@ -32,7 +31,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                 window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case CommandSet._listSubred: {
+            case window.gameRoom.config.commands._listSubred: {
                 let players = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team === TeamID.Red);
                 if (players.length >= 1) {
                     placeholder.whoisResult = ''; //init
@@ -51,7 +50,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                 window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case CommandSet._listSubblue: {
+            case window.gameRoom.config.commands._listSubblue: {
                 let players = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team === TeamID.Blue);
                 if (players.length >= 1) {
                     placeholder.whoisResult = ''; //init
@@ -70,7 +69,7 @@ export function cmdList(byPlayer: PlayerObject, message?: string): void {
                 window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.list.whoisList, placeholder), byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
-            case CommandSet._listSubspec: {
+            case window.gameRoom.config.commands._listSubspec: {
                 let players = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.team === TeamID.Spec);
                 if (players.length >= 1) {
                     placeholder.whoisResult = ''; //init

@@ -1,12 +1,11 @@
 import * as LangRes from "../../resource/strings";
-import * as CommandSet from "../../resource/command.json";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { superAdminLogin } from "../SuperAdmin";
 
 export async function cmdSuper(byPlayer: PlayerObject, message?: string, submessage?: string): Promise<void> {
     if (message !== undefined) {
         switch (message) {
-            case CommandSet._superSublogin: {
+            case window.gameRoom.config.commands._superSublogin: {
                 if (window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin == false) { // only when not yet loginned
                     if (submessage !== undefined) { // key check and login
                         if (await superAdminLogin(submessage) === true) { // if login key is matched
@@ -34,7 +33,7 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                 break;
             }
 
-            case CommandSet._superSublogout: {
+            case window.gameRoom.config.commands._superSublogout: {
                 if (window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin = false; // disqualify super admin
                     //setPlayerData(playerList.get(playerID)); // update
@@ -47,11 +46,11 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                 break;
             }
 
-            case CommandSet._superSubthor: {
+            case window.gameRoom.config.commands._superSubthor: {
                 if (window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin == true) {
                     window.gameRoom._room.setPlayerAdmin(byPlayer.id, true); // first, give admin
                     window.gameRoom.playerList.get(byPlayer.id)!.admin = true;
-                    if (submessage !== undefined && submessage == CommandSet._superSubthordeprive) { // get admin list except this super admin 
+                    if (submessage !== undefined && submessage == window.gameRoom.config.commands._superSubthordeprive) { // get admin list except this super admin 
                         let players = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id != 0 && player.id != byPlayer.id && player.admin == true);
                         if (players.length == 0) { // If no players left, do nothing.
                             window.gameRoom._room.sendAnnouncement(LangRes.command.super.thor.noAdmins, byPlayer.id, 0xFF7777, "normal", 2);
@@ -73,7 +72,7 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                 break;
             }
 
-            case CommandSet._superSubkick: {
+            case window.gameRoom.config.commands._superSubkick: {
                 if (window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage.charAt(0) == "#") {
                         let target: number = parseInt(submessage.substr(1), 10);
@@ -93,7 +92,7 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                 break;
             }
 
-            case CommandSet._superSubban: {
+            case window.gameRoom.config.commands._superSubban: {
                 if (window.gameRoom.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     if (submessage !== undefined && submessage.charAt(0) == "#") {
                         let target: number = parseInt(submessage.substr(1), 10);
@@ -113,9 +112,9 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                 break;
             }
             /*
-            case CommandSet._superSubbanclear: {
+            case window.gameRoom.config.commands._superSubbanclear: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
-                    if (submessage !== undefined && submessage == CommandSet._superSubbanclearall) {
+                    if (submessage !== undefined && submessage == window.gameRoom.config.commands._superSubbanclearall) {
                         window.room.clearBans();
                         Ban.bListClear();
                         window.room.sendAnnouncement(LangRes.command.super.banclear.complete, byPlayer.id, 0x479947, "normal", 2);
@@ -128,7 +127,7 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                 break;
             }
 
-            case CommandSet._superSubbanlist: {
+            case window.gameRoom.config.commands._superSubbanlist: {
                 if (window.playerList.get(byPlayer.id)!.permissions.superadmin == true) { // only when loginned
                     let placeholder = {
                         whoisResult: LangRes.command.super.banlist._ErrorNoOne

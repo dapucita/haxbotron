@@ -95,6 +95,56 @@ const roomSettingSchema = Joi.object().keys({
     ,chatLengthLimit : Joi.number().required()
 });
 
+const commandsSchema = Joi.object().keys({
+    _commandPrefix: Joi.string().required(),
+
+    _helpManabout: Joi.string().required(),
+    _helpManafk: Joi.string().required(),
+    _helpManfreeze: Joi.string().required(),
+    _helpManhelp: Joi.string().required(),
+    _helpManlist: Joi.string().required(),
+    _helpManmute: Joi.string().required(),
+    _helpManposs: Joi.string().required(),
+    _helpManscout: Joi.string().required(),
+    _helpManstats: Joi.string().required(),
+    _helpManstatsreset: Joi.string().required(),
+    _helpManstreak: Joi.string().required(),
+    _helpManvote: Joi.string().required(),
+    _helpMantier: Joi.string().required(),
+    _helpMansuper: Joi.string().required(),
+    _helpManadmin: Joi.string().required(),
+
+    _listSubafk: Joi.string().required(),
+    _listSubmute: Joi.string().required(),
+    _listSubred: Joi.string().required(),
+    _listSubblue: Joi.string().required(),
+    _listSubspec: Joi.string().required(),
+
+    _superSublogin: Joi.string().required(),
+    _superSublogout: Joi.string().required(),
+    _superSubthor: Joi.string().required(),
+    _superSubthordeprive: Joi.string().required(),
+    _superSubkick: Joi.string().required(),
+    _superSubban: Joi.string().required(),
+
+    _disabledCommandList: Joi.array().items(Joi.string()).optional().allow(null),
+
+    about: Joi.string().required(),
+    afk: Joi.string().required(),
+    freeze: Joi.string().required(),
+    help: Joi.string().required(),
+    list: Joi.string().required(),
+    mute: Joi.string().required(),
+    poss: Joi.string().required(),
+    scout: Joi.string().required(),
+    stats: Joi.string().required(),
+    statsreset: Joi.string().required(),
+    streak: Joi.string().required(),
+    super: Joi.string().required(),
+    vote: Joi.string().required(),
+    tier: Joi.string().required(),
+});
+
 const configHEloSchema = Joi.object().keys({
     factor: Joi.object().keys({
         placement_match_chances: Joi.number().required()
@@ -134,4 +184,5 @@ export const nestedHostRoomConfigSchema = Joi.object().keys({
     ,settings: roomSettingSchema.required()
     ,rules: gameRuleSchema.required()
     ,helo: configHEloSchema.required()
+    ,commands: commandsSchema.required()
 });

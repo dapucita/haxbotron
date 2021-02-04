@@ -2,7 +2,6 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
     context: __dirname, // to automatically find tsconfig.json
-    
     entry: "./react/index.tsx",
     
     output: {

@@ -25,6 +25,7 @@ export async function createRoom(ctx: Context) {
         ,settings: ctx.request.body.settings
         ,rules: ctx.request.body.rules
         ,HElo: ctx.request.body.helo
+        ,commands: ctx.request.body.commands
     }
 
     if(newRoomConfig._config.password == "") {

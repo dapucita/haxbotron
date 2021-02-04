@@ -1,5 +1,4 @@
 import * as LangRes from "../resource/strings";
-import * as CommandSet from "../resource/command.json";
 import { PlayerObject } from "../model/GameObject/PlayerObject";
 import { cmdAbout } from "./commands/about";
 import { cmdHelp } from "./commands/help";
@@ -18,7 +17,7 @@ import { cmdTier } from "./commands/tier";
 
 // if given string is command chat, this function returns true, nor false.
 export function isCommandString(message: string): boolean {
-    if(message.charAt(0) == CommandSet._commandPrefix) {
+    if(message.charAt(0) == window.gameRoom.config.commands._commandPrefix) {
         // If message has prefix signature (default: !) as first character in it's string, return true.
         return true;
     } else {
@@ -35,12 +34,12 @@ export function getCommandChunk(message: string): string[] {
 export function parseCommand(byPlayer: PlayerObject, message: string): void {
     let msgChunk: string[] = getCommandChunk(message);
     let commandSign: string = msgChunk[0].substring(1); // remove prefix character(default: !)
-    if(CommandSet._disabledCommandList.includes(commandSign) === true) { // if this command is in disabled list
+    if(window.gameRoom.config.commands._disabledCommandList?.includes(commandSign) === true) { // if this command is in disabled list
         window.gameRoom._room.sendAnnouncement(LangRes.command._ErrorDisabled, byPlayer.id, 0xFF7777, "normal", 2); // notify
         return; // exit this function
     }
     switch(commandSign) {
-        case CommandSet.help: {
+        case window.gameRoom.config.commands.help: {
             if(msgChunk[1] !== undefined) {
                 cmdHelp(byPlayer, msgChunk[1]);
             } else {
@@ -48,11 +47,11 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             }
             break;
         }
-        case CommandSet.about: {
+        case window.gameRoom.config.commands.about: {
             cmdAbout(byPlayer);
             break;
         }
-        case CommandSet.stats: {
+        case window.gameRoom.config.commands.stats: {
             if(msgChunk[1] !== undefined) {
                 cmdStats(byPlayer, msgChunk[1]);
             } else {
@@ -60,23 +59,23 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             }
             break;
         }
-        case CommandSet.statsreset: {
+        case window.gameRoom.config.commands.statsreset: {
             cmdStatsReset(byPlayer);
             break;
         }
-        case CommandSet.streak: {
+        case window.gameRoom.config.commands.streak: {
             cmdStreak(byPlayer);
             break;
         }
-        case CommandSet.scout: {
+        case window.gameRoom.config.commands.scout: {
             cmdScout(byPlayer);
             break;
         }
-        case CommandSet.poss: {
+        case window.gameRoom.config.commands.poss: {
             cmdPoss(byPlayer);
             break;
         }
-        case CommandSet.afk: {
+        case window.gameRoom.config.commands.afk: {
             if(msgChunk[1] !== undefined) {
                 cmdAfk(byPlayer, msgChunk[1]);
             } else {
@@ -84,7 +83,7 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             }
             break;
         }
-        case CommandSet.list: {
+        case window.gameRoom.config.commands.list: {
             if(msgChunk[1] !== undefined) {
                 cmdList(byPlayer, msgChunk[1]);
             } else {
@@ -92,11 +91,11 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             }
             break;
         }
-        case CommandSet.freeze: {
+        case window.gameRoom.config.commands.freeze: {
             cmdFreeze(byPlayer);
             break;
         }
-        case CommandSet.mute: {
+        case window.gameRoom.config.commands.mute: {
             if(msgChunk[1] !== undefined) {
                 cmdMute(byPlayer, msgChunk[1]);
             } else {
@@ -104,7 +103,7 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             }
             break;
         }
-        case CommandSet.vote: {
+        case window.gameRoom.config.commands.vote: {
             if(msgChunk[1] !== undefined) {
                 cmdVote(byPlayer, msgChunk[1]);
             } else {
@@ -112,11 +111,11 @@ export function parseCommand(byPlayer: PlayerObject, message: string): void {
             }
             break;
         }
-        case CommandSet.tier: {
+        case window.gameRoom.config.commands.tier: {
             cmdTier(byPlayer);
             break;
         }
-        case CommandSet.super: {
+        case window.gameRoom.config.commands.super: {
             if(msgChunk[1] !== undefined) {
                 if(msgChunk[2] !== undefined) {
                     cmdSuper(byPlayer, msgChunk[1], msgChunk[2]);

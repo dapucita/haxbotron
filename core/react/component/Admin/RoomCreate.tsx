@@ -69,10 +69,10 @@ export default function RoomCreate({ styleClass }: styleClass) {
             //TODO: settings,rules,helo
             settings: DefaultConfigSet.settings,
             rules: DefaultConfigSet.rules,
-            helo: DefaultConfigSet.helo
+            helo: DefaultConfigSet.helo,
+            commands: DefaultConfigSet.commands
         });
     }, [roomUIDFormField, roomPublicFormField, configFormField]); //TODO: settings,rules,helo // include switch toggle component
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
