@@ -6,7 +6,7 @@
 		"password": "",
 		"maxPlayers": 12,
 		"public": true,
-		"token": "https://www.haxball.com/headlesstoken",
+		"token": "",
 		"noPlayer": true
 	},
 	"settings": {
@@ -54,8 +54,8 @@
 		"chatLengthLimit": 80
 	},
 	"rules": {
-		"ruleName": "Auto Relay",
-		"ruleDescription": "default game rule by haxbotron",
+		"ruleName": "default-rule",
+		"ruleDescription": "this is default rule. (Auto+Relay+Shuffle)",
 		"requisite": {
 			"minimumPlayers": 8,
 			"eachTeamPlayers": 4,
