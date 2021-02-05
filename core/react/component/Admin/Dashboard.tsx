@@ -16,6 +16,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { makeStyles } from '@material-ui/core/styles';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Mainboard from './Mainboard';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import NotFound from '../NotFound';
@@ -167,6 +168,11 @@ function Dashboard({ match }: RouteComponentProps) {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Haxbotron Administrative Dashboard
                     </Typography>
+                    <IconButton color="inherit">
+                        <Badge color="secondary">
+                            <HelpOutlineIcon onClick={() => window.open('https://github.com/dapucita/haxbotron/wiki', '_blank')} />
+                        </Badge>
+                    </IconButton>
                     <IconButton color="inherit">
                         <Badge badgeContent={noti} color="secondary">
                             <NotificationsIcon />
