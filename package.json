@@ -1,7 +1,7 @@
 {
     "name": "haxbotron",
-    "version": "0.3.5",
-    "description": "Haxbotron is a host bot application for Haxball game.",
+    "version": "0.4.0",
+    "description": "Haxbotron is a headless host server application for Haxball.",
     "main": "out/index.js",
     "author": "dapucita",
     "license": "MIT",
@@ -12,5 +12,19 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/dapucita/haxbotron.git"
+    },
+    "scripts": {
+        "quick:install": "npm run install:packages",
+        "quick:build": "npm run build",
+        "quick:start:core": "cd core && npm start",
+        "quick:start:db": "cd db && npm start",
+
+        "install:packages": "npm run install:packages:core && npm run install:packages:db",
+        "install:packages:core": "cd core && npm install",
+        "install:packages:db": "cd db && npm install",
+
+        "build": "npm run build:core && npm run build:db",
+        "build:core": "cd core && npm run build",
+        "build:db": "cd db && npm run build"
     }
 }

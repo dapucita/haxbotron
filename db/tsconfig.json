@@ -21,6 +21,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
-    "out"
+    "out",
+    "node_modules"
   ]
 }

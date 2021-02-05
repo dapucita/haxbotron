@@ -1,3 +1,4 @@
+Language : English, [Korean(한국어)](README.ko.md)
 # Haxbotron 🤖
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/dapucita/haxbotron?style=flat-square)
 ![Most Used Language](https://img.shields.io/github/languages/top/dapucita/haxbotron?style=flat-square)
@@ -18,6 +19,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 
 ## Features
 - launch on Multi platforms: Windows, Linux, OS X and so on.
+- Convenient Management System on Web
 - Automatic game operating system
 - Detailed player data and statistics
 - Sophisticated tier and rating system
@@ -33,16 +35,16 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 - ...and check also our [wiki](https://github.com/dapucita/haxbotron/wiki) and documents in `docs`.
 
 ## How to Use
-You need to prepare `headless token key`. You can get it from [here](https://www.haxball.com/headlesstoken).
+You can easily start by following the document [Getting Started](https://github.com/dapucita/haxbotron/wiki/Getting-Started).
 
-If you got the token, you have to launch the application and input your room's configuration values.
+It's simple. Just install packages, build, and launch.
 
-Then, you can launch your own game room.
+You can conveniently manage your server on the web management system.
 
 ## How to Backup
-Players' data are saved on `DB Server`.
+Players' data, Ban list, and Superadmin keys are saved on `DB Server`.
 
-And you have to keep a copy of `.node-persist` directory to preserve some bot data.
+And you have to keep a copy of `.node-persist` directory to preserve some internal data.
 
 You can also check the log in `.logs` directory. These log data will be kept for 30 days.
 
@@ -51,9 +53,9 @@ You can also check the log in `.logs` directory. These log data will be kept for
 - [Discord](https://discord.gg/qfg45B2)
 
 ## Special thanks to
-`G.Buffon` made great custom maps that are especially popular in Korea.
 
-## Copyrights
-By `dapucita`, MIT License.
 
-Some maps by `G.Buffon`.
+## Credits
+Copyrights by `dapucita`, MIT License.
+
+`G.Buffon` provided `[GB]` stadium maps.
