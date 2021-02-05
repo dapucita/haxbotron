@@ -8,8 +8,8 @@ export function onPlayerActivityListener(player : PlayerObject): void {
 
         // reflect position in the field
         window.gameRoom.playerList.get(player.id)!.position = {
-            x: player.position.x
-            ,y: player.position.y
+            x: player.position?.x || null
+            ,y: player.position?.y || null
         }
     } else {
         window.gameRoom.logger.e('onPlayerActivity', `Error on onPlayerActivityListener: Cannot access to afktrace.count. ${player.name}#${player.id}(team ${player.team}, conn ${player.conn}) is not registered in playerList.`)
