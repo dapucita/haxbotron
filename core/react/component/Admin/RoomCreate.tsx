@@ -74,13 +74,13 @@ export default function RoomCreate({ styleClass }: styleClass) {
         setRulesSwitchesFormField({autoAdmin: loadedDefaultSettings.rules.autoAdmin, autoOperating: loadedDefaultSettings.rules.autoOperating, statsRecord: loadedDefaultSettings.rules.statsRecord}); // switch toggle component
         
         setSettingsFormField(loadedDefaultSettings.settings);
-        setSettingsFormStringifiedField(JSON.stringify(loadedDefaultSettings.settings,null,2));
+        setSettingsFormStringifiedField(JSON.stringify(loadedDefaultSettings.settings,null,4));
         
         setHeloFormField(loadedDefaultSettings.helo);
-        setHeloFormStringifiedField(JSON.stringify(loadedDefaultSettings.helo,null,2));
+        setHeloFormStringifiedField(JSON.stringify(loadedDefaultSettings.helo,null,4));
         
         setCommandsFormField(loadedDefaultSettings.commands);
-        setCommandsFormStringifiedField(JSON.stringify(loadedDefaultSettings.commands,null,2));
+        setCommandsFormStringifiedField(JSON.stringify(loadedDefaultSettings.commands,null,4));
 
         
 
@@ -195,9 +195,9 @@ export default function RoomCreate({ styleClass }: styleClass) {
         e.preventDefault();
 
         try {
-            setSettingsFormStringifiedField(JSON.stringify(settingsFormField,null,2));
-            setHeloFormStringifiedField(JSON.stringify(heloFormField,null,2));
-            setCommandsFormStringifiedField(JSON.stringify(commandsFormField,null,2));
+            setSettingsFormStringifiedField(JSON.stringify(settingsFormField,null,4));
+            setHeloFormStringifiedField(JSON.stringify(heloFormField,null,4));
+            setCommandsFormStringifiedField(JSON.stringify(commandsFormField,null,4));
         } catch (error) {
             //console.log("JSON Beautify Error : \n" + error);
         }

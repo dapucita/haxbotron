@@ -13,6 +13,7 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import DnsIcon from '@material-ui/icons/Dns';
 
 interface matchParams {
     ruid: string
@@ -50,6 +51,12 @@ export default function RoomInfoSideMenu() {
                             <FormatListBulletedIcon />
                         </ListItemIcon>
                         <ListItemText primary="Log Messages" />
+                    </ListItem>
+                    <ListItem button component={RouterLink} to={`/admin/room/${paramRUID}/info`}>
+                        <ListItemIcon>
+                            <DnsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Information" />
                     </ListItem>
                     <ListItem button component={RouterLink} to={`/admin/room/${paramRUID}/player`}>
                         <ListItemIcon>

@@ -28,6 +28,7 @@ import RoomListSideMenu from './SideMenu/RoomList.SideMenu';
 import RoomInfoSideMenu from './SideMenu/RoomInfo.SideMenu';
 import RoomPower from './RoomPower';
 import RoomSuperAdmin from './RoomSuperAdmin';
+import RoomInfo from './RoomInfo';
 
 const drawerWidth = 240;
 
@@ -216,6 +217,7 @@ function Dashboard({ match }: RouteComponentProps) {
                     <Route path={`${match.path}/serverinfo`} render={()=><ServerInfo styleClass={styleClass} />} />
                     <Route path={`${match.path}/superadmin/:ruid`}><RoomSuperAdmin styleClass={styleClass} /></Route>
                     <Route path={`${match.path}/room/:ruid`} exact><RoomLog styleClass={styleClass} /></Route>
+                    <Route path={`${match.path}/room/:ruid/info`}><RoomInfo styleClass={styleClass} /></Route>
                     <Route path={`${match.path}/room/:ruid/power`}><RoomPower styleClass={styleClass} /></Route>
                     <Route component={NotFound} />
                 </Switch>

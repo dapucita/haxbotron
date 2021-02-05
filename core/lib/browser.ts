@@ -316,7 +316,8 @@ export class HeadlessBrowser {
                     _roomConfig: window.gameRoom.config._config,
                     _settings: window.gameRoom.config.settings,
                     _rules: window.gameRoom.config.rules,
-                    _HElo: window.gameRoom.config.HElo
+                    _HElo: window.gameRoom.config.HElo,
+                    _commands: window.gameRoom.config.commands
                 }
             });
         } else {
