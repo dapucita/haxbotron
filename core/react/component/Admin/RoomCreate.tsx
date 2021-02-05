@@ -17,6 +17,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import client from '../../lib/client';
 import Alert from '../common/Alert';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import { isNumber } from '../../lib/numcheck';
 
 interface styleClass {
     styleClass: any
@@ -217,10 +218,17 @@ export default function RoomCreate({ styleClass }: styleClass) {
 
     const onChangeRoomConfig = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setConfigFormField({
-            ...configFormField,
-            [name]: value
-        });
+        if(name === 'maxPlayers' && isNumber(parseInt(value))) {
+            setConfigFormField({
+                ...configFormField,
+                maxPlayers: parseInt(value)
+            });
+        } else {
+            setConfigFormField({
+                ...configFormField,
+                [name]: value
+            });
+        }
     }
 
     const onChangeRules = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -241,13 +249,24 @@ export default function RoomCreate({ styleClass }: styleClass) {
 
     const onChangeRulesRequisite = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setRulesFormField({
-            ...rulesFormField,
-            requisite: {
-                ...rulesFormField.requisite,
-                [name]: value
-            }
-        });
+        if(['minimumPlayers','eachTeamPlayers','timeLimit','scoreLimit'].includes(name) && isNumber(parseInt(value))) {
+            setRulesFormField({
+                ...rulesFormField,
+                requisite: {
+                    ...rulesFormField.requisite,
+                    [name]: parseInt(value)
+                }
+            });
+        } else {
+            setRulesFormField({
+                ...rulesFormField,
+                requisite: {
+                    ...rulesFormField.requisite,
+                    [name]: value
+                }
+            });
+        }
+        
     }
 
     const onChangeStringifiedField = (e: React.ChangeEvent<HTMLInputElement>) => {
