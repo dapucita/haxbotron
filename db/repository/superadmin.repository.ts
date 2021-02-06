@@ -4,9 +4,14 @@ import { SuperAdminModel } from '../model/SuperAdminModel';
 import { IRepository } from './repository.interface';
 
 export class SuperAdminRepository implements IRepository<SuperAdmin> {
-    public async findAll(ruid: string): Promise<SuperAdmin[]> {
+    public async findAll(ruid: string, pagination?: {start: number, count: number}): Promise<SuperAdmin[]> {
         const repository: Repository<SuperAdmin> = getRepository(SuperAdmin);
-        let superlist: SuperAdmin[] = await repository.find({ ruid: ruid });
+        let superlist: SuperAdmin[] = [];
+        if(pagination) {
+            superlist = await repository.find({where: {ruid: ruid}, skip: pagination.start, take: pagination.count});
+        } else {
+            superlist = await repository.find({ ruid: ruid });
+        }
         if (superlist.length === 0) throw new Error('There are no registered superadmin keys.');
         return superlist;
     }

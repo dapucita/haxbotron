@@ -10,6 +10,7 @@ const banlistRepository: IRepository<BanList> = new BanListRepository();
 const controller: BanListController = new BanListController(banlistRepository);
 
 // /v1/banlist GET
+// /v1/banlist?start&end GET
 // get all banned players list and data
 banlistRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
     await controller.getAllBannedPlayers(request, response, next);

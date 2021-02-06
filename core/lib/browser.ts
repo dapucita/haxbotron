@@ -335,6 +335,17 @@ export class HeadlessBrowser {
     }
 
     /**
+     * Check this player is online in the room.
+     * @param ruid Room UID
+     * @param id Player ID
+     */
+    public async checkOnlinePlayer(ruid: string, id: number): Promise<boolean> {
+        return await this._PageContainer.get(ruid)!.evaluate((id: number) => {
+            return window.gameRoom.playerList.has(id);
+        }, id);
+    }
+
+    /**
      * Get Player's Information
      */
     public async getPlayerInfo(ruid: string, id: number): Promise<Player | undefined> {
@@ -349,12 +360,41 @@ export class HeadlessBrowser {
     }
 
     /**
+     * Kick a online player (fixed-term).
+     * @param ruid Room UID
+     * @param id Player ID
+     * @param message Reason
+     * @param seconds Fixed-term ban duration
+     */
+    public async banPlayerFixedTerm(ruid: string, id: number, ban: boolean, message: string, seconds: number): Promise<void> {
+        await this._PageContainer.get(ruid)?.evaluate(async (id: number, ban: boolean, message: string, seconds: number) => {
+            if(window.gameRoom.playerList.has(id)) {
+                const banItem = {
+                    conn: window.gameRoom.playerList.get(id)!.conn,
+                    reason: message,
+                    register: Math.floor(Date.now()),
+                    expire: Math.floor(Date.now()) + (seconds*1000)
+                }
+                if(await window._readBanlistDB(window.gameRoom.config._RUID, window.gameRoom.playerList.get(id)!.conn) !== undefined) {
+                    //if already exist then update it
+                    await window._updateBanlistDB(window.gameRoom.config._RUID, banItem);
+                } else {
+                    // or create new one
+                    await window._createBanlistDB(window.gameRoom.config._RUID, banItem);
+                }
+                window.gameRoom._room.kickPlayer(id, message, ban);
+                window.gameRoom.logger.i('system', `[Kick] #${id} has been ${ban?'banned':'kicked'} by operator. (duration: ${seconds}secs, reason: ${message})`);
+            }
+        }, id, ban, message, seconds);
+    }
+
+    /**
      * Broadcast text message
      */
     public async broadcast(ruid: string, message: string): Promise<void> {
         await this._PageContainer.get(ruid)?.evaluate((message: string) => {
             window.gameRoom._room.sendAnnouncement(message, null, 0xFFFF00, "bold", 2);
-            window.gameRoom.logger.i('onPlayerChat', `[Broadcast] ${message}`);
+            window.gameRoom.logger.i('system', `[Broadcast] ${message}`);
         }, message);
     }
 }
