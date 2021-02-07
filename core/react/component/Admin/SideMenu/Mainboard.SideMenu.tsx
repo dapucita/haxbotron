@@ -6,11 +6,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
-import ListAltIcon from '@material-ui/icons/ListAlt';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 export default function MainboardSideMenu() {
     return (
@@ -29,29 +27,17 @@ export default function MainboardSideMenu() {
             <List>
                 <div>
                     <ListSubheader inset>Management</ListSubheader>
+                    <ListItem button component={RouterLink} to="/admin/newroom">
+                        <ListItemIcon>
+                            <AddCircleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="New Room" />
+                    </ListItem>
                     <ListItem button component={RouterLink} to="/admin/roomlist">
                         <ListItemIcon>
                             <SportsEsportsIcon />
                         </ListItemIcon>
                         <ListItemText primary="Room List" />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <PeopleAltIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Player List" />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <ListAltIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Ban List" />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <VpnKeyIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Super Admin" />
                     </ListItem>
                 </div>
             </List>
