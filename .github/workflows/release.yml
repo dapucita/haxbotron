@@ -34,7 +34,7 @@ jobs:
         run: |
           npm run quick:install
           npm run quick:build
-          zip --junk-paths build-outputs core/out core/public/out db/out
+          zip build-outputs -r ./core/out/* ./core/public/out/* ./db/out/*
           
       - name: Create Release
         id: create_release
@@ -45,7 +45,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           draft: false
-          prerelease: false
+          prerelease: true
           
       - name: Upload Release Asset
         id: upload-release-asset 

@@ -15,15 +15,13 @@ import { useHistory } from 'react-router-dom';
 import { Divider, IconButton, Switch } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import client from '../../lib/client';
-import Alert from '../common/Alert';
+import Alert, { AlertColor } from '../common/Alert';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import { isNumber } from '../../lib/numcheck';
 
 interface styleClass {
     styleClass: any
 }
-
-type AlertColor = 'success' | 'info' | 'warning' | 'error';
 
 const getSavedRoomConfig = (): ReactHostRoomInfo => {
     let savedRoomInfo: ReactHostRoomInfo = DefaultConfigSet;
@@ -428,6 +426,9 @@ export default function RoomCreate({ styleClass }: styleClass) {
                                         <TextField
                                             fullWidth value={rulesFormField.readyMapName} onChange={onChangeRules} id="readyMapName" name="readyMapName" label="Ready Map Name" variant="outlined" margin="normal" size="small" required
                                         />
+                                    </Grid>
+                                    <Grid item xs={4} sm={2}>
+                                        <Button startIcon={<OpenInNewIcon />} type="button" variant="text" color="default" className={classes.submit} onClick={() => window.open('https://github.com/dapucita/haxbotron/wiki/Available-built-in-maps-name-tags', '_blank')}>AVAILABLE MAPS</Button>
                                     </Grid>
                                 </Grid>
                                 <Divider />

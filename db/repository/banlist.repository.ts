@@ -4,9 +4,14 @@ import { BanList } from '../entity/banlist.entity';
 import { BanListModel } from '../model/BanListModel';
 
 export class BanListRepository implements IRepository<BanList> {
-    public async findAll(ruid: string): Promise<BanList[]> {
+    public async findAll(ruid: string, pagination?: {start: number, count: number}): Promise<BanList[]> {
         const repository: Repository<BanList> = getRepository(BanList);
-        let banlist: BanList[] = await repository.find({ ruid: ruid });
+        let banlist: BanList[] = [];
+        if(pagination) {
+            banlist = await repository.find({where: {ruid: ruid}, skip: pagination.start, take: pagination.count});
+        } else {
+            banlist = await repository.find({ ruid: ruid });
+        }
         if (banlist.length === 0) throw new Error('There are no banned players.');
         return banlist;
     }

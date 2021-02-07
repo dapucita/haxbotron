@@ -29,9 +29,12 @@ axios.defaults.withCredentials = true;
 
 export async function getAllList(ctx: Context) {
     const { ruid } = ctx.params;
+    const { start, count } = ctx.request.query;
+
+    let apiPath: string = (start && count)?  `${dbConnAddr}room/${ruid}/superadmin?start=${start}&count=${count}`: `${dbConnAddr}room/${ruid}/superadmin`;
 
     try {
-        const getRes = await client.get(`${dbConnAddr}room/${ruid}/superadmin`)
+        const getRes = await client.get(apiPath)
         .then((response) => {
             return response.data as IGivenSuperAdminKey[];
         })
@@ -56,7 +59,7 @@ export async function registerKey(ctx: Context) {
     const { ruid } = ctx.params;
     const { key, description } = ctx.request.body;
     if(!key || !description) {
-        ctx.status = 400; // Unauthorized Error
+        ctx.status = 400; // Unfulfilled error
         return;
     }
     try {

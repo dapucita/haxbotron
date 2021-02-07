@@ -123,6 +123,24 @@ export async function getPlayerInfo(ctx: Context) {
 }
 
 /**
+ * Kick this player from the room
+ */
+export async function kickOnlinePlayer(ctx: Context) {
+    const { ruid, id } = ctx.params;
+    const { ban, seconds, message } = ctx.request.body;
+    if(ban === undefined || !seconds || !message) {
+        ctx.status = 400; // Unfulfilled error
+        return;
+    }
+    if (browser.checkExistRoom(ruid) && await browser.checkOnlinePlayer(ruid, parseInt(id))) {
+        await browser.banPlayerFixedTerm(ruid, parseInt(id), ban, message, seconds);
+        ctx.status = 204;
+    } else {
+        ctx.status = 404;
+    }
+}
+
+/**
  * send broadcast message
  */
 export function broadcast(ctx: Context) {

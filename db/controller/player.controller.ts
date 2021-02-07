@@ -11,10 +11,17 @@ export class PlayerController {
     }
 
     public async getAllPlayers(request: Request, response: Response, next: NextFunction): Promise<any> {
-        return this._repository
-            .findAll(request.params.ruid)
-            .then((players) => response.status(200).send(players))
-            .catch((error) => response.status(404).send({ error: error.message }));
+        if(request.query?.start && request.query?.count) {
+            return this._repository
+                .findAll(request.params.ruid, {start: parseInt(<string>request.query.start), count: parseInt(<string>request.query.count)})
+                .then((players) => response.status(200).send(players))
+                .catch((error) => response.status(404).send({ error: error.message }));
+        } else {
+            return this._repository
+                .findAll(request.params.ruid)
+                .then((players) => response.status(200).send(players))
+                .catch((error) => response.status(404).send({ error: error.message }));
+        }
     }
 
     public async getPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
