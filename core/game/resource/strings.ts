@@ -91,7 +91,7 @@ export const command = {
     ,mute: {
         _ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
         ,_ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
-        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.(30분) 해제하려면 mute 명령어를 다시 사용하세요.'
+        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.(3분) 해제하려면 mute 명령어를 다시 사용하세요.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
         ,muteAbusingWarn: '❌ 해당 플레이어에 대해 곧바로 음소거할 수 없습니다.(3분)'
     }

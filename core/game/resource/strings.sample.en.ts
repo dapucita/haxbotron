@@ -91,7 +91,7 @@ export const command = {
     ,mute: {
         _ErrorNoPermission: '❌ You are not admin. You can\'t do this command.'
         ,_ErrorNoPlayer: '❌ Wrong player ID. You can only target numeric ID.(eg: !mute #12)\n📑 You can check IDs by command !list red,blue,spec,mute'
-        ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.(30mins) You can command it againt for release.'
+        ,successMute: '🔇 {targetName}#{ticketTarget} player is muted.(3mins) You can command it againt for release.'
         ,successUnmute: '🔊 Player {targetName}#{ticketTarget} is unmuted.'
         ,muteAbusingWarn: '❌ You can\'t mute again this player in too short time. (3mins)'
     }
