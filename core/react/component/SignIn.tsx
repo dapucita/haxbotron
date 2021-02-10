@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container';
 import Copyright from './common/Footer.Copyright';
 import client from '../lib/client';
 import { useHistory } from 'react-router-dom';
+import Alert, { AlertColor } from './common/Alert';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -37,6 +38,7 @@ export default function SignIn() {
     const history = useHistory();
 
     const [flashMessage, setFlashMessage] = useState('');
+    const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
     const [adminAccount, setAdminAccount] = useState({
         username: '',
         password: ''
@@ -64,12 +66,14 @@ export default function SignIn() {
                 const result = await client.post('/api/v1/auth', { username, password });
                 if(result.status === 201) {
                     setFlashMessage('Configuration succeeded.');
+                    setAlertStatus('success');
                     /*setTimeout(()=>{
                         history.push('/admin');
                     }, 1000);*/
                     history.push('/admin');
                 }
             } catch (e) {
+                setAlertStatus('error');
                 switch(e.response.status) {
                     case 401: {
                         setFlashMessage('Login failed.');
@@ -82,6 +86,7 @@ export default function SignIn() {
                 }
             }
         } else {
+            setAlertStatus('error');
             setFlashMessage('Form is unfulfilled.');
         }
     }
@@ -97,7 +102,7 @@ export default function SignIn() {
                     Admin Account
                 </Typography>
                 <Typography variant="body1">Login and start managing the server.</Typography>
-                <Typography variant="body1">{flashMessage}</Typography>
+                {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
                 <form className={classes.form} onSubmit={handleSubmit} method="post">
                     <TextField
                         variant="outlined"

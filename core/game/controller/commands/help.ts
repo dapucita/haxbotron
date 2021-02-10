@@ -60,6 +60,10 @@ export function cmdHelp(byPlayer: PlayerObject, message?: string): void {
                 window.gameRoom._room.sendAnnouncement(LangRes.command.helpman.tier, byPlayer.id, 0x479947, "normal", 1);
                 break;
             }
+            case window.gameRoom.config.commands._helpMannotice: {
+                window.gameRoom._room.sendAnnouncement(LangRes.command.helpman.notice, byPlayer.id, 0x479947, "normal", 1);
+                break;
+            }
             default: {
                 window.gameRoom._room.sendAnnouncement(LangRes.command.helpman._ErrorWrongMan, byPlayer.id, 0xFF7777, "normal", 2);
                 break;

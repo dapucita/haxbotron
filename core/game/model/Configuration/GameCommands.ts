@@ -16,6 +16,7 @@ export interface GameCommands {
     _helpMantier: string
     _helpMansuper: string
     _helpManadmin: string
+    _helpMannotice: string
 
     _listSubafk: string
     _listSubmute: string
@@ -46,4 +47,5 @@ export interface GameCommands {
     super: string
     vote: string
     tier: string
+    notice: string
 }

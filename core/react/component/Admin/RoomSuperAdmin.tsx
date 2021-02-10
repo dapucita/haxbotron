@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -15,6 +15,7 @@ import client from '../../lib/client';
 import { useParams } from 'react-router-dom';
 import { Button, IconButton, TextField, Typography } from '@material-ui/core';
 import BackspaceIcon from '@material-ui/icons/Backspace';
+import Alert, { AlertColor } from '../common/Alert';
 
 interface styleClass {
     styleClass: any
@@ -49,6 +50,8 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
     const [superAdminKeyList, setSuperAdminKeyList] = useState([] as superAdminItem[]);
 
     const [flashMessage, setFlashMessage] = useState('');
+    const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
+
     const [newAdminKey, setNewAdminKey] = useState('');
 
     const getSuperAdminKeyList = async () => {
@@ -61,9 +64,11 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
         } catch (error) {
             if (error.response.status === 404) {
                 setFlashMessage('Failed to load list.');
+                setAlertStatus('error');
                 setSuperAdminKeyList([]);
             } else {
                 setFlashMessage('Unexpected error is caused. Please try again.');
+                setAlertStatus('error');
             }
         }
     }
@@ -77,6 +82,7 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
             const result = await client.delete(`/api/v1/superadmin/${matchParams.ruid}/${key}`);
             if (result.status === 204) {
                 setFlashMessage('Successfully deleted.');
+                setAlertStatus('success');
                 setTimeout(() => {
                     setFlashMessage('');
                 }, 3000);
@@ -84,6 +90,7 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
         } catch (error) {
             //error.response.status
             setFlashMessage('Failed to delete the key.');
+            setAlertStatus('error');
             setTimeout(() => {
                 setFlashMessage('');
             }, 3000);
@@ -105,6 +112,7 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
             } as superAdminItem);
             if (result.status === 204) {
                 setFlashMessage('Successfully added.');
+                setAlertStatus('success');
                 setNewAdminKey('');
                 setTimeout(() => {
                     setFlashMessage('');
@@ -113,6 +121,7 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
         } catch (error) {
             //error.response.status
             setFlashMessage('Failed to register the key.');
+            setAlertStatus('error');
             setTimeout(() => {
                 setFlashMessage('');
             }, 3000);
@@ -130,7 +139,7 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                         <React.Fragment>
-                            <Typography variant="body1">{flashMessage}</Typography>
+                            {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
                             <Title>Super Admin Keys</Title>
                             <Typography variant="body1">Super admin is an ingame player who has adminstrative permissions.</Typography>
                             <form className={classes.form} onSubmit={handleAdd} method="post">

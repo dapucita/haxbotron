@@ -397,4 +397,29 @@ export class HeadlessBrowser {
             window.gameRoom.logger.i('system', `[Broadcast] ${message}`);
         }, message);
     }
+
+    /**
+     * Get notice message.
+     * @param ruid Game room's UID
+     */
+    public async getNotice(ruid: string): Promise<string|undefined> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            if(window.gameRoom.notice) {
+                return window.gameRoom.notice;
+            } else {
+                return undefined;
+            }
+        })
+    }
+
+    /**
+     * Set notice message.
+     * @param ruid Game room's UID
+     * @param message Notice Content
+     */
+    public async setNotice(ruid: string, message: string): Promise<void> {
+        await this._PageContainer.get(ruid)!.evaluate((message: string) => {
+            window.gameRoom.notice = message;
+        },message)
+    }
 }

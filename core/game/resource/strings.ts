@@ -54,7 +54,7 @@ export const command = {
     _ErrorWrongCommand : '❌ 잘못된 명령어입니다. 📑 !help 또는 !help COMMAND로 자세히 알아보세요.'
     ,_ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
     ,_ErrorDisabled: '❌ 현재 방에서는 사용할 수 없는 명령어입니다.'
-    ,help: '📄 !about, stats, statsreset, tier, afk, vote, poss, streak, scout, list\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
+    ,help: '📄 !about, notice, stats, statsreset, tier, afk, vote, poss, streak, scout, list\n📑 !help COMMAND로 자세히 보기 (예: !help stats)\n📑 !help admin 을 입력하여 관리자용 명령어를 볼 수 있습니다.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND로 자세히 보기'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ 요청하신 명령어에 대한 설명이 없습니다.'
@@ -71,6 +71,7 @@ export const command = {
         ,scout: '📑 !scout : 각 팀의 기대승률치를 보여줍니다. 팀 간의 비교는 아니며, 피타고리안 승률 공식의 변형을 사용합니다.'
         ,vote: '📑 !vote : 현재 추방 투표 현황과 본인의 투표 상태를 보여줍니다.\n📑 !vote #ID : 해당 ID의 플레이어에 대해 추방 투표를 하거나 취소합니다. ID는 숫자이어야 합니다. (예: !vote #12)'
         ,tier: '📑 !tier : 티어와 레이팅 시스템에 대한 정보를 보여줍니다.'
+        ,notice: '📑 !notice : 공지사항을 보여줍니다.'
     } 
     ,about: '📄 방 이름 : {RoomName} ({_LaunchTime})\n💬 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. https://github.com/dapucita/haxbotron\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
@@ -91,7 +92,7 @@ export const command = {
     ,mute: {
         _ErrorNoPermission: '❌ 관리자만 이 명령어를 사용할 수 있습니다.'
         ,_ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !mute #12)\n📑 !list red,blue,spec,mute 명령어로 숫자아이디를 확인할 수 있습니다.'
-        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.(30분) 해제하려면 mute 명령어를 다시 사용하세요.'
+        ,successMute: '🔇 {targetName}#{ticketTarget}님을 음소거했습니다.(3분) 해제하려면 mute 명령어를 다시 사용하세요.'
         ,successUnmute: '🔊 {targetName}#{ticketTarget}님의 음소거를 해제했습니다.'
         ,muteAbusingWarn: '❌ 해당 플레이어에 대해 곧바로 음소거할 수 없습니다.(3분)'
     }
@@ -153,6 +154,9 @@ export const command = {
         ,voteAutoNotify: '🗳️ 현재 추방 투표가 진행중입니다 : {voteList}'
     }
     ,tier: '📄 티어는 레이팅 점수에 따라 결정됩니다. 레이팅 점수는 !stats 명령어로 봅니다.\n📑 {tierAvatar9}{tierCutoff9} {tierAvatar8}{tierCutoff8} {tierAvatar7}{tierCutoff7} {tierAvatar6}{tierCutoff6} {tierAvatar5}{tierCutoff5} {tierAvatar4}{tierCutoff4} {tierAvatar3}{tierCutoff3} {tierAvatar2}{tierCutoff2} {tierAvatar1}{tierCutoff1}'
+    ,notice: {
+        _ErrorNoMessage: '❌ 현재 공지사항이 없습니다.'
+    }
 }
 
 export const funcUpdateAdmins = {

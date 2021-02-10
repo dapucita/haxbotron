@@ -13,6 +13,7 @@ import Container from '@material-ui/core/Container';
 import { Link as RouterLink, useHistory  } from 'react-router-dom';
 import client from '../../lib/client';
 import Copyright from '../common/Footer.Copyright';
+import Alert, { AlertColor } from '../common/Alert';
 
 interface checkProps {
     installed: boolean
@@ -43,6 +44,7 @@ export default function SignUp({ installed }: checkProps) {
     const history = useHistory();
 
     const [flashMessage, setFlashMessage] = useState('');
+    const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
     const [adminAccount, setAdminAccount] = useState({
         username: '',
         password: ''
@@ -70,11 +72,13 @@ export default function SignUp({ installed }: checkProps) {
                 const result = await client.post('/api/v1/init', { username, password });
                 if(result.status === 201) {
                     setFlashMessage('Configuration succeeded.');
+                    setAlertStatus('success');
                     setTimeout(()=>{
                         history.push('/admin');
                     }, 5000);
                 }
             } catch (e) {
+                setAlertStatus('error');
                 switch(e.response.status) {
                     case 400: {
                         setFlashMessage('Form is unfulfilled.');
@@ -92,6 +96,7 @@ export default function SignUp({ installed }: checkProps) {
             }
         } else {
             setFlashMessage('Form is unfulfilled.');
+            setAlertStatus('error');
         }
         
     }
@@ -126,7 +131,7 @@ export default function SignUp({ installed }: checkProps) {
                         Initial Configuration
                     </Typography>
                     <Typography variant="body1">Sign up new admin account.</Typography>
-                    <Typography variant="body1">{flashMessage}</Typography>
+                    {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
                     <form className={classes.form} onSubmit={handleSubmit} method="post">
                         <Grid container spacing={2}>
                             <Grid item xs={12}>

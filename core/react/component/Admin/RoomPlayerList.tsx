@@ -14,11 +14,12 @@ import Title from './common/Widget.Title';
 import client from '../../lib/client';
 import { WSocketContext } from '../../context/ws';
 import { useParams } from 'react-router-dom';
-import { Button, Collapse, Divider, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, Collapse, Divider, IconButton, makeStyles, TextField, Typography } from '@material-ui/core';
 import Alert, { AlertColor } from '../common/Alert';
 import { Player } from '../../../game/model/GameObject/Player';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { isNumber } from '../../lib/numcheck';
 
 
 interface styleClass {
@@ -27,6 +28,11 @@ interface styleClass {
 
 interface matchParams {
     ruid: string
+}
+
+interface newBanFields {
+    reason: string
+    seconds: number
 }
 
 interface PlayerStorage {
@@ -60,13 +66,19 @@ const useRowStyles = makeStyles({
 });
 
 const convertDate = (timestamp: number): string => {
+    if (timestamp === -1) return 'Permanent';
     return new Date(timestamp).toLocaleString();
 }
 
-function OnlinePlayerRow(props: { row: Player }) {
-    const { row } = props;
+function OnlinePlayerRow(props: { ruid: string, row: Player }) {
+    const { ruid, row } = props;
     const classes = useRowStyles();
     const [open, setOpen] = useState(false);
+
+    const [newBan, setNewBan] = useState({ reason: '', seconds: 0 } as newBanFields);
+
+    const [flashMessage, setFlashMessage] = useState('');
+    const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
 
     const convertTeamID = (teamID: number): string => {
         if (teamID === 1) return 'Red';
@@ -76,9 +88,52 @@ function OnlinePlayerRow(props: { row: Player }) {
 
     const makePermissionsText = (admin: boolean, superAdmin: boolean): string => {
         let text: string[] = [];
-        if(admin) text.push('Admin');
-        if(superAdmin) text.push('SuperAdmin');
+        if (admin) text.push('Admin');
+        if (superAdmin) text.push('SuperAdmin');
         return text.join(',');
+    }
+
+    const onChangeNewBan = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        if (name === "newbanseconds" && isNumber(parseInt(value))) {
+            setNewBan({
+                ...newBan,
+                seconds: parseInt(value)
+            });
+        } else {
+            setNewBan({
+                ...newBan,
+                [name]: value
+            });
+        }
+    }
+
+    const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const result = await client.delete(`/api/v1/room/${ruid}/player/${row.id}`, {
+                data: {
+                    ban: false,
+                    seconds: newBan.seconds,
+                    message: newBan.reason
+                }
+            });
+            if (result.status === 204) {
+                setFlashMessage('Successfully kicked.');
+                setAlertStatus('success');
+                setNewBan({ reason: '', seconds: 0 });
+                setTimeout(() => {
+                    setFlashMessage('');
+                }, 3000);
+            }
+        } catch (error) {
+            //error.response.status
+            setFlashMessage('Failed to kick.');
+            setAlertStatus('error');
+            setTimeout(() => {
+                setFlashMessage('');
+            }, 3000);
+        }
     }
 
     return (
@@ -98,6 +153,22 @@ function OnlinePlayerRow(props: { row: Player }) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
+                            <Grid container spacing={0}>
+                                {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
+                                <form onSubmit={handleAdd} method="post">
+                                    <Grid item xs={12} sm={12}>
+                                        <TextField
+                                            variant="outlined" margin="normal" required size="small" value={newBan.reason} onChange={onChangeNewBan}
+                                            id="reason" label="Reason" name="reason"
+                                        />
+                                        <TextField
+                                            variant="outlined" margin="normal" required size="small" value={newBan.seconds} onChange={onChangeNewBan} type="number"
+                                            id="seconds" label="Time(secs)" name="seconds"
+                                        />
+                                        <Button size="small" type="submit" variant="outlined" color="secondary">Kick</Button>
+                                    </Grid>
+                                </form>
+                            </Grid>
                             <Typography variant="h6" gutterBottom component="div">
                                 Information
                             </Typography>
@@ -106,6 +177,8 @@ function OnlinePlayerRow(props: { row: Player }) {
                                     <TableRow>
                                         <TableCell>Permissions</TableCell>
                                         <TableCell>AFK</TableCell>
+                                        <TableCell>Mute</TableCell>
+                                        <TableCell>Mute Expiration</TableCell>
                                         <TableCell>Voted</TableCell>
                                         <TableCell>Join Date</TableCell>
                                     </TableRow>
@@ -113,7 +186,9 @@ function OnlinePlayerRow(props: { row: Player }) {
                                 <TableBody>
                                     <TableRow key={row.id}>
                                         <TableCell component="th" scope="row">{makePermissionsText(row.admin, row.permissions.superadmin)}</TableCell>
-                                        <TableCell>{row.permissions.afkmode? 'Yes': 'No'}</TableCell>
+                                        <TableCell>{row.permissions.afkmode ? 'Yes' : 'No'}</TableCell>
+                                        <TableCell>{row.permissions.mute ? 'Yes' : 'No'}</TableCell>
+                                        <TableCell>{row.permissions.muteExpire === 0 ? '-' : convertDate(row.permissions.muteExpire)}</TableCell>
                                         <TableCell>{row.voteGet}</TableCell>
                                         <TableCell>{convertDate(row.entrytime.joinDate)}</TableCell>
                                     </TableRow>
@@ -349,7 +424,7 @@ export default function RoomPlayerList({ styleClass }: styleClass) {
                                 </TableHead>
                                 <TableBody>
                                     {onlinePlayerList && onlinePlayerList.map((item, idx) => (
-                                        <OnlinePlayerRow key={idx} row={item} />
+                                        <OnlinePlayerRow key={idx} row={item} ruid={matchParams.ruid} />
                                     ))}
                                 </TableBody>
                             </Table>

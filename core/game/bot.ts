@@ -39,6 +39,7 @@ window.gameRoom = {
     ,antiTrollingChatFloodCount: []
     ,antiInsufficientStartAbusingCount: []
     ,antiPlayerKickAbusingCount: []
+    ,notice: ''
     ,onEmergency: EmergencyTools
 }
 

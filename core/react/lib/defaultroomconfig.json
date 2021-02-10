@@ -118,6 +118,7 @@
 		"_helpMantier": "tier",
 		"_helpMansuper": "super",
 		"_helpManadmin": "admin",
+		"_helpMannotice": "notice",
 		"_listSubafk": "afk",
 		"_listSubmute": "mute",
 		"_listSubred": "red",
@@ -146,6 +147,7 @@
 		"streak": "streak",
 		"super": "super",
 		"vote": "vote",
-		"tier": "tier"
+		"tier": "tier",
+		"notice": "notice"
 	}
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -7,8 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import Copyright from '../common/Footer.Copyright';
 import Title from './common/Widget.Title';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import client from '../../lib/client';
+import Alert, { AlertColor } from '../common/Alert';
 
 interface styleClass {
     styleClass: any
@@ -29,6 +30,7 @@ export default function RoomPower({ styleClass }: styleClass) {
     const history = useHistory();
 
     const [flashMessage, setFlashMessage] = useState('');
+    const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
     
     const handleShutdownClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -37,9 +39,11 @@ export default function RoomPower({ styleClass }: styleClass) {
             const result = await client.delete('/api/v1/room/' + matchParams.ruid);
             if (result.status === 204) {
                 setFlashMessage('Shutdown succeeded.');
+                setAlertStatus('success');
                 history.push('/admin/roomlist');
             }
         } catch (e) {
+            setAlertStatus('error');
             switch (e.response.status) {
                 case 401: {
                     setFlashMessage('No permission.');
@@ -63,7 +67,7 @@ export default function RoomPower({ styleClass }: styleClass) {
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                         <React.Fragment>
-                            <Typography variant="body1">{flashMessage}</Typography>
+                        {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
                             <Title>{matchParams.ruid}</Title>
                             <Button
                                 type="submit"

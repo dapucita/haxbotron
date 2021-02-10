@@ -163,6 +163,7 @@ export interface BrowserHostRoomCommands {
     _helpMantier: string
     _helpMansuper: string
     _helpManadmin: string
+    _helpMannotice: string
 
     _listSubafk: string
     _listSubmute: string
@@ -193,4 +194,5 @@ export interface BrowserHostRoomCommands {
     super: string
     vote: string
     tier: string
+    notice: string
 }

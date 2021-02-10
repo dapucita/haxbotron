@@ -8,8 +8,9 @@ import Copyright from '../common/Footer.Copyright';
 import Title from './common/Widget.Title';
 import { WSocketContext } from '../../context/ws';
 import { useParams } from 'react-router-dom';
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import client from '../../lib/client';
+import Alert, { AlertColor } from '../common/Alert';
 
 interface styleClass {
     styleClass: any
@@ -40,6 +41,8 @@ export default function RoomLog({ styleClass }: styleClass) {
     const [recentLogMessage, setRecentLogMessage] = useState({} as LogMessage);
 
     const [flashMessage, setFlashMessage] = useState('');
+    const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
+
     const [broadcastMessage, setBroadcastMessage] = useState('');
 
     const handleBroadcast = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -48,12 +51,14 @@ export default function RoomLog({ styleClass }: styleClass) {
             const result = await client.post(`/api/v1/room/${matchParams.ruid}/chat`, { message: broadcastMessage });
             if (result.status === 201) {
                 setFlashMessage('Successfully sent.');
+                setAlertStatus('success');
                 setBroadcastMessage('');
                 setTimeout(() => {
                     setFlashMessage('');
                 }, 3000);
             }
         } catch (error) {
+            setAlertStatus('error');
             switch (error.response.status) {
                 case 400: {
                     setFlashMessage('No message.');
@@ -101,7 +106,7 @@ export default function RoomLog({ styleClass }: styleClass) {
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                         <React.Fragment>
-                            <Typography variant="body1">{flashMessage}</Typography>
+                            {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
                             <Title>Broadcast</Title>
                             <form className={classes.form} onSubmit={handleBroadcast} method="post">
                                 <TextField
