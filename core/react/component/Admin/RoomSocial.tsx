@@ -41,7 +41,7 @@ export default function RoomSocial({ styleClass }: styleClass) {
             if (result.status === 201) {
                 setFlashMessage('Successfully set.');
                 setAlertStatus('success');
-                setNoticeMessage('');
+                setNewNoticeMessage('');
                 getNoticeMessage();
                 setTimeout(() => {
                     setFlashMessage('');
