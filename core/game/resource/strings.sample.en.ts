@@ -54,7 +54,7 @@ export const command = {
     _ErrorWrongCommand : '❌ You did wrong command. 📑 !help or !help COMMAND for detail.'
     ,_ErrorNoPermission: '❌ You are not admin. You can\'t use this command.'
     ,_ErrorDisabled: '❌ This command is disabled. You can\'t use this command.'
-    ,help: '📄 !about, stats, statsreset, tier, afk, vote, poss, streak, scout, list\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
+    ,help: '📄 !about, notice, stats, statsreset, tier, afk, vote, poss, streak, scout, list\n📑 !help COMMAND for detail. (eg. !help stats)\n📑 !help admin shows you commands list for administrator.'
     ,helpadmin: '📄 !freeze, mute\n📑 !help COMMAND for detail.'
     ,helpman: { // detailed description for a command
         _ErrorWrongMan : '❌ Failed to read manual about that command.'
@@ -71,6 +71,7 @@ export const command = {
         ,scout: '📑 !scout shows you expectation of each teams by customed Pythagorean Expectation.'
         ,vote: '📑 !vote shows you progress of the vote.\n📑 !vote #ID : vote for kick that player. (eg: !vote #12)'
         ,tier: '📑 !tier shows you information of tier and rating system.'
+        ,notice: '📑 !notice shows you notice message.'
     } 
     ,about: '📄 {RoomName} ({_LaunchTime})\n💬 This room is powered by Haxbotron🤖 bot. https://github.com/dapucita/haxbotron\n💬 Discord https://discord.gg/qfg45B2 Donate https://www.patreon.com/dapucita'
     ,stats: {
@@ -153,6 +154,9 @@ export const command = {
         ,voteAutoNotify: '🗳️ Voting to ban is in progress: {voteList}'
     }
     ,tier: '📄 Tier is determined by the rating score. (!stats shows your rating)\n📑 {tierAvatar9}{tierCutoff9} {tierAvatar8}{tierCutoff8} {tierAvatar7}{tierCutoff7} {tierAvatar6}{tierCutoff6} {tierAvatar5}{tierCutoff5} {tierAvatar4}{tierCutoff4} {tierAvatar3}{tierCutoff3} {tierAvatar2}{tierCutoff2} {tierAvatar1}{tierCutoff1}'
+    ,notice: {
+        _ErrorNoMessage: '❌ No notice message.'
+    }
 }
 
 export const funcUpdateAdmins = {
