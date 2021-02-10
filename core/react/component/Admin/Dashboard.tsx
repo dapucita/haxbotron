@@ -32,6 +32,7 @@ import RoomSuperAdmin from './RoomSuperAdmin';
 import RoomInfo from './RoomInfo';
 import RoomBanList from './RoomBanList';
 import RoomPlayerList from './RoomPlayerList';
+import RoomSocial from './RoomSocial';
 
 const drawerWidth = 240;
 
@@ -230,6 +231,7 @@ function Dashboard({ match }: RouteComponentProps) {
                     <Route path={`${match.path}/room/:ruid/info`}><RoomInfo styleClass={styleClass} /></Route>
                     <Route path={`${match.path}/room/:ruid/power`}><RoomPower styleClass={styleClass} /></Route>
                     <Route path={`${match.path}/room/:ruid/player`}><RoomPlayerList styleClass={styleClass} /></Route>
+                    <Route path={`${match.path}/room/:ruid/social`}><RoomSocial styleClass={styleClass} /></Route>
                     <Route component={NotFound} />
                 </Switch>
             </main>

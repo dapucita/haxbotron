@@ -194,6 +194,11 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
     // send welcome message to new player. other players cannot read this message.
     window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onJoin.welcome, placeholderJoin), player.id, 0x00FF00, "normal", 0);
 
+    // send notice
+    if(window.gameRoom.notice !== '') {
+        window.gameRoom._room.sendAnnouncement(window.gameRoom.notice, player.id, 0x55AADD, "bold", 0);
+    }
+
     // check number of players joined and change game mode
     let activePlayersNumber: number = roomActivePlayersNumberCheck();
     if (window.gameRoom.config.rules.statsRecord === true && activePlayersNumber >= window.gameRoom.config.rules.requisite.minimumPlayers) {

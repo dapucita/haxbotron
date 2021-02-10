@@ -156,3 +156,47 @@ export function broadcast(ctx: Context) {
         }
     }
 }
+
+/**
+ * set notice message
+ */
+export async function setNotice(ctx: Context) {
+    const { ruid } = ctx.params;
+    const message: string | undefined = ctx.request.body.message;
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid)) {
+        if(message) {
+            browser.setNotice(ruid, message);
+            ctx.status = 201;
+        } else {
+            ctx.status = 400;
+        }
+    }
+}
+
+/**
+ * get notice message
+ */
+export async function getNotice(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid)) {
+        const message: string|undefined = await browser.getNotice(ruid);
+        if(typeof message === 'string') {
+            ctx.body = { message: message };
+            ctx.status = 200;
+        } 
+    }
+}
+
+/**
+ * delete notice message
+ */
+export async function deleteNotice(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid)) {
+        browser.setNotice(ruid, '');
+        ctx.status = 204;
+    }
+}

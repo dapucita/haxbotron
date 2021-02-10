@@ -46,6 +46,8 @@ declare global {
             antiInsufficientStartAbusingCount: number[] // ID record for start with insufficient players (player id: number)
             antiPlayerKickAbusingCount: AdminKickTrace[] // ID and Timestamp record for abusing kick other players (id:number, register date:number)
 
+            notice: string // Notice Message
+
             // on dev-console tools for emergency
             onEmergency: {
                 list(): void
