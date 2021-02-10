@@ -1,6 +1,6 @@
 {
     "name": "haxbotron",
-    "version": "0.4.3",
+    "version": "0.4.4",
     "description": "Haxbotron is a headless host server application for Haxball.",
     "main": "out/index.js",
     "author": "dapucita",
