@@ -22,7 +22,7 @@ winstonLogger.info(`haxbotron-db server is launched at ${new Date().toLocaleStri
 
 const app: express.Application = express();
 
-const whiteListIPs: string[] = process.env.SERVER_WHITELIST_IP?.split(",") || ['127.0.0.1'];
+const whiteListIPs: string[] = process.env.SERVER_WHITELIST_IP?.split(",") || ['127.0.0.1','::ffff:127.0.0.1'];
 
 // DB CONNECTION
 createConnection({
