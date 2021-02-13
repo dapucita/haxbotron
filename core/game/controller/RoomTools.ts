@@ -33,7 +33,15 @@ export function updateAdmins(): void {
     };
 
     // Get all players except the host (id = 0 is always the host)
-    let players = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode !== true); // only no afk mode players
+    let players = window.gameRoom._room.getPlayerList().filter(
+            // only no afk mode players
+            (player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode !== true
+        ).sort(
+            (a: PlayerObject, b: PlayerObject) => {
+                return window.gameRoom.playerList.get(a.id)!.stats.rating
+                        - window.gameRoom.playerList.get(b.id)!.stats.rating
+            }
+        );
     if (players.length == 0) return; // If no players left, do nothing.
     if (players.find((player: PlayerObject) => player.admin) != null) return; // Do nothing if any admin player is still left.
 
