@@ -18,8 +18,13 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 위 페이지에서 기부하여 이 프로젝트를 지원해주세요!
 
 ## Features
-- launch on Multi platforms: Windows, Linux, OS X and so on.
-- Convenient Management System on Web
+![Node.js](https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node%2ejs&logoColor=fff)
+![Typescript](https://img.shields.io/badge/-Typescript-007acc?style=for-the-badge&logo=typescript&logoColor=fff)
+![React](https://img.shields.io/badge/-React-61dafb?style=for-the-badge&logo=react&logoColor=fff)
+![SQLite](https://img.shields.io/badge/-SQLite-003b57?style=for-the-badge&logo=sqlite&logoColor=fff)
+![Chrome](https://img.shields.io/badge/-Chrome-4285f4?style=for-the-badge&logo=google%20chrome&logoColor=fff)
+- Powered on multi platforms: Windows, Linux, OS X and so on.
+- Web-based management system
 - Automatic game operating system
 - Detailed player data and statistics
 - Sophisticated tier and rating system
