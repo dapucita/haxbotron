@@ -47,21 +47,23 @@ export default function RoomBanList({ styleClass }: styleClass) {
     const matchParams: matchParams = useParams();
 
     const [banList, setBanList] = useState([] as banListItem[]);
-    const [newBan, setNewBan] = useState({conn: '', reason: '', seconds: 0} as newBanFields);
+    const [newBan, setNewBan] = useState({ conn: '', reason: '', seconds: 0 } as newBanFields);
 
     const [flashMessage, setFlashMessage] = useState('');
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
 
     const [pagingOrder, setPagingOrder] = useState(1);
+    const [pagingCount, setPagingCount] = useState(10);
+    const [pagingCountInput, setPagingCountInput] = useState('10');
 
     const convertDate = (timestamp: number): string => {
         return new Date(timestamp).toLocaleString();
     }
 
     const getBanList = async (page: number) => {
-        const index: number = (page - 1) * 10;
+        const index: number = (page - 1) * pagingCount;
         try {
-            const result = await client.get(`/api/v1/banlist/${matchParams.ruid}?start=${index}&count=10`);
+            const result = await client.get(`/api/v1/banlist/${matchParams.ruid}?start=${index}&count=${pagingCount}`);
             if (result.status === 200) {
                 const banList: banListItem[] = result.data;
                 setBanList(banList);
@@ -99,15 +101,26 @@ export default function RoomBanList({ styleClass }: styleClass) {
     }
 
     const onClickPaging = (move: number) => {
-        if(pagingOrder + move >= 1) {
+        if (pagingOrder + move >= 1) {
             setPagingOrder(pagingOrder + move);
             getBanList(pagingOrder + move);
         }
     }
 
+    const onChangePagingCountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPagingCountInput(e.target.value);
+
+        if (isNumber(parseInt(e.target.value))) {
+            const count: number = parseInt(e.target.value);
+            if (count >= 1) {
+                setPagingCount(count);
+            }
+        }
+    }
+
     const onChangeNewBan = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if(name === "newbanseconds" && isNumber(parseInt(value))) {
+        if (name === "newbanseconds" && isNumber(parseInt(value))) {
             setNewBan({
                 ...newBan,
                 seconds: parseInt(value)
@@ -131,7 +144,7 @@ export default function RoomBanList({ styleClass }: styleClass) {
             if (result.status === 204) {
                 setFlashMessage('Successfully banned.');
                 setAlertStatus('success');
-                setNewBan({conn: '', reason: '', seconds: 0});
+                setNewBan({ conn: '', reason: '', seconds: 0 });
                 setTimeout(() => {
                     setFlashMessage('');
                 }, 3000);
@@ -163,15 +176,15 @@ export default function RoomBanList({ styleClass }: styleClass) {
                                 <form className={classes.form} onSubmit={handleAdd} method="post">
                                     <Grid item xs={12} sm={12}>
                                         <TextField
-                                            variant="outlined" margin="normal" required size="small" value={newBan.conn} onChange={onChangeNewBan} 
+                                            variant="outlined" margin="normal" required size="small" value={newBan.conn} onChange={onChangeNewBan}
                                             id="conn" label="CONN" name="conn"
                                         />
                                         <TextField
-                                            variant="outlined" margin="normal" required size="small" value={newBan.reason} onChange={onChangeNewBan} 
+                                            variant="outlined" margin="normal" required size="small" value={newBan.reason} onChange={onChangeNewBan}
                                             id="reason" label="Reason" name="reason"
                                         />
                                         <TextField
-                                            variant="outlined" margin="normal" required size="small" value={newBan.seconds} onChange={onChangeNewBan} type="number" 
+                                            variant="outlined" margin="normal" required size="small" value={newBan.seconds} onChange={onChangeNewBan} type="number"
                                             id="seconds" label="Ban Time(secs)" name="seconds"
                                         />
                                         <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Ban</Button>
@@ -181,14 +194,27 @@ export default function RoomBanList({ styleClass }: styleClass) {
                             <Divider />
 
                             <Grid container spacing={1}>
-                                <Grid item xs={4} sm={2}>
+                                <Grid item xs={8} sm={4}>
                                     {/* previous page */}
                                     <Button onClick={() => onClickPaging(-1)} size="small" type="button" variant="outlined" color="inherit" className={classes.submit}>&lt;&lt;</Button>
                                     {/* next page */}
                                     <Button onClick={() => onClickPaging(1)} size="small" type="button" variant="outlined" color="inherit" className={classes.submit}>&gt;&gt;</Button>
+
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        size="small"
+                                        id="pagingCountInput"
+                                        label="Paging Items Count"
+                                        name="pagingCountInput"
+                                        type="number"
+                                        value={pagingCountInput}
+                                        onChange={onChangePagingCountInput}
+                                    />
+
                                     <Typography>Page {pagingOrder}</Typography>
                                 </Grid>
-                                
+
                             </Grid>
                             <Divider />
 

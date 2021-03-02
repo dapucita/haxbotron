@@ -332,6 +332,8 @@ export default function RoomPlayerList({ styleClass }: styleClass) {
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
 
     const [pagingOrder, setPagingOrder] = useState(1);
+    const [pagingCount, setPagingCount] = useState(10);
+    const [pagingCountInput, setPagingCountInput] = useState('10');
 
     const [onlinePlayerList, setOnlinePlayerList] = useState([] as Player[]);
     const [playerAccountList, setPlayerAccountList] = useState([] as PlayerStorage[]);
@@ -343,10 +345,21 @@ export default function RoomPlayerList({ styleClass }: styleClass) {
         }
     }
 
+    const onChangePagingCountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPagingCountInput(e.target.value);
+
+        if (isNumber(parseInt(e.target.value))) {
+            const count: number = parseInt(e.target.value);
+            if (count >= 1) {
+                setPagingCount(count);
+            }
+        }
+    }
+
     const getPlayerAccountList = async (page: number) => {
-        const index: number = (page - 1) * 10;
+        const index: number = (page - 1) * pagingCount;
         try {
-            const result = await client.get(`/api/v1/playerlist/${matchParams.ruid}?start=${index}&count=10`);
+            const result = await client.get(`/api/v1/playerlist/${matchParams.ruid}?start=${index}&count=${pagingCount}`);
             if (result.status === 200) {
                 const playerAccounts: PlayerStorage[] = result.data;
 
@@ -434,11 +447,24 @@ export default function RoomPlayerList({ styleClass }: styleClass) {
                         <React.Fragment>
                             <Title>Player Accounts List</Title>
                             <Grid container spacing={1}>
-                                <Grid item xs={4} sm={2}>
+                                <Grid item xs={8} sm={4}>
                                     {/* previous page */}
                                     <Button onClick={() => onClickPaging(-1)} size="small" type="button" variant="outlined" color="inherit" className={classes.submit}>&lt;&lt;</Button>
                                     {/* next page */}
                                     <Button onClick={() => onClickPaging(1)} size="small" type="button" variant="outlined" color="inherit" className={classes.submit}>&gt;&gt;</Button>
+
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        size="small"
+                                        id="pagingCountInput"
+                                        label="Paging Items Count"
+                                        name="pagingCountInput"
+                                        type="number"
+                                        value={pagingCountInput}
+                                        onChange={onChangePagingCountInput}
+                                    />
+
                                     <Typography>Page {pagingOrder}</Typography>
                                 </Grid>
 
