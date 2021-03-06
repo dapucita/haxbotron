@@ -1,4 +1,5 @@
-import express, { Request, Response, Router, NextFunction } from "express";
+import { Context } from "koa";
+import Router from "koa-router";
 import { Player } from '../entity/player.entity';
 import { getRepository, Repository } from "typeorm";
 
@@ -6,17 +7,22 @@ interface ruidListItem {
     ruid: string
 }
 
-export const ruidlistRouter: Router = express.Router({ mergeParams: true });
+export const ruidlistRouter = new Router();
 
 // Get All exist RUIDs list on DB
-ruidlistRouter.get('/', async (request: Request, response: Response, next: NextFunction) => {
-    //await controller.getAllPlayers(request, response, next);
+ruidlistRouter.get('/', async (ctx: Context) => {
     const repository: Repository<Player> = getRepository(Player);
     await repository
         .createQueryBuilder('Player')
         .select('ruid')
         .distinct(true)
         .getRawMany()
-        .then((ruidList: ruidListItem[]) => response.status(200).send(ruidList))
-        .catch((error) => response.status(404).send({ error: error.message }));
+        .then((ruidList: ruidListItem[]) => {
+            ctx.status = 200;
+            ctx.body = ruidList;
+        })
+        .catch((error) => {
+            ctx.status = 404;
+            ctx.body = { error: error.message };
+        });
 });

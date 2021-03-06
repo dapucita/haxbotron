@@ -1,6 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import { Context } from "koa";
 import { SuperAdmin } from '../entity/superadmin.entity';
 import { SuperAdminModel } from '../model/SuperAdminModel';
+import { superAdminModelSchema } from "../model/Validator";
 import { IRepository } from '../repository/repository.interface';
 
 export class SuperAdminController {
@@ -10,49 +11,107 @@ export class SuperAdminController {
         this._repository = repository;
     }
 
-    public async getAllSuperAdmins(request: Request, response: Response, next: NextFunction): Promise<any> {
-        if(request.query?.start && request.query?.count) {
+    public async getAllSuperAdmins(ctx: Context) {
+        const { ruid } = ctx.params;
+        const { start, count } = ctx.request.query;
+
+        if(start && count) {
             return this._repository
-                .findAll(request.params.ruid, {start: parseInt(<string>request.query.start), count: parseInt(<string>request.query.count)})
-                .then((superadmins) => response.status(200).send(superadmins))
-                .catch((error) => response.status(404).send({ error: error.message }));
+                .findAll(ruid, {start: parseInt(<string>start), count: parseInt(<string>count)})
+                .then((superadmins) => {
+                    ctx.status = 200;
+                    ctx.body = superadmins;
+                })
+                .catch((error) => {
+                    ctx.status = 404;
+                    ctx.body = { error: error.message };
+                });
         } else {
             return this._repository
-                .findAll(request.params.ruid)
-                .then((superadmins) => response.status(200).send(superadmins))
-                .catch((error) => response.status(404).send({ error: error.message }));
+                .findAll(ruid)
+                .then((superadmins) => {
+                    ctx.status = 200;
+                    ctx.body = superadmins;
+                })
+                .catch((error) => {
+                    ctx.status = 404;
+                    ctx.body = { error: error.message };
+                });
         }
     }
 
-    public async getSuperAdmin(request: Request, response: Response, next: NextFunction): Promise<any> {
+    public async getSuperAdmin(ctx: Context) {
+        const { ruid, key } = ctx.params;
+
         return this._repository
-            .findSingle(request.params.ruid, request.params.key)
-            .then((superadmin) => response.status(200).send(superadmin))
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .findSingle(ruid, key)
+            .then((superadmins) => {
+                ctx.status = 200;
+                ctx.body = superadmins;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async addSuperAdmin(request: Request, response: Response, next: NextFunction): Promise<any> {
-        let superAdminModel: SuperAdminModel = request.body;
+    public async addSuperAdmin(ctx: Context) {
+        const validationResult = superAdminModelSchema.validate(ctx.request.body);
+
+        if (validationResult.error) {
+            ctx.status = 400;
+            ctx.body = validationResult.error;
+            return;
+        }
+
+        const { ruid } = ctx.params;
+        const superAdminModel: SuperAdminModel = ctx.request.body;
 
         return this._repository
-            .addSingle(request.params.ruid, superAdminModel)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(400).send({ error: error.message }));
+            .addSingle(ruid, superAdminModel)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 400;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async updateSuperAdmin(request: Request, response: Response, next: NextFunction): Promise<any> {
-        let superAdminModel: SuperAdminModel = request.body;
+    public async updateSuperAdmin(ctx: Context) {
+        const validationResult = superAdminModelSchema.validate(ctx.request.body);
+
+        if (validationResult.error) {
+            ctx.status = 400;
+            ctx.body = validationResult.error;
+            return;
+        }
+
+        const { ruid, key } = ctx.params;
+        const superAdminModel: SuperAdminModel = ctx.request.body;
 
         return this._repository
-            .updateSingle(request.params.ruid, request.params.key, superAdminModel)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .updateSingle(ruid, key, superAdminModel)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async deleteSuperAdmin(request: Request, response: Response, next: NextFunction): Promise<any> {
+    public async deleteSuperAdmin(ctx: Context) {
+        const { ruid, key } = ctx.params;
+
         return this._repository
-            .deleteSingle(request.params.ruid, request.params.key)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .deleteSingle(ruid, key)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 }
