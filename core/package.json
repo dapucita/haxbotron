@@ -1,6 +1,6 @@
 {
   "name": "haxbotron-core",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Haxbotron is a headless host server application for Haxball.",
   "main": "out/app.js",
   "scripts": {
@@ -39,7 +39,6 @@
     "bcrypt": "^5.0.0",
     "cookie": "^0.4.1",
     "dotenv": "^8.2.0",
-    "inquirer": "^7.3.3",
     "joi": "^17.3.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
