@@ -16,6 +16,11 @@ Language : [English](README.md), Korean(한국어)
 [Patreon](https://www.patreon.com/dapucita)을 통해 이 프로젝트에 기부하고 지원해주세요!
 
 ## 특징
+![Node.js](https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node%2ejs&logoColor=fff)
+![Typescript](https://img.shields.io/badge/-Typescript-007acc?style=for-the-badge&logo=typescript&logoColor=fff)
+![React](https://img.shields.io/badge/-React-61dafb?style=for-the-badge&logo=react&logoColor=fff)
+![SQLite](https://img.shields.io/badge/-SQLite-003b57?style=for-the-badge&logo=sqlite&logoColor=fff)
+![Chrome](https://img.shields.io/badge/-Chrome-4285f4?style=for-the-badge&logo=google%20chrome&logoColor=fff)
 - Windows, Linux, OS X 등 멀티 플랫폼 지원
 - 웹 기반 관리 시스템
 - 게임 자동 운영
