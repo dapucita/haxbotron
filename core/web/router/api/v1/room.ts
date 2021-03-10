@@ -19,6 +19,9 @@ roomRouter.post('/:ruid/chat', checkLoginMiddleware, roomController.broadcast); 
 
 roomRouter.get('/:ruid/info', checkLoginMiddleware, roomController.getRoomDetailInfo); // get detail room info
 
+roomRouter.post('/:ruid/info/password', checkLoginMiddleware, roomController.setPassword); // set password
+roomRouter.delete('/:ruid/info/password', checkLoginMiddleware, roomController.clearPassword); // clear password
+
 roomRouter.get('/:ruid/social/notice', checkLoginMiddleware, roomController.getNotice); // get notice message
 roomRouter.post('/:ruid/social/notice', checkLoginMiddleware, roomController.setNotice); // set notice message
 roomRouter.delete('/:ruid/social/notice', checkLoginMiddleware, roomController.deleteNotice); // delete notice message

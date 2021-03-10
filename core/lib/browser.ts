@@ -409,7 +409,7 @@ export class HeadlessBrowser {
             } else {
                 return undefined;
             }
-        })
+        });
     }
 
     /**
@@ -420,6 +420,19 @@ export class HeadlessBrowser {
     public async setNotice(ruid: string, message: string): Promise<void> {
         await this._PageContainer.get(ruid)!.evaluate((message: string) => {
             window.gameRoom.notice = message;
-        },message)
+        }, message);
+    }
+
+    /**
+     * Set password of game room.
+     * @param ruid Game room's UID
+     * @param password Password (null string for disable password)
+     */
+    public async setPassword(ruid: string, password: string) {
+        await this._PageContainer.get(ruid)!.evaluate((password: string) => {
+            const convertedPassword: string|null = (password == "")? null: password;
+            window.gameRoom._room.setPassword(convertedPassword);
+            window.gameRoom.config._config.password = password;
+        }, password);
     }
 }

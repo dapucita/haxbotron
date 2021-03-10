@@ -200,3 +200,29 @@ export async function deleteNotice(ctx: Context) {
         ctx.status = 204;
     }
 }
+
+export async function setPassword(ctx: Context) {
+    const { ruid } = ctx.params;
+    const password: string = ctx.request.body.password;
+    ctx.status = 404;
+
+    if(!password) {
+        ctx.status = 400; // Unfulfilled error
+        return;
+    }
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setPassword(ruid, password);
+        ctx.status = 201;
+    }
+}
+
+export async function clearPassword(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setPassword(ruid, '');
+        ctx.status = 204;
+    }
+}
