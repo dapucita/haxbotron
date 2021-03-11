@@ -77,6 +77,8 @@ function OnlinePlayerRow(props: { ruid: string, row: Player }) {
 
     const [newBan, setNewBan] = useState({ reason: '', seconds: 0 } as newBanFields);
 
+    const [whisperMessage, setWhisperMessage] = useState('');
+
     const [flashMessage, setFlashMessage] = useState('');
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
 
@@ -108,7 +110,49 @@ function OnlinePlayerRow(props: { ruid: string, row: Player }) {
         }
     }
 
-    const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
+    const onChangeWhisperMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setWhisperMessage(e.target.value);
+    }
+
+    const handleWhisper = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const result = await client.post(`/api/v1/room/${ruid}/chat/${row.id}`, { message: whisperMessage });
+            if (result.status === 201) {
+                setFlashMessage('Successfully sent.');
+                setAlertStatus('success');
+                setWhisperMessage('');
+                setTimeout(() => {
+                    setFlashMessage('');
+                }, 3000);
+            }
+        } catch (error) {
+            setAlertStatus('error');
+            switch (error.response.status) {
+                case 400: {
+                    setFlashMessage('No message.');
+                    break;
+                }
+                case 401: {
+                    setFlashMessage('No permission.');
+                    break;
+                }
+                case 404: {
+                    setFlashMessage('No exists room or player.');
+                    break;
+                }
+                default: {
+                    setFlashMessage('Unexpected error is caused. Please try again.');
+                    break;
+                }
+            }
+            setTimeout(() => {
+                setFlashMessage('');
+            }, 3000);
+        }
+    }
+
+    const handleKick = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             const result = await client.delete(`/api/v1/room/${ruid}/player/${row.id}`, {
@@ -138,6 +182,7 @@ function OnlinePlayerRow(props: { ruid: string, row: Player }) {
 
     return (
         <React.Fragment>
+            {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
             <TableRow className={classes.root}>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -153,9 +198,17 @@ function OnlinePlayerRow(props: { ruid: string, row: Player }) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
-                            <Grid container spacing={0}>
-                                {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
-                                <form onSubmit={handleAdd} method="post">
+                            <Grid container spacing={4}>
+                                <form onSubmit={handleWhisper} method="post">
+                                    <Grid item xs={12} sm={12}>
+                                        <TextField
+                                            variant="outlined" margin="normal" required size="small" value={whisperMessage} onChange={onChangeWhisperMessage}
+                                            id="whisper" label="Whisper" name="whisper"
+                                        />
+                                        <Button size="small" type="submit" variant="outlined" color="primary">Send</Button>
+                                    </Grid>
+                                </form>
+                                <form onSubmit={handleKick} method="post">
                                     <Grid item xs={12} sm={12}>
                                         <TextField
                                             variant="outlined" margin="normal" required size="small" value={newBan.reason} onChange={onChangeNewBan}

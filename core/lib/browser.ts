@@ -399,6 +399,16 @@ export class HeadlessBrowser {
     }
 
     /**
+     * Send whisper text message
+     */
+    public async whisper(ruid: string, id: number, message: string): Promise<void> {
+        await this._PageContainer.get(ruid)?.evaluate((id: number, message: string) => {
+            window.gameRoom._room.sendAnnouncement(message, id, 0xFFFF00, "bold", 2);
+            window.gameRoom.logger.i('system', `[Whisper][to ${window.gameRoom.playerList.get(id)?.name}#${id}] ${message}`);
+        }, id, message);
+    }
+
+    /**
      * Get notice message.
      * @param ruid Game room's UID
      */

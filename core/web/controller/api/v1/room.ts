@@ -20,15 +20,15 @@ export async function createRoom(ctx: Context) {
 
     const newRoomConfig: BrowserHostRoomInitConfig = {
         _LaunchDate: new Date()
-        ,_RUID: ctx.request.body.ruid
-        ,_config: ctx.request.body._config
-        ,settings: ctx.request.body.settings
-        ,rules: ctx.request.body.rules
-        ,HElo: ctx.request.body.helo
-        ,commands: ctx.request.body.commands
+        , _RUID: ctx.request.body.ruid
+        , _config: ctx.request.body._config
+        , settings: ctx.request.body.settings
+        , rules: ctx.request.body.rules
+        , HElo: ctx.request.body.helo
+        , commands: ctx.request.body.commands
     }
 
-    if(newRoomConfig._config.password == "") {
+    if (newRoomConfig._config.password == "") {
         newRoomConfig._config.password = undefined;
     }
 
@@ -104,7 +104,7 @@ export async function getPlayersList(ctx: Context) {
     } else {
         ctx.status = 404;
     }
-    
+
 }
 
 /**
@@ -115,7 +115,7 @@ export async function getPlayerInfo(ctx: Context) {
     ctx.status = 404;
     if (browser.checkExistRoom(ruid)) {
         const player: Player | undefined = await browser.getPlayerInfo(ruid, parseInt(id));
-        if(player !== undefined) {
+        if (player !== undefined) {
             ctx.body = player;
             ctx.status = 200;
         }
@@ -128,7 +128,7 @@ export async function getPlayerInfo(ctx: Context) {
 export async function kickOnlinePlayer(ctx: Context) {
     const { ruid, id } = ctx.params;
     const { ban, seconds, message } = ctx.request.body;
-    if(ban === undefined || !seconds || !message) {
+    if (ban === undefined || !seconds || !message) {
         ctx.status = 400; // Unfulfilled error
         return;
     }
@@ -148,8 +148,26 @@ export function broadcast(ctx: Context) {
     const message: string | undefined = ctx.request.body.message;
     ctx.status = 404;
     if (browser.checkExistRoom(ruid)) {
-        if(message) {
+        if (message) {
             browser.broadcast(ruid, message);
+            ctx.status = 201;
+        } else {
+            ctx.status = 400;
+        }
+    }
+}
+
+/**
+ * send whisper message
+ */
+export async function whisper(ctx: Context) {
+    const { ruid, id } = ctx.params;
+    const message: string | undefined = ctx.request.body.message;
+    const playerID: number = parseInt(id)
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid) && await browser.checkOnlinePlayer(ruid, playerID)) {
+        if (message) {
+            browser.whisper(ruid, playerID, message);
             ctx.status = 201;
         } else {
             ctx.status = 400;
@@ -165,7 +183,7 @@ export async function setNotice(ctx: Context) {
     const message: string | undefined = ctx.request.body.message;
     ctx.status = 404;
     if (browser.checkExistRoom(ruid)) {
-        if(message) {
+        if (message) {
             browser.setNotice(ruid, message);
             ctx.status = 201;
         } else {
@@ -181,11 +199,11 @@ export async function getNotice(ctx: Context) {
     const { ruid } = ctx.params;
     ctx.status = 404;
     if (browser.checkExistRoom(ruid)) {
-        const message: string|undefined = await browser.getNotice(ruid);
-        if(typeof message === 'string') {
+        const message: string | undefined = await browser.getNotice(ruid);
+        if (typeof message === 'string') {
             ctx.body = { message: message };
             ctx.status = 200;
-        } 
+        }
     }
 }
 
@@ -206,7 +224,7 @@ export async function setPassword(ctx: Context) {
     const password: string = ctx.request.body.password;
     ctx.status = 404;
 
-    if(!password) {
+    if (!password) {
         ctx.status = 400; // Unfulfilled error
         return;
     }

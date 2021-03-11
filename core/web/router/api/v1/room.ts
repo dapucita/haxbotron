@@ -15,7 +15,8 @@ roomRouter.get('/:ruid/player', checkLoginMiddleware, roomController.getPlayersL
 roomRouter.get('/:ruid/player/:id', checkLoginMiddleware, roomController.getPlayerInfo); // get player info
 roomRouter.delete('/:ruid/player/:id', checkLoginMiddleware, roomController.kickOnlinePlayer); // kick/ban player info
 
-roomRouter.post('/:ruid/chat', checkLoginMiddleware, roomController.broadcast); // send message
+roomRouter.post('/:ruid/chat', checkLoginMiddleware, roomController.broadcast); // send message to game room
+roomRouter.post('/:ruid/chat/:id', checkLoginMiddleware, roomController.whisper); // send message to specific player
 
 roomRouter.get('/:ruid/info', checkLoginMiddleware, roomController.getRoomDetailInfo); // get detail room info
 
