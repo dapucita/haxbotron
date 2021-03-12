@@ -8,6 +8,7 @@ import { setDefaultStadiums, updateAdmins } from "../RoomTools";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
+import { isExistNickname } from "../TextFilter";
 
 export async function onPlayerJoinListener(player: PlayerObject): Promise<void> {
     const joinTimeStamp: number = getUnixTimestamp();
@@ -72,12 +73,20 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         }
     }
 
-    // if player's nickname is logger than limitation
+    // if player's nickname is longer than limitation
     if (player.name.length > window.gameRoom.config.settings.nicknameLengthLimit) {
         window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for too long nickname.`);
         window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.tooLongNickname, placeholderJoin), false); // kick
         return;
     }
+
+    // if player's nickname is already used (duplicated nickname)
+    if (window.gameRoom.config.settings.forbidDuplicatedNickname === true && isExistNickname(player.name) === true) {
+        window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for duplicated nickname.`);
+        window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.duplicatedNickname, placeholderJoin), false); // kick
+        return;
+    }
+
 
     // add the player who joined into playerList by creating class instance
     let existPlayerData = await getPlayerDataFromDB(player.auth);

@@ -51,7 +51,8 @@
 		"guaranteedPlayingTimeSeconds": 20,
 		"avatarOverridingByTier": true,
 		"nicknameLengthLimit": 12,
-		"chatLengthLimit": 80
+		"chatLengthLimit": 80,
+		"forbidDuplicatedNickname": true
 	},
 	"rules": {
 		"ruleName": "default-rule",
@@ -131,8 +132,8 @@
 		"_superSubkick": "kick",
 		"_superSubban": "ban",
 		"_disabledCommandList": [
-			"sampledisabledcommandname1",
-			"sampledisabledcommandname2"
+			"SampleDisabledCommandName1",
+			"SampleDisabledCommandName2"
 		],
 		"about": "about",
 		"afk": "afk",

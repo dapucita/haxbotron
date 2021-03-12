@@ -171,6 +171,7 @@ export const onJoin = {
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID}님이 중복 접속하였습니다.'
     ,doubleJoinningKick: '🚫 중복 접속으로 퇴장'
     ,tooLongNickname: '🚫 너무 긴 닉네임'
+    ,duplicatedNickname: '🚫 중복 닉네임'
     ,banList: {
         permanentBan: '{banListReason}'
         ,fixedTermBan: '{banListReason}'

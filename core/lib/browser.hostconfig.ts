@@ -110,6 +110,8 @@ export interface BrowserHostRoomSettings {
 
     nicknameLengthLimit : number
     chatLengthLimit : number
+
+    forbidDuplicatedNickname: boolean
 }
 
 export interface BrowserHostRoomHEloConfig {

@@ -171,6 +171,7 @@ export const onJoin = {
     ,doubleJoinningMsg: '🚫 {playerName}#{playerID} has already joined.'
     ,doubleJoinningKick: '🚫 You did double joinning.'
     ,tooLongNickname: '🚫 Too long nickname.'
+    ,duplicatedNickname: '🚫 Duplicated nickname.'
     ,banList: {
         permanentBan: '{banListReason}'
         ,fixedTermBan: '{banListReason}'
