@@ -37,7 +37,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 - [Game Playing](https://github.com/dapucita/haxbotron/wiki/Game-Playing)
 - [Core Server](https://github.com/dapucita/haxbotron/wiki/Core-Server)
 - [DB Server](https://github.com/dapucita/haxbotron/wiki/DB-Server)
-- ...and check also our [wiki](https://github.com/dapucita/haxbotron/wiki) and documents in `docs`.
+- ...and check also our [wiki](https://github.com/dapucita/haxbotron/wiki).
 
 ## How to Use
 You can easily start by following the document [Getting Started](https://github.com/dapucita/haxbotron/wiki/Getting-Started).

@@ -35,7 +35,7 @@ Language : [English](README.md), Korean(한국어)
 - [Game Playing](https://github.com/dapucita/haxbotron/wiki/Game-Playing)
 - [Core Server](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-Core-Server)
 - [DB Server](https://github.com/dapucita/haxbotron/wiki/DB-Server)
-- ... [위키](https://github.com/dapucita/haxbotron/wiki)와 `docs` 폴더에 있는 문서도 참고하세요
+- ... [위키](https://github.com/dapucita/haxbotron/wiki)도 참고하세요
 
 ## 사용하기
 [처음 시작하기](https://github.com/dapucita/haxbotron/wiki/%5BKorean%5D-%EC%B2%98%EC%9D%8C-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0) 문서에 따라 과정을 진행하면 쉽게 `Haxbotron`을 시작할 수 있습니다.
