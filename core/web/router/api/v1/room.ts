@@ -27,6 +27,10 @@ roomRouter.get('/:ruid/info', checkLoginMiddleware, roomController.getRoomDetail
 roomRouter.post('/:ruid/info/password', checkLoginMiddleware, roomController.setPassword); // set password
 roomRouter.delete('/:ruid/info/password', checkLoginMiddleware, roomController.clearPassword); // clear password
 
+roomRouter.get('/:ruid/info/freeze', checkLoginMiddleware, roomController.checkChatFreezed); // check whether chat is freezed
+roomRouter.post('/:ruid/info/freeze', checkLoginMiddleware, roomController.freezeChat); // freeze whole chat
+roomRouter.delete('/:ruid/info/freeze', checkLoginMiddleware, roomController.unfreezeChat); // unfreeze whole chat
+
 roomRouter.get('/:ruid/social/notice', checkLoginMiddleware, roomController.getNotice); // get notice message
 roomRouter.post('/:ruid/social/notice', checkLoginMiddleware, roomController.setNotice); // set notice message
 roomRouter.delete('/:ruid/social/notice', checkLoginMiddleware, roomController.deleteNotice); // delete notice message

@@ -393,3 +393,44 @@ export async function unmutePlayer(ctx: Context) {
         ctx.status = 201;
     }
 }
+
+/**
+ * Check whether the game room's chat is freezed
+ */
+export async function checkChatFreezed(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        ctx.body = {
+            freezed: await browser.getChatFreeze(ruid)
+        }
+        ctx.status = 200;
+    }
+}
+
+/**
+ * Freeze whole chat
+ */
+export async function freezeChat(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setChatFreeze(ruid, true);
+        ctx.status = 204;
+    }
+}
+
+/**
+ * Unfreeze whole chat
+ */
+export async function unfreezeChat(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setChatFreeze(ruid, false);
+        ctx.status = 204;
+    }
+}

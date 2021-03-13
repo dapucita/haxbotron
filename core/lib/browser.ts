@@ -533,7 +533,8 @@ export class HeadlessBrowser {
     public async setChatFreeze(ruid: string, freeze: boolean) {
         await this._PageContainer.get(ruid)!.evaluate((freeze: boolean) => {
             window.gameRoom.isMuteAll = freeze;
-            window.gameRoom.logger.i('system', `[Freeze] Whole chat is muted by Operator.`);
+            window.gameRoom.logger.i('system', `[Freeze] Whole chat is ${freeze? 'muted': 'unmuted'} by Operator.`);
+            window._emitSIOPlayerStatusChangeEvent(0);
         }, freeze);
     }
 
