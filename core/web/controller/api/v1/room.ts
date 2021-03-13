@@ -244,3 +244,77 @@ export async function clearPassword(ctx: Context) {
         ctx.status = 204;
     }
 }
+
+export async function getNicknameTextFilteringPool(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid)) {
+        const pool: string[] = await browser.getNicknameTextFilteringPool(ruid);
+
+        ctx.body = { pool: pool.join('|,|') };
+        ctx.status = 200;
+    }
+}
+
+export async function getChatTextFilteringPool(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+    if (browser.checkExistRoom(ruid)) {
+        const pool: string[] = await browser.getChatTextFilteringPool(ruid);
+
+        ctx.body = { pool: pool.join('|,|') };
+        ctx.status = 200;
+    }
+}
+
+export async function setNicknameTextFilter(ctx: Context) {
+    const { ruid } = ctx.params;
+    const pool: string = ctx.request.body.pool;
+    ctx.status = 404;
+
+    if (!pool) {
+        ctx.status = 400; // Unfulfilled error
+        return;
+    }
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setNicknameTextFilter(ruid, pool.split('|,|'));
+        ctx.status = 201;
+    }
+}
+
+export async function setChatTextFilter(ctx: Context) {
+    const { ruid } = ctx.params;
+    const pool: string = ctx.request.body.pool;
+    ctx.status = 404;
+
+    if (!pool) {
+        ctx.status = 400; // Unfulfilled error
+        return;
+    }
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setChatTextFilter(ruid, pool.split('|,|'));
+        ctx.status = 201;
+    }
+}
+
+export async function clearNicknameTextFilter(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.clearNicknameTextFilter(ruid);
+        ctx.status = 204;
+    }
+}
+
+export async function clearChatTextFilter(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.clearChatTextFilter(ruid);
+        ctx.status = 204;
+    }
+}

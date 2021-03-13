@@ -23,9 +23,13 @@ window.gameRoom = {
     _room: window.HBInit(loadedConfig._config)
     ,config: loadedConfig
     ,link: ''
-    ,stadiumData:{
+    ,stadiumData: {
         default: localStorage.getItem('_defaultMap')!
         ,training: localStorage.getItem('_readyMap')!
+    }
+    ,bannedWordsPool: {
+        nickname: []
+        ,chat: []
     }
     ,logger: Logger.getInstance() 
     ,isStatRecord: false

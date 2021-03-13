@@ -172,6 +172,8 @@ export const onJoin = {
     ,doubleJoinningKick: '🚫 You did double joinning.'
     ,tooLongNickname: '🚫 Too long nickname.'
     ,duplicatedNickname: '🚫 Duplicated nickname.'
+    ,bannedNickname: '🚫 Banned nickname.'
+    ,includeSeperator: '🚫 Chat message includes banned word. (|,|)'
     ,banList: {
         permanentBan: '{banListReason}'
         ,fixedTermBan: '{banListReason}'
@@ -186,6 +188,8 @@ export const onLeft = {
 export const onChat = {
     mutedChat: '🔇 You are muted. You can\'t send message to others, and only can command by chat.'
     ,tooLongChat: '🔇 Chat message is too long.'
+    ,bannedWords: '🚫 Chat message includes banned words.'
+    ,includeSeperator: '🚫 Chat message includes banned word. (|,|)'
 }
 
 export const onTeamChange = {

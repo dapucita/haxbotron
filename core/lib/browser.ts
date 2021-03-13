@@ -445,4 +445,66 @@ export class HeadlessBrowser {
             window.gameRoom.config._config.password = password;
         }, password);
     }
+
+    /**
+     * Get banned words pool for nickname filter
+     * @param ruid Game room's UID
+     */
+    public async getNicknameTextFilteringPool(ruid: string): Promise<string[]> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return window.gameRoom.bannedWordsPool.nickname;
+        });
+    }
+
+    /**
+     * Get banned words pool for chat message filter
+     * @param ruid Game room's UID
+     */
+    public async getChatTextFilteringPool(ruid: string): Promise<string[]> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return window.gameRoom.bannedWordsPool.chat;
+        });
+    }
+
+    /**
+     * Set banned words pool for nickname filter
+     * @param ruid Game room's UID
+     * @param pool banned words pool
+     */
+    public async setNicknameTextFilter(ruid: string, pool: string[]) {
+        await this._PageContainer.get(ruid)!.evaluate((pool: string[]) => {
+            window.gameRoom.bannedWordsPool.nickname = pool;
+        }, pool);
+    }
+
+    /**
+     * Set banned words pool for chat message filter
+     * @param ruid Game room's UID
+     * @param pool banned words pool
+     */
+    public async setChatTextFilter(ruid: string, pool: string[]) {
+        await this._PageContainer.get(ruid)!.evaluate((pool: string[]) => {
+            window.gameRoom.bannedWordsPool.chat = pool;
+        }, pool);
+    }
+
+    /**
+     * Clear banned words pool for nickname filter
+     * @param ruid Game room's UID
+     */
+    public async clearNicknameTextFilter(ruid: string) {
+        await this._PageContainer.get(ruid)!.evaluate(() => {
+            window.gameRoom.bannedWordsPool.nickname = [];
+        });
+    }
+
+    /**
+     * Clear banned words pool for chat message filter
+     * @param ruid Game room's UID
+     */
+    public async clearChatTextFilter(ruid: string) {
+        await this._PageContainer.get(ruid)!.evaluate(() => {
+            window.gameRoom.bannedWordsPool.chat = [];
+        });
+    }
 }

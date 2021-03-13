@@ -25,6 +25,11 @@ declare global {
                 training: string
             }
 
+            bannedWordsPool: {
+                nickname: string[]
+                chat: string[]
+            }
+
             logger: Logger; // logger for whole bot application
 
             isStatRecord: boolean // TRUE means that recording stats now

@@ -8,7 +8,7 @@ import { setDefaultStadiums, updateAdmins } from "../RoomTools";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
-import { isExistNickname } from "../TextFilter";
+import { isExistNickname, isIncludeBannedWords } from "../TextFilter";
 
 export async function onPlayerJoinListener(player: PlayerObject): Promise<void> {
     const joinTimeStamp: number = getUnixTimestamp();
@@ -62,6 +62,13 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
             // window.room.clearBan(player.id); //useless cuz banned player in haxball couldn't make join-event.
         }
     }
+
+    // if this player use seperator (|,|) in nickname, then kick
+    if (player.name.includes('|,|')) {
+        window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for including seperator word. (|,|)`);
+        window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.includeSeperator, placeholderJoin), false); // kick
+        return;
+    }
     
     // if this player has already joinned by other connection
     for (let eachPlayer of window.gameRoom.playerList.values()) {
@@ -87,6 +94,12 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
         return;
     }
 
+    // if player's nickname includes some banned words
+    if (window.gameRoom.config.settings.nicknameTextFilter === true && isIncludeBannedWords(window.gameRoom.bannedWordsPool.nickname, player.name) === true) {
+        window.gameRoom.logger.i('onPlayerJoin', `${player.name}#${player.id} was joined but kicked for including banned word(s).`);
+        window.gameRoom._room.kickPlayer(player.id, Tst.maketext(LangRes.onJoin.bannedNickname, placeholderJoin), false); // kick
+        return;
+    }
 
     // add the player who joined into playerList by creating class instance
     let existPlayerData = await getPlayerDataFromDB(player.auth);

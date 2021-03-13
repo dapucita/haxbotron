@@ -5,6 +5,7 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { isCommandString, parseCommand } from "../Parser";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { isIncludeBannedWords } from "../TextFilter";
 
 export function onPlayerChatListener(player: PlayerObject, message: string): boolean {
     // Event called when a player sends a chat message.
@@ -66,6 +67,16 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                 // Message Length Limitation Check
                 if(message.length > window.gameRoom.config.settings.chatLengthLimit) {
                     window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onChat.tooLongChat, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
+                    return false;
+                }
+                // if this player use seperator (|,|) in chat message
+                if(message.includes('|,|')) {
+                    window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onChat.includeSeperator, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
+                    return false;
+                }
+                // Check if includes banned words
+                if(window.gameRoom.config.settings.chatTextFilter === true && isIncludeBannedWords(window.gameRoom.bannedWordsPool.chat, message)) {
+                    window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onChat.bannedWords, placeholderChat), player.id, 0xFF0000, "bold", 2); // notify that fact
                     return false;
                 }
                 // otherwise, send to room

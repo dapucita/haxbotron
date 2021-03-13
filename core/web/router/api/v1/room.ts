@@ -26,3 +26,10 @@ roomRouter.delete('/:ruid/info/password', checkLoginMiddleware, roomController.c
 roomRouter.get('/:ruid/social/notice', checkLoginMiddleware, roomController.getNotice); // get notice message
 roomRouter.post('/:ruid/social/notice', checkLoginMiddleware, roomController.setNotice); // set notice message
 roomRouter.delete('/:ruid/social/notice', checkLoginMiddleware, roomController.deleteNotice); // delete notice message
+
+roomRouter.get('/:ruid/filter/nickname', checkLoginMiddleware, roomController.getNicknameTextFilteringPool); // get banned words pool for chat filter
+roomRouter.get('/:ruid/filter/chat', checkLoginMiddleware, roomController.getChatTextFilteringPool); // get banned words pool for nickname filter
+roomRouter.post('/:ruid/filter/nickname', checkLoginMiddleware, roomController.setNicknameTextFilter); // set banned words pool for chat filter
+roomRouter.post('/:ruid/filter/chat', checkLoginMiddleware, roomController.setChatTextFilter); // set banned words pool for nickname filter
+roomRouter.delete('/:ruid/filter/nickname', checkLoginMiddleware, roomController.clearNicknameTextFilter); // clear banned words pool for chat filter
+roomRouter.delete('/:ruid/filter/chat', checkLoginMiddleware, roomController.clearChatTextFilter); // clear banned words pool for nickname filter
