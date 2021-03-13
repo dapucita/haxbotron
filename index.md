@@ -1,9 +1,23 @@
 # Haxbotron 🤖
+![GitHub package.json version](https://img.shields.io/github/package-json/v/dapucita/haxbotron?style=flat-square)
+![Most Used Language](https://img.shields.io/github/languages/top/dapucita/haxbotron?style=flat-square)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/dapucita/haxbotron?style=flat-square)
+![Our Discrod Online Members](https://img.shields.io/discord/602402864647634954?style=flat-square)
+![MIT Licence](https://img.shields.io/github/license/dapucita/haxbotron?style=flat-square)
+
+![Node.js](https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node%2ejs&logoColor=fff)
+![Typescript](https://img.shields.io/badge/-Typescript-007acc?style=for-the-badge&logo=typescript&logoColor=fff)
+![React](https://img.shields.io/badge/-React-61dafb?style=for-the-badge&logo=react&logoColor=fff)
+![SQLite](https://img.shields.io/badge/-SQLite-003b57?style=for-the-badge&logo=sqlite&logoColor=fff)
+![Chrome](https://img.shields.io/badge/-Chrome-4285f4?style=for-the-badge&logo=google%20chrome&logoColor=fff)
+
 ![haxbotron-image](haxbotron-img.png)
 
-Haxbotron is a host bot application for Haxball game.
+`Haxbotron` is a headless host server for `Haxball` game.
 
-This project is maintained by `dapucita`.
+This Project is open source and free to use. Enjoy it :)
+
+[Github](https://github.com/dapucita/haxbotron) / [Discord](https://discord.gg/qfg45B2)
 
 ## Donate
 Please donate and support this project by [Patreon](https://www.patreon.com/dapucita) !
@@ -16,7 +30,7 @@ Please donate and support this project by [Patreon](https://www.patreon.com/dapu
 - [Game Playing](https://github.com/dapucita/haxbotron/wiki/Game-Playing)
 - [Core Server](https://github.com/dapucita/haxbotron/wiki/Core-Server)
 - [DB Server](https://github.com/dapucita/haxbotron/wiki/DB-Server)
-- ...and check also our [wiki](https://github.com/dapucita/haxbotron/wiki) and documents in `docs`.
+- ...and check also our [wiki](https://github.com/dapucita/haxbotron/wiki).
 
 ## Features
 - launch on Multi platforms: Windows, Linux, OS X and so on.
