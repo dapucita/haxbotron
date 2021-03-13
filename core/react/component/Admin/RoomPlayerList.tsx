@@ -180,6 +180,38 @@ function OnlinePlayerRow(props: { ruid: string, row: Player }) {
         }
     }
 
+    const handleOnlinePlayerMute = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+        try {
+            if(row.permissions.mute) {
+                const result = await client.delete(`/api/v1/room/${ruid}/player/${row.id}/permission/mute`);
+                if (result.status === 204) {
+                    setFlashMessage('Successfully unmuted.');
+                    setAlertStatus('success');
+                    setTimeout(() => {
+                        setFlashMessage('');
+                    }, 3000);
+                }
+            } else {
+                const result = await client.post(`/api/v1/room/${ruid}/player/${row.id}/permission/mute`, { muteExpire: -1 }); // Permanent
+                if (result.status === 204) {
+                    setFlashMessage('Successfully muted.');
+                    setAlertStatus('success');
+                    setTimeout(() => {
+                        setFlashMessage('');
+                    }, 3000);
+                }
+            }
+        } catch (error) {
+            //error.response.status
+            setFlashMessage('Failed to mute/unmute.');
+            setAlertStatus('error');
+            setTimeout(() => {
+                setFlashMessage('');
+            }, 3000);
+        }
+    }
+
     return (
         <React.Fragment>
             {flashMessage && <Alert severity={alertStatus}>{flashMessage}</Alert>}
@@ -193,6 +225,11 @@ function OnlinePlayerRow(props: { ruid: string, row: Player }) {
                 <TableCell>{row.auth}</TableCell>
                 <TableCell>{row.conn}</TableCell>
                 <TableCell>{convertTeamID(row.team)}</TableCell>
+                <TableCell>
+                    <Button size="small" type="button" variant="text" color="default" onClick={handleOnlinePlayerMute} >
+                        {row.permissions.mute ? 'Unmute' : 'Mute'}
+                    </Button>
+                </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -464,6 +501,11 @@ export default function RoomPlayerList({ styleClass }: styleClass) {
                 getOnlinePlayersID();
             }
         });
+        ws.on('statuschange', (content: any) => {
+            if (content.ruid === matchParams.ruid) {
+                getOnlinePlayersID();
+            }
+        });
         return () => {
             // before the component is destroyed
             // unbind all event handlers used in this component
@@ -486,6 +528,7 @@ export default function RoomPlayerList({ styleClass }: styleClass) {
                                         <TableCell>AUTH</TableCell>
                                         <TableCell>CONN</TableCell>
                                         <TableCell>Team</TableCell>
+                                        <TableCell>Chat</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

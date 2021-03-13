@@ -61,6 +61,8 @@ export function onPlayerChatListener(player: PlayerObject, message: string): boo
                         window.gameRoom.playerList.get(player.id)!.permissions['mute'] = true; // mute this player
                         window.gameRoom.playerList.get(player.id)!.permissions.muteExpire = nowTimeStamp + window.gameRoom.config.settings.muteDefaultMillisecs; //record mute expiration date by unix timestamp
                         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.antitrolling.chatFlood.muteReason, placeholderChat), null, 0xFF0000, "normal", 1); // notify that fact
+                        
+                        window._emitSIOPlayerStatusChangeEvent(player.id);
                         return false;
                     }
                 }

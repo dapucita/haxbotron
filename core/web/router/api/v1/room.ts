@@ -15,6 +15,10 @@ roomRouter.get('/:ruid/player', checkLoginMiddleware, roomController.getPlayersL
 roomRouter.get('/:ruid/player/:id', checkLoginMiddleware, roomController.getPlayerInfo); // get player info
 roomRouter.delete('/:ruid/player/:id', checkLoginMiddleware, roomController.kickOnlinePlayer); // kick/ban player info
 
+roomRouter.get('/:ruid/player/:id/permission/mute', checkLoginMiddleware, roomController.checkPlayerMuted); // check the player is muted
+roomRouter.post('/:ruid/player/:id/permission/mute', checkLoginMiddleware, roomController.mutePlayer); // mute player
+roomRouter.delete('/:ruid/player/:id/permission/mute', checkLoginMiddleware, roomController.unmutePlayer); // unmute player
+
 roomRouter.post('/:ruid/chat', checkLoginMiddleware, roomController.broadcast); // send message to game room
 roomRouter.post('/:ruid/chat/:id', checkLoginMiddleware, roomController.whisper); // send message to specific player
 

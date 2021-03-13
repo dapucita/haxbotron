@@ -160,6 +160,9 @@ export class HeadlessBrowser {
         page.addListener('_SIO.InOut', (event: any) => {
             this._SIOserver?.sockets.emit('joinleft', { ruid: ruid, playerID: event.playerID });
         });
+        page.addListener('_SIO.StatusChange', (event: any) => {
+            this._SIOserver?.sockets.emit('statuschange', { ruid: ruid, playerID: event.playerID });
+        });
         // ================================================================================
 
         // ================================================================================
@@ -169,6 +172,9 @@ export class HeadlessBrowser {
         })
         await page.exposeFunction('_emitSIOPlayerInOutEvent', (playerID: number) => {
             page.emit('_SIO.InOut', { playerID: playerID });
+        })
+        await page.exposeFunction('_emitSIOPlayerStatusChangeEvent', (playerID: number) => {
+            page.emit('_SIO.StatusChange', { playerID: playerID });
         })
         
         // inject functions for CRUD with DB Server ====================================
@@ -506,5 +512,58 @@ export class HeadlessBrowser {
         await this._PageContainer.get(ruid)!.evaluate(() => {
             window.gameRoom.bannedWordsPool.chat = [];
         });
+    }
+
+    /**
+     * Check if the game room's chat is muted
+     * @param ruid Game room's UID
+     * @returns 
+     */
+    public async getChatFreeze(ruid: string): Promise<boolean> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return window.gameRoom.isMuteAll;
+        });
+    }
+
+    /**
+     * Mute or not game room's whole chat
+     * @param ruid Game room's UID
+     * @param freeze mute or unmute whole chat
+     */
+    public async setChatFreeze(ruid: string, freeze: boolean) {
+        await this._PageContainer.get(ruid)!.evaluate((freeze: boolean) => {
+            window.gameRoom.isMuteAll = freeze;
+            window.gameRoom.logger.i('system', `[Freeze] Whole chat is muted by Operator.`);
+        }, freeze);
+    }
+
+    /**
+     * Mute the player
+     * @param ruid ruid Game room's UID
+     * @param id player's numeric ID
+     * @param muteExpireTime mute expiration time
+     */
+    public async setPlayerMute(ruid: string, id: number, muteExpireTime: number) {
+        await this._PageContainer.get(ruid)!.evaluate((id: number, muteExpireTime: number) => {
+            window.gameRoom.playerList.get(id)!.permissions.mute = true;
+            window.gameRoom.playerList.get(id)!.permissions.muteExpire = muteExpireTime;
+        
+            window.gameRoom.logger.i('system', `[Mute] ${window.gameRoom.playerList.get(id)!.name}#${id} is muted by Operator.`);
+            window._emitSIOPlayerStatusChangeEvent(id);
+        }, id, muteExpireTime);
+    }
+
+    /**
+     * Unmute the player
+     * @param ruid ruid Game room's UID
+     * @param id player's numeric ID
+     */
+    public async setPlayerUnmute(ruid: string, id: number) {
+        await this._PageContainer.get(ruid)!.evaluate((id: number) => {
+            window.gameRoom.playerList.get(id)!.permissions.mute = false;
+
+            window.gameRoom.logger.i('system', `[Mute] ${window.gameRoom.playerList.get(id)!.name}#${id} is unmuted by Operator.`);
+            window._emitSIOPlayerStatusChangeEvent(id);
+        }, id);
     }
 }

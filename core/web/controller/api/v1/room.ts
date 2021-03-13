@@ -219,6 +219,9 @@ export async function deleteNotice(ctx: Context) {
     }
 }
 
+/**
+ * set room's password
+ */
 export async function setPassword(ctx: Context) {
     const { ruid } = ctx.params;
     const password: string = ctx.request.body.password;
@@ -235,6 +238,9 @@ export async function setPassword(ctx: Context) {
     }
 }
 
+/**
+ * Clear room's password
+ */
 export async function clearPassword(ctx: Context) {
     const { ruid } = ctx.params;
     ctx.status = 404;
@@ -245,6 +251,9 @@ export async function clearPassword(ctx: Context) {
     }
 }
 
+/**
+ * Get text filtering pool for nickname
+ */
 export async function getNicknameTextFilteringPool(ctx: Context) {
     const { ruid } = ctx.params;
     ctx.status = 404;
@@ -256,6 +265,9 @@ export async function getNicknameTextFilteringPool(ctx: Context) {
     }
 }
 
+/**
+ * Get text filtering pool for chat messages
+ */
 export async function getChatTextFilteringPool(ctx: Context) {
     const { ruid } = ctx.params;
     ctx.status = 404;
@@ -267,6 +279,9 @@ export async function getChatTextFilteringPool(ctx: Context) {
     }
 }
 
+/**
+ * Set text filtering pool for nickname
+ */
 export async function setNicknameTextFilter(ctx: Context) {
     const { ruid } = ctx.params;
     const pool: string = ctx.request.body.pool;
@@ -283,6 +298,9 @@ export async function setNicknameTextFilter(ctx: Context) {
     }
 }
 
+/**
+ * Set text filtering pool for chat messages
+ */
 export async function setChatTextFilter(ctx: Context) {
     const { ruid } = ctx.params;
     const pool: string = ctx.request.body.pool;
@@ -299,6 +317,9 @@ export async function setChatTextFilter(ctx: Context) {
     }
 }
 
+/**
+ * Clear text filtering pool for nickname
+ */
 export async function clearNicknameTextFilter(ctx: Context) {
     const { ruid } = ctx.params;
     ctx.status = 404;
@@ -309,6 +330,9 @@ export async function clearNicknameTextFilter(ctx: Context) {
     }
 }
 
+/**
+ * Clear text filtering pool for chat messages
+ */
 export async function clearChatTextFilter(ctx: Context) {
     const { ruid } = ctx.params;
     ctx.status = 404;
@@ -316,5 +340,56 @@ export async function clearChatTextFilter(ctx: Context) {
     if (browser.checkExistRoom(ruid)) {
         browser.clearChatTextFilter(ruid);
         ctx.status = 204;
+    }
+}
+
+/**
+ * Check player's mute status
+ */
+export async function checkPlayerMuted(ctx: Context) {
+    const { ruid, id } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        const player: Player | undefined = await browser.getPlayerInfo(ruid, parseInt(id));
+        if (player !== undefined) {
+            ctx.body = {
+                mute: player.permissions.mute
+                ,muteExpire: player.permissions.muteExpire
+            };
+            ctx.status = 200;
+        }
+    }
+}
+
+/**
+ * Mute player
+ */
+export async function mutePlayer(ctx: Context) {
+    const { ruid, id } = ctx.params;
+    const { muteExpire } = ctx.request.body;
+    ctx.status = 404;
+
+    if (!muteExpire) {
+        ctx.status = 400; // Unfulfilled error
+        return;
+    }
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setPlayerMute(ruid, parseInt(id), muteExpire);
+        ctx.status = 201;
+    }
+}
+
+/**
+ * Unmute player
+ */
+export async function unmutePlayer(ctx: Context) {
+    const { ruid, id } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setPlayerUnmute(ruid, parseInt(id));
+        ctx.status = 201;
     }
 }
