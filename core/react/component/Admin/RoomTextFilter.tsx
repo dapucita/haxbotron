@@ -84,7 +84,7 @@ export default function RoomTextFilter({ styleClass }: styleClass) {
     }
 
     const setFilteringPool = async (endpoint: string, pool: string) => {
-        
+        localStorage.setItem(`_${endpoint}FilteringPool`, pool);
         try {
             const result = await client.post(`/api/v1/room/${matchParams.ruid}/filter/${endpoint}`, { pool: pool });
             if (result.status === 201) {
@@ -146,6 +146,18 @@ export default function RoomTextFilter({ styleClass }: styleClass) {
         }
     }
 
+    const handleNicknameFilteringPoolLoad = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+
+        setNicknameFilteringPool(localStorage.getItem('_nicknameFilteringPool') || '');
+    }
+
+    const handleChatFilteringPoolLoad = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+
+        setChatFilteringPool(localStorage.getItem('_chatFilteringPool') || '');
+    }
+
     useEffect(() => {
         getNicknameFilteringPool();
         getChatFilteringPool();
@@ -163,6 +175,7 @@ export default function RoomTextFilter({ styleClass }: styleClass) {
                             <form className={classes.form} onSubmit={handleNicknameFilteringPoolSet} method="post">
                                 <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Apply</Button>
                                 <Button size="small" type="button" variant="contained" color="secondary" className={classes.submit} onClick={handleNicknameFilteringPoolClear}>Clear</Button>
+                                <Button size="small" type="button" variant="outlined" color="default" className={classes.submit} onClick={handleNicknameFilteringPoolLoad}>Load</Button>
                                 <TextField
                                     fullWidth variant="outlined" margin="normal" multiline required
                                     value={nicknameFilteringPool} onChange={onChangeNicknameFilteringPool}
@@ -176,6 +189,7 @@ export default function RoomTextFilter({ styleClass }: styleClass) {
                             <form className={classes.form} onSubmit={handleChatFilteringPoolSet} method="post">
                                 <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Apply</Button>
                                 <Button size="small" type="button" variant="contained" color="secondary" className={classes.submit} onClick={handleChatFilteringPoolClear}>Clear</Button>
+                                <Button size="small" type="button" variant="outlined" color="default" className={classes.submit} onClick={handleChatFilteringPoolLoad}>Load</Button>
                                 <TextField
                                     fullWidth variant="outlined" margin="normal" multiline required
                                     value={chatFilteringPool} onChange={onChangeChatFilteringPool}
