@@ -2,7 +2,7 @@
 // THE TYPES OF PLACEHOLDER ARE LIMITED BY STRING SET.
 
 export const scheduler = {
-    advertise: '📢 Haxbotron🤖 - Open Source Bot Project\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
+    advertise: '📢 Haxbotron🤖 (https://dapucita.github.io/haxbotron/)\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
     ,afkCommandTooLongKick: '📢 2분 이상 잠수로 퇴장'
@@ -73,7 +73,7 @@ export const command = {
         ,tier: '📑 !tier : 티어와 레이팅 시스템에 대한 정보를 보여줍니다.'
         ,notice: '📑 !notice : 공지사항을 보여줍니다.'
     } 
-    ,about: '📄 방 이름 : {RoomName} ({_LaunchTime})\n💬 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. https://github.com/dapucita/haxbotron\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
+    ,about: '📄 방 이름 : {RoomName} ({_LaunchTime})\n💬 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. (https://dapucita.github.io/haxbotron/)\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
         ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 (레이팅 {targetStatsRatingAvatar}{targetStatsRating}) 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 연결끊김 {targetStatsDisconns}회 \n📊 (이어서) 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
