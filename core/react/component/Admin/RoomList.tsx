@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Copyright from '../common/Footer.Copyright';
-import { Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import Title from './common/Widget.Title';
 import client from '../../lib/client';
 import { WSocketContext } from '../../context/ws';

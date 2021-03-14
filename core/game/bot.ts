@@ -31,6 +31,10 @@ window.gameRoom = {
         nickname: []
         ,chat: []
     }
+    ,teamColours: {
+        red: { angle: 0, textColour: 0xffffff, teamColour1: 0xe66e55, teamColour2: 0xe66e55, teamColour3: 0xe66e55 }
+        ,blue: { angle: 0, textColour: 0xffffff, teamColour1: 0x5a89e5, teamColour2: 0x5a89e5, teamColour3: 0x5a89e5 }
+    }
     ,logger: Logger.getInstance() 
     ,isStatRecord: false
     ,isGamingNow: false

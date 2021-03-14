@@ -30,7 +30,24 @@ declare global {
                 chat: string[]
             }
 
-            logger: Logger; // logger for whole bot application
+            teamColours: {
+                red: {
+                    angle: number
+                    textColour: number
+                    teamColour1: number
+                    teamColour2: number
+                    teamColour3: number
+                }
+                blue: {
+                    angle: number
+                    textColour: number
+                    teamColour1: number
+                    teamColour2: number
+                    teamColour3: number
+                }
+            }
+
+            logger: Logger // logger for whole bot application
 
             isStatRecord: boolean // TRUE means that recording stats now
             isGamingNow: boolean // is playing now?

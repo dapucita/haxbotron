@@ -41,3 +41,6 @@ roomRouter.post('/:ruid/filter/nickname', checkLoginMiddleware, roomController.s
 roomRouter.post('/:ruid/filter/chat', checkLoginMiddleware, roomController.setChatTextFilter); // set banned words pool for nickname filter
 roomRouter.delete('/:ruid/filter/nickname', checkLoginMiddleware, roomController.clearNicknameTextFilter); // clear banned words pool for chat filter
 roomRouter.delete('/:ruid/filter/chat', checkLoginMiddleware, roomController.clearChatTextFilter); // clear banned words pool for nickname filter
+
+roomRouter.get('/:ruid/asset/team/colour', checkLoginMiddleware, roomController.getTeamColours); // get team colours
+roomRouter.post('/:ruid/asset/team/colour', checkLoginMiddleware, roomController.setTeamColours); // set team colours

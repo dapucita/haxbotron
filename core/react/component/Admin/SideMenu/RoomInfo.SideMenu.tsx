@@ -16,6 +16,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import DnsIcon from '@material-ui/icons/Dns';
 import SendIcon from '@material-ui/icons/Send';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import AttachmentIcon from '@material-ui/icons/Attachment';
 
 interface matchParams {
     ruid: string
@@ -89,6 +90,12 @@ export default function RoomInfoSideMenu() {
                             <VpnKeyIcon />
                         </ListItemIcon>
                         <ListItemText primary="Super Admin" />
+                    </ListItem>
+                    <ListItem button component={RouterLink} to={`/admin/room/${paramRUID}/assets`}>
+                        <ListItemIcon>
+                            <AttachmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Assets" />
                     </ListItem>
                     <ListItem button component={RouterLink} to={`/admin/room/${paramRUID}/power`}>
                         <ListItemIcon>

@@ -34,6 +34,7 @@ import RoomBanList from './RoomBanList';
 import RoomPlayerList from './RoomPlayerList';
 import RoomSocial from './RoomSocial';
 import RoomTextFilter from './RoomTextFilter';
+import RoomAssets from './RoomAssets';
 
 const drawerWidth = 240;
 
@@ -234,6 +235,7 @@ function Dashboard({ match }: RouteComponentProps) {
                     <Route path={`${match.path}/room/:ruid/player`}><RoomPlayerList styleClass={styleClass} /></Route>
                     <Route path={`${match.path}/room/:ruid/social`}><RoomSocial styleClass={styleClass} /></Route>
                     <Route path={`${match.path}/room/:ruid/filter`}><RoomTextFilter styleClass={styleClass} /></Route>
+                    <Route path={`${match.path}/room/:ruid/assets`}><RoomAssets styleClass={styleClass} /></Route>
                     <Route component={NotFound} />
                 </Switch>
             </main>

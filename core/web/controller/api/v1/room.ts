@@ -1,8 +1,10 @@
 import { Context } from "koa";
 import { Player } from "../../../../game/model/GameObject/Player";
+import { TeamID } from "../../../../game/model/GameObject/TeamID";
 import { HeadlessBrowser } from "../../../../lib/browser";
 import { BrowserHostRoomInitConfig } from '../../../../lib/browser.hostconfig';
 import { nestedHostRoomConfigSchema } from "../../../schema/hostroomconfig.validation";
+import { teamColourSchema } from "../../../schema/teamcolour.validation";
 
 const browser = HeadlessBrowser.getInstance();
 
@@ -432,5 +434,45 @@ export async function unfreezeChat(ctx: Context) {
     if (browser.checkExistRoom(ruid)) {
         browser.setChatFreeze(ruid, false);
         ctx.status = 204;
+    }
+}
+
+/**
+ * Get team colours
+ */
+export async function getTeamColours(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        ctx.body = {
+            red: await browser.getTeamColours(ruid, TeamID.Red)
+            ,blue: await browser.getTeamColours(ruid, TeamID.Blue)
+        }
+        ctx.status = 200;
+    }
+}
+
+/**
+ * Set team colours
+ */
+export async function setTeamColours(ctx: Context) {
+    const { ruid } = ctx.params;
+    const { team, angle, textColour, teamColour1, teamColour2, teamColour3 } = ctx.request.body;
+    ctx.status = 404;
+
+    const validationResult = teamColourSchema.validate(ctx.request.body);
+
+    if (validationResult.error) {
+        ctx.status = 400;
+        ctx.body = validationResult.error;
+        return;
+    }
+
+    if(team !== TeamID.Red && team !== TeamID.Blue) return; // 404 Error
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setTeamColours(ruid, team, angle, textColour, teamColour1, teamColour2, teamColour3);
+        ctx.status = 201;
     }
 }
