@@ -58,4 +58,8 @@ export interface GameRoomSettings {
 
     nicknameLengthLimit : number
     chatLengthLimit : number
+
+    forbidDuplicatedNickname: boolean
+    nicknameTextFilter: boolean
+    chatTextFilter: boolean
 }

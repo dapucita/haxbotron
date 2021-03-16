@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Context } from "koa";
 import { IRepository } from '../repository/repository.interface';
 import { BanList } from '../entity/banlist.entity';
 import { BanListModel } from '../model/BanListModel';
+import { banListModelSchema } from "../model/Validator";
 
 export class BanListController {
     private readonly _repository: IRepository<BanList>;
@@ -10,49 +11,107 @@ export class BanListController {
         this._repository = repository;
     }
 
-    public async getAllBannedPlayers(request: Request, response: Response, next: NextFunction): Promise<any> {
-        if(request.query?.start && request.query?.count) {
+    public async getAllBannedPlayers(ctx: Context) {
+        const { ruid } = ctx.params;
+        const { start, count } = ctx.request.query;
+
+        if (start && count) {
             return this._repository
-                .findAll(request.params.ruid, {start: parseInt(<string>request.query.start), count: parseInt(<string>request.query.count)})
-                .then((players) => response.status(200).send(players))
-                .catch((error) => response.status(404).send({ error: error.message }));
+                .findAll(ruid, { start: parseInt(<string>start), count: parseInt(<string>count) })
+                .then((players) => {
+                    ctx.status = 200;
+                    ctx.body = players;
+                })
+                .catch((error) => {
+                    ctx.status = 404;
+                    ctx.body = { error: error.message };
+                });
         } else {
             return this._repository
-                .findAll(request.params.ruid)
-                .then((players) => response.status(200).send(players))
-                .catch((error) => response.status(404).send({ error: error.message }));
+                .findAll(ruid)
+                .then((players) => {
+                    ctx.status = 200;
+                    ctx.body = players;
+                })
+                .catch((error) => {
+                    ctx.status = 404;
+                    ctx.body = { error: error.message };
+                });
         }
     }
 
-    public async getBannedPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
+    public async getBannedPlayer(ctx: Context) {
+        const { ruid, conn } = ctx.params;
+
         return this._repository
-            .findSingle(request.params.ruid, request.params.conn)
-            .then((player) => response.status(200).send(player))
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .findSingle(ruid, conn)
+            .then((player) => {
+                ctx.status = 200;
+                ctx.body = player;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async addBanPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
-        let banlistModel: BanListModel = request.body;
+    public async addBanPlayer(ctx: Context) {
+        const validationResult = banListModelSchema.validate(ctx.request.body);
+
+        if (validationResult.error) {
+            ctx.status = 400;
+            ctx.body = validationResult.error;
+            return;
+        }
+
+        const { ruid } = ctx.params;
+        const banlistModel: BanListModel = ctx.request.body;
 
         return this._repository
-            .addSingle(request.params.ruid, banlistModel)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(400).send({ error: error.message }));
+            .addSingle(ruid, banlistModel)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 400;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async updateBannedPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
-        let banlistModel: BanListModel = request.body;
+    public async updateBannedPlayer(ctx: Context) {
+        const validationResult = banListModelSchema.validate(ctx.request.body);
+
+        if (validationResult.error) {
+            ctx.status = 400;
+            ctx.body = validationResult.error;
+            return;
+        }
+
+        const { ruid, conn } = ctx.params;
+        const banlistModel: BanListModel = ctx.request.body;
 
         return this._repository
-            .updateSingle(request.params.ruid, request.params.conn, banlistModel)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .updateSingle(ruid, conn, banlistModel)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async deleteBannedPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
+    public async deleteBannedPlayer(ctx: Context) {
+        const { ruid, conn } = ctx.params;
+
         return this._repository
-            .deleteSingle(request.params.ruid, request.params.conn)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .deleteSingle(ruid, conn)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 }

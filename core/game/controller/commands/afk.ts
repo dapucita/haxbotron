@@ -64,4 +64,6 @@ export function cmdAfk(byPlayer: PlayerObject, message?: string): void {
             window.gameRoom.isStatRecord = false;
         }
     }
+
+    window._emitSIOPlayerStatusChangeEvent(byPlayer.id);
 }

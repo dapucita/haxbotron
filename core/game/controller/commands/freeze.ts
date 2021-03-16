@@ -10,6 +10,8 @@ export function cmdFreeze(byPlayer: PlayerObject): void {
             window.gameRoom.isMuteAll = true; //on
             window.gameRoom._room.sendAnnouncement(LangRes.command.freeze.onFreeze, null, 0x479947, "normal", 1);
         }
+
+        window._emitSIOPlayerStatusChangeEvent(byPlayer.id);
     } else {
         window.gameRoom._room.sendAnnouncement(LangRes.command.freeze._ErrorNoPermission, byPlayer.id, 0xFF7777, "normal", 2);
     }

@@ -13,6 +13,8 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                             //setPlayerData(playerList.get(playerID)); // update
                             window.gameRoom._room.sendAnnouncement(LangRes.command.super.loginSuccess, byPlayer.id, 0x479947, "normal", 2);
                             window.gameRoom.logger.i('super', `${byPlayer.name}#${byPlayer.id} did successfully login to super admin with the key. (KEY ${submessage})`);
+                            
+                            window._emitSIOPlayerStatusChangeEvent(byPlayer.id);
                         } else {
                             window.gameRoom.playerList.get(byPlayer.id)!.permissions.malActCount++; // add malicious behaviour count
                             window.gameRoom._room.sendAnnouncement(LangRes.command.super.loginFail, byPlayer.id, 0xFF7777, "normal", 2);
@@ -39,6 +41,8 @@ export async function cmdSuper(byPlayer: PlayerObject, message?: string, submess
                     //setPlayerData(playerList.get(playerID)); // update
                     window.gameRoom._room.sendAnnouncement(LangRes.command.super.logoutSuccess, byPlayer.id, 0x479947, "normal", 2);
                     window.gameRoom.logger.i('super', `${byPlayer.name}#${byPlayer.id} did logout from super admin.`);
+                
+                    window._emitSIOPlayerStatusChangeEvent(byPlayer.id);
                 } else {
                     window.gameRoom._room.sendAnnouncement(LangRes.command.super._ErrorNoPermission, byPlayer.id, 0xFF7777, "normal", 2);
                 }

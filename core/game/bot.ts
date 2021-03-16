@@ -23,9 +23,17 @@ window.gameRoom = {
     _room: window.HBInit(loadedConfig._config)
     ,config: loadedConfig
     ,link: ''
-    ,stadiumData:{
+    ,stadiumData: {
         default: localStorage.getItem('_defaultMap')!
         ,training: localStorage.getItem('_readyMap')!
+    }
+    ,bannedWordsPool: {
+        nickname: []
+        ,chat: []
+    }
+    ,teamColours: {
+        red: { angle: 0, textColour: 0xffffff, teamColour1: 0xe66e55, teamColour2: 0xe66e55, teamColour3: 0xe66e55 }
+        ,blue: { angle: 0, textColour: 0xffffff, teamColour1: 0x5a89e5, teamColour2: 0x5a89e5, teamColour3: 0x5a89e5 }
     }
     ,logger: Logger.getInstance() 
     ,isStatRecord: false
@@ -87,9 +95,10 @@ var scheduledTimer = setInterval(() => {
         placeholderScheduler.targetName = player.name;
 
         // check muted player and unmute when it's time to unmute
-        if (player.permissions.mute === true && nowTimeStamp > player.permissions.muteExpire) {
+        if (player.permissions.mute === true && player.permissions.muteExpire !== -1 && nowTimeStamp > player.permissions.muteExpire) {
             player.permissions.mute = false; //unmute
             window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.scheduler.autoUnmute, placeholderScheduler), null, 0x479947, "normal", 0); //notify it
+            window._emitSIOPlayerStatusChangeEvent(player.id);
         }
 
         // when afk too long kick option is enabled, then check sleeping with afk command and kick if afk too long

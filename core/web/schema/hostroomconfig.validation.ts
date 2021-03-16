@@ -93,6 +93,10 @@ const roomSettingSchema = Joi.object().keys({
 
     ,nicknameLengthLimit : Joi.number().required()
     ,chatLengthLimit : Joi.number().required()
+    
+    ,forbidDuplicatedNickname: Joi.boolean().required()
+    ,nicknameTextFilter: Joi.boolean().required()
+    ,chatTextFilter: Joi.boolean().required()
 });
 
 const commandsSchema = Joi.object().keys({

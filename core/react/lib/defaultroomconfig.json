@@ -51,7 +51,10 @@
 		"guaranteedPlayingTimeSeconds": 20,
 		"avatarOverridingByTier": true,
 		"nicknameLengthLimit": 12,
-		"chatLengthLimit": 80
+		"chatLengthLimit": 80,
+		"forbidDuplicatedNickname": true,
+		"nicknameTextFilter": true,
+		"chatTextFilter": true
 	},
 	"rules": {
 		"ruleName": "default-rule",
@@ -73,8 +76,8 @@
 		"factor": {
 			"placement_match_chances": 10,
 			"factor_k_placement": 50,
-			"factor_k_normal": 30,
-			"factor_k_replace": 10
+			"factor_k_normal": 40,
+			"factor_k_replace": 20
 		},
 		"tier": {
 			"class_tier_1": 500,
@@ -82,10 +85,10 @@
 			"class_tier_3": 800,
 			"class_tier_4": 900,
 			"class_tier_5": 1000,
-			"class_tier_6": 1125,
-			"class_tier_7": 1250,
-			"class_tier_8": 1375,
-			"class_tier_9": 1500
+			"class_tier_6": 1100,
+			"class_tier_7": 1200,
+			"class_tier_8": 1300,
+			"class_tier_9": 1400
 		},
 		"avatar": {
 			"avatar_unknown": "❔",
@@ -131,8 +134,8 @@
 		"_superSubkick": "kick",
 		"_superSubban": "ban",
 		"_disabledCommandList": [
-			"sampledisabledcommandname1",
-			"sampledisabledcommandname2"
+			"SampleDisabledCommandName1",
+			"SampleDisabledCommandName2"
 		],
 		"about": "about",
 		"afk": "afk",

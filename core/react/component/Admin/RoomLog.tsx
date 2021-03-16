@@ -8,7 +8,7 @@ import Copyright from '../common/Footer.Copyright';
 import Title from './common/Widget.Title';
 import { WSocketContext } from '../../context/ws';
 import { useParams } from 'react-router-dom';
-import { Button, TextField } from '@material-ui/core';
+import { Button, Divider, TextField } from '@material-ui/core';
 import client from '../../lib/client';
 import Alert, { AlertColor } from '../common/Alert';
 
@@ -125,7 +125,8 @@ export default function RoomLog({ styleClass }: styleClass) {
                                 <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Send</Button>
                             </form>
                         </React.Fragment>
-
+                        <Divider />
+                        
                         <React.Fragment>
                             <Title>Log Messages</Title>
                             <ul>

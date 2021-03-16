@@ -34,16 +34,6 @@ const coreServerSettings = {
 const buildOutputDirectory = path.resolve(__dirname, "../public");
 const whiteListIPs: string[] = process.env.SERVER_WHITELIST_IP?.split(",") || ['127.0.0.1'];
 
-/*
-if (process.env.TWEAKS_GEOLOCATIONOVERRIDE && JSON.parse(process.env.TWEAKS_GEOLOCATIONOVERRIDE.toLowerCase()) === true) {
-    hostRoomConfig.geo = {
-        code: process.env.TWEAKS_GEOLOCATIONOVERRIDE_CODE || "KR"
-        , lat: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LAT || "37.5665")
-        , lon: parseFloat(process.env.TWEAKS_GEOLOCATIONOVERRIDE_LON || "126.978")
-    }
-}
-*/
-
 nodeStorage.init();
 
 browser.attachSIOserver(sio);

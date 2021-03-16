@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Context } from "koa";
 import { IRepository } from '../repository/repository.interface';
 import { Player } from '../entity/player.entity';
 import { PlayerModel } from '../model/PlayerModel';
+import { playerModelSchema } from "../model/Validator";
 
 export class PlayerController {
     private readonly _repository: IRepository<Player>;
@@ -10,49 +11,107 @@ export class PlayerController {
         this._repository = repository;
     }
 
-    public async getAllPlayers(request: Request, response: Response, next: NextFunction): Promise<any> {
-        if(request.query?.start && request.query?.count) {
+    public async getAllPlayers(ctx: Context) {
+        const { ruid } = ctx.params;
+        const { start, count } = ctx.request.query;
+
+        if (start && count) {
             return this._repository
-                .findAll(request.params.ruid, {start: parseInt(<string>request.query.start), count: parseInt(<string>request.query.count)})
-                .then((players) => response.status(200).send(players))
-                .catch((error) => response.status(404).send({ error: error.message }));
+                .findAll(ruid, { start: parseInt(<string>start), count: parseInt(<string>count) })
+                .then((players) => {
+                    ctx.status = 200;
+                    ctx.body = players;
+                })
+                .catch((error) => {
+                    ctx.status = 404;
+                    ctx.body = { error: error.message };
+                });
         } else {
             return this._repository
-                .findAll(request.params.ruid)
-                .then((players) => response.status(200).send(players))
-                .catch((error) => response.status(404).send({ error: error.message }));
+                .findAll(ruid)
+                .then((players) => {
+                    ctx.status = 200;
+                    ctx.body = players;
+                })
+                .catch((error) => {
+                    ctx.status = 404;
+                    ctx.body = { error: error.message };
+                });
         }
     }
 
-    public async getPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
+    public async getPlayer(ctx: Context) {
+        const { ruid, auth } = ctx.params;
+
         return this._repository
-            .findSingle(request.params.ruid, request.params.auth)
-            .then((player) => response.status(200).send(player))
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .findSingle(ruid, auth)
+            .then((player) => {
+                ctx.status = 200;
+                ctx.body = player;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async addPlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
-        let playerModel: PlayerModel = request.body;
+    public async addPlayer(ctx: Context) {
+        const validationResult = playerModelSchema.validate(ctx.request.body);
+
+        if (validationResult.error) {
+            ctx.status = 400;
+            ctx.body = validationResult.error;
+            return;
+        }
+
+        const { ruid } = ctx.params;
+        const playerModel: PlayerModel = ctx.request.body;
 
         return this._repository
-            .addSingle(request.params.ruid, playerModel)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(400).send({ error: error.message }));
+            .addSingle(ruid, playerModel)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 400;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async updatePlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
-        let playerModel: PlayerModel = request.body;
+    public async updatePlayer(ctx: Context) {
+        const validationResult = playerModelSchema.validate(ctx.request.body);
+
+        if (validationResult.error) {
+            ctx.status = 400;
+            ctx.body = validationResult.error;
+            return;
+        }
+
+        const { ruid, auth } = ctx.params;
+        const playerModel: PlayerModel = ctx.request.body;
 
         return this._repository
-            .updateSingle(request.params.ruid, request.params.auth, playerModel)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .updateSingle(ruid, auth, playerModel)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 
-    public async deletePlayer(request: Request, response: Response, next: NextFunction): Promise<any> {
+    public async deletePlayer(ctx: Context) {
+        const { ruid, auth } = ctx.params;
+
         return this._repository
-            .deleteSingle(request.params.ruid, request.params.auth)
-            .then(() => response.status(204).send())
-            .catch((error) => response.status(404).send({ error: error.message }));
+            .deleteSingle(ruid, auth)
+            .then(() => {
+                ctx.status = 204;
+            })
+            .catch((error) => {
+                ctx.status = 404;
+                ctx.body = { error: error.message };
+            });
     }
 }

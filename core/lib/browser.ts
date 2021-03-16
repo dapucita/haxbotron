@@ -5,6 +5,7 @@ import { BrowserHostRoomInitConfig } from "./browser.hostconfig";
 import * as dbUtilityInject from "./db.injection";
 import { loadStadiumData } from "./stadiumLoader";
 import { Server as SIOserver, Socket as SIOsocket } from "socket.io";
+import { TeamID } from "../game/model/GameObject/TeamID";
 
 /**
 * Use this class for control Headless Browser.
@@ -56,7 +57,7 @@ export class HeadlessBrowser {
         }
 
         //winstonLogger.info("[core] The browser is opened.");
-        
+
         this._BrowserContainer = await puppeteer.launch({ headless: browserSettings.openHeadless, args: browserSettings.customArgs });
 
         this._BrowserContainer.on('disconnected', () => {
@@ -98,13 +99,13 @@ export class HeadlessBrowser {
             }
         }
 
-        if(!this._BrowserContainer) await this.initBrowser(); // open if browser isn't exist.
+        if (!this._BrowserContainer) await this.initBrowser(); // open if browser isn't exist.
 
         const page: puppeteer.Page = await this._BrowserContainer!.newPage(); // create new page(tab)
 
         const existPages = await this._BrowserContainer?.pages(); // get exist pages for check if first blank page is exist
-        if(existPages?.length == 2 && this._PageContainer.size == 0) existPages[0].close(); // close useless blank page
-        
+        if (existPages?.length == 2 && this._PageContainer.size == 0) existPages[0].close(); // close useless blank page
+
 
 
         page.on('console', (msg: any) => {
@@ -152,7 +153,7 @@ export class HeadlessBrowser {
             localStorage.setItem('_defaultMap', defaultMap);
             localStorage.setItem('_readyMap', readyMap);
         }, JSON.stringify(initConfig), loadStadiumData(initConfig.rules.defaultMapName), loadStadiumData(initConfig.rules.readyMapName));
-        
+
         // add event listeners ============================================================
         page.addListener('_SIO.Log', (event: any) => {
             this._SIOserver?.sockets.emit('log', { ruid: ruid, origin: event.origin, type: event.type, message: event.message });
@@ -160,17 +161,23 @@ export class HeadlessBrowser {
         page.addListener('_SIO.InOut', (event: any) => {
             this._SIOserver?.sockets.emit('joinleft', { ruid: ruid, playerID: event.playerID });
         });
+        page.addListener('_SIO.StatusChange', (event: any) => {
+            this._SIOserver?.sockets.emit('statuschange', { ruid: ruid, playerID: event.playerID });
+        });
         // ================================================================================
 
         // ================================================================================
         // inject some functions ==========================================================
         await page.exposeFunction('_emitSIOLogEvent', (origin: string, type: string, message: string) => {
-            page.emit('_SIO.Log', {origin: origin, type: type, message: message});
+            page.emit('_SIO.Log', { origin: origin, type: type, message: message });
         })
         await page.exposeFunction('_emitSIOPlayerInOutEvent', (playerID: number) => {
             page.emit('_SIO.InOut', { playerID: playerID });
         })
-        
+        await page.exposeFunction('_emitSIOPlayerStatusChangeEvent', (playerID: number) => {
+            page.emit('_SIO.StatusChange', { playerID: playerID });
+        })
+
         // inject functions for CRUD with DB Server ====================================
         await page.exposeFunction('_createSuperadminDB', dbUtilityInject.createSuperadminDB);
         await page.exposeFunction('_readSuperadminDB', dbUtilityInject.readSuperadminDB);
@@ -204,7 +211,7 @@ export class HeadlessBrowser {
     */
     private async fetchRoomURILink(ruid: string): Promise<string> {
         await this._PageContainer.get(ruid)!.waitForFunction(() => window.gameRoom.link !== undefined && window.gameRoom.link.length > 0); // wait for 30secs(default) until room link is created
-            
+
         let link: string = await this._PageContainer.get(ruid)!.evaluate(() => {
             return window.gameRoom.link;
         });
@@ -351,7 +358,7 @@ export class HeadlessBrowser {
     public async getPlayerInfo(ruid: string, id: number): Promise<Player | undefined> {
         return await this._PageContainer.get(ruid)!.evaluate((id: number) => {
             //let idNum: number = parseInt(id);
-            if(window.gameRoom.playerList.has(id)) {
+            if (window.gameRoom.playerList.has(id)) {
                 return window.gameRoom.playerList.get(id);
             } else {
                 return undefined;
@@ -368,14 +375,14 @@ export class HeadlessBrowser {
      */
     public async banPlayerFixedTerm(ruid: string, id: number, ban: boolean, message: string, seconds: number): Promise<void> {
         await this._PageContainer.get(ruid)?.evaluate(async (id: number, ban: boolean, message: string, seconds: number) => {
-            if(window.gameRoom.playerList.has(id)) {
+            if (window.gameRoom.playerList.has(id)) {
                 const banItem = {
                     conn: window.gameRoom.playerList.get(id)!.conn,
                     reason: message,
                     register: Math.floor(Date.now()),
-                    expire: Math.floor(Date.now()) + (seconds*1000)
+                    expire: Math.floor(Date.now()) + (seconds * 1000)
                 }
-                if(await window._readBanlistDB(window.gameRoom.config._RUID, window.gameRoom.playerList.get(id)!.conn) !== undefined) {
+                if (await window._readBanlistDB(window.gameRoom.config._RUID, window.gameRoom.playerList.get(id)!.conn) !== undefined) {
                     //if already exist then update it
                     await window._updateBanlistDB(window.gameRoom.config._RUID, banItem);
                 } else {
@@ -383,7 +390,7 @@ export class HeadlessBrowser {
                     await window._createBanlistDB(window.gameRoom.config._RUID, banItem);
                 }
                 window.gameRoom._room.kickPlayer(id, message, ban);
-                window.gameRoom.logger.i('system', `[Kick] #${id} has been ${ban?'banned':'kicked'} by operator. (duration: ${seconds}secs, reason: ${message})`);
+                window.gameRoom.logger.i('system', `[Kick] #${id} has been ${ban ? 'banned' : 'kicked'} by operator. (duration: ${seconds}secs, reason: ${message})`);
             }
         }, id, ban, message, seconds);
     }
@@ -399,17 +406,27 @@ export class HeadlessBrowser {
     }
 
     /**
+     * Send whisper text message
+     */
+    public async whisper(ruid: string, id: number, message: string): Promise<void> {
+        await this._PageContainer.get(ruid)?.evaluate((id: number, message: string) => {
+            window.gameRoom._room.sendAnnouncement(message, id, 0xFFFF00, "bold", 2);
+            window.gameRoom.logger.i('system', `[Whisper][to ${window.gameRoom.playerList.get(id)?.name}#${id}] ${message}`);
+        }, id, message);
+    }
+
+    /**
      * Get notice message.
      * @param ruid Game room's UID
      */
-    public async getNotice(ruid: string): Promise<string|undefined> {
+    public async getNotice(ruid: string): Promise<string | undefined> {
         return await this._PageContainer.get(ruid)!.evaluate(() => {
-            if(window.gameRoom.notice) {
+            if (window.gameRoom.notice) {
                 return window.gameRoom.notice;
             } else {
                 return undefined;
             }
-        })
+        });
     }
 
     /**
@@ -420,6 +437,183 @@ export class HeadlessBrowser {
     public async setNotice(ruid: string, message: string): Promise<void> {
         await this._PageContainer.get(ruid)!.evaluate((message: string) => {
             window.gameRoom.notice = message;
-        },message)
+        }, message);
+    }
+
+    /**
+     * Set password of game room.
+     * @param ruid Game room's UID
+     * @param password Password (null string for disable password)
+     */
+    public async setPassword(ruid: string, password: string) {
+        await this._PageContainer.get(ruid)!.evaluate((password: string) => {
+            const convertedPassword: string | null = (password == "") ? null : password;
+            window.gameRoom._room.setPassword(convertedPassword);
+            window.gameRoom.config._config.password = password;
+        }, password);
+    }
+
+    /**
+     * Get banned words pool for nickname filter
+     * @param ruid Game room's UID
+     */
+    public async getNicknameTextFilteringPool(ruid: string): Promise<string[]> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return window.gameRoom.bannedWordsPool.nickname;
+        });
+    }
+
+    /**
+     * Get banned words pool for chat message filter
+     * @param ruid Game room's UID
+     */
+    public async getChatTextFilteringPool(ruid: string): Promise<string[]> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return window.gameRoom.bannedWordsPool.chat;
+        });
+    }
+
+    /**
+     * Set banned words pool for nickname filter
+     * @param ruid Game room's UID
+     * @param pool banned words pool
+     */
+    public async setNicknameTextFilter(ruid: string, pool: string[]) {
+        await this._PageContainer.get(ruid)!.evaluate((pool: string[]) => {
+            window.gameRoom.bannedWordsPool.nickname = pool;
+        }, pool);
+    }
+
+    /**
+     * Set banned words pool for chat message filter
+     * @param ruid Game room's UID
+     * @param pool banned words pool
+     */
+    public async setChatTextFilter(ruid: string, pool: string[]) {
+        await this._PageContainer.get(ruid)!.evaluate((pool: string[]) => {
+            window.gameRoom.bannedWordsPool.chat = pool;
+        }, pool);
+    }
+
+    /**
+     * Clear banned words pool for nickname filter
+     * @param ruid Game room's UID
+     */
+    public async clearNicknameTextFilter(ruid: string) {
+        await this._PageContainer.get(ruid)!.evaluate(() => {
+            window.gameRoom.bannedWordsPool.nickname = [];
+        });
+    }
+
+    /**
+     * Clear banned words pool for chat message filter
+     * @param ruid Game room's UID
+     */
+    public async clearChatTextFilter(ruid: string) {
+        await this._PageContainer.get(ruid)!.evaluate(() => {
+            window.gameRoom.bannedWordsPool.chat = [];
+        });
+    }
+
+    /**
+     * Check if the game room's chat is muted
+     * @param ruid Game room's UID
+     * @returns 
+     */
+    public async getChatFreeze(ruid: string): Promise<boolean> {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return window.gameRoom.isMuteAll;
+        });
+    }
+
+    /**
+     * Mute or not game room's whole chat
+     * @param ruid Game room's UID
+     * @param freeze mute or unmute whole chat
+     */
+    public async setChatFreeze(ruid: string, freeze: boolean) {
+        await this._PageContainer.get(ruid)!.evaluate((freeze: boolean) => {
+            window.gameRoom.isMuteAll = freeze;
+            window.gameRoom.logger.i('system', `[Freeze] Whole chat is ${freeze ? 'muted' : 'unmuted'} by Operator.`);
+            window._emitSIOPlayerStatusChangeEvent(0);
+        }, freeze);
+    }
+
+    /**
+     * Mute the player
+     * @param ruid ruid Game room's UID
+     * @param id player's numeric ID
+     * @param muteExpireTime mute expiration time
+     */
+    public async setPlayerMute(ruid: string, id: number, muteExpireTime: number) {
+        await this._PageContainer.get(ruid)!.evaluate((id: number, muteExpireTime: number) => {
+            window.gameRoom.playerList.get(id)!.permissions.mute = true;
+            window.gameRoom.playerList.get(id)!.permissions.muteExpire = muteExpireTime;
+
+            window.gameRoom.logger.i('system', `[Mute] ${window.gameRoom.playerList.get(id)!.name}#${id} is muted by Operator.`);
+            window._emitSIOPlayerStatusChangeEvent(id);
+        }, id, muteExpireTime);
+    }
+
+    /**
+     * Unmute the player
+     * @param ruid ruid Game room's UID
+     * @param id player's numeric ID
+     */
+    public async setPlayerUnmute(ruid: string, id: number) {
+        await this._PageContainer.get(ruid)!.evaluate((id: number) => {
+            window.gameRoom.playerList.get(id)!.permissions.mute = false;
+
+            window.gameRoom.logger.i('system', `[Mute] ${window.gameRoom.playerList.get(id)!.name}#${id} is unmuted by Operator.`);
+            window._emitSIOPlayerStatusChangeEvent(id);
+        }, id);
+    }
+
+    /**
+     * Get team colours
+     * @param ruid ruid Game room's UID
+     * @param team team ID (red 1, blue 2)
+     * @returns `angle`, `textColour`, `teamColour1`, `teamColour2`, `teamColour3` as Number
+     */
+    public async getTeamColours(ruid: string, team: TeamID) {
+        return await this._PageContainer.get(ruid)!.evaluate((team: number) => {
+            return window.gameRoom.teamColours[team === 1 ? 'red' : 'blue'];
+        }, team);
+    }
+
+    /**
+     * Set team colours
+     * @param ruid ruid Game room's UID
+     * @param team team ID (red 1, blue 2)
+     * @param angle angle for the team color stripes (in degrees)
+     * @param textColour color of the player avatars
+     * @param teamColour1 first color for the team
+     * @param teamColour2 second color for the team
+     * @param teamColour3 third color for the team
+     */
+    public async setTeamColours(ruid: string, team: TeamID, angle: number, textColour: number, teamColour1: number, teamColour2: number, teamColour3: number) {
+        await this._PageContainer.get(ruid)!.evaluate((team: number, angle: number, textColour: number, teamColour1: number, teamColour2: number, teamColour3: number) => {
+            window.gameRoom._room.setTeamColors(team, angle, textColour, [teamColour1, teamColour2, teamColour3]);
+
+            if (team === 2) {
+                window.gameRoom.teamColours.blue = {
+                    angle: angle,
+                    textColour: textColour,
+                    teamColour1: teamColour1,
+                    teamColour2: teamColour2,
+                    teamColour3: teamColour3,
+                }
+            } else {
+                window.gameRoom.teamColours.red = {
+                    angle: angle,
+                    textColour: textColour,
+                    teamColour1: teamColour1,
+                    teamColour2: teamColour2,
+                    teamColour3: teamColour3,
+                }
+            }
+
+            window.gameRoom.logger.i('system', `[TeamColour] New team colour is set for Team ${team}.`);
+        }, team, angle, textColour, teamColour1, teamColour2, teamColour3);
     }
 }

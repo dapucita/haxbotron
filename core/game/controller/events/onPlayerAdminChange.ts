@@ -32,4 +32,6 @@ export function onPlayerAdminChangeListener(changedPlayer: PlayerObject, byPlaye
     if(window.gameRoom.config.rules.autoAdmin === true) { // if auto admin option is enabled
         updateAdmins(); // check when the last admin player disqulified by self
     }
+
+    window._emitSIOPlayerStatusChangeEvent(changedPlayer.id);
 }

@@ -25,7 +25,29 @@ declare global {
                 training: string
             }
 
-            logger: Logger; // logger for whole bot application
+            bannedWordsPool: {
+                nickname: string[]
+                chat: string[]
+            }
+
+            teamColours: {
+                red: {
+                    angle: number
+                    textColour: number
+                    teamColour1: number
+                    teamColour2: number
+                    teamColour3: number
+                }
+                blue: {
+                    angle: number
+                    textColour: number
+                    teamColour1: number
+                    teamColour2: number
+                    teamColour3: number
+                }
+            }
+
+            logger: Logger // logger for whole bot application
 
             isStatRecord: boolean // TRUE means that recording stats now
             isGamingNow: boolean // is playing now?
@@ -66,6 +88,7 @@ declare global {
         // Injected functions
         _emitSIOLogEvent(origin: string, type: string, message: string): void
         _emitSIOPlayerInOutEvent(playerID: number): void
+        _emitSIOPlayerStatusChangeEvent(playerID: number): void
         // CRUD with DB Server via REST API
         async _createPlayerDB(ruid: string, player: PlayerStorage): Promise<void>
         async _readPlayerDB(ruid: string, playerAuth: string): Promise<PlayerStorage | undefined>

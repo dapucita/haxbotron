@@ -32,6 +32,8 @@ export function cmdMute(byPlayer: PlayerObject, message?: string): void {
                         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.command.mute.successMute, placeholder), null, 0x479947, "normal", 1);
                     }
                 }
+
+                window._emitSIOPlayerStatusChangeEvent(byPlayer.id);
             } else {
                 window.gameRoom._room.sendAnnouncement(LangRes.command.mute._ErrorNoPlayer, byPlayer.id, 0xFF7777, "normal", 2);
             }

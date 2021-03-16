@@ -39,4 +39,6 @@ export function onPlayerTeamChangeListener(changedPlayer: PlayerObject, byPlayer
         window.gameRoom.playerList.get(changedPlayer.id)!.team = changedPlayer.team;
         window.gameRoom.logger.i('onPlayerTeamChange', `${changedPlayer.name}#${changedPlayer.id} is moved team to ${convertTeamID2Name(changedPlayer.team)}.`);
     }
+
+    window._emitSIOPlayerStatusChangeEvent(changedPlayer.id);
 }
