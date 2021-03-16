@@ -83,8 +83,26 @@ export default function RoomAssets({ styleClass }: styleClass) {
         setTeamSelectValue(e.target.value);
     };
 
+    const handleTeamColoursLoad = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+
+        if (localStorage.getItem(`_${teamSelectValue}TeamColours`) !== null) {
+            const colours = JSON.parse(localStorage.getItem(`_${teamSelectValue}TeamColours`)!);
+
+            setNewAngle(colours.angle.toString());
+            setNewTextColour(colours.textColour.toString(16));
+            setNewTeamColour1(colours.teamColour1.toString(16));
+            setNewTeamColour2(colours.teamColour2.toString(16));
+            setNewTeamColour3(colours.teamColour3.toString(16));
+        }
+    }
+
     const handleColoursApply = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        localStorage.setItem(`_${teamSelectValue}TeamColours`, JSON.stringify({
+            angle: newAngle, textColour: newTextColour, teamColour1: newTeamColour1, teamColour2: newTeamColour2, teamColour3: newTeamColour3
+        }));
 
         try {
             const result = await client.post(`/api/v1/room/${matchParams.ruid}/asset/team/colour`, {
@@ -289,7 +307,8 @@ export default function RoomAssets({ styleClass }: styleClass) {
                                                     <TableCell>{newTeamColour2}</TableCell>
                                                     <TableCell>{newTeamColour3}</TableCell>
                                                     <TableCell>
-                                                        <Button fullWidth size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Apply</Button>
+                                                        <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Apply</Button>
+                                                        <Button size="small" type="button" variant="outlined" color="default" className={classes.submit} onClick={handleTeamColoursLoad}>Load</Button>
                                                     </TableCell>
                                                 </TableRow>
                                             </TableBody>
