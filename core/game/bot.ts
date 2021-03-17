@@ -1,6 +1,6 @@
-// Haxbotron
-// This is main part of the bot
-
+// Haxbotron by dapucita
+// MAIN OF THE BOT
+// ====================================================================================================
 // import modules
 import * as LangRes from "./resource/strings";
 import * as eventListener from "./controller/events/eventListeners";
@@ -15,7 +15,7 @@ import { TeamID } from "./model/GameObject/TeamID";
 import { EmergencyTools } from "./model/ExposeLibs/EmergencyTools";
 import { refreshBanVoteCache } from "./model/OperateHelper/Vote";
 import { GameRoomConfig } from "./model/Configuration/GameRoomConfig";
-
+// ====================================================================================================
 // load initial configurations
 const loadedConfig: GameRoomConfig = JSON.parse(localStorage.getItem('_initConfig')!);
 
@@ -62,9 +62,9 @@ console.log(`Haxbotron loaded bot script. (UID ${window.gameRoom.config._RUID}, 
 window.document.title = `Haxbotron ${window.gameRoom.config._RUID}`;
 
 makeRoom();
-
-// set schedulers
-var advertisementTimer = setInterval(() => {
+// ====================================================================================================
+// set scheduling timers
+var scheduledTimer60 = setInterval(() => {
     window.gameRoom._room.sendAnnouncement(LangRes.scheduler.advertise, null, 0x777777, "normal", 0); // advertisement
 
     refreshBanVoteCache(); // update banvote status cache
@@ -79,9 +79,9 @@ var advertisementTimer = setInterval(() => {
         }
         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.scheduler.banVoteAutoNotify, placeholderVote), null, 0x00FF00, "normal", 0); //notify it
     }
-}, 60000) // 1min
+}, 60000); // 60secs
 
-var scheduledTimer = setInterval(() => {
+var scheduledTimer5 = setInterval(() => {
     const nowTimeStamp: number = getUnixTimestamp(); //get timestamp
 
     let placeholderScheduler = {
@@ -131,8 +131,8 @@ var scheduledTimer = setInterval(() => {
             }
         }
     });
-}, 5000); // by 5seconds
-
+}, 5000); // 5secs
+// ====================================================================================================
 // declare functions
 function makeRoom(): void {
     window.gameRoom.logger.i('initialisation', `The game room is opened at ${window.gameRoom.config._LaunchDate.toLocaleString()}.`);

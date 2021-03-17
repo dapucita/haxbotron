@@ -8,7 +8,7 @@ export function roomPlayersNumberCheck(): number {
 
 export function roomActivePlayersNumberCheck(): number {
     // return number of players actually atcivated(not afk)
-    return window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode !== true).length;
+    return window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false).length;
 }
 
 export function roomTeamPlayersNumberCheck(team: TeamID): number {
