@@ -36,6 +36,7 @@ export default function RoomSocial({ styleClass }: styleClass) {
 
     const handleNoticeSet = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        localStorage.setItem(`_NoticeMessage`, newNoticeMessage);
         try {
             const result = await client.post(`/api/v1/room/${matchParams.ruid}/social/notice`, { message: newNoticeMessage });
             if (result.status === 201) {
@@ -113,6 +114,14 @@ export default function RoomSocial({ styleClass }: styleClass) {
         }
     }
 
+    const handleNoticeLoad = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+
+        if (localStorage.getItem(`_NoticeMessage`) !== null) {
+            setNewNoticeMessage(localStorage.getItem(`_NoticeMessage`)!);
+        }
+    }
+
     useEffect(() => {
         getNoticeMessage();
     }, []);
@@ -140,6 +149,7 @@ export default function RoomSocial({ styleClass }: styleClass) {
                                     className={classes.halfInput}
                                 />
                                 <Button size="small" type="submit" variant="contained" color="primary" className={classes.submit}>Set</Button>
+                                <Button size="small" type="button" variant="outlined" color="default" className={classes.submit} onClick={handleNoticeLoad}>Load</Button>
                             </form>
                             <Table size="small">
                                 <TableHead>
