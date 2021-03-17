@@ -16,43 +16,39 @@ export function roomTeamPlayersNumberCheck(team: TeamID): number {
     return window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === team).length;
 }
 
-export function putTeamNewPlayerConditional(playerID: number, redPlayers?: number, bluePlayers?: number): TeamID {
-    // check quorum of each team, and if there are any lacks then supplement automatically just one time
-    let newTeamID: TeamID = 0;
-    let teamPlayersNumber = {
-        red: redPlayers || roomTeamPlayersNumberCheck(TeamID.Red),
-        blue: bluePlayers || roomTeamPlayersNumberCheck(TeamID.Blue)
-    }
-    if(teamPlayersNumber.red <= teamPlayersNumber.blue) {
-        // if red team members are equal or less than blues, move this player to red team.
-        if(teamPlayersNumber.red < window.gameRoom.config.rules.requisite.eachTeamPlayers) {
-            // move only when team limitation is not reached.
-            newTeamID = TeamID.Red;
-            window.gameRoom._room.setPlayerTeam(playerID, TeamID.Red);
-            window.gameRoom.logger.i('autoOperating', `The player #${playerID} is moved to Red Team by system.`);
-        }
-    } else {
-        // or move to blue team.
-        if(teamPlayersNumber.blue < window.gameRoom.config.rules.requisite.eachTeamPlayers) {
-            // move only when team limitation is not reached.
-            newTeamID = TeamID.Blue;
-            window.gameRoom._room.setPlayerTeam(playerID, TeamID.Blue);
-            window.gameRoom.logger.i('autoOperating', `The player #${playerID} is moved to Blue Team by system.`);
-        }
-    }
-    return newTeamID;
+export function fetchActiveSpecPlayers(): PlayerObject[] {
+    return window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false && player.team === TeamID.Spec);
 }
 
-export function putTeamNewPlayerFullify(): void {
-    // check quorum of each team, and if there are any lacks then supplement automatically
-    let allActivePlayers: PlayerObject[] =  window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false);
-    let specActivePlayers: PlayerObject[] = allActivePlayers.filter((player: PlayerObject) => player.team === TeamID.Spec);
+export function recuritByOne() {
+    const activePlayersList: PlayerObject[] = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false);
+    const activeSpecPlayersList: PlayerObject[] = activePlayersList.filter((player: PlayerObject) => player.team === TeamID.Spec);
 
-    let redPlayersLack: number = window.gameRoom.config.rules.requisite.eachTeamPlayers - allActivePlayers.filter((player: PlayerObject) => player.team === TeamID.Red).length;
-    let bluePlayersLack: number = window.gameRoom.config.rules.requisite.eachTeamPlayers - allActivePlayers.filter((player: PlayerObject) => player.team === TeamID.Blue).length;
+    const redInsufficiency: number = window.gameRoom.config.rules.requisite.eachTeamPlayers - activePlayersList.filter((player: PlayerObject) => player.team === TeamID.Red).length;
+    const blueInsufficiency: number = window.gameRoom.config.rules.requisite.eachTeamPlayers - activePlayersList.filter((player: PlayerObject) => player.team === TeamID.Blue).length;
 
-    for(let i: number = 0; i < specActivePlayers.length; i++) {
-        if(i < redPlayersLack) window.gameRoom._room.setPlayerTeam(specActivePlayers[i].id, TeamID.Red);
-        if(i >= redPlayersLack && i < redPlayersLack + bluePlayersLack) window.gameRoom._room.setPlayerTeam(specActivePlayers[i].id, TeamID.Blue);
+    if(redInsufficiency >= blueInsufficiency && redInsufficiency > 0) {
+        window.gameRoom._room.setPlayerTeam(activeSpecPlayersList[0].id, TeamID.Red);
+    }
+    if(redInsufficiency < blueInsufficiency && blueInsufficiency > 0) {
+        window.gameRoom._room.setPlayerTeam(activeSpecPlayersList[0].id, TeamID.Blue);
+    }
+}
+
+export function recuritBothTeamFully() {
+    const activePlayersList: PlayerObject[] = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false);
+    let activeSpecPlayersList: PlayerObject[] = activePlayersList.filter((player: PlayerObject) => player.team === TeamID.Spec);
+
+    const redInsufficiency: number = window.gameRoom.config.rules.requisite.eachTeamPlayers - activePlayersList.filter((player: PlayerObject) => player.team === TeamID.Red).length;
+    const blueInsufficiency: number = window.gameRoom.config.rules.requisite.eachTeamPlayers - activePlayersList.filter((player: PlayerObject) => player.team === TeamID.Blue).length;
+
+    for(let i=0; i < redInsufficiency && i < activeSpecPlayersList.length; i++) {
+        window.gameRoom._room.setPlayerTeam(activeSpecPlayersList[i].id, TeamID.Red);
+    }
+
+    activeSpecPlayersList = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false && player.team === TeamID.Spec);
+
+    for(let i=0; i < blueInsufficiency && i < activeSpecPlayersList.length; i++) {
+        window.gameRoom._room.setPlayerTeam(activeSpecPlayersList[i].id, TeamID.Blue);
     }
 }

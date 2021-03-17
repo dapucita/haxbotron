@@ -4,7 +4,7 @@ import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { updateAdmins } from "../RoomTools";
 import { getUnixTimestamp } from "../Statistics";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
-import { putTeamNewPlayerFullify, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { recuritByOne, roomActivePlayersNumberCheck, roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { convertToPlayerStorage, getBanlistDataFromDB, setBanlistDataToDB, setPlayerDataToDB } from "../Storage";
 
 export async function onPlayerLeaveListener(player: PlayerObject): Promise<void> {
@@ -48,7 +48,8 @@ export async function onPlayerLeaveListener(player: PlayerObject): Promise<void>
         // when auto emcee mode is enabled
         if(window.gameRoom.config.rules.autoOperating === true && window.gameRoom.isGamingNow === true) {
             if(player.team !== TeamID.Spec) {
-                putTeamNewPlayerFullify(); // put new players into the team this player has left
+                // put new players into the team this player has left
+                recuritByOne();
             }
         }
     } else {

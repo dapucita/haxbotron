@@ -1,5 +1,6 @@
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
+import { recuritBothTeamFully } from "../../model/OperateHelper/Quorum";
 import { setDefaultRoomLimitation, setDefaultStadiums } from "../RoomTools";
 
 
@@ -43,6 +44,7 @@ export function onGameStopListener(byPlayer: PlayerObject): void {
 
     // when auto emcee mode is enabled
     if(window.gameRoom.config.rules.autoOperating === true) {
+        recuritBothTeamFully();
         window.gameRoom._room.startGame(); // start next new game
     }
 }
