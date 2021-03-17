@@ -164,9 +164,6 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
                 window.gameRoom.logger.i('onTeamVictory', `Whole players are shuffled. (${shuffledIDList.toString()})`);
             }
         } else { // or still under the limit, then change spec and loser team
-            // this count is for determine how many players will be alive in loser team
-            let outPlayersCount: number = window.gameRoom.config.rules.requisite.eachTeamPlayers; // init as full count.
-
             teamPlayers
                 .filter((player: PlayerObject) => player.team === loserTeamID)
                 .forEach((eachPlayer: PlayerObject) => {
@@ -174,8 +171,6 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
                         // if guarantee playing time option is enabled
                         if ((scores.time - window.gameRoom.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime) > window.gameRoom.config.settings.guaranteedPlayingTimeSeconds) {
                             window.gameRoom._room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move losers played enough time to Spec team
-                        } else {
-                            outPlayersCount--; // decrease count as this player will be alive in loser team
                         }
                     } else {
                         // if guarantee playing time option is disabled
@@ -184,9 +179,11 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
                 });
 
             // get new spec player list
-            let specActivePlayers: PlayerObject[] = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false);
+            let newAllActivePlayers: PlayerObject[] = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false);
+            let specActivePlayers: PlayerObject[] = newAllActivePlayers.filter((player: PlayerObject) => player.team === TeamID.Spec);
+            let loseTeamPlayersLength: number = newAllActivePlayers.filter((player: PlayerObject) => player.team === loserTeamID).length;
 
-            for (let i: number = 0; i < outPlayersCount && i < specActivePlayers.length; i++) {
+            for (let i: number = 0; i < window.gameRoom.config.rules.requisite.eachTeamPlayers - loseTeamPlayersLength && i < specActivePlayers.length; i++) {
                 window.gameRoom._room.setPlayerTeam(specActivePlayers[i].id, loserTeamID); // move Specs to challenger team
             }
         }
