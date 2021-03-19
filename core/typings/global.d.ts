@@ -20,6 +20,15 @@ declare global {
             config: GameRoomConfig // bot settings collection
             link: string // for sharing URI link of the room
 
+            social: {
+                discordWebhook: {
+                    feed: boolean
+                    id: string
+                    token: string
+                    replayUpload: boolean
+                }
+            }
+
             stadiumData: {
                 default: string
                 training: string
@@ -89,6 +98,7 @@ declare global {
         _emitSIOLogEvent(origin: string, type: string, message: string): void
         _emitSIOPlayerInOutEvent(playerID: number): void
         _emitSIOPlayerStatusChangeEvent(playerID: number): void
+        _feedSocialDiscordWebhook(id: string, token: string, type: string, content: any): void
         // CRUD with DB Server via REST API
         async _createPlayerDB(ruid: string, player: PlayerStorage): Promise<void>
         async _readPlayerDB(ruid: string, playerAuth: string): Promise<PlayerStorage | undefined>

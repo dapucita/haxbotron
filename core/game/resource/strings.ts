@@ -204,7 +204,9 @@ export const onStart = {
 }
 
 export const onStop = {
-
+    feedSocialDiscordWebhook: {
+        replayMessage: '💽 {roomName}의 리플레이 파일 ({replayDate})'
+    }
 }
 
 export const onVictory = {

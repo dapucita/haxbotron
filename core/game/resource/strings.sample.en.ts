@@ -204,7 +204,9 @@ export const onStart = {
 }
 
 export const onStop = {
-
+    feedSocialDiscordWebhook: {
+        replayMessage: '💽 Replay file from {roomName} ({replayDate})'
+    }
 }
 
 export const onVictory = {

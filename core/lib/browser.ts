@@ -6,6 +6,12 @@ import * as dbUtilityInject from "./db.injection";
 import { loadStadiumData } from "./stadiumLoader";
 import { Server as SIOserver, Socket as SIOsocket } from "socket.io";
 import { TeamID } from "../game/model/GameObject/TeamID";
+import Discord from 'discord.js';
+import { DiscordWebhookConfig } from "./browser.interface";
+
+function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
+    return array.buffer.slice(array.byteOffset, array.byteLength + array.byteOffset)
+}
 
 /**
 * Use this class for control Headless Browser.
@@ -83,8 +89,11 @@ export class HeadlessBrowser {
     * Close given page.
     */
     private async closePage(ruid: string) {
-        await this._PageContainer.get(ruid)?.close();
-        this._PageContainer.delete(ruid);
+        await this._PageContainer.get(ruid)?.evaluate(() => {
+            window.gameRoom._room.stopRecording(); // suspend recording for prevent memory leak
+        });
+        await this._PageContainer.get(ruid)?.close(); // close page
+        this._PageContainer.delete(ruid); // delete from container
     }
 
     /**
@@ -164,19 +173,39 @@ export class HeadlessBrowser {
         page.addListener('_SIO.StatusChange', (event: any) => {
             this._SIOserver?.sockets.emit('statuschange', { ruid: ruid, playerID: event.playerID });
         });
+        page.addListener('_SOCIAL.DiscordWebhook', (event: any) => {
+            const webhookClient = new Discord.WebhookClient(event.id, event.token);
+
+            switch (event.type as string) {
+                case "replay": {
+                    const bufferData = Buffer.from(JSON.parse(event.content.data));
+                    const date = Date.now().toLocaleString();
+                    const attachment = new Discord.MessageAttachment(
+                        bufferData
+                        , `${date}.hbr2`);
+                    webhookClient.send(event.content.message, {
+                        files: [attachment],
+                    });
+                    break;
+                }
+            }
+        });
         // ================================================================================
 
         // ================================================================================
         // inject some functions ==========================================================
         await page.exposeFunction('_emitSIOLogEvent', (origin: string, type: string, message: string) => {
             page.emit('_SIO.Log', { origin: origin, type: type, message: message });
-        })
+        });
         await page.exposeFunction('_emitSIOPlayerInOutEvent', (playerID: number) => {
             page.emit('_SIO.InOut', { playerID: playerID });
-        })
+        });
         await page.exposeFunction('_emitSIOPlayerStatusChangeEvent', (playerID: number) => {
             page.emit('_SIO.StatusChange', { playerID: playerID });
-        })
+        });
+        await page.exposeFunction('_feedSocialDiscordWebhook', (id: string, token: string, type: string, content: any) => {
+            page.emit('_SOCIAL.DiscordWebhook', { id: id, token: token, type: type, content: content });
+        });
 
         // inject functions for CRUD with DB Server ====================================
         await page.exposeFunction('_createSuperadminDB', dbUtilityInject.createSuperadminDB);
@@ -616,4 +645,28 @@ export class HeadlessBrowser {
             window.gameRoom.logger.i('system', `[TeamColour] New team colour is set for Team ${team}.`);
         }, team, angle, textColour, teamColour1, teamColour2, teamColour3);
     }
+
+    /**
+     * Get discord webhook configuration
+     * @param ruid ruid Game room's UID
+     * @returns discord webhook configuration
+     */
+    public async getDiscordWebhookConfig(ruid: string) {
+        return await this._PageContainer.get(ruid)!.evaluate(() => {
+            return window.gameRoom.social.discordWebhook as DiscordWebhookConfig;
+        });
+    }
+
+    /**
+     * Set discord webhook configuration
+     * @param ruid ruid Game room's UID
+     * @param config discord webhook configuration
+     */
+    public async setDiscordWebhookConfig(ruid: string, config: DiscordWebhookConfig) {
+        await this._PageContainer.get(ruid)!.evaluate((config: DiscordWebhookConfig) => {
+            window.gameRoom.social.discordWebhook = config;
+        }, config);
+    }
 }
+
+

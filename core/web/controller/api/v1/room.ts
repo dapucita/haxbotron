@@ -3,6 +3,7 @@ import { Player } from "../../../../game/model/GameObject/Player";
 import { TeamID } from "../../../../game/model/GameObject/TeamID";
 import { HeadlessBrowser } from "../../../../lib/browser";
 import { BrowserHostRoomInitConfig } from '../../../../lib/browser.hostconfig';
+import { discordWebhookConfigSchema } from "../../../schema/discordwebhook.validation";
 import { nestedHostRoomConfigSchema } from "../../../schema/hostroomconfig.validation";
 import { teamColourSchema } from "../../../schema/teamcolour.validation";
 
@@ -473,6 +474,47 @@ export async function setTeamColours(ctx: Context) {
 
     if (browser.checkExistRoom(ruid)) {
         browser.setTeamColours(ruid, team, angle, textColour, teamColour1, teamColour2, teamColour3);
+        ctx.status = 201;
+    }
+}
+
+/**
+ * Get discord webhook configuration
+ */
+export async function getDiscordWebhookConfig(ctx: Context) {
+    const { ruid } = ctx.params;
+    ctx.status = 404;
+
+    if (browser.checkExistRoom(ruid)) {
+        const config = await browser.getDiscordWebhookConfig(ruid);
+        ctx.body = {
+            feed: config.feed
+            ,id: config.id
+            ,token: config.token
+            ,replayUpload: config.replayUpload
+        }
+        ctx.status = 200;
+    }
+}
+
+/**
+ * Set discord webhook configuration
+ */
+export async function setDiscordWebhookConfig(ctx: Context) {
+    const { ruid } = ctx.params;
+    const { feed, id, token, replayUpload } = ctx.request.body;
+    ctx.status = 404;
+
+    const validationResult = discordWebhookConfigSchema.validate(ctx.request.body);
+
+    if (validationResult.error) {
+        ctx.status = 400;
+        ctx.body = validationResult.error;
+        return;
+    }
+
+    if (browser.checkExistRoom(ruid)) {
+        browser.setDiscordWebhookConfig(ruid, { feed, id, token, replayUpload });
         ctx.status = 201;
     }
 }

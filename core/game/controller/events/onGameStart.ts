@@ -101,5 +101,9 @@ export function onGameStartListener(byPlayer: PlayerObject | null): void {
     } else {
         window.gameRoom._room.sendAnnouncement(Tst.maketext(LangRes.onStart.stopRecord, placeholderStart), null, 0x00FF00, "normal", 0);
     }
+
+    // replay record start
+    window.gameRoom._room.startRecording();
+
     window.gameRoom.logger.i('onGameStart', msg);
 }

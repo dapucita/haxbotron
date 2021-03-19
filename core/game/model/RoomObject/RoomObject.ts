@@ -125,7 +125,7 @@ export interface Room {
     Stops the recording previously started with startRecording and returns the replay file contents as a Uint8Array.
     Returns null if recording was not started or had already been stopped.
     */
-    stopRecording(): Uint8Array;
+    stopRecording(): Uint8Array | null;
 
     /*
     Changes the password of the room, if pass is null the password will be cleared.

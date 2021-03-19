@@ -35,6 +35,9 @@ roomRouter.get('/:ruid/social/notice', checkLoginMiddleware, roomController.getN
 roomRouter.post('/:ruid/social/notice', checkLoginMiddleware, roomController.setNotice); // set notice message
 roomRouter.delete('/:ruid/social/notice', checkLoginMiddleware, roomController.deleteNotice); // delete notice message
 
+roomRouter.get('/:ruid/social/discord/webhook', checkLoginMiddleware, roomController.getDiscordWebhookConfig); // get discord webhook configuration
+roomRouter.post('/:ruid/social/discord/webhook', checkLoginMiddleware, roomController.setDiscordWebhookConfig); // set discord webhook configuration
+
 roomRouter.get('/:ruid/filter/nickname', checkLoginMiddleware, roomController.getNicknameTextFilteringPool); // get banned words pool for chat filter
 roomRouter.get('/:ruid/filter/chat', checkLoginMiddleware, roomController.getChatTextFilteringPool); // get banned words pool for nickname filter
 roomRouter.post('/:ruid/filter/nickname', checkLoginMiddleware, roomController.setNicknameTextFilter); // set banned words pool for chat filter

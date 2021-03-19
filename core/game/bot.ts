@@ -23,6 +23,14 @@ window.gameRoom = {
     _room: window.HBInit(loadedConfig._config)
     ,config: loadedConfig
     ,link: ''
+    ,social: {
+        discordWebhook: {
+            feed: false
+            ,replayUpload: false
+            ,id: ''
+            ,token: ''
+        }
+    }
     ,stadiumData: {
         default: localStorage.getItem('_defaultMap')!
         ,training: localStorage.getItem('_readyMap')!
@@ -64,6 +72,7 @@ window.document.title = `Haxbotron ${window.gameRoom.config._RUID}`;
 makeRoom();
 // ====================================================================================================
 // set scheduling timers
+
 var scheduledTimer60 = setInterval(() => {
     window.gameRoom._room.sendAnnouncement(LangRes.scheduler.advertise, null, 0x777777, "normal", 0); // advertisement
 

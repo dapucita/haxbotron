@@ -1,3 +1,5 @@
+import * as Tst from "../Translator";
+import * as LangRes from "../../resource/strings";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { recuritBothTeamFully } from "../../model/OperateHelper/Quorum";
@@ -41,6 +43,21 @@ export function onGameStopListener(byPlayer: PlayerObject): void {
     window.gameRoom.ballStack.initTouchInfo(); // clear touch info
     window.gameRoom.ballStack.clear(); // clear the stack.
     window.gameRoom.ballStack.possClear(); // clear possession count
+
+    // stop replay record and send it
+    const replay = window.gameRoom._room.stopRecording();
+    
+    if(replay && window.gameRoom.social.discordWebhook.feed && window.gameRoom.social.discordWebhook.replayUpload && window.gameRoom.social.discordWebhook.id && window.gameRoom.social.discordWebhook.token) {
+        const placeholder = {
+            roomName: window.gameRoom.config._config.roomName
+            ,replayDate: Date().toLocaleString()
+        }
+
+        window._feedSocialDiscordWebhook(window.gameRoom.social.discordWebhook.id, window.gameRoom.social.discordWebhook.token, "replay", {
+            message: Tst.maketext(LangRes.onStop.feedSocialDiscordWebhook.replayMessage, placeholder)
+            ,data: JSON.stringify(Array.from(replay))
+        });
+    }
 
     // when auto emcee mode is enabled
     if(window.gameRoom.config.rules.autoOperating === true) {
