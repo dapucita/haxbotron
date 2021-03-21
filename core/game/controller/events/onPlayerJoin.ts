@@ -6,7 +6,7 @@ import { convertToPlayerStorage, getBanlistDataFromDB, getPlayerDataFromDB, remo
 import { getUnixTimestamp } from "../Statistics";
 import { setDefaultStadiums, updateAdmins } from "../RoomTools";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
-import { putTeamNewPlayerConditional, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { recuritByOne, roomActivePlayersNumberCheck, roomTeamPlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { decideTier, getAvatarByTier, Tier } from "../../model/Statistics/Tier";
 import { isExistNickname, isIncludeBannedWords } from "../TextFilter";
 
@@ -241,7 +241,7 @@ export async function onPlayerJoinListener(player: PlayerObject): Promise<void> 
 
     // when auto emcee mode is enabled
     if (window.gameRoom.config.rules.autoOperating === true) {
-        putTeamNewPlayerConditional(player.id); // move team
+        recuritByOne();
         if (window.gameRoom.isGamingNow === false) {
             // if game is not started then start the game for active players
             setDefaultStadiums(); // set stadium

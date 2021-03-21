@@ -6,7 +6,7 @@ export const scheduler = {
     ,shutdown: '📢 방이 곧 닫힙니다. 이용해주셔서 감사합니다.'
     ,afkKick: '📢 잠수로 인한 퇴장'
     ,afkCommandTooLongKick: '📢 2분 이상 잠수로 퇴장'
-    ,afkDetect: '📢 @{targetName} #{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
+    ,afkDetect: '📢 @{targetName}#{targetID}님이 잠수중입니다. 아무 키나 눌러주세요. 계속 잠수시 퇴장당할 수 있습니다.'
     ,autoUnmute: '🔊 {targetName}#{targetID}님의 음소거가 자동으로 해제되었습니다.'
     ,banVoteAutoNotify: '🗳️ 추방 투표가 진행중입니다 (!vote #ID) : {voteList}'
 }
@@ -76,7 +76,8 @@ export const command = {
     ,about: '📄 방 이름 : {RoomName} ({_LaunchTime})\n💬 이 방은 Haxbotron🤖 봇에 의해 운영됩니다. (https://dapucita.github.io/haxbotron/)\n💬 [디스코드] https://discord.gg/qfg45B2 [후원하기] https://www.patreon.com/dapucita'
     ,stats: {
         _ErrorNoPlayer: '❌ 접속중이지 않습니다. #숫자아이디 의 형식으로 지정해야 합니다. (예: !stats #12)\n📑 !list red,blue,spec 명령어로 숫자아이디를 확인할 수 있습니다.'
-        ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 (레이팅 {targetStatsRatingAvatar}{targetStatsRating}) 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 연결끊김 {targetStatsDisconns}회 \n📊 (이어서) 골 {targetStatsGoals}, 어시 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
+        ,statsMsg: '📊 {targetName}#{ticketTarget}님의 전적 (레이팅 {targetStatsRatingAvatar}{targetStatsRating}) 총 {targetStatsTotal}판(승률 {targetStatsWinRate}%), 연결끊김 {targetStatsDisconns}회 \n📊 (이어서) 골 {targetStatsGoals}, 도움 {targetStatsAssists}, 자책 {targetStatsOgs}, 실점 {targetStatsLosepoints}, 패스성공률 {targetStatsPassSuccess}%\n📊 (이어서) 경기당 {targetStatsGoalsPerGame}골, {targetStatsAssistsPerGame}도움과 {targetStatsOgsPerGame}자책, {targetStatsLostGoalsPerGame}실점을 기록중입니다.'
+        ,matchAnalysis: '📊 (이어서) 현재 경기에서 {targetStatsNowGoals}골 {targetStatsNowAssists}도움 {targetStatsNowOgs}자책을 기록중입니다. (패스성공률 {targetStatsNowPassSuccess}%)'
     }
     ,statsreset: '📊 전적을 초기화했습니다. 다시 복구할 수 없습니다.'
     ,poss: '📊 점유율 : Red {possTeamRed}%, Blue {possTeamBlue}%.'
@@ -203,7 +204,9 @@ export const onStart = {
 }
 
 export const onStop = {
-
+    feedSocialDiscordWebhook: {
+        replayMessage: '💽 {roomName}의 리플레이 파일 ({replayDate})'
+    }
 }
 
 export const onVictory = {

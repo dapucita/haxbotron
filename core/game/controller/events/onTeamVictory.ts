@@ -4,7 +4,7 @@ import { ScoresObject } from "../../model/GameObject/ScoresObject";
 import { PlayerObject } from "../../model/GameObject/PlayerObject";
 import { convertTeamID2Name, TeamID } from "../../model/GameObject/TeamID";
 import { shuffleArray } from "../RoomTools";
-import { roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
+import { fetchActiveSpecPlayers, roomActivePlayersNumberCheck } from "../../model/OperateHelper/Quorum";
 import { HElo, MatchResult, StatsRecord } from "../../model/Statistics/HElo";
 import { convertToPlayerStorage, setPlayerDataToDB } from "../Storage";
 
@@ -56,21 +56,21 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
     if (window.gameRoom.config.rules.statsRecord == true && window.gameRoom.isStatRecord == true) { // records when game mode is for stats recording.
         // HElo rating part ================
         // make diffs array (key: index by teamPlayers order, value: number[])
-        
+
 
         // make stat records
-        let redStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Red?MatchResult.Win:MatchResult.Lose, redTeamPlayers);
-        let blueStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID===TeamID.Blue?MatchResult.Win:MatchResult.Lose, blueTeamPlayers);
-        
+        let redStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID === TeamID.Red ? MatchResult.Win : MatchResult.Lose, redTeamPlayers);
+        let blueStatsRecords: StatsRecord[] = ratingHelper.makeStasRecord(winnerTeamID === TeamID.Blue ? MatchResult.Win : MatchResult.Lose, blueTeamPlayers);
+
         // calc average of team ratings
-        let winTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(winnerTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers); 
-        let loseTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(loserTeamID===TeamID.Red?redTeamPlayers:blueTeamPlayers);
-        
+        let winTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(winnerTeamID === TeamID.Red ? redTeamPlayers : blueTeamPlayers);
+        let loseTeamRatingsMean: number = ratingHelper.calcTeamRatingsMean(loserTeamID === TeamID.Red ? redTeamPlayers : blueTeamPlayers);
+
         // get diff and update rating
         redStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
-            let diffArray: number[] = []; 
+            let diffArray: number[] = [];
             let oldRating: number = window.gameRoom.playerList.get(redTeamPlayers[idx].id)!.stats.rating;
-            for(let i: number = 0; i < blueStatsRecords.length; i++) {
+            for (let i: number = 0; i < blueStatsRecords.length; i++) {
                 diffArray.push(ratingHelper.calcBothDiff(eachItem, blueStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, eachItem.matchKFactor));
             }
             let newRating: number = ratingHelper.calcNewRating(eachItem.rating, diffArray);
@@ -78,9 +78,9 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
             window.gameRoom.logger.i('onTeamVictory', `Red Player ${redTeamPlayers[idx].name}#${redTeamPlayers[idx].id}'s rating has become ${newRating} from ${oldRating}.`);
         });
         blueStatsRecords.forEach((eachItem: StatsRecord, idx: number) => {
-            let diffArray: number[] = []; 
+            let diffArray: number[] = [];
             let oldRating: number = window.gameRoom.playerList.get(blueTeamPlayers[idx].id)!.stats.rating;
-            for(let i: number = 0; i < redStatsRecords.length; i++) {
+            for (let i: number = 0; i < redStatsRecords.length; i++) {
                 diffArray.push(ratingHelper.calcBothDiff(eachItem, redStatsRecords[i], winTeamRatingsMean, loseTeamRatingsMean, eachItem.matchKFactor));
             }
             let newRating: number = ratingHelper.calcNewRating(eachItem.rating, diffArray);
@@ -164,30 +164,18 @@ export async function onTeamVictoryListener(scores: ScoresObject): Promise<void>
                 window.gameRoom.logger.i('onTeamVictory', `Whole players are shuffled. (${shuffledIDList.toString()})`);
             }
         } else { // or still under the limit, then change spec and loser team
-            // this count is for determine how many players will be alive in loser team
-            let outPlayersCount: number = window.gameRoom.config.rules.requisite.eachTeamPlayers; // init as full count.
-
-            teamPlayers
+            window.gameRoom._room.getPlayerList()
                 .filter((player: PlayerObject) => player.team === loserTeamID)
-                .forEach((eachPlayer: PlayerObject) => {
-                    if (window.gameRoom.config.settings.guaranteePlayingTime === true) {
-                        // if guarantee playing time option is enabled
-                        if ((scores.time - window.gameRoom.playerList.get(eachPlayer.id)!.entrytime.matchEntryTime) > window.gameRoom.config.settings.guaranteedPlayingTimeSeconds) {
-                            window.gameRoom._room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // move losers played enough time to Spec team
-                        } else {
-                            outPlayersCount--; // decrease count as this player will be alive in loser team
-                        }
-                    } else {
-                        // if guarantee playing time option is disabled
-                        window.gameRoom._room.setPlayerTeam(eachPlayer.id, TeamID.Spec); // just move all losers to Spec team
+                .forEach((player: PlayerObject) => {
+                    if (window.gameRoom.config.settings.guaranteePlayingTime === false || (scores.time - window.gameRoom.playerList.get(player.id)!.entrytime.matchEntryTime) > window.gameRoom.config.settings.guaranteedPlayingTimeSeconds) {
+                        window.gameRoom._room.setPlayerTeam(player.id, TeamID.Spec); // just move all losers to Spec team
                     }
                 });
 
-            // get new spec player list
-            let specActivePlayers: PlayerObject[] = window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.id !== 0 && player.team === TeamID.Spec && window.gameRoom.playerList.get(player.id)!.permissions.afkmode === false);
-
-            for (let i: number = 0; i < outPlayersCount && i < specActivePlayers.length; i++) {
-                window.gameRoom._room.setPlayerTeam(specActivePlayers[i].id, loserTeamID); // move Specs to challenger team
+            const specPlayers: PlayerObject[] = fetchActiveSpecPlayers();
+            const insufficiency: number = window.gameRoom.config.rules.requisite.eachTeamPlayers - window.gameRoom._room.getPlayerList().filter((player: PlayerObject) => player.team === loserTeamID).length;
+            for(let i=0; i < insufficiency && i < specPlayers.length; i++) {
+                window.gameRoom._room.setPlayerTeam(specPlayers[i].id, loserTeamID);
             }
         }
     }
