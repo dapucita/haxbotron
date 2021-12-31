@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from './common/Footer.Copyright';
 import client from '../lib/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Alert, { AlertColor } from './common/Alert';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [flashMessage, setFlashMessage] = useState('');
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
@@ -68,9 +68,9 @@ export default function SignIn() {
                     setFlashMessage('Configuration succeeded.');
                     setAlertStatus('success');
                     /*setTimeout(()=>{
-                        history.push('/admin');
+                        navigate('/admin');
                     }, 1000);*/
-                    history.push('/admin');
+                    navigate('/admin');
                 }
             } catch (e) {
                 setAlertStatus('error');

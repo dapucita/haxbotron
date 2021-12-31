@@ -26,9 +26,9 @@ interface superAdminItem {
     description: string
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 function generateRandKey() { // from https://stackoverflow.com/questions/1497481
     var length = 20,
@@ -45,7 +45,7 @@ export default function RoomSuperAdmin({ styleClass }: styleClass) {
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
 
     const [superAdminKeyList, setSuperAdminKeyList] = useState([] as superAdminItem[]);
 

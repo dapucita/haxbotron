@@ -26,9 +26,9 @@ interface styleClass {
     styleClass: any
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 interface newBanFields {
     reason: string
@@ -417,7 +417,7 @@ export default function RoomPlayerList({ styleClass }: styleClass) {
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
     const ws = useContext(WSocketContext);
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
     const [flashMessage, setFlashMessage] = useState('');
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { useHistory, withRouter } from 'react-router-dom';
 import client from '../../lib/client';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,7 +18,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Mainboard from './Mainboard';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import NotFound from '../NotFound';
 import RoomList from './RoomList';
 import ServerInfo from './ServerInfo';
@@ -133,9 +132,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Dashboard({ match }: RouteComponentProps) {
+function Dashboard() {
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(true); // dashboard sidemenu
     const [noti, setNoti] = useState(0); // notification alarm count
     const [styleClass, setStyleClass] = useState(classes);
@@ -144,7 +143,7 @@ function Dashboard({ match }: RouteComponentProps) {
         try {
             const result = await client.delete('/api/v1/auth');
             if (result.status === 204) {
-                history.push('/');
+                navigate('/');
             }
         } catch (e) { }
     }
@@ -209,38 +208,38 @@ function Dashboard({ match }: RouteComponentProps) {
                 </div>
                 <Divider />
                 { /* Side Menu */ }
-                <Switch>
-                    <Route path={match.path} exact><MainboardSideMenu /></Route>
-                    <Route path={`${match.path}/roomlist`}><RoomListSideMenu /></Route>
-                    <Route path={`${match.path}/newroom`}><RoomListSideMenu /></Route>
-                    <Route path={`${match.path}/serverinfo`}><MainboardSideMenu /></Route>
-                    <Route path={`${match.path}/superadmin/:ruid`} component={RoomInfoSideMenu} />
-                    <Route path={`${match.path}/banlist/:ruid`} component={RoomInfoSideMenu} />
-                    <Route path={`${match.path}/room/:ruid`} component={RoomInfoSideMenu} />
-                </Switch>
+                <Routes>
+                    <Route path="" ><MainboardSideMenu /></Route>
+                    <Route path="roomlist"><RoomListSideMenu /></Route>
+                    <Route path="newroom"><RoomListSideMenu /></Route>
+                    <Route path="serverinfo"><MainboardSideMenu /></Route>
+                    <Route path="superadmin/:ruid" element={<RoomInfoSideMenu />} />
+                    <Route path="banlist/:ruid" element={<RoomInfoSideMenu />} />
+                    <Route path="room/:ruid" element={<RoomInfoSideMenu />} />
+                </Routes>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 { /* Main Content */ }
-                <Switch>
-                    <Route path={match.path} render={()=><Mainboard styleClass={styleClass} />} exact />
-                    <Route path={`${match.path}/roomlist`} render={()=><RoomList styleClass={styleClass} />} />
-                    <Route path={`${match.path}/newroom`} render={()=><RoomCreate styleClass={styleClass} />} />
-                    <Route path={`${match.path}/serverinfo`} render={()=><ServerInfo styleClass={styleClass} />} />
-                    <Route path={`${match.path}/superadmin/:ruid`}><RoomSuperAdmin styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/banlist/:ruid`} exact><RoomBanList styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/room/:ruid`} exact><RoomLog styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/room/:ruid/info`}><RoomInfo styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/room/:ruid/power`}><RoomPower styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/room/:ruid/player`}><RoomPlayerList styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/room/:ruid/social`}><RoomSocial styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/room/:ruid/filter`}><RoomTextFilter styleClass={styleClass} /></Route>
-                    <Route path={`${match.path}/room/:ruid/assets`}><RoomAssets styleClass={styleClass} /></Route>
-                    <Route component={NotFound} />
-                </Switch>
+                <Routes>
+                    <Route path=""><Mainboard styleClass={styleClass} /></Route>
+                    <Route path="roomlist"><RoomList styleClass={styleClass} /></Route>
+                    <Route path="newroom"><RoomCreate styleClass={styleClass} /></Route>
+                    <Route path="serverinfo"><ServerInfo styleClass={styleClass} /></Route>
+                    <Route path="superadmin/:ruid"><RoomSuperAdmin styleClass={styleClass} /></Route>
+                    <Route path="banlist/:ruid"><RoomBanList styleClass={styleClass} /></Route>
+                    <Route path="room/:ruid"><RoomLog styleClass={styleClass} /></Route>
+                    <Route path="room/:ruid/info"><RoomInfo styleClass={styleClass} /></Route>
+                    <Route path="room/:ruid/power"><RoomPower styleClass={styleClass} /></Route>
+                    <Route path="room/:ruid/player"><RoomPlayerList styleClass={styleClass} /></Route>
+                    <Route path="room/:ruid/social"><RoomSocial styleClass={styleClass} /></Route>
+                    <Route path="room/:ruid/filter"><RoomTextFilter styleClass={styleClass} /></Route>
+                    <Route path="room/:ruid/assets"><RoomAssets styleClass={styleClass} /></Route>
+                    <Route element={NotFound} />
+                </Routes>
             </main>
         </div>
     );
 }
 
-export default withRouter(Dashboard);
+export default Dashboard;

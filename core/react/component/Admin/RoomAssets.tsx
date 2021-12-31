@@ -21,9 +21,9 @@ interface styleClass {
     styleClass: any
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface MatchParams {
+//     ruid: string
+// }
 
 interface TeamColours {
     angle: number
@@ -46,7 +46,7 @@ export default function RoomAssets({ styleClass }: styleClass) {
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
 

@@ -17,9 +17,9 @@ interface styleClass {
     styleClass: any
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 type AlertColor = 'success' | 'info' | 'warning' | 'error';
 
@@ -39,7 +39,7 @@ export default function RoomInfo({ styleClass }: styleClass) {
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
 
     const ws = useContext(WSocketContext);
 

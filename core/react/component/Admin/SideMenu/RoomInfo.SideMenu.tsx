@@ -18,12 +18,12 @@ import SendIcon from '@material-ui/icons/Send';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import AttachmentIcon from '@material-ui/icons/Attachment';
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 export default function RoomInfoSideMenu() {
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
     
     const [paramRUID, setParmRUID] = useState(matchParams.ruid);
 

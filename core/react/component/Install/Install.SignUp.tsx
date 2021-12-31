@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link as RouterLink, useHistory  } from 'react-router-dom';
+import { Link as RouterLink, useNavigate  } from 'react-router-dom';
 import client from '../../lib/client';
 import Copyright from '../common/Footer.Copyright';
 import Alert, { AlertColor } from '../common/Alert';
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp({ installed }: checkProps) {
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [flashMessage, setFlashMessage] = useState('');
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
@@ -74,7 +74,7 @@ export default function SignUp({ installed }: checkProps) {
                     setFlashMessage('Configuration succeeded.');
                     setAlertStatus('success');
                     setTimeout(()=>{
-                        history.push('/admin');
+                        navigate('/admin');
                     }, 5000);
                 }
             } catch (e) {

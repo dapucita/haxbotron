@@ -15,9 +15,9 @@ interface styleClass {
     styleClass: any
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 export default function RoomTextFilter({ styleClass }: styleClass) {
 
@@ -25,7 +25,7 @@ export default function RoomTextFilter({ styleClass }: styleClass) {
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
 
     const [nicknameFilteringPool, setNicknameFilteringPool] = useState('');
     const [chatFilteringPool, setChatFilteringPool] = useState('');

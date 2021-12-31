@@ -17,9 +17,9 @@ interface styleClass {
     styleClass: any
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 type DiscordWebhookConfig = {
     feed: boolean
@@ -34,7 +34,7 @@ export default function RoomSocial({ styleClass }: styleClass) {
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
 
     const [newNoticeMessage, setNewNoticeMessage] = useState('');
     const [noticeMessage, setNoticeMessage] = useState('');

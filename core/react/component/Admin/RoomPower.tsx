@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Copyright from '../common/Footer.Copyright';
 import Title from './common/Widget.Title';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import client from '../../lib/client';
 import Alert, { AlertColor } from '../common/Alert';
@@ -15,9 +15,9 @@ interface styleClass {
     styleClass: any
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 
 export default function RoomPower({ styleClass }: styleClass) {
@@ -26,8 +26,8 @@ export default function RoomPower({ styleClass }: styleClass) {
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
-    const matchParams: matchParams = useParams();
-    const history = useHistory();
+    const matchParams = useParams<"ruid">();
+    const navigate = useNavigate();
 
     const [flashMessage, setFlashMessage] = useState('');
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
@@ -40,7 +40,7 @@ export default function RoomPower({ styleClass }: styleClass) {
             if (result.status === 204) {
                 setFlashMessage('Shutdown succeeded.');
                 setAlertStatus('success');
-                history.push('/admin/roomlist');
+                navigate('/admin/roomlist');
             }
         } catch (e) {
             setAlertStatus('error');

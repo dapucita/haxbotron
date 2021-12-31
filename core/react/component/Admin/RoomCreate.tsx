@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import * as DefaultConfigSet from "../../lib/defaultroomconfig.json";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Divider, IconButton, Switch } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import client from '../../lib/client';
@@ -32,7 +32,7 @@ const getSavedRoomConfig = (): ReactHostRoomInfo => {
 export default function RoomCreate({ styleClass }: styleClass) {
     const classes = styleClass;
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
-    const history = useHistory();
+    const navigate = useNavigate();
     const [flashMessage, setFlashMessage] = useState('');
     const [alertStatus, setAlertStatus] = useState("success" as AlertColor);
 
@@ -155,7 +155,7 @@ export default function RoomCreate({ styleClass }: styleClass) {
                     // save as lastest settings value (it will be loaded as default next time)
                     localStorage.setItem('_savedRoomInfo', JSON.stringify(roomConfigComplex));
                     // redirect to room list page
-                    history.push('/admin/roomlist');
+                    navigate('/admin/roomlist');
                 }
             } catch (error) {
                 setFlashMessage('Unexpected error is caused. Please try again.');
@@ -187,7 +187,7 @@ export default function RoomCreate({ styleClass }: styleClass) {
     const handleReset = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         localStorage.removeItem('_savedRoomInfo');
-        history.push('/admin/roomlist');
+        navigate('/admin/roomlist');
     }
 
     const handleJSONBeautify  = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

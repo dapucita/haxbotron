@@ -35,16 +35,16 @@ interface newBanFields {
     seconds: number
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 export default function RoomBanList({ styleClass }: styleClass) {
     const classes = styleClass;
 
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
 
     const [banList, setBanList] = useState([] as banListItem[]);
     const [newBan, setNewBan] = useState({ conn: '', reason: '', seconds: 0 } as newBanFields);

@@ -16,9 +16,9 @@ interface styleClass {
     styleClass: any
 }
 
-interface matchParams {
-    ruid: string
-}
+// interface matchParams {
+//     ruid: string
+// }
 
 interface LogMessage {
     ruid: string
@@ -35,7 +35,7 @@ export default function RoomLog({ styleClass }: styleClass) {
     const fixedHeightPaper = clsx(classes.paper, classes.fullHeight);
 
     const ws = useContext(WSocketContext);
-    const matchParams: matchParams = useParams();
+    const matchParams = useParams<"ruid">();
 
     const [logMessage, setLogMessage] = useState([] as LogMessage[]);
     const [recentLogMessage, setRecentLogMessage] = useState({} as LogMessage);
